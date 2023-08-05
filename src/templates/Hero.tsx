@@ -22,7 +22,7 @@ const Hero = () => (
         title={
           <>
             <div className='text-white'> Welcome to</div>
-            <span className="text-[#FFC700]">Arthur Exchange</span>
+            <span className="text-[#FFC700]">Arthur Exchange </span>
           </>
         }
         description="Arthur Exchange is an innovative and highly flexible DEX built to
