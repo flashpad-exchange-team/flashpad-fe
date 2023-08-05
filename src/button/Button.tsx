@@ -1,8 +1,10 @@
 import className from 'classnames';
+import { MouseEventHandler, ReactNode } from 'react';
 
 type IButtonProps = {
   xl?: boolean;
-  children: string;
+  children: ReactNode;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
 const Button = (props: IButtonProps) => {
@@ -11,36 +13,15 @@ const Button = (props: IButtonProps) => {
     'btn-xl': props.xl,
     'btn-base': !props.xl,
     'btn-primary': true,
+    'bordered': true
+
   });
 
   return (
-    <div className={btnClass}>
+    <button {...props} type="button" className="px-8 py-3 font-semibold rounded-full dark:bg-gray-100 dark:text-gray-800">
       {props.children}
+    </button>
 
-      <style jsx>
-        {`
-          .btn {
-            @apply inline-block rounded-md text-center;
-          }
-
-          .btn-base {
-            @apply text-lg font-semibold py-2 px-4;
-          }
-
-          .btn-xl {
-            @apply font-extrabold text-xl py-4 px-6;
-          }
-
-          .btn-primary {
-            @apply text-white bg-primary-500;
-          }
-
-          .btn-primary:hover {
-            @apply bg-primary-600;
-          }
-        `}
-      </style>
-    </div>
   );
 };
 
