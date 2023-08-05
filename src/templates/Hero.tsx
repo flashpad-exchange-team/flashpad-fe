@@ -41,7 +41,7 @@ const Hero = () => {
             </>
           }
           description="Arthur Exchange is an innovative and highly flexible DEX built to
-          support the Arbitrum ecosystem.
+          support the Linea ecosystem.
           Community driven and capital efficient."
         />
       </Section>
