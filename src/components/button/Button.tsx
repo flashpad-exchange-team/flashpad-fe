@@ -4,12 +4,15 @@ type IButtonProps = {
   xl?: boolean;
   children: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  icon?: ReactNode;
+
 };
 
 const Button = (props: IButtonProps) => {
 
   return (
-    <button {...props} type="button" className="px-8 py-3 font-semibold rounded-full dark:bg-gray-100 dark:text-gray-800">
+    <button {...props} type="button" className="px-[42px] py-[12px] bg-[#FFAF1D] text-[#0C111D] text-[18px] rounded-lg flex items-center gap-2">
+      {props.icon}
       {props.children}
     </button>
 
