@@ -30,11 +30,11 @@ const LiquidityForm = () => {
             </div>
         </div>
         <TokenForm />
-        <div className="mx-auto w-fit my-2">
+        <div className="mx-auto w-fit">
             <DividerIcon />
         </div>
         <TokenForm />
-        <Button onClick={() => { }} className="w-full justify-center bg-[#1D2939] text-[#98A2B3] mb-2"> Add Liquidity</Button>
+        <Button onClick={() => { }} className="w-full justify-center  mb-2" disabled> Add Liquidity</Button>
         <ButtonStyle />
 
     </div>

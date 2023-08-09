@@ -7,7 +7,7 @@ const TOKENS_LIST = [
 ]
 const TokenForm = () => {
 
-    return <div className="bg-[#150E3980] rounded-lg my-4 p-4">
+    return <div className="bg-[#150E3980] rounded-lg my-2 p-4">
         <div className="flex items-center justify-between w-full">
             <div className="min-w-[200px] w-fit rounded-md bg-[#150E39] px-2 py-1 flex items-center gap-2">
                 Token 1
