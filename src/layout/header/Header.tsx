@@ -1,19 +1,19 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Button } from '@/components/button/Button';
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
+// import { useAccount, useConnect, useDisconnect } from 'wagmi'
+// import { InjectedConnector } from 'wagmi/connectors/injected'
 import CrossSword from '@/icons/CrossSword';
 type INavbarProps = {
   logo: ReactNode;
 };
 
 const Header = (props: INavbarProps) => {
-  const { address, isConnected } = useAccount()
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  })
-  const { disconnect } = useDisconnect()
+  // const { address, isConnected } = useAccount()
+  // const { connect } = useConnect({
+  //   connector: new InjectedConnector(),
+  // })
+  // const { disconnect } = useDisconnect()
   return (
 
     <div className="flex flex-wrap items-center justify-between bg-[#00000080] h-[80px] px-20">
