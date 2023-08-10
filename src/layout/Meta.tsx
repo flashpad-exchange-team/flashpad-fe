@@ -50,10 +50,10 @@ const Meta = (props: IMetaProps) => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=REM&display=swap"
         /> */}
-        <link
+        {/* <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=OpenSans&display=swap"
-        />
+        /> */}
       </Head>
       <NextSeo
         title={props.title}

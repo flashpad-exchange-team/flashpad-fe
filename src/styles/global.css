@@ -4,9 +4,47 @@
 
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.cdnfonts.com/css/open-sans');
 
 body {
   font-family: 'Open Sans', sans-serif;
   color: white;
+}
+
+/* For Webkit-based browsers (Chrome, Safari) */
+/* Customize the scrollbar's track */
+::-webkit-scrollbar {
+  width: 7px; /* Width of the scrollbar */
+  background: white;
+  border-radius: 5px; /* Rounded corners of the thumb */
+}
+
+/* Customize the scrollbar's thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #ffaf1d; /* Color of the thumb */
+  border-radius: 5px; /* Rounded corners of the thumb */
+}
+
+/* Customize the scrollbar's track when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ffaf1d;
+}
+
+/* Customize the scrollbar's track when active/pressed */
+::-webkit-scrollbar-thumb:active {
+  background-color: #ffaf1d;
+}
+
+.szh-menu {
+  background-color: #000000 !important;
+  padding: 15px 0px !important;
+}
+.szh-menu li {
+  background: #000000;
+  color: white;
+  width: 200px;
+  margin-bottom: 5px;
+}
+.szh-menu li:hover {
+  color: #ffaf1d;
 }

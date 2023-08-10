@@ -1,3 +1,4 @@
+import CopyableText from "@/components/copyableText/CopyableText"
 import ArrowDown from "@/icons/ArrowDown"
 import ArrowUp from "@/icons/ArrowUp"
 import { useState } from "react"
@@ -60,7 +61,7 @@ const LiquidityPairInfo = () => {
                             &lt;0.0000881%
                         </div>
                         <div className="text-[14px] mt-1.5 text-right ">
-                            0x5422...564156554
+                            <CopyableText text="0x53346...34553" />
                         </div>
                     </div>
                 </div>
