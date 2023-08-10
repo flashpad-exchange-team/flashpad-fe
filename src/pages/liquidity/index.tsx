@@ -8,7 +8,7 @@ import Bg from 'public/assets/images/app-bg.png'; // Import your image
 const Liquidity = () => {
 
     return <div style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
-        className=' min-h-[100vh]'
+        className=' min-h-[100vh] pb-[100px]'
     >
         <Header logo={<Logo xl />} mode='app' />
 

@@ -7,6 +7,7 @@ import TokenForm from "../TokenForm"
 import DividerIcon from "@/icons/DividerIcon"
 import { Button } from "@/components/button/Button"
 import ButtonStyle from "@/icons/ButtonStyle"
+import LiquidityPairInfo from "../LiquidityPairInfo"
 
 
 const LiquidityForm = () => {
@@ -34,6 +35,8 @@ const LiquidityForm = () => {
             <DividerIcon />
         </div>
         <TokenForm />
+        <LiquidityPairInfo />
+
         <Button onClick={() => { }} className="w-full justify-center  mb-2" disabled> Add Liquidity</Button>
         <ButtonStyle />
 
