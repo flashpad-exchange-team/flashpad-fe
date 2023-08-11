@@ -46,14 +46,10 @@ const Meta = (props: IMetaProps) => {
           href={`${router.basePath}/favicon.ico`}
           key="favicon"
         />
-        {/* <link
+        <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=REM&display=swap"
-        /> */}
-        {/* <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=OpenSans&display=swap"
-        /> */}
+          href="https://fonts.googleapis.com/css2?family=REM:wght@400;700&display=swap"
+        />
       </Head>
       <NextSeo
         title={props.title}

@@ -8,8 +8,9 @@ const TOKENS_LIST = [
 
 export interface TokenFormProps {
   openModal?: () => void;
+  title: string;
 }
-const TokenForm = ({ openModal }: TokenFormProps) => {
+const TokenForm = ({ openModal, title }: TokenFormProps) => {
   return (
     <div className="bg-[#150E3980] rounded-lg my-2 p-4">
       <div className="flex items-center justify-between w-full">
@@ -17,7 +18,7 @@ const TokenForm = ({ openModal }: TokenFormProps) => {
           className="min-w-[200px] w-fit rounded-md bg-[#150E39] px-2 py-1 flex items-center gap-2"
           onClick={() => (openModal ? openModal() : void 0)}
         >
-          Token 1
+          {title}
           <Select options={TOKENS_LIST} icon={<BNBICon />} disabled />
         </div>
         <input

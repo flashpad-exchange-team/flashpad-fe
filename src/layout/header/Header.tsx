@@ -123,7 +123,7 @@ const Header = (props: INavbarProps) => {
           ) : (
             <Button
               onClick={() => {
-                router.push('/liquidity');
+                router.push('/swap');
               }}
               icon={<CrossSword />}
             >

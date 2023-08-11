@@ -1,17 +1,29 @@
+import { Button } from '@/components/button/Button';
+import SelectTokenModal from '@/components/modal/SelectTokenModal';
+import ButtonStyle from '@/icons/ButtonStyle';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import TokenForm from '../TokenForm';
-import DividerIcon from '@/icons/DividerIcon';
-import { Button } from '@/components/button/Button';
-import ButtonStyle from '@/icons/ButtonStyle';
-import LiquidityPairInfo from '../LiquidityPairInfo';
 import { useState } from 'react';
-import SelectTokenModal from '@/components/modal/SelectTokenModal';
+import LiquidityPairInfo from '../LiquidityPairInfo';
+import TokenForm from '../TokenForm';
 
-const LiquidityForm = () => {
+interface TradeFormProps {
+  title: string;
+  buttonName: string;
+  inputTitle1: string;
+  inputTitle2: string;
+  dividerIcon: React.ReactNode;
+}
+const TradeForm = ({
+  title,
+  buttonName,
+  inputTitle1,
+  inputTitle2,
+  dividerIcon,
+}: TradeFormProps) => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
   return (
@@ -20,7 +32,7 @@ const LiquidityForm = () => {
       <div className="w-[648px] bg-[#00000080] rounded-lg h-auto my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3">
           <SwapLeftIcon />
-          Liquidity
+          {title}
           <SwapRightIcon />
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
@@ -34,11 +46,9 @@ const LiquidityForm = () => {
             <SettingIcon />
           </div>
         </div>
-        <TokenForm openModal={toggleOpen} />
-        <div className="mx-auto w-fit">
-          <DividerIcon />
-        </div>
-        <TokenForm openModal={toggleOpen} />
+        <TokenForm openModal={toggleOpen} title={inputTitle1} />
+        <div className="mx-auto w-fit">{dividerIcon}</div>
+        <TokenForm openModal={toggleOpen} title={inputTitle2} />
         <LiquidityPairInfo />
 
         <Button
@@ -46,8 +56,7 @@ const LiquidityForm = () => {
           className="w-full justify-center  mb-2"
           disabled
         >
-          {' '}
-          Add Liquidity
+          {buttonName}
         </Button>
         <ButtonStyle />
       </div>
@@ -55,4 +64,4 @@ const LiquidityForm = () => {
   );
 };
 
-export default LiquidityForm;
+export default TradeForm;

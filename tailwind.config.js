@@ -41,6 +41,9 @@ module.exports = {
       lineHeight: {
         hero: '4.5rem',
       },
+      fontFamily: {
+        rem: ['REM', 'sans-serif'],
+      },
     },
   },
   plugins: [],
