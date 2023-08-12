@@ -2,7 +2,6 @@ import SwapLeftIcon from '@/icons/SwapLeft';
 import CommonModal from './CommonModal';
 import SwapRightIcon from '@/icons/SwapRight';
 import CloseIcon from '@/icons/CloseIcon';
-import BNBICon from '@/icons/BNBIcon';
 import { Button } from '../button/Button';
 import ButtonStyle from '@/icons/ButtonStyle';
 import { useState } from 'react';
