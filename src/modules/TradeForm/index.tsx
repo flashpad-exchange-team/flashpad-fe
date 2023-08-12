@@ -10,6 +10,7 @@ import { useState } from 'react';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import Notification from '@/components/notification/Notification';
+import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 
 interface TradeFormProps {
   title: string;
@@ -26,10 +27,19 @@ const TradeForm = ({
   dividerIcon,
 }: TradeFormProps) => {
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
+
   const toggleOpen = () => setOpen(!isOpen);
+  const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
+
   return (
     <>
       <SelectTokenModal isOpen={isOpen} toggleOpen={toggleOpen} />
+      <LiquiditySettingModal
+        isOpen={isOpenSetting}
+        toggleOpen={toggleOpenSetting}
+      />
+
       <div className="w-[648px] bg-[#00000080] rounded-lg h-auto my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3">
           <SwapLeftIcon />
@@ -44,7 +54,7 @@ const TradeForm = ({
 
           <div className="flex items-center gap-6">
             <ReloadIcon />
-            <SettingIcon />
+            <SettingIcon onClick={toggleOpenSetting} />
           </div>
         </div>
         <TokenForm openModal={toggleOpen} title={inputTitle1} />

@@ -61,7 +61,7 @@ const SelectTokenModal = ({ toggleOpen, isOpen }: SelectTokenModalProps) => {
       </div>
 
       <input
-        className="w-full bg-[#1D2939] h-[52px] pl-8 text-[16px] font-semibold mb-2 mt-3.5 rounded-md focus:outline-none"
+        className="w-full bg-[#1D2939] h-[52px] pl-8 text-[15px] font-semibold mb-2 mt-3.5 rounded-md focus:outline-none"
         placeholder="Search by name or address "
         value={search}
         onChange={(e) => setSearch(e.target.value)}

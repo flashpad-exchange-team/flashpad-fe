@@ -5,12 +5,14 @@ interface ModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
   children: any;
+  height?: string;
 }
 
 const CommonModal: React.FC<ModalProps> = ({
   isOpen,
   onRequestClose,
   children,
+  height,
 }) => {
   useEffect(() => {
     if (isOpen) document.body.style.overflow = 'hidden';
@@ -34,7 +36,7 @@ const CommonModal: React.FC<ModalProps> = ({
           transform: 'translate(-50%, -50%)', // Center content
           backgroundColor: '#0A071E',
           width: 648,
-          height: 700,
+          height: height || 700,
           overflow: 'hidden',
           position: 'fixed',
         },
