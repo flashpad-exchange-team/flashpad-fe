@@ -9,6 +9,7 @@ import SwapRightIcon from '@/icons/SwapRight';
 import { useState } from 'react';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import Notification from '@/components/notification/Notification';
 
 interface TradeFormProps {
   title: string;
@@ -50,6 +51,23 @@ const TradeForm = ({
         <div className="mx-auto w-fit">{dividerIcon}</div>
         <TokenForm openModal={toggleOpen} title={inputTitle2} />
         <LiquidityPairInfo />
+        <Notification message="Error: Insufficient Balance" type="error" />
+        <Notification message="Wallet connected" type="success" />
+        <Notification
+          message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
+          type="info"
+        />
+        <Notification
+          message={
+            <div className="text-[#F04438]">
+              The AIDOGE token has a custom transfer tax that can prevent you
+              from swapping, you might need to significantly increase your
+              slippage and only use the V2 swap mode.
+            </div>
+          }
+          type="error"
+          hideIcon
+        />
 
         <Button
           onClick={() => {}}

@@ -109,7 +109,7 @@ const Header = (props: INavbarProps) => {
             <>
               <Linea className="mr-8" />
               {isConnected ? (
-                <Button onClick={() => disconnect()}>
+                <Button onClick={() => disconnect()} icon={<WalletIcon />}>
                   {address
                     ? address.slice(0, 8) + '...' + address.slice(36, 42)
                     : ''}
