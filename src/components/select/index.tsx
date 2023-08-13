@@ -2,9 +2,10 @@ import { ReactNode } from 'react';
 import { ControlProps, IndicatorSeparatorProps, IndicatorsContainerProps, default as SelectComponent, SingleValueProps } from 'react-select'
 
 export interface SelectProps {
-    options: any[]
-    icon?: ReactNode
-    disabled?: boolean
+    options: any[];
+    icon?: ReactNode;
+    value?: any;
+    disabled?: boolean;
 }
 
 const customStyles: any = {
@@ -49,7 +50,7 @@ const customStyles: any = {
 };
 
 
-const Select = ({ options, icon, disabled }: SelectProps) => {
+const Select = ({ options, icon, value, disabled }: SelectProps) => {
     const CustomSingleValue: React.FC<SingleValueProps> = ({ children }) => (
         <div className='flex items-center gap-2'>
             {icon}
@@ -59,6 +60,7 @@ const Select = ({ options, icon, disabled }: SelectProps) => {
     return <SelectComponent options={options}
         styles={customStyles}
         defaultValue={options[0]}
+        value={value}
         components={{ SingleValue: CustomSingleValue }}
         isSearchable={false}
         isDisabled={disabled}

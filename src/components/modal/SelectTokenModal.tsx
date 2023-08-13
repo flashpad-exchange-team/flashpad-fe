@@ -10,42 +10,62 @@ import { useState } from 'react';
 export interface SelectTokenModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-}
-const TOKENS_LIST = [
+  selectValue: (value: any) => void;
+};
+
+export const TOKENS_LIST = [
   {
-    token: 'ARB',
-    name: 'Arbitrum',
+    symbol: 'USDC',
+    name: 'USD Coin',
+    address: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
   },
   {
-    token: 'AURY',
-    name: 'Aury',
+    symbol: 'USDT',
+    name: 'Tether USD',
+    address: '0x1990BC6dfe2ef605Bfc08f5A23564dB75642Ad73',
   },
   {
-    token: 'CHOKE',
+    symbol: 'BUSD',
+    name: 'Binance USD',
+    address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
+  },
+  {
+    symbol: 'CHOKE',
     name: 'Choke',
+    address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
   },
   {
-    token: 'DAI',
+    symbol: 'DAI',
     name: 'DAI',
+    address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
   },
   {
-    token: 'DMT',
+    symbol: 'DMT',
     name: 'DMT',
+    address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
   },
   {
-    token: 'DSQ',
+    symbol: 'DSQ',
     name: 'DSquared Governance Token',
+    address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
   },
   {
-    token: 'ETH',
+    symbol: 'ETH',
     name: 'Ethereum',
+    address: '0xC5aB03962938Fa544D16F4667ED76788894fFca4',
   },
   {
-    token: 'JONES',
+    symbol: 'JONES',
     name: 'Jones DAO',
+    address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
   },
 ];
-const SelectTokenModal = ({ toggleOpen, isOpen }: SelectTokenModalProps) => {
+
+const SelectTokenModal = ({
+  toggleOpen,
+  isOpen,
+  selectValue,
+}: SelectTokenModalProps) => {
   const [search, setSearch] = useState<string>('');
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
@@ -86,19 +106,22 @@ const SelectTokenModal = ({ toggleOpen, isOpen }: SelectTokenModalProps) => {
         {(search
           ? TOKENS_LIST.filter(
               (item) =>
-                item.token.includes(search) || item.name.includes(search)
+                item.symbol.includes(search) || item.name.includes(search)
             )
           : TOKENS_LIST
         ).map((item) => (
           <div
             className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2"
-            key={item.token}
-            onClick={toggleOpen}
+            key={item.symbol}
+            onClick={() => {
+              selectValue(item);
+              toggleOpen();
+            }}
           >
             <div className="flex items-center gap-2">
               <BNBICon />
               <div>
-                <div className="text-[14px]">{item.token}</div>
+                <div className="text-[14px]">{item.symbol}</div>
                 <div className="text-[12px] text-[#475467]">{item.name}</div>
               </div>
             </div>
