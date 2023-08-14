@@ -1,10 +1,10 @@
 import { useLoading } from '@/context/LoadingContext';
 import LiquidityIcon from '@/icons/LiquidityIcon';
 import { Header } from '@/layout/header/Header';
-import TradeForm from '@/modules/TradeForm';
 import { Logo } from '@/templates/Logo';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect } from 'react';
+import TradeForm from './components/TradeForm';
 
 const Liquidity = () => {
   const { startLoading, stopLoading } = useLoading();

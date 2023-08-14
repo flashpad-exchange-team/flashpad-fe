@@ -1,10 +1,10 @@
 import { useLoading } from '@/context/LoadingContext';
 import SwapIcon from '@/icons/SwapIcon';
 import { Header } from '@/layout/header/Header';
-import TradeForm from '@/modules/TradeForm';
 import { Logo } from '@/templates/Logo';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect } from 'react';
+import TradeForm from './components/TradeForm';
 
 const Swap = () => {
   const { startLoading, stopLoading } = useLoading();

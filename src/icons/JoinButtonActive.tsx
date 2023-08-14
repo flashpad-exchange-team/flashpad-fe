@@ -7,13 +7,7 @@ const JoinButtonActive = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect
-        width="132"
-        height="132"
-        rx="66"
-        fill="#5EA9EF"
-        fill-opacity="0.1"
-      />
+      <rect width="132" height="132" rx="66" fill="#5EA9EF" fillOpacity="0.1" />
       <rect
         x="9.32617"
         y="9.32605"
@@ -21,7 +15,7 @@ const JoinButtonActive = () => {
         height="113.348"
         rx="56.6739"
         fill="#100965"
-        fill-opacity="0.4"
+        fillOpacity="0.4"
       />
       <rect
         x="17.2173"
