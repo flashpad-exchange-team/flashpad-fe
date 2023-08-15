@@ -14,4 +14,7 @@ module.exports = withBundleAnalyzer({
   // So, the source code is "basePath-ready".
   // You can remove `basePath` if you don't need it.
   reactStrictMode: true,
+  env: {
+    ARTHUR_ROUTER_ADDRESS: '0x9F423958b0e02d6C60D1714a37bc627C23C7d048'
+  }
 });

@@ -13,6 +13,7 @@ import Notification from '@/components/notification/Notification';
 import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import BigNumber from 'bignumber.js';
 import { useAccount, useBalance } from 'wagmi';
+import * as routerContract from '@/utils/routerContract';
 
 interface TradeFormProps {
   title: string;
@@ -67,18 +68,17 @@ const TradeForm = ({
     }
   };
 
-  const handleAction = () => {
-    if (buttonName === 'Add Liquidity') {
-      const bnToken1Amount = BigNumber(10).pow(balanceToken1?.decimals!)
-        .times(new BigNumber(token1Amount))
-        .toFixed(0, BigNumber.ROUND_DOWN);
-      const bnToken2Amount = BigNumber(10).pow(balanceToken2?.decimals!)
-        .times(new BigNumber(token2Amount))
-        .toFixed(0, BigNumber.ROUND_DOWN);
-      console.log({bnToken1Amount, bnToken2Amount});
-    } else {
-
-    }
+  const handleAction = async () => {
+    await routerContract.getPair('', '');
+    const bnToken1Amount = BigNumber(10)
+      .pow(balanceToken1?.decimals!)
+      .times(new BigNumber(token1Amount))
+      .toFixed(0, BigNumber.ROUND_DOWN);
+    const bnToken2Amount = BigNumber(10)
+      .pow(balanceToken2?.decimals!)
+      .times(new BigNumber(token2Amount))
+      .toFixed(0, BigNumber.ROUND_DOWN);
+    console.log({ bnToken1Amount, bnToken2Amount });
   };
 
   return (
