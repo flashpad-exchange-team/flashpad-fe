@@ -5,6 +5,7 @@ import { Logo } from '@/templates/Logo';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Footer from '@/layout/footer';
 
 const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
   ssr: false,
@@ -24,17 +25,17 @@ const Swap = () => {
   return isClient ? (
     <div
       style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
-      className=" min-h-[100vh] pb-[100px]"
+      className=" min-h-[100vh] "
     >
       <Header logo={<Logo xl />} mode="app" />
-
       <TradeForm
-        title="Swap"
+        title="SWAP"
         buttonName="Swap"
         inputTitle1="From"
         inputTitle2="To"
         dividerIcon={<SwapIcon />}
       />
+      <Footer />
     </div>
   ) : (
     'Render'

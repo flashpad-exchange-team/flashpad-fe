@@ -11,7 +11,7 @@ export interface SelectTokenModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   selectValue: (value: any) => void;
-};
+}
 
 export const TOKENS_LIST = [
   {
@@ -69,7 +69,7 @@ const SelectTokenModal = ({
   const [search, setSearch] = useState<string>('');
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full mt-4 lg:mt-0">
         <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3 justify-start ml-0 mr-auto">
           <SwapLeftIcon />
           Select a token
@@ -88,12 +88,14 @@ const SelectTokenModal = ({
       />
       <div className="max-h-[450px] overflow-y-auto pr-3">
         <div className="text-[18px] font-semibold my-2">Common bases</div>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-between">
           {['ETH', 'BNB', 'USDT', 'USDC', 'TRX', 'NEO', 'LINK', 'BTC'].map(
-            (item) => (
-              <div className="w-1/4" key={item}>
+            (item, index: number) => (
+              <div className={`w-2/4 lg:w-1/4`} key={item}>
                 <div
-                  className="flex gap-1 items-center hover:bg-[#1D2939] rounded-md px-1 py-2 w-[90px]"
+                  className={`flex gap-1 items-center hover:bg-[#1D2939] rounded-md px-1 py-2 w-[90px]  ${
+                    index % 2 == 1 ? 'mr-0 ml-auto' : ''
+                  } lg:mr-0 lg:ml-0`}
                   onClick={toggleOpen}
                 >
                   <BNBICon /> {item}
@@ -131,7 +133,7 @@ const SelectTokenModal = ({
       </div>
       <Button
         onClick={toggleOpen}
-        className="w-full justify-center mt-2 mb-2"
+        className="w-full justify-center mt-2 mb-2 px-[42px]"
         type="secondary"
       >
         Close

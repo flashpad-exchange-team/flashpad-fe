@@ -68,13 +68,16 @@ const TradeForm = ({
 
   const getPairAddress = async () => {
     if (!token1 || !token2) return;
-    const address = await factoryContract.getPair(token1.address, token2.address);
+    const address = await factoryContract.getPair(
+      token1.address,
+      token2.address
+    );
     // setPairAddress(address);
-    console.log({address})
+    console.log({ address });
     if (!address || address === ADDRESS_ZERO) {
-        setIsFirstLP(true);
+      setIsFirstLP(true);
     }
-  }
+  };
 
   useEffect(() => {
     getPairAddress();
@@ -89,7 +92,6 @@ const TradeForm = ({
   };
 
   const handleAction = async () => {
-
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
       .times(new BigNumber(token1Amount))
@@ -101,7 +103,7 @@ const TradeForm = ({
     console.log({ bnToken1Amount, bnToken2Amount });
 
     const { timestamp } = await web3Helpers.getBlock();
-    console.log({timestamp})
+    console.log({ timestamp });
     const result = await routerContract.addLiquidity(
       token1.address,
       token2.address,
@@ -111,9 +113,9 @@ const TradeForm = ({
       bnToken2Amount,
       userAddress,
       timestamp + K_5_MIN + '',
-      timestamp + K_1_DAY + '',
+      timestamp + K_1_DAY + ''
     );
-    console.log({result});
+    console.log({ result });
   };
 
   return (
@@ -173,25 +175,29 @@ const TradeForm = ({
         <LiquidityPairInfo />
         <Notification message="Error: Insufficient Balance" type="error" />
         <Notification message="Wallet connected" type="success" />
-        {isFirstLP && <Notification
-          message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
-          type="info"
-        />}
-        {(token1?.symbol === 'AIDOGE' || token2?.symbol === 'AIDOGE') && <Notification
-          message={
-            <div className="text-[#F04438]">
-              The AIDOGE token has a custom transfer tax that can prevent you
-              from swapping, you might need to significantly increase your
-              slippage and only use the V2 swap mode.
-            </div>
-          }
-          type="error"
-          hideIcon
-        />}
+        {isFirstLP && (
+          <Notification
+            message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
+            type="info"
+          />
+        )}
+        {(token1?.symbol === 'AIDOGE' || token2?.symbol === 'AIDOGE') && (
+          <Notification
+            message={
+              <div className="text-[#F04438]">
+                The AIDOGE token has a custom transfer tax that can prevent you
+                from swapping, you might need to significantly increase your
+                slippage and only use the V2 swap mode.
+              </div>
+            }
+            type="error"
+            hideIcon
+          />
+        )}
 
         <Button
           onClick={() => handleAction()}
-          className="w-full justify-center  mb-2"
+          className="w-full justify-center mb-2 px-[42px]"
           disabled={!token1 || !token2}
         >
           {buttonName}

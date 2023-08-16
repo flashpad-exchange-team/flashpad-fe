@@ -69,15 +69,16 @@ const TradeForm = ({
 
   const handleAction = () => {
     if (buttonName === 'Add Liquidity') {
-      const bnToken1Amount = BigNumber(10).pow(balanceToken1?.decimals!)
+      const bnToken1Amount = BigNumber(10)
+        .pow(balanceToken1?.decimals!)
         .times(new BigNumber(token1Amount))
         .toFixed(0, BigNumber.ROUND_DOWN);
-      const bnToken2Amount = BigNumber(10).pow(balanceToken2?.decimals!)
+      const bnToken2Amount = BigNumber(10)
+        .pow(balanceToken2?.decimals!)
         .times(new BigNumber(token2Amount))
         .toFixed(0, BigNumber.ROUND_DOWN);
-      console.log({bnToken1Amount, bnToken2Amount});
+      console.log({ bnToken1Amount, bnToken2Amount });
     } else {
-
     }
   };
 
@@ -93,14 +94,14 @@ const TradeForm = ({
         toggleOpen={toggleOpenSetting}
       />
 
-      <div className="w-[648px] bg-[#00000080] rounded-lg h-auto my-[96px] mx-auto py-4 px-[24px]">
+      <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3">
           <SwapLeftIcon />
           {title}
           <SwapRightIcon />
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
-          <div className="text-[#FFAF1D] text-semibold flex items-center gap-2 ">
+          <div className="text-[#FFAF1D] text-semibold flex items-center gap-2 text-[14px] lg:text-[16px] ">
             V2 MODE
             <QuestionIcon />
           </div>
@@ -156,7 +157,7 @@ const TradeForm = ({
 
         <Button
           onClick={() => handleAction()}
-          className="w-full justify-center  mb-2"
+          className="w-full justify-center mb-2 px-[42px]"
           disabled
         >
           {buttonName}

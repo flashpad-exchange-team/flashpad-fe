@@ -17,7 +17,7 @@ const Base = () => {
   }, []);
   return (
     <div
-      className={`text-white-600 antialiased h-[100vh]`}
+      className={`text-white-600 antialiased xl:h-[100vh] pb-20`}
       style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
     >
       <Meta title={AppConfig.title} description={AppConfig.description} />
