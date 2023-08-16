@@ -13,14 +13,16 @@ const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
 const Liquidity = () => {
   const { startLoading, stopLoading } = useLoading();
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
+
   useEffect(() => {
     setIsClient(true);
     startLoading();
     // Simulate an asynchronous action
     setTimeout(() => {
       stopLoading();
-    }, 2000);
+    }, 1000);
   }, []);
+
   return isClient ? (
     <div
       style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}

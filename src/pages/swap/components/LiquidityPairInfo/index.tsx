@@ -17,7 +17,7 @@ const LiquidityPairInfo = () => {
                 </div>
             </div>
             <div>
-                {open ? <ArrowDown /> : <ArrowUp />}
+                {open ? <ArrowUp /> : <ArrowDown />}
             </div>
         </div>
         {

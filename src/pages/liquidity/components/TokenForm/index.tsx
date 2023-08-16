@@ -13,7 +13,7 @@ export interface TokenFormProps {
   title: string;
   tokenData: {
     symbol: string;
-    balance: bigint;
+    balance: string;
   };
   setTokenAmount: (value: any) => void;
 }

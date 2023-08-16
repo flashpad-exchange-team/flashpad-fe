@@ -1,20 +1,6 @@
-import { ethers } from "ethers";
-import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
+import { GetBlockParameters } from 'viem';
+import { publicClient } from './web3Clients';
 
-var routerContract: ethers.Contract;
-
-export const getRouterContract = () => {
-  if (!routerContract) {
-    const routerContractAddress = '';
-    const provider = new ethers.BrowserProvider((window as any).ethereum);
-    // const signer = provider.getSigner();
-
-    routerContract = new ethers.Contract(routerContractAddress, RouterABI, provider);
-  }
-  return routerContract;
+export const getBlock = async (params?: GetBlockParameters) => {
+  return await publicClient.getBlock(params);
 };
-
-export const scAddLiquidity = async () => {
-  const contract = getRouterContract();
-  await contract.callStatic!.addLiquidity();
-}

@@ -11,8 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router'; // Import the useRouter hook
 import type { ReactNode } from 'react';
 import { useAccount, useConnect, useDisconnect, useConfig } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaTestnet, sepolia } from 'wagmi/chains';
 
 type INavbarProps = {
   logo: ReactNode;
@@ -59,7 +58,7 @@ const MENU_ITEMS = [
 const Header = (props: INavbarProps) => {
   const { address, isConnected } = useAccount();
   const { connectors } = useConfig();
-  const { connect } = useConnect({ connector: connectors[0] });
+  const { connect } = useConnect({ connector: connectors[0], chainId: lineaTestnet.id });
   const { disconnect } = useDisconnect();
   const router = useRouter(); // Initialize the useRouter hook
 

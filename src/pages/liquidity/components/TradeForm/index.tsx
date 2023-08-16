@@ -6,7 +6,7 @@ import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import Notification from '@/components/notification/Notification';
@@ -14,6 +14,9 @@ import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import BigNumber from 'bignumber.js';
 import { useAccount, useBalance } from 'wagmi';
 import * as routerContract from '@/utils/routerContract';
+import * as factoryContract from '@/utils/factoryContract';
+import * as web3Helpers from '@/utils/web3Helpers';
+import { ADDRESS_ZERO, K_1_DAY, K_5_MIN } from '@/utils/constants';
 
 interface TradeFormProps {
   title: string;
@@ -22,6 +25,7 @@ interface TradeFormProps {
   inputTitle2: string;
   dividerIcon: React.ReactNode;
 }
+
 const TradeForm = ({
   title,
   buttonName,
@@ -29,7 +33,7 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
-  const { address } = useAccount();
+  const { address: userAddress } = useAccount();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -38,11 +42,13 @@ const TradeForm = ({
   const [token2, setToken2] = useState<any>();
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
+  // const [pairAddress, setPairAddress] = useState('');
+  const [isFirstLP, setIsFirstLP] = useState(false);
 
   console.log({ token1Amount, token2Amount });
 
   const { data: balanceToken1 } = useBalance({
-    address,
+    address: userAddress,
     token: token1 ? (token1.address as `0x${string}`) : undefined,
     watch: true,
     cacheTime: 5000,
@@ -50,7 +56,7 @@ const TradeForm = ({
   });
 
   const { data: balanceToken2 } = useBalance({
-    address,
+    address: userAddress,
     token: token2 ? (token2.address as `0x${string}`) : undefined,
     watch: true,
     cacheTime: 5000,
@@ -59,6 +65,20 @@ const TradeForm = ({
 
   const toggleOpen = () => setOpen(!isOpen);
   const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
+
+  const getPairAddress = async () => {
+    if (!token1 || !token2) return;
+    const address = await factoryContract.getPair(token1.address, token2.address);
+    // setPairAddress(address);
+    console.log({address})
+    if (!address || address === ADDRESS_ZERO) {
+        setIsFirstLP(true);
+    }
+  }
+
+  useEffect(() => {
+    getPairAddress();
+  }, [token1, token2]);
 
   const onSelectedToken = (token: any) => {
     if (tokenBeingSelected === 1) {
@@ -69,7 +89,7 @@ const TradeForm = ({
   };
 
   const handleAction = async () => {
-    await routerContract.getPair('', '');
+
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
       .times(new BigNumber(token1Amount))
@@ -79,6 +99,21 @@ const TradeForm = ({
       .times(new BigNumber(token2Amount))
       .toFixed(0, BigNumber.ROUND_DOWN);
     console.log({ bnToken1Amount, bnToken2Amount });
+
+    const { timestamp } = await web3Helpers.getBlock();
+    console.log({timestamp})
+    const result = await routerContract.addLiquidity(
+      token1.address,
+      token2.address,
+      bnToken1Amount,
+      bnToken2Amount,
+      bnToken1Amount,
+      bnToken2Amount,
+      userAddress,
+      timestamp + K_5_MIN + '',
+      timestamp + K_1_DAY + '',
+    );
+    console.log({result});
   };
 
   return (
@@ -118,7 +153,7 @@ const TradeForm = ({
           title={inputTitle1}
           tokenData={{
             symbol: balanceToken1?.symbol!,
-            balance: balanceToken1?.value!,
+            balance: balanceToken1?.formatted!,
           }}
           setTokenAmount={(value) => setToken1Amount(value)}
         />
@@ -131,18 +166,18 @@ const TradeForm = ({
           title={inputTitle2}
           tokenData={{
             symbol: balanceToken2?.symbol!,
-            balance: balanceToken2?.value!,
+            balance: balanceToken2?.formatted!,
           }}
           setTokenAmount={(value) => setToken2Amount(value)}
         />
         <LiquidityPairInfo />
         <Notification message="Error: Insufficient Balance" type="error" />
         <Notification message="Wallet connected" type="success" />
-        <Notification
+        {isFirstLP && <Notification
           message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
           type="info"
-        />
-        <Notification
+        />}
+        {(token1?.symbol === 'AIDOGE' || token2?.symbol === 'AIDOGE') && <Notification
           message={
             <div className="text-[#F04438]">
               The AIDOGE token has a custom transfer tax that can prevent you
@@ -152,12 +187,12 @@ const TradeForm = ({
           }
           type="error"
           hideIcon
-        />
+        />}
 
         <Button
           onClick={() => handleAction()}
           className="w-full justify-center  mb-2"
-          disabled
+          disabled={!token1 || !token2}
         >
           {buttonName}
         </Button>
