@@ -6,8 +6,6 @@ export const ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET = process.env.ARTHUR_ROUTER_ADD
 
 export const ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET = process.env.ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET || '0x95D37Feb6e4Df0F1d17DcB80A755f8DAb849C71F';
 
-console.log({ ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET })
-
 export const K_5_MIN = BigInt(300);
 
 export const K_1_DAY = BigInt(86400);
@@ -15,7 +13,7 @@ export const K_1_DAY = BigInt(86400);
 export const K_1_WEEK = BigInt(604800);
 
 export const daysToSeconds = (days: number) => {
-  return BigInt(days * 60 * 60 * 24);
+  return BigInt(days * 86400);
 };
 
 

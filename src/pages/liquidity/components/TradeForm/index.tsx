@@ -254,7 +254,7 @@ const TradeForm = ({
           title={inputTitle1}
           tokenData={{
             symbol: token1 ? balanceToken1?.symbol! : '',
-            balance: token1 ? balanceToken1?.formatted! : '',
+            balance: token1 ? balanceToken1?.formatted! : '?',
             logo: token1 ? token1?.logoURI : '',
           }}
           setTokenAmount={(value) => setToken1Amount(value)}
