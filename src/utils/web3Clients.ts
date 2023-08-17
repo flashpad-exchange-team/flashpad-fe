@@ -8,7 +8,7 @@ const publicClient: any = createPublicClient({
 
 const walletClient = createWalletClient({
   chain: lineaTestnet,
-  transport: custom((window as any).ethereum),
+  transport: typeof window !== 'undefined' ? custom((window as any).ethereum) : http(),
 })
 
 export {

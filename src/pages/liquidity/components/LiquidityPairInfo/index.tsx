@@ -23,18 +23,24 @@ const LiquidityPairInfo = ({
   token1Data,
   token2Data,
 }: LiquidityPairInfoProps) => {
-  const {
-    address: token1Address,
-    symbol: token1Symbol,
-    // decimals: token1Decimals,
-    // amountIn: token1AmountIn,
-  } = token1Data;
-  const {
-    address: token2Address,
-    symbol: token2Symbol,
-    // decimals: token2Decimals,
-    // amountIn: token2AmountIn,
-  } = token2Data;
+  // const {
+  //   address: token1Address,
+  //   symbol: token1Symbol,
+  //   // decimals: token1Decimals,
+  //   // amountIn: token1AmountIn,
+  // } = token1Data;
+  // const {
+  //   address: token2Address,
+  //   symbol: token2Symbol,
+  //   // decimals: token2Decimals,
+  //   // amountIn: token2AmountIn,
+  // } = token2Data;
+
+  const token1Address = token1Data?.address;
+  const token1Symbol = token1Data?.symbol;
+  const token2Address = token2Data?.address;
+  const token2Symbol = token2Data?.symbol;
+
   const [lpAddress, setLPAddress] = useState(ADDRESS_ZERO);
   const [open, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!open);

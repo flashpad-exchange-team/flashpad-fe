@@ -31,8 +31,13 @@ const TokenForm = ({
           <Select
             options={LINEA_TESTNET_TOKENS_LIST}
             icon={
-              tokenData.logo ? (
-                <Image alt="logo" src={tokenData.logo} width={25} height={25} />
+              tokenData?.logo ? (
+                <Image
+                  alt="logo"
+                  src={tokenData?.logo}
+                  width={25}
+                  height={25}
+                />
               ) : (
                 <BNBICon />
               )
