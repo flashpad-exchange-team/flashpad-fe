@@ -17,7 +17,7 @@ const LiquiditySettingModal = ({
 }: LiquiditySettingModalProps) => {
   const [search, setSearch] = useState<string>('');
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} height="450px">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} height="490px">
       <div className="flex items-center justify-between w-full">
         <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
@@ -49,17 +49,17 @@ const LiquiditySettingModal = ({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <div className="flex items-center gap-2">
+      <div className="block lg:flex items-center gap-2">
         <Button
           onClick={toggleOpen}
-          className="w-full justify-center mt-2 mb-2"
+          className="w-full justify-center mt-2 mb-2 px-[42px]"
           type="secondary"
         >
           Reset to default
         </Button>
         <Button
           onClick={toggleOpen}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
         >
           Save setting
         </Button>

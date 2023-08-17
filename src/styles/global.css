@@ -6,6 +6,11 @@
 
 @import url('https://fonts.cdnfonts.com/css/open-sans');
 
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
 body {
   font-family: 'Open Sans', sans-serif;
   color: white;
@@ -38,13 +43,32 @@ body {
 .szh-menu {
   background-color: #000000 !important;
   padding: 15px 0px !important;
+  @media (max-width: 768px) {
+    width: 100vw !important;
+    top: unset !important;
+    bottom: 10px;
+  }
 }
 .szh-menu li {
   background: #000000;
   color: white;
   width: 200px;
   margin-bottom: 5px;
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
 }
 .szh-menu li:hover {
   color: #ffaf1d;
+}
+
+.hoverItem:hover svg path {
+  stroke: #ffc700;
+}
+.active svg path {
+  stroke: #ffc700;
+}
+
+.smallSVG svg {
+  width: 18px;
 }

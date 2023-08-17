@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactModal from 'react-modal';
+import styles from './modal.module.css';
 
 interface ModalProps {
   isOpen: boolean;
@@ -35,12 +36,12 @@ const CommonModal: React.FC<ModalProps> = ({
           left: '50%', // Center horizontally
           transform: 'translate(-50%, -50%)', // Center content
           backgroundColor: '#0A071E',
-          width: 648,
           height: height || 700,
           overflow: 'hidden',
           position: 'fixed',
         },
       }}
+      className={styles.modal}
     >
       {children}
     </ReactModal>
