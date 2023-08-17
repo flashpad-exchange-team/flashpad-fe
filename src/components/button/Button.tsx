@@ -15,7 +15,7 @@ const Button = (props: IButtonProps) => {
     <button
       {...props}
       type="button"
-      className={`px-[42px] py-[12px]  ${
+      className={` py-[12px]  ${
         props.type === 'secondary'
           ? 'text-[#98A2B3] bg-[#1D2939] '
           : 'text-[#0C111D] bg-[#FFAF1D]'

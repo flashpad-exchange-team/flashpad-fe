@@ -11,6 +11,8 @@ import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import Notification from '@/components/notification/Notification';
 import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
+import BigNumber from 'bignumber.js';
+import { useAccount, useBalance } from 'wagmi';
 
 interface TradeFormProps {
   title: string;
@@ -26,28 +28,80 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
+  const { address } = useAccount();
+
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
+  const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
+  const [token1, setToken1] = useState<any>();
+  const [token2, setToken2] = useState<any>();
+  const [token1Amount, setToken1Amount] = useState<string>('0');
+  const [token2Amount, setToken2Amount] = useState<string>('0');
+
+  console.log({ token1Amount, token2Amount });
+
+  const { data: balanceToken1 } = useBalance({
+    address,
+    token: token1 ? (token1.address as `0x${string}`) : undefined,
+    watch: true,
+    cacheTime: 5000,
+    formatUnits: 'ether',
+  });
+
+  const { data: balanceToken2 } = useBalance({
+    address,
+    token: token2 ? (token2.address as `0x${string}`) : undefined,
+    watch: true,
+    cacheTime: 5000,
+    formatUnits: 'ether',
+  });
 
   const toggleOpen = () => setOpen(!isOpen);
   const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
 
+  const onSelectedToken = (token: any) => {
+    if (tokenBeingSelected === 1) {
+      setToken1(token);
+    } else if (tokenBeingSelected === 2) {
+      setToken2(token);
+    }
+  };
+
+  const handleAction = () => {
+    if (buttonName === 'Add Liquidity') {
+      const bnToken1Amount = BigNumber(10)
+        .pow(balanceToken1?.decimals!)
+        .times(new BigNumber(token1Amount))
+        .toFixed(0, BigNumber.ROUND_DOWN);
+      const bnToken2Amount = BigNumber(10)
+        .pow(balanceToken2?.decimals!)
+        .times(new BigNumber(token2Amount))
+        .toFixed(0, BigNumber.ROUND_DOWN);
+      console.log({ bnToken1Amount, bnToken2Amount });
+    } else {
+    }
+  };
+
   return (
     <>
-      <SelectTokenModal isOpen={isOpen} toggleOpen={toggleOpen} />
+      <SelectTokenModal
+        isOpen={isOpen}
+        toggleOpen={toggleOpen}
+        selectValue={onSelectedToken}
+      />
       <LiquiditySettingModal
         isOpen={isOpenSetting}
         toggleOpen={toggleOpenSetting}
       />
 
-      <div className="w-[648px] bg-[#00000080] rounded-lg h-auto my-[96px] mx-auto py-4 px-[24px]">
+      <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3">
           <SwapLeftIcon />
           {title}
           <SwapRightIcon />
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
-          <div className="text-[#FFAF1D] text-semibold flex items-center gap-2 ">
+          <div className="text-[#FFAF1D] text-semibold flex items-center gap-2 text-[14px] lg:text-[16px] ">
             V2 MODE
             <QuestionIcon />
           </div>
@@ -57,9 +111,31 @@ const TradeForm = ({
             <SettingIcon onClick={toggleOpenSetting} />
           </div>
         </div>
-        <TokenForm openModal={toggleOpen} title={inputTitle1} />
+        <TokenForm
+          openModal={() => {
+            setTokenBeingSelected(1);
+            toggleOpen();
+          }}
+          title={inputTitle1}
+          tokenData={{
+            symbol: balanceToken1?.symbol!,
+            balance: balanceToken1?.value!,
+          }}
+          setTokenAmount={(value) => setToken1Amount(value)}
+        />
         <div className="mx-auto w-fit">{dividerIcon}</div>
-        <TokenForm openModal={toggleOpen} title={inputTitle2} />
+        <TokenForm
+          openModal={() => {
+            setTokenBeingSelected(2);
+            toggleOpen();
+          }}
+          title={inputTitle2}
+          tokenData={{
+            symbol: balanceToken2?.symbol!,
+            balance: balanceToken2?.value!,
+          }}
+          setTokenAmount={(value) => setToken2Amount(value)}
+        />
         <LiquidityPairInfo />
         <Notification message="Error: Insufficient Balance" type="error" />
         <Notification message="Wallet connected" type="success" />
@@ -80,8 +156,8 @@ const TradeForm = ({
         />
 
         <Button
-          onClick={() => {}}
-          className="w-full justify-center  mb-2"
+          onClick={() => handleAction()}
+          className="w-full justify-center mb-2 px-[42px]"
           disabled
         >
           {buttonName}
