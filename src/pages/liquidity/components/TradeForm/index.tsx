@@ -33,34 +33,28 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress, isConnected } = useAccount();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
-  const [token1, setToken1] = useState<any>();
-  const [token2, setToken2] = useState<any>();
+  const [token1, setToken1] = useState<any>(null);
+  const [token2, setToken2] = useState<any>(null);
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
-  // const [pairAddress, setPairAddress] = useState('');
+  const [insufficient, setInsufficient] = useState(false);
   const [isFirstLP, setIsFirstLP] = useState(false);
-
-  console.log({ token1Amount, token2Amount });
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
     token: token1 ? (token1.address as `0x${string}`) : undefined,
     watch: true,
-    cacheTime: 5000,
-    formatUnits: 'ether',
   });
 
   const { data: balanceToken2 } = useBalance({
     address: userAddress,
     token: token2 ? (token2.address as `0x${string}`) : undefined,
     watch: true,
-    cacheTime: 5000,
-    formatUnits: 'ether',
   });
 
   const toggleOpen = () => setOpen(!isOpen);
@@ -68,13 +62,15 @@ const TradeForm = ({
 
   const getPairAddress = async () => {
     if (!token1 || !token2) return;
-    const address = await factoryContract.getPair(token1.address, token2.address);
-    // setPairAddress(address);
-    console.log({address})
+    const address = await factoryContract.getPair(
+      token1.address,
+      token2.address
+    );
+    console.log({ factoryPairAddress: address });
     if (!address || address === ADDRESS_ZERO) {
-        setIsFirstLP(true);
+      setIsFirstLP(true);
     }
-  }
+  };
 
   useEffect(() => {
     getPairAddress();
@@ -82,38 +78,62 @@ const TradeForm = ({
 
   const onSelectedToken = (token: any) => {
     if (tokenBeingSelected === 1) {
+      if (token2?.address === token?.address) {
+        setToken2(token1);
+      }
       setToken1(token);
     } else if (tokenBeingSelected === 2) {
+      if (token1?.address === token?.address) {
+        setToken1(token2);
+      }
       setToken2(token);
     }
   };
 
-  const handleAction = async () => {
-
+  const handleAddLiquidity = async () => {
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
-      .times(new BigNumber(token1Amount))
-      .toFixed(0, BigNumber.ROUND_DOWN);
+      .times(new BigNumber(token1Amount));
+    // .toFixed(0, BigNumber.ROUND_DOWN);
     const bnToken2Amount = BigNumber(10)
       .pow(balanceToken2?.decimals!)
-      .times(new BigNumber(token2Amount))
-      .toFixed(0, BigNumber.ROUND_DOWN);
-    console.log({ bnToken1Amount, bnToken2Amount });
+      .times(new BigNumber(token2Amount));
+    // .toFixed(0, BigNumber.ROUND_DOWN);
+
+    if (
+      bnToken1Amount.isNaN() ||
+      bnToken2Amount.isNaN() ||
+      bnToken1Amount.isZero() ||
+      bnToken2Amount.isZero()
+    ) {
+      alert('Please input valid amount');
+      return;
+    }
+
+    if (
+      bnToken1Amount.isGreaterThan(
+        BigNumber(balanceToken1!.value.toString())
+      ) ||
+      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
+    ) {
+      setInsufficient(true);
+      return;
+    }
+    setInsufficient(false);
 
     const { timestamp } = await web3Helpers.getBlock();
-    console.log({timestamp})
     const result = await routerContract.addLiquidity(
       token1.address,
       token2.address,
-      bnToken1Amount,
-      bnToken2Amount,
-      bnToken1Amount,
-      bnToken2Amount,
+      bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
       userAddress,
       timestamp + K_5_MIN + '',
-      timestamp + K_1_DAY + '',
+      timestamp + K_1_DAY + ''
     );
-    console.log({result});
+    console.log({ result });
   };
 
   return (
@@ -152,8 +172,8 @@ const TradeForm = ({
           }}
           title={inputTitle1}
           tokenData={{
-            symbol: balanceToken1?.symbol!,
-            balance: balanceToken1?.formatted!,
+            symbol: token1 ? balanceToken1?.symbol! : '',
+            balance: token1 ? balanceToken1?.formatted! : '?',
           }}
           setTokenAmount={(value) => setToken1Amount(value)}
         />
@@ -165,32 +185,46 @@ const TradeForm = ({
           }}
           title={inputTitle2}
           tokenData={{
-            symbol: balanceToken2?.symbol!,
-            balance: balanceToken2?.formatted!,
+            symbol: token2 ? balanceToken2?.symbol! : '',
+            balance: token2 ? balanceToken2?.formatted! : '?',
           }}
           setTokenAmount={(value) => setToken2Amount(value)}
         />
-        <LiquidityPairInfo />
-        <Notification message="Error: Insufficient Balance" type="error" />
-        <Notification message="Wallet connected" type="success" />
-        {isFirstLP && <Notification
-          message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
-          type="info"
-        />}
-        {(token1?.symbol === 'AIDOGE' || token2?.symbol === 'AIDOGE') && <Notification
-          message={
-            <div className="text-[#F04438]">
-              The AIDOGE token has a custom transfer tax that can prevent you
-              from swapping, you might need to significantly increase your
-              slippage and only use the V2 swap mode.
-            </div>
-          }
-          type="error"
-          hideIcon
-        />}
+        <LiquidityPairInfo
+          isFirstLP={isFirstLP}
+          token1Address={token1?.address}
+          token2Address={token2?.address}
+          token1Symbol={token1?.symbol}
+          token2Symbol={token2?.symbol}
+        />
+        {insufficient && (
+          <Notification message="Error: Insufficient Balance" type="error" />
+        )}
+        {isConnected && (
+          <Notification message="Wallet connected" type="success" />
+        )}
+        {isFirstLP && (
+          <Notification
+            message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
+            type="info"
+          />
+        )}
+        {(token1?.symbol === 'AIDOGE' || token2?.symbol === 'AIDOGE') && (
+          <Notification
+            message={
+              <div className="text-[#F04438]">
+                The AIDOGE token has a custom transfer tax that can prevent you
+                from swapping, you might need to significantly increase your
+                slippage and only use the V2 swap mode.
+              </div>
+            }
+            type="error"
+            hideIcon
+          />
+        )}
 
         <Button
-          onClick={() => handleAction()}
+          onClick={() => handleAddLiquidity()}
           className="w-full justify-center  mb-2"
           disabled={!token1 || !token2}
         >

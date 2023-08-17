@@ -5,7 +5,7 @@ import { publicClient, walletClient } from './web3Clients';
 const routerContract = getContract({
   address:
     (process.env.ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as `0x${string}`) ||
-    '0x9F423958b0e02d6C60D1714a37bc627C23C7d048',
+    '0x3DE501F374fd285C61E96F1039be564438D3eA33',
   abi: RouterABI,
   publicClient,
   walletClient,
@@ -51,8 +51,26 @@ export const addLiquidity = async (
     // return hash;
   } catch (err: any) {
     console.log(err.message || err);
+    return undefined;
   }
 };
+
+export const getPair = async (
+  token1Address: string,
+  token2Address: string,
+) => {
+  try {
+    const pairAddress = await routerContract.read.getPair!([
+      token1Address,
+      token2Address,
+    ]);
+  
+    return pairAddress as string;
+  } catch (err: any) {
+    console.log(err.message || err);
+    return undefined;
+  }
+}
 
 /**
  * Get amounts out
@@ -60,8 +78,13 @@ export const addLiquidity = async (
  * @param path array of ERC20 token addresses
  */
 export const getAmountsOut = async (amountIn: string, path: string[]) => {
-  const result = await routerContract.read.getAmountsOut!([amountIn, path]);
-
-  console.log({ result });
-  return result;
+  try {
+    const result = await routerContract.read.getAmountsOut!([amountIn, path]);
+  
+    console.log({ result });
+    return result;
+  } catch (err: any) {
+    console.log(err.message || err);
+    return undefined;
+  }
 };

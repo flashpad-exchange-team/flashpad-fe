@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router'; // Import the useRouter hook
 import type { ReactNode } from 'react';
 import { useAccount, useConnect, useDisconnect, useConfig } from 'wagmi';
-import { lineaTestnet, sepolia } from 'wagmi/chains';
+import { lineaTestnet } from 'wagmi/chains';
 
 type INavbarProps = {
   logo: ReactNode;

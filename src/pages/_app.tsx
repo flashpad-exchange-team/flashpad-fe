@@ -11,11 +11,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from 'wagmi/connectors/injected';
-import { lineaTestnet, sepolia } from 'wagmi/chains';
+import { lineaTestnet } from 'wagmi/chains';
 
 
 const { chains, publicClient } = configureChains(
-  [ lineaTestnet, sepolia ],
+  [ lineaTestnet ],
   [publicProvider()],
 );
  
