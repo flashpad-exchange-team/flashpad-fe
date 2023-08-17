@@ -131,6 +131,7 @@ const TradeForm = ({
       ) ||
       bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
     ) {
+      toast.error('Insufficient balance!');
       setInsufficient(true);
       return;
     }
@@ -153,6 +154,7 @@ const TradeForm = ({
         [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
       );
       if (!approveRes) {
+        stopLoading();
         setSuccessful(false);
         setFailed(true);
         return;
@@ -178,6 +180,7 @@ const TradeForm = ({
         [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
       );
       if (!approveRes) {
+        stopLoading();
         setSuccessful(false);
         setFailed(true);
         return;
@@ -202,6 +205,7 @@ const TradeForm = ({
     });
 
     if (!txResult) {
+      stopLoading();
       setSuccessful(false);
       setFailed(true);
       return;
@@ -215,7 +219,6 @@ const TradeForm = ({
     setSuccessful(true);
     setFailed(false);
   };
-  console.log({ token1 });
 
   return (
     <>

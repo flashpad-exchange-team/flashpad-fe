@@ -1,6 +1,7 @@
 import { abi as ERC20ABI } from '@/resources/abis/ERC20.json';
 import { publicClient, walletClient } from './web3Clients';
 import { Address } from 'viem';
+import { toast } from 'react-toastify';
 
 export const erc20Read = async (
   address: Address,
@@ -39,6 +40,7 @@ export const erc20Write = async (
     return { hash, result };
   } catch (err: any) {
     console.log(err.message || err);
+    toast.error(err.message || err);
     return undefined;
   }
 };

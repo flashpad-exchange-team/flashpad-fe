@@ -2,6 +2,7 @@ import { Address, getContract } from 'viem';
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
 import { ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET } from './constants';
+import { toast } from 'react-toastify';
 
 const routerContract: any = getContract({
   address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
@@ -49,6 +50,7 @@ export const addLiquidity = async (
     return { hash, result };
   } catch (err: any) {
     console.log(err.message || err);
+    toast.error(err.message || err);
     return undefined;
   }
 };
