@@ -13,10 +13,14 @@ import Notification from '@/components/notification/Notification';
 import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import BigNumber from 'bignumber.js';
 import { useAccount, useBalance } from 'wagmi';
+import { Address } from 'viem';
 import * as routerContract from '@/utils/routerContract';
 import * as factoryContract from '@/utils/factoryContract';
+import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as web3Helpers from '@/utils/web3Helpers';
-import { ADDRESS_ZERO, K_1_DAY, K_5_MIN } from '@/utils/constants';
+import { ADDRESS_ZERO, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, K_1_DAY, K_5_MIN, MAX_UINT256 } from '@/utils/constants';
+import { waitForTransaction } from '@wagmi/core';
+import { useLoading } from '@/context/LoadingContext';
 
 interface TradeFormProps {
   title: string;
@@ -34,6 +38,7 @@ const TradeForm = ({
   dividerIcon,
 }: TradeFormProps) => {
   const { address: userAddress, isConnected } = useAccount();
+  const { startLoading, stopLoading } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -44,16 +49,18 @@ const TradeForm = ({
   const [token2Amount, setToken2Amount] = useState<string>('0');
   const [insufficient, setInsufficient] = useState(false);
   const [isFirstLP, setIsFirstLP] = useState(false);
+  const [successful, setSuccessful] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
-    token: token1 ? (token1.address as `0x${string}`) : undefined,
+    token: token1 ? (token1.address as Address) : undefined,
     watch: true,
   });
 
   const { data: balanceToken2 } = useBalance({
     address: userAddress,
-    token: token2 ? (token2.address as `0x${string}`) : undefined,
+    token: token2 ? (token2.address as Address) : undefined,
     watch: true,
   });
 
@@ -69,12 +76,14 @@ const TradeForm = ({
     console.log({ factoryPairAddress: address });
     if (!address || address === ADDRESS_ZERO) {
       setIsFirstLP(true);
+      return;
     }
+    setIsFirstLP(false);
   };
 
   useEffect(() => {
     getPairAddress();
-  }, [token1, token2]);
+  }, [token1, token2, successful]);
 
   const onSelectedToken = (token: any) => {
     if (tokenBeingSelected === 1) {
@@ -94,11 +103,11 @@ const TradeForm = ({
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
       .times(new BigNumber(token1Amount));
-    // .toFixed(0, BigNumber.ROUND_DOWN);
+
     const bnToken2Amount = BigNumber(10)
       .pow(balanceToken2?.decimals!)
       .times(new BigNumber(token2Amount));
-    // .toFixed(0, BigNumber.ROUND_DOWN);
+
 
     if (
       bnToken1Amount.isNaN() ||
@@ -111,9 +120,8 @@ const TradeForm = ({
     }
 
     if (
-      bnToken1Amount.isGreaterThan(
-        BigNumber(balanceToken1!.value.toString())
-      ) ||
+      bnToken1Amount.isGreaterThan(BigNumber(balanceToken1!.value.toString()))
+      ||
       bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
     ) {
       setInsufficient(true);
@@ -121,19 +129,69 @@ const TradeForm = ({
     }
     setInsufficient(false);
 
+    startLoading();
+
+    const token1Allowance = (await erc20TokenContract.erc20Read(token1.address, 'allowance', [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET])) as bigint;
+    console.log({ token1Allowance: token1Allowance.toString() })
+
+    if (token1Allowance.toString() < MAX_UINT256) {
+      const approveRes = await erc20TokenContract.erc20Write(userAddress!, token1.address, 'approve', [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]);
+      if (!approveRes) {
+        setSuccessful(false);
+        setFailed(true);
+        return;
+      }
+
+      const hash = approveRes.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt })
+    }
+
+    const token2Allowance = (await erc20TokenContract.erc20Read(token2.address, 'allowance', [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET])) as bigint;
+    console.log({ token2Allowance: token2Allowance.toString() })
+
+    if (token2Allowance.toString() < MAX_UINT256) {
+      const approveRes = await erc20TokenContract.erc20Write(userAddress!, token2.address, 'approve', [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]);
+      if (!approveRes) {
+        setSuccessful(false);
+        setFailed(true);
+        return;
+      }
+
+      const hash = approveRes.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt })
+    }
+
     const { timestamp } = await web3Helpers.getBlock();
-    const result = await routerContract.addLiquidity(
-      token1.address,
-      token2.address,
-      bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-      bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-      bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-      bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-      userAddress,
-      timestamp + K_5_MIN + '',
-      timestamp + K_1_DAY + ''
+    const txResult = await routerContract.addLiquidity(
+      userAddress!,
+      {
+        tokenA: token1.address,
+        tokenB: token2.address,
+        amountADesired: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        amountBDesired: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        amountAMin: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        amountBMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        to: userAddress!,
+        deadline: timestamp + K_5_MIN + '',
+        timeLock: timestamp + K_1_DAY + ''
+      }
     );
-    console.log({ result });
+
+    if (!txResult) {
+      setSuccessful(false);
+      setFailed(true);
+      return;
+    }
+
+    const hash = txResult.hash;
+    const txReceipt = await waitForTransaction({ hash });
+    console.log({ txReceipt })
+
+    stopLoading();
+    setSuccessful(true);
+    setFailed(false);
   };
 
   return (
@@ -192,16 +250,30 @@ const TradeForm = ({
         />
         <LiquidityPairInfo
           isFirstLP={isFirstLP}
-          token1Address={token1?.address}
-          token2Address={token2?.address}
-          token1Symbol={token1?.symbol}
-          token2Symbol={token2?.symbol}
+          token1Data={{
+            address: token1?.address,
+            symbol: token1?.symbol,
+            amountIn: token1Amount,
+            decimals: balanceToken1?.decimals,
+          }}
+          token2Data={{
+            address: token2?.address,
+            symbol: token2?.symbol,
+            amountIn: token2Amount,
+            decimals: balanceToken2?.decimals,
+          }}
         />
         {insufficient && (
           <Notification message="Error: Insufficient Balance" type="error" />
         )}
         {isConnected && (
           <Notification message="Wallet connected" type="success" />
+        )}
+        {successful && (
+          <Notification message="Add liquidity successfully" type="success" />
+        )}
+        {failed && (
+          <Notification message="Add liquidity failed" type="error" />
         )}
         {isFirstLP && (
           <Notification

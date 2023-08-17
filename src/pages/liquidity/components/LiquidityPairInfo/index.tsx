@@ -3,26 +3,45 @@ import ArrowDown from '@/icons/ArrowDown';
 import ArrowUp from '@/icons/ArrowUp';
 import { useEffect, useState } from 'react';
 import * as routerContract from '@/utils/routerContract';
+import * as factoryContract from '@/utils/factoryContract';
 import { ADDRESS_ZERO } from '@/utils/constants';
 
+interface IPairTokenInfo {
+  symbol?: string;
+  address?: string;
+  decimals?: number;
+  amountIn: string;
+}
+
 interface LiquidityPairInfoProps {
-  token1Symbol?: string;
-  token2Symbol?: string;
-  token1Address?: string;
-  token2Address?: string;
+  token1Data: IPairTokenInfo;
+  token2Data: IPairTokenInfo;
   isFirstLP?: boolean;
 }
 
 const LiquidityPairInfo = ({
   isFirstLP,
-  token1Address,
-  token2Address,
-  token1Symbol,
-  token2Symbol,
+  token1Data,
+  token2Data,
 }: LiquidityPairInfoProps) => {
+  const {
+    address: token1Address,
+    symbol: token1Symbol,
+    decimals: token1Decimals,
+    amountIn: token1AmountIn,
+  } = token1Data;
+  const {
+    address: token2Address,
+    symbol: token2Symbol,
+    decimals: token2Decimals,
+    amountIn: token2AmountIn,
+  } = token2Data;
   const [lpAddress, setLPAddress] = useState(ADDRESS_ZERO);
   const [open, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!open);
+
+  const [token1Reserve, setToken1Reserve] = useState('');
+  const [token2Reserve, setToken2Reserve] = useState('');
 
   const getPairLPAddress = async () => {
     if (!token1Address || !token2Address) return;

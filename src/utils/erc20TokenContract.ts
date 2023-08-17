@@ -1,17 +1,9 @@
 import { abi as ERC20ABI } from '@/resources/abis/ERC20.json';
 import { publicClient, walletClient } from './web3Clients';
-
-// export const getERC20TokenContract = (address: string) => {
-//   return getContract({
-//     address: address as `0x${string}`,
-//     abi: ERC20ABI,
-//     publicClient,
-//     walletClient,
-//   });
-// }
+import { Address } from 'viem';
 
 export const erc20Read = async (
-  address: `0x${string}`,
+  address: Address,
   functionName: string,
   args: any[]
 ) => {
@@ -30,8 +22,8 @@ export const erc20Read = async (
 };
 
 export const erc20Write = async (
-  account: `0x${string}`,
-  address: `0x${string}`,
+  account: Address,
+  address: Address,
   functionName: string,
   args: any[]
 ) => {

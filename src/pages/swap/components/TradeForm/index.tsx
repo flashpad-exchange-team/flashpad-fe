@@ -13,6 +13,7 @@ import Notification from '@/components/notification/Notification';
 import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import BigNumber from 'bignumber.js';
 import { useAccount, useBalance } from 'wagmi';
+import { Address } from 'viem';
 
 interface TradeFormProps {
   title: string;
@@ -42,7 +43,7 @@ const TradeForm = ({
 
   const { data: balanceToken1 } = useBalance({
     address,
-    token: token1 ? (token1.address as `0x${string}`) : undefined,
+    token: token1 ? (token1.address as Address) : undefined,
     watch: true,
     cacheTime: 5000,
     formatUnits: 'ether',
@@ -50,7 +51,7 @@ const TradeForm = ({
 
   const { data: balanceToken2 } = useBalance({
     address,
-    token: token2 ? (token2.address as `0x${string}`) : undefined,
+    token: token2 ? (token2.address as Address) : undefined,
     watch: true,
     cacheTime: 5000,
     formatUnits: 'ether',

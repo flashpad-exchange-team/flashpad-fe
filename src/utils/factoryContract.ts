@@ -1,9 +1,10 @@
-import { getContract } from 'viem'
+import { Address, getContract } from 'viem'
 import { abi as ArthurFactoryABI } from '@/resources/abis/ArthurFactory.json';
 import { publicClient, walletClient } from './web3Clients';
+import { ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET } from './constants';
 
 const factoryContract = getContract({
-  address: process.env.ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET as `0x${string}` || '0x95D37Feb6e4Df0F1d17DcB80A755f8DAb849C71F',
+  address: ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET as Address,
   abi: ArthurFactoryABI,
   publicClient,
   walletClient,

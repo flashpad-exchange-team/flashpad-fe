@@ -1,58 +1,18 @@
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
+export const MAX_UINT256 = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+
+export const ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET = process.env.ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET || '0x90C163cf7C29C449548EF605545d618009F1C74A';
+
+export const ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET = process.env.ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET || '0x95D37Feb6e4Df0F1d17DcB80A755f8DAb849C71F';
+
+console.log({ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET})
+
 export const K_5_MIN = BigInt(300);
 
 export const K_1_DAY = BigInt(86400);
 
 export const K_1_WEEK = BigInt(604800);
-
-// export const LINEA_TESTNET_TOKENS_LIST = [
-//   {
-//     symbol: 'USDC',
-//     name: 'USD Coin',
-//     address: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
-//   },
-//   {
-//     symbol: 'USDT',
-//     name: 'Tether USD',
-//     address: '0x1990BC6dfe2ef605Bfc08f5A23564dB75642Ad73',
-//   },
-//   {
-//     symbol: 'BUSD',
-//     name: 'Binance USD',
-//     address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
-//   },
-//   {
-//     symbol: 'CHOKE',
-//     name: 'Choke',
-//     address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
-//   },
-//   {
-//     symbol: 'DAI',
-//     name: 'DAI',
-//     address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
-//   },
-//   {
-//     symbol: 'DMT',
-//     name: 'DMT',
-//     address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
-//   },
-//   {
-//     symbol: 'DSQ',
-//     name: 'DSquared Governance Token',
-//     address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
-//   },
-//   {
-//     symbol: 'ETH',
-//     name: 'Ethereum',
-//     address: '0xC5aB03962938Fa544D16F4667ED76788894fFca4',
-//   },
-//   {
-//     symbol: 'JONES',
-//     name: 'Jones DAO',
-//     address: '0x7d43AABC515C356145049227CeE54B608342c0ad',
-//   },
-// ];
 
 export const LINEA_TESTNET_TOKENS_LIST = [
   {

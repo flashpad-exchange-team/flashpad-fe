@@ -13,7 +13,7 @@ import { Menu, MenuItem } from '@szhsin/react-menu';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router'; // Import the useRouter hook
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { useAccount, useConnect, useDisconnect, useConfig } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 

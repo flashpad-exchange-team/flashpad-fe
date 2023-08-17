@@ -1,11 +1,10 @@
-import { getContract } from 'viem';
+import { Address, getContract } from 'viem';
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
+import { ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET } from './constants';
 
 const routerContract = getContract({
-  address:
-    (process.env.ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as `0x${string}`) ||
-    '0x3DE501F374fd285C61E96F1039be564438D3eA33',
+  address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
   abi: RouterABI,
   publicClient,
   walletClient,
@@ -21,34 +20,33 @@ const SEPOLIA_TOKENS = {
   ERC20: '0x764EcF27DF3df771D1c79f48A05aB18d2b6BBa10',
 };
 
+export interface IAddLiquidityParams {
+  tokenA: string;
+  tokenB: string;
+  amountADesired: string;
+  amountBDesired: string;
+  amountAMin: string;
+  amountBMin: string;
+  to: Address;
+  deadline: string;
+  timeLock: string;
+}
+
 export const addLiquidity = async (
-  tokenA: string,
-  tokenB: string,
-  amountADesired: string,
-  amountBDesired: string,
-  amountAMin: string,
-  amountBMin: string,
-  to: string | undefined,
-  deadline: string,
-  timeLock: string
+  account: Address,
+  params: IAddLiquidityParams,
 ) => {
   try {
-    const { request, result } = await routerContract.simulate.addLiquidity!([
-      tokenA,
-      tokenB,
-      amountADesired,
-      amountBDesired,
-      amountAMin,
-      amountBMin,
-      to,
-      deadline,
-      timeLock,
-    ]);
+    const { request, result } = await publicClient.simulateContract({
+      address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
+      abi: RouterABI,
+      functionName: 'addLiquidity',
+      args: Object.values(params),
+      account
+    });
+    const hash = await walletClient.writeContract(request);
 
-    return result;
-    
-    // const hash = await routerContract.write.addLiquidity!([]);
-    // return hash;
+    return { hash, result };
   } catch (err: any) {
     console.log(err.message || err);
     return undefined;
