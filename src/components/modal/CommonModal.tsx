@@ -7,6 +7,8 @@ interface ModalProps {
   onRequestClose: () => void;
   children: any;
   height?: string;
+  className?: string;
+  paddingBottom?: string;
 }
 
 const CommonModal: React.FC<ModalProps> = ({
@@ -14,6 +16,8 @@ const CommonModal: React.FC<ModalProps> = ({
   onRequestClose,
   children,
   height,
+  paddingBottom,
+  className,
 }) => {
   useEffect(() => {
     if (isOpen) document.body.style.overflow = 'hidden';
@@ -39,9 +43,12 @@ const CommonModal: React.FC<ModalProps> = ({
           height: height || 700,
           overflow: 'hidden',
           position: 'fixed',
+          paddingBottom,
         },
       }}
-      className={styles.modal}
+      className={`${styles.modal} ${
+        className === 'big-modal' && styles.bigModal
+      }`}
     >
       {children}
     </ReactModal>

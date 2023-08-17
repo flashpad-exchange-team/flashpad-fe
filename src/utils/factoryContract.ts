@@ -3,7 +3,7 @@ import { abi as ArthurFactoryABI } from '@/resources/abis/ArthurFactory.json';
 import { publicClient, walletClient } from './web3Clients';
 import { ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET } from './constants';
 
-const factoryContract = getContract({
+const factoryContract: any = getContract({
   address: ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET as Address,
   abi: ArthurFactoryABI,
   publicClient,
@@ -19,7 +19,7 @@ export const getPair = async (
       token1Address,
       token2Address,
     ]);
-  
+
     return pairAddress as string;
   } catch (err: any) {
     console.log(err.message || err);

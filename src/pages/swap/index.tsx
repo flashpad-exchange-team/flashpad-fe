@@ -1,11 +1,11 @@
 import { useLoading } from '@/context/LoadingContext';
 import SwapIcon from '@/icons/SwapIcon';
+import Footer from '@/layout/footer';
 import { Header } from '@/layout/header/Header';
 import { Logo } from '@/templates/Logo';
+import dynamic from 'next/dynamic';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
-import Footer from '@/layout/footer';
 
 const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
   ssr: false,

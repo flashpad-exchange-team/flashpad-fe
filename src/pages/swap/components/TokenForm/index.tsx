@@ -1,12 +1,6 @@
 import Select from '@/components/select';
 import BNBICon from '@/icons/BNBIcon';
-import { TOKENS_LIST } from '@/components/modal/SelectTokenModal';
-
-// const TOKENS_LIST = [
-//   { value: 'BNB', label: 'BNB' },
-//   { value: 'USDC', label: 'USDC' },
-//   { value: 'USDT', label: 'USDT' },
-// ];
+import { LINEA_TESTNET_TOKENS_LIST } from '@/utils/constants';
 
 export interface TokenFormProps {
   openModal?: () => void;
@@ -33,7 +27,7 @@ const TokenForm = ({
         >
           {title}
           <Select
-            options={TOKENS_LIST}
+            options={LINEA_TESTNET_TOKENS_LIST}
             icon={<BNBICon />}
             value={{ value: tokenData?.symbol, label: tokenData?.symbol }}
             disabled

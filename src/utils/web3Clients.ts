@@ -1,7 +1,7 @@
 import { createPublicClient, createWalletClient, custom, http } from 'viem'
 import { lineaTestnet } from 'viem/chains'
 
-const publicClient = createPublicClient({ 
+const publicClient: any = createPublicClient({
   chain: lineaTestnet,
   transport: http()
 });

@@ -66,7 +66,7 @@ const Select = ({ options, icon, value, disabled }: SelectProps) => {
     <SelectComponent
       options={options}
       styles={customStyles}
-      defaultValue={options[0]}
+      defaultValue={options?.length && options[0]}
       value={value}
       components={{ SingleValue: CustomSingleValue }}
       isSearchable={false}

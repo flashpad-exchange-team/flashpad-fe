@@ -1,19 +1,19 @@
 import { Button } from '@/components/button/Button';
+import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
+import Notification from '@/components/notification/Notification';
 import ButtonStyle from '@/icons/ButtonStyle';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
+import BigNumber from 'bignumber.js';
 import { useState } from 'react';
+import { Address } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import Notification from '@/components/notification/Notification';
-import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
-import BigNumber from 'bignumber.js';
-import { useAccount, useBalance } from 'wagmi';
-import { Address } from 'viem';
 
 interface TradeFormProps {
   title: string;
@@ -22,6 +22,7 @@ interface TradeFormProps {
   inputTitle2: string;
   dividerIcon: React.ReactNode;
 }
+
 const TradeForm = ({
   title,
   buttonName,
@@ -38,8 +39,6 @@ const TradeForm = ({
   const [token2, setToken2] = useState<any>();
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
-
-  console.log({ token1Amount, token2Amount });
 
   const { data: balanceToken1 } = useBalance({
     address,
@@ -96,7 +95,7 @@ const TradeForm = ({
       />
 
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
-        <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3">
+        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3">
           <SwapLeftIcon />
           {title}
           <SwapRightIcon />

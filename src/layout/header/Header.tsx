@@ -1,4 +1,6 @@
 import { Button } from '@/components/button/Button';
+import ConnectWalletModal from '@/components/modal/ConnectWalletModal';
+import { useModal } from '@/context/ModalContext';
 import AddIcon from '@/icons/AddIcon';
 import AnalyticsIcon from '@/icons/AnalyticsIcon';
 import ArrowDown from '@/icons/ArrowDown';
@@ -14,8 +16,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router'; // Import the useRouter hook
 import { ReactNode } from 'react';
-import { useAccount, useConnect, useDisconnect, useConfig } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
+import { useAccount } from 'wagmi';
 
 type INavbarProps = {
   logo: ReactNode;
@@ -63,18 +64,19 @@ const MENU_ITEMS = [
 
 const Header = (props: INavbarProps) => {
   const { address, isConnected } = useAccount();
-  const { connectors } = useConfig();
-  const { connect } = useConnect({
-    connector: connectors[0],
-    chainId: lineaTestnet.id,
-  });
-  const { disconnect } = useDisconnect();
+
   const router = useRouter();
+  const { isOpenConnectWallet, toggleConnectWallet } = useModal();
+
   const currentPath = router.pathname;
   return (
     <>
+      <ConnectWalletModal
+        isOpen={isOpenConnectWallet}
+        toggleOpen={toggleConnectWallet}
+      />
       <div className="bg-[#00000080] h-[80px] items-center flex">
-        <div className="max-w-[1440px] m-auto w-full flex flex-wrap items-center justify-between px-4 lg:px-20">
+        <div className=" m-auto w-full flex flex-wrap items-center justify-between px-4 lg:px-20">
           <div
             className={clsx([
               'flex gap-5 ',
@@ -85,7 +87,7 @@ const Header = (props: INavbarProps) => {
               {props.logo}
             </Link>
             {props.mode === 'app' &&
-              MENU_ITEMS.map((menuItem: any, index: number) =>
+              MENU_ITEMS.map((menuItem: any) =>
                 menuItem.subMenu ? (
                   <Menu
                     key={menuItem.path}
@@ -116,6 +118,7 @@ const Header = (props: INavbarProps) => {
                       >
                         <div
                           className={clsx([
+                            'flex items-center gap-2',
                             item.path === currentPath
                               ? 'text-[#FFAF1D] active'
                               : '',
@@ -149,18 +152,14 @@ const Header = (props: INavbarProps) => {
                 <>
                   <Linea className="mr-8 hidden lg:block" />
                   {isConnected ? (
-                    <Button
-                      onClick={() => disconnect()}
-                      icon={<WalletIcon />}
-                      className="px-4 "
-                    >
+                    <Button icon={<WalletIcon />} className="px-4 ">
                       {address
                         ? address.slice(0, 5) + '...' + address.slice(37, 42)
                         : ''}
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => connect()}
+                      onClick={() => toggleConnectWallet()}
                       icon={<WalletIcon />}
                       className="px-4"
                     >
@@ -171,7 +170,7 @@ const Header = (props: INavbarProps) => {
               ) : (
                 <Button
                   onClick={() => {
-                    router.push('/swap');
+                    router.push('/liquidity');
                   }}
                   icon={<CrossSword />}
                   className="hidden lg:flex px-[42px]"
@@ -186,7 +185,7 @@ const Header = (props: INavbarProps) => {
       {props.mode === 'app' && (
         <div className="bg-[#0C111D] h-[78px] flex items-center justify-center fixed left-0 bottom-0 w-full lg:hidden">
           <div className="flex gap-6 ">
-            {MENU_ITEMS.map((menuItem: any, index: number) =>
+            {MENU_ITEMS.map((menuItem: any) =>
               menuItem.subMenu ? (
                 <Menu
                   key={menuItem.path}

@@ -7,6 +7,9 @@ module.exports = withBundleAnalyzer({
   eslint: {
     dirs: ['.'],
   },
+  images: {
+    domains: ['s2.coinmarketcap.com'], // Add other domains if needed
+  },
   poweredByHeader: false,
   trailingSlash: true,
   basePath: '',

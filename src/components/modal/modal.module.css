@@ -2,6 +2,16 @@
   width: 648px;
 
   @media (max-width: 768px) {
+    width: auto;
+    width: 100%;
+    padding-top: 20px;
+  }
+}
+.bigModal {
+  width: 872px;
+
+  @media (max-width: 768px) {
+    width: auto;
     width: 100%;
     padding-top: 20px;
   }

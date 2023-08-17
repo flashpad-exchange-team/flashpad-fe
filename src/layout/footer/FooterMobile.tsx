@@ -14,7 +14,7 @@ const FooterMobile = () => {
   const toggleShow3 = () => setShow3(!show3);
 
   return (
-    <div className="bg-[#00000080] mb-[78px] h-100% min-h-[450px]  px-4 pt-4 text  pb-10">
+    <div className="bg-[#00000080] mb-[75px] h-100% min-h-[450px]  px-4 pt-4 text  pb-10">
       <div className="text-center mb-3">
         <Logo xl />
       </div>

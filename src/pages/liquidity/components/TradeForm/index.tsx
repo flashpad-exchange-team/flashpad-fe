@@ -1,26 +1,33 @@
 import { Button } from '@/components/button/Button';
+import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
+import Notification from '@/components/notification/Notification';
+import { useLoading } from '@/context/LoadingContext';
 import ButtonStyle from '@/icons/ButtonStyle';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
+import {
+  ADDRESS_ZERO,
+  ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
+  K_1_DAY,
+  K_5_MIN,
+  MAX_UINT256,
+} from '@/utils/constants';
+import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as factoryContract from '@/utils/factoryContract';
+import * as routerContract from '@/utils/routerContract';
+import * as web3Helpers from '@/utils/web3Helpers';
+import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Address } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import Notification from '@/components/notification/Notification';
-import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
-import BigNumber from 'bignumber.js';
-import { useAccount, useBalance } from 'wagmi';
-import { Address } from 'viem';
-import * as routerContract from '@/utils/routerContract';
-import * as factoryContract from '@/utils/factoryContract';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
-import * as web3Helpers from '@/utils/web3Helpers';
-import { ADDRESS_ZERO, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, K_1_DAY, K_5_MIN, MAX_UINT256 } from '@/utils/constants';
-import { waitForTransaction } from '@wagmi/core';
-import { useLoading } from '@/context/LoadingContext';
 
 interface TradeFormProps {
   title: string;
@@ -37,7 +44,7 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
-  const { address: userAddress, isConnected } = useAccount();
+  const { address: userAddress } = useAccount();
   const { startLoading, stopLoading } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -108,20 +115,20 @@ const TradeForm = ({
       .pow(balanceToken2?.decimals!)
       .times(new BigNumber(token2Amount));
 
-
     if (
       bnToken1Amount.isNaN() ||
       bnToken2Amount.isNaN() ||
       bnToken1Amount.isZero() ||
       bnToken2Amount.isZero()
     ) {
-      alert('Please input valid amount');
+      toast.error('Please input valid amount');
       return;
     }
 
     if (
-      bnToken1Amount.isGreaterThan(BigNumber(balanceToken1!.value.toString()))
-      ||
+      bnToken1Amount.isGreaterThan(
+        BigNumber(balanceToken1!.value.toString())
+      ) ||
       bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
     ) {
       setInsufficient(true);
@@ -131,11 +138,20 @@ const TradeForm = ({
 
     startLoading();
 
-    const token1Allowance = (await erc20TokenContract.erc20Read(token1.address, 'allowance', [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET])) as bigint;
-    console.log({ token1Allowance: token1Allowance.toString() })
+    const token1Allowance = (await erc20TokenContract.erc20Read(
+      token1.address,
+      'allowance',
+      [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
+    )) as bigint;
+    console.log({ token1Allowance: token1Allowance.toString() });
 
     if (token1Allowance.toString() < MAX_UINT256) {
-      const approveRes = await erc20TokenContract.erc20Write(userAddress!, token1.address, 'approve', [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]);
+      const approveRes = await erc20TokenContract.erc20Write(
+        userAddress!,
+        token1.address,
+        'approve',
+        [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
+      );
       if (!approveRes) {
         setSuccessful(false);
         setFailed(true);
@@ -144,14 +160,23 @@ const TradeForm = ({
 
       const hash = approveRes.hash;
       const txReceipt = await waitForTransaction({ hash });
-      console.log({ txReceipt })
+      console.log({ txReceipt });
     }
 
-    const token2Allowance = (await erc20TokenContract.erc20Read(token2.address, 'allowance', [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET])) as bigint;
-    console.log({ token2Allowance: token2Allowance.toString() })
+    const token2Allowance = (await erc20TokenContract.erc20Read(
+      token2.address,
+      'allowance',
+      [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
+    )) as bigint;
+    console.log({ token2Allowance: token2Allowance.toString() });
 
     if (token2Allowance.toString() < MAX_UINT256) {
-      const approveRes = await erc20TokenContract.erc20Write(userAddress!, token2.address, 'approve', [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]);
+      const approveRes = await erc20TokenContract.erc20Write(
+        userAddress!,
+        token2.address,
+        'approve',
+        [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
+      );
       if (!approveRes) {
         setSuccessful(false);
         setFailed(true);
@@ -160,24 +185,21 @@ const TradeForm = ({
 
       const hash = approveRes.hash;
       const txReceipt = await waitForTransaction({ hash });
-      console.log({ txReceipt })
+      console.log({ txReceipt });
     }
 
     const { timestamp } = await web3Helpers.getBlock();
-    const txResult = await routerContract.addLiquidity(
-      userAddress!,
-      {
-        tokenA: token1.address,
-        tokenB: token2.address,
-        amountADesired: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountBDesired: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountAMin: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountBMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        to: userAddress!,
-        deadline: timestamp + K_5_MIN + '',
-        timeLock: timestamp + K_1_DAY + ''
-      }
-    );
+    const txResult = await routerContract.addLiquidity(userAddress!, {
+      tokenA: token1.address,
+      tokenB: token2.address,
+      amountADesired: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      amountBDesired: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      amountAMin: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      amountBMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      to: userAddress!,
+      deadline: timestamp + K_5_MIN + '',
+      timeLock: timestamp + K_1_DAY + '',
+    });
 
     if (!txResult) {
       setSuccessful(false);
@@ -187,12 +209,13 @@ const TradeForm = ({
 
     const hash = txResult.hash;
     const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt })
+    console.log({ txReceipt });
 
     stopLoading();
     setSuccessful(true);
     setFailed(false);
   };
+  console.log({ token1 });
 
   return (
     <>
@@ -206,14 +229,14 @@ const TradeForm = ({
         toggleOpen={toggleOpenSetting}
       />
 
-      <div className="w-[648px] bg-[#00000080] rounded-lg h-auto my-[96px] mx-auto py-4 px-[24px]">
-        <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3">
+      <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
+        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3">
           <SwapLeftIcon />
           {title}
           <SwapRightIcon />
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
-          <div className="text-[#FFAF1D] text-semibold flex items-center gap-2 ">
+          <div className="text-[#FFAF1D] text-semibold flex items-center gap-2 text-[14px] lg:text-[16px] ">
             V2 MODE
             <QuestionIcon />
           </div>
@@ -231,7 +254,8 @@ const TradeForm = ({
           title={inputTitle1}
           tokenData={{
             symbol: token1 ? balanceToken1?.symbol! : '',
-            balance: token1 ? balanceToken1?.formatted! : '?',
+            balance: token1 ? balanceToken1?.formatted! : '',
+            logo: token1 ? token1.logoURI : '',
           }}
           setTokenAmount={(value) => setToken1Amount(value)}
         />
@@ -245,6 +269,7 @@ const TradeForm = ({
           tokenData={{
             symbol: token2 ? balanceToken2?.symbol! : '',
             balance: token2 ? balanceToken2?.formatted! : '?',
+            logo: token2 ? token2.logoURI : '',
           }}
           setTokenAmount={(value) => setToken2Amount(value)}
         />
@@ -266,15 +291,13 @@ const TradeForm = ({
         {insufficient && (
           <Notification message="Error: Insufficient Balance" type="error" />
         )}
-        {isConnected && (
+        {/* {isConnected && (
           <Notification message="Wallet connected" type="success" />
-        )}
+        )} */}
         {successful && (
           <Notification message="Add liquidity successfully" type="success" />
         )}
-        {failed && (
-          <Notification message="Add liquidity failed" type="error" />
-        )}
+        {failed && <Notification message="Add liquidity failed" type="error" />}
         {isFirstLP && (
           <Notification
             message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
@@ -297,7 +320,7 @@ const TradeForm = ({
 
         <Button
           onClick={() => handleAddLiquidity()}
-          className="w-full justify-center  mb-2"
+          className="w-full justify-center  mb-2 px-[42px]"
           disabled={!token1 || !token2}
         >
           {buttonName}
