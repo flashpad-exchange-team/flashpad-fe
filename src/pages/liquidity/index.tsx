@@ -1,11 +1,11 @@
 import { useLoading } from '@/context/LoadingContext';
 import LiquidityIcon from '@/icons/LiquidityIcon';
+import Footer from '@/layout/footer';
 import { Header } from '@/layout/header/Header';
 import { Logo } from '@/templates/Logo';
+import dynamic from 'next/dynamic';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
-import Footer from '@/layout/footer';
 
 const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
   ssr: false,
@@ -31,7 +31,7 @@ const Liquidity = () => {
       <Header logo={<Logo xl />} mode="app" />
 
       <TradeForm
-        title="LIQUIDITY"
+        title="ADD LIQUIDITY"
         buttonName="Add Liquidity"
         inputTitle1="Token 1"
         inputTitle2="Token 2"

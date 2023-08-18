@@ -24,7 +24,7 @@ const Landing = () => {
   return (
     <>
       <Header logo={<Logo xl />} />
-      <div className="block xl:grid grid-cols-2  h-auto xl:h-[calc(100vh-160px)] px-7 xl:px-20  m-auto">
+      <div className="block xl:grid grid-cols-2  h-full xl:max-h-[710px] px-7 xl:px-20 m-auto max-w-[1440px]">
         <div className="flex items-end">
           <Image
             src={isHover ? UpSword : PullSword}
@@ -33,7 +33,7 @@ const Landing = () => {
             width={598}
           />
         </div>
-        <div className="relative w-full xl:w-auto pt-12">
+        <div className="relative w-full xl:w-auto pt-32">
           <div className="text-[#FFAF1D] text-[36px] leading-9 font-bold mb-6 uppercase font-rem xl:max-w-[500px] text-center xl:text-left">
             Be the King of Your Own Legend
           </div>
@@ -58,28 +58,30 @@ const Landing = () => {
           >
             <JoinButton />
           </div>
-          <div className="block xl:flex gap-8 text-center">
-            <div className="text-[#FFAF1D] text-[36px] font-bold mb-4 font-rem text-center xl:text-left">
-              GET READY!
+        </div>
+      </div>
+      <div className="h-[calc(100vh-756px)] min-h-[200px] bg-transparent xl:bg-[#00000080] mt-8 xl:mt-0 text-center pb-6 pt-6 box-content">
+        <div className="block text-center">
+          <div className="text-[#FFAF1D] text-[36px] font-bold mb-4 font-rem text-center">
+            GET READY!
+          </div>
+          <div>
+            <div className="text-white  text-[16px] xl:text-[18px] font-semibold ">
+              Arthur Exchange DEX is live on Linea{' '}
             </div>
-            <div>
-              <div className="text-white  text-[16px] xl:text-[18px] font-semibold xl:max-w-[600px] ">
-                Arthur Exchange DEX is live on Linea{' '}
-              </div>
-              <div className="text-white  text-[16px] xl:text-[18px] font-semibold ">
-                Join our <span className="text-[#FFAF1D]">community</span> to
-                find out more.
-              </div>
+            <div className="text-white  text-[16px] xl:text-[18px] font-semibold ">
+              Join our <span className="text-[#FFAF1D]">community</span> to find
+              out more.
             </div>
           </div>
         </div>
-      </div>
-      <div className="h-[80px] bg-transparent xl:bg-[#00000080] mt-4 xl:mt-0 flex items-center justify-center">
-        <div className="xl:flex text-center xl:text-left justify-between items-center gap-4">
+        <div className="text-center mt-3ss">
           <div className="text-white text-[22px] xl:text-[24px] mt-4 xl:mt-0 font-bold mb-1 font-rem">
             Find us on
           </div>
-          <ListSocial />
+          <div className="mx-auto w-fit">
+            <ListSocial />
+          </div>
         </div>
       </div>
     </>

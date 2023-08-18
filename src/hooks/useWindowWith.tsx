@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
 export default function useWindowWidth() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const windowValue = typeof window !== 'undefined' ? window : ({} as any);
+  const [windowWidth, setWindowWidth] = useState(windowValue.innerWidth);
 
   const handleResize = () => {
-    setWindowWidth(window.innerWidth);
+    setWindowWidth(windowValue.innerWidth);
   };
 
   useEffect(() => {
@@ -13,7 +14,7 @@ export default function useWindowWidth() {
 
     // Cleanup the event listener when component unmounts
     return () => {
-      window.removeEventListener('resize', handleResize);
+      windowValue.removeEventListener('resize', handleResize);
     };
   }, []);
 

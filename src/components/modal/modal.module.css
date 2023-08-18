@@ -1,5 +1,6 @@
 .modal {
   width: 648px;
+  max-width: 90vw;
 
   @media (max-width: 768px) {
     width: auto;
@@ -7,12 +8,20 @@
     padding-top: 20px;
   }
 }
+.modal:focus-visible {
+  border-color: transparent;
+  outline: none;
+}
 .bigModal {
   width: 872px;
-
+  max-width: 90vw;
   @media (max-width: 768px) {
     width: auto;
     width: 100%;
     padding-top: 20px;
   }
+}
+.bigModal:focus-visible {
+  border-color: transparent;
+  outline: none;
 }
