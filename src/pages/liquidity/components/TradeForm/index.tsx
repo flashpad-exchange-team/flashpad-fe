@@ -1,5 +1,5 @@
 import { Button } from '@/components/button/Button';
-import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
+import LiquiditySettingModal, { ILiquiditySettings } from '@/components/modal/LiquiditySettingModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
 import { useLoading } from '@/context/LoadingContext';
@@ -12,8 +12,8 @@ import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
   ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
-  K_1_DAY,
-  K_5_MIN,
+  DEFAULT_DEADLINE,
+  K_1_WEEK,
   MAX_UINT256,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
@@ -59,6 +59,8 @@ const TradeForm = ({
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
+
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
     token: token1 ? (token1.address as Address) : undefined,
@@ -88,6 +90,10 @@ const TradeForm = ({
     setIsFirstLP(false);
   };
 
+  const saveSettings = ({ deadline }: ILiquiditySettings) => {
+    setDeadline(deadline);
+  };
+
   useEffect(() => {
     getPairAddress();
   }, [token1, token2, successful]);
@@ -109,11 +115,11 @@ const TradeForm = ({
   const handleAddLiquidity = async () => {
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
-      .times(new BigNumber(token1Amount));
+      .times(BigNumber(token1Amount));
 
     const bnToken2Amount = BigNumber(10)
       .pow(balanceToken2?.decimals!)
-      .times(new BigNumber(token2Amount));
+      .times(BigNumber(token2Amount));
 
     if (
       bnToken1Amount.isNaN() ||
@@ -129,7 +135,9 @@ const TradeForm = ({
       bnToken1Amount.isGreaterThan(
         BigNumber(balanceToken1!.value.toString())
       ) ||
-      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
+      bnToken2Amount.isGreaterThan(
+        BigNumber(balanceToken2!.value.toString())
+      )
     ) {
       toast.error('Insufficient balance!');
       setInsufficient(true);
@@ -139,6 +147,9 @@ const TradeForm = ({
 
     startLoading();
 
+    const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+
     const token1Allowance = (await erc20TokenContract.erc20Read(
       token1.address,
       'allowance',
@@ -146,7 +157,7 @@ const TradeForm = ({
     )) as bigint;
     console.log({ token1Allowance: token1Allowance.toString() });
 
-    if (token1Allowance.toString() < MAX_UINT256) {
+    if (token1Allowance.toString() < token1AmountIn) {
       const approveRes = await erc20TokenContract.erc20Write(
         userAddress!,
         token1.address,
@@ -172,7 +183,7 @@ const TradeForm = ({
     )) as bigint;
     console.log({ token2Allowance: token2Allowance.toString() });
 
-    if (token2Allowance.toString() < MAX_UINT256) {
+    if (token2Allowance.toString() < token2AmountIn) {
       const approveRes = await erc20TokenContract.erc20Write(
         userAddress!,
         token2.address,
@@ -195,13 +206,13 @@ const TradeForm = ({
     const txResult = await routerContract.addLiquidity(userAddress!, {
       tokenA: token1.address,
       tokenB: token2.address,
-      amountADesired: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-      amountBDesired: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-      amountAMin: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-      amountBMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      amountADesired: token1AmountIn,
+      amountBDesired: token2AmountIn,
+      amountAMin: token1AmountIn,
+      amountBMin: token2AmountIn,
       to: userAddress!,
-      deadline: timestamp + K_5_MIN + '',
-      timeLock: timestamp + K_1_DAY + '',
+      deadline: timestamp as bigint + BigInt(deadline) + '',
+      timeLock: timestamp as bigint + K_1_WEEK + '',
     });
 
     if (!txResult) {
@@ -228,6 +239,7 @@ const TradeForm = ({
         selectValue={onSelectedToken}
       />
       <LiquiditySettingModal
+        saveSettings={saveSettings}
         isOpen={isOpenSetting}
         toggleOpen={toggleOpenSetting}
       />
