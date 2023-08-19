@@ -16,7 +16,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router'; // Import the useRouter hook
 import { ReactNode } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 
 type INavbarProps = {
   logo: ReactNode;
@@ -64,9 +64,18 @@ const MENU_ITEMS = [
 
 const Header = (props: INavbarProps) => {
   const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
 
   const router = useRouter();
   const { isOpenConnectWallet, toggleConnectWallet } = useModal();
+
+  const handleConnectWallet = () => {
+    if (!isConnected) {
+      toggleConnectWallet();
+      return;
+    }
+    disconnect();
+  };
 
   const currentPath = router.pathname;
   return (
@@ -151,21 +160,17 @@ const Header = (props: INavbarProps) => {
               {props.mode === 'app' ? (
                 <>
                   <Linea className="mr-8 hidden lg:block" />
-                  {isConnected ? (
-                    <Button icon={<WalletIcon />} className="px-4 ">
-                      {address
-                        ? address.slice(0, 5) + '...' + address.slice(37, 42)
-                        : ''}
-                    </Button>
-                  ) : (
+                  {
                     <Button
-                      onClick={() => toggleConnectWallet()}
                       icon={<WalletIcon />}
-                      className="px-4"
+                      className="px-4 "
+                      onClick={handleConnectWallet}
                     >
-                      Connect Wallet
+                      {isConnected && address
+                        ? address.slice(0, 5) + '...' + address.slice(37, 42)
+                        : 'Connect Wallet'}
                     </Button>
-                  )}
+                  }
                 </>
               ) : (
                 <Button
