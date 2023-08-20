@@ -55,7 +55,7 @@ const TradeForm = ({
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
   const [insufficient, setInsufficient] = useState(false);
-  const [isFirstLP, setIsFirstLP] = useState(false);
+  const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -78,16 +78,12 @@ const TradeForm = ({
 
   const getPairAddress = async () => {
     if (!token1 || !token2) return;
-    const address = await factoryContract.getPair(
+    const address = (await factoryContract.getPair(
       token1.address,
       token2.address
-    );
+    )) as Address;
     console.log({ factoryPairAddress: address });
-    if (!address || address === ADDRESS_ZERO) {
-      setIsFirstLP(true);
-      return;
-    }
-    setIsFirstLP(false);
+    setIsFirstLP(!address || address === ADDRESS_ZERO);
   };
 
   const saveSettings = ({ deadline }: ILiquiditySettings) => {
@@ -155,9 +151,8 @@ const TradeForm = ({
       'allowance',
       [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
     )) as bigint;
-    console.log({ token1Allowance: token1Allowance.toString() });
 
-    if (token1Allowance.toString() < token1AmountIn) {
+    if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
       const approveRes = await erc20TokenContract.erc20Write(
         userAddress!,
         token1.address,
@@ -181,9 +176,8 @@ const TradeForm = ({
       'allowance',
       [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
     )) as bigint;
-    console.log({ token2Allowance: token2Allowance.toString() });
 
-    if (token2Allowance.toString() < token2AmountIn) {
+    if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
       const approveRes = await erc20TokenContract.erc20Write(
         userAddress!,
         token2.address,

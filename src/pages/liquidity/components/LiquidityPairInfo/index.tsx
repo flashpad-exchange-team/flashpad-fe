@@ -5,14 +5,14 @@ import { ADDRESS_ZERO } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import * as routerContract from '@/utils/routerContract';
 import * as pairContract from '@/utils/pairContract';
-import { useContractRead } from 'wagmi';
+import { useAccount, useContractRead } from 'wagmi';
 import { Address } from 'viem';
 import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import BigNumber from 'bignumber.js';
 
 interface IPairTokenInfo {
   symbol?: string;
-  address?: string;
+  address?: Address;
   decimals?: number;
   amountIn: string;
 }
@@ -35,6 +35,8 @@ const LiquidityPairInfo = ({
   const token1Decimals = token1Data?.decimals;
   const token2Decimals = token2Data?.decimals;
 
+  const { address: userAddress } = useAccount();
+
   const [open, setOpen] = useState<boolean>(false);
   const [lpAddress, setLPAddress] = useState<Address>(ADDRESS_ZERO);
   const [isStableSwap, setIsStableSwap] = useState(false);
@@ -42,16 +44,20 @@ const LiquidityPairInfo = ({
   const [swapRate1To2, setSwapRate1To2] = useState('-');
   const [swapRate2To1, setSwapRate2To1] = useState('-');
 
+  const [poolShare, setPoolShare] = useState('');
+
   const toggleOpen = () => setOpen(!open);
 
   const { data: reserves } = useContractRead({
-    address: lpAddress != ADDRESS_ZERO ? lpAddress : undefined,
+    address:
+      isFirstLP === false && lpAddress != ADDRESS_ZERO ? lpAddress : undefined,
     abi: ArthurPairABI,
     functionName: 'getReserves',
   });
 
   const { data: token1 } = useContractRead({
-    address: lpAddress != ADDRESS_ZERO ? lpAddress : undefined,
+    address:
+      isFirstLP === false && lpAddress != ADDRESS_ZERO ? lpAddress : undefined,
     abi: ArthurPairABI,
     functionName: 'token0',
   });
@@ -70,14 +76,14 @@ const LiquidityPairInfo = ({
     }
   }
 
-  const getPairLPAddress = async () => {
+  const getLPInfo = async () => {
     if (!token1Address || !token2Address) return;
     const address = await routerContract.getPair(token1Address, token2Address);
     setLPAddress(address || ADDRESS_ZERO);
-    if (address && address != ADDRESS_ZERO) {
+    if (address && isFirstLP === false) {
       const stableSwap = await pairContract.read(address, 'stableSwap', []);
       setIsStableSwap(!!stableSwap);
-      
+
       const amount1In = BigNumber(10).pow(BigNumber(token1Decimals!));
       const amount2In = BigNumber(10).pow(BigNumber(token2Decimals!));
 
@@ -86,9 +92,7 @@ const LiquidityPairInfo = ({
         token1Address,
       ]);
       setSwapRate1To2(
-        BigNumber(amount2Out)
-          .div(amount2In)
-          .toFixed(token2Decimals!)
+        BigNumber(amount2Out).div(amount2In).toFixed(token2Decimals!)
       );
 
       const amount1Out = await pairContract.read(address, 'getAmountOut', [
@@ -96,16 +100,26 @@ const LiquidityPairInfo = ({
         token2Address,
       ]);
       setSwapRate2To1(
-        BigNumber(amount1Out)
-          .div(amount1In)
-          .toFixed(token1Decimals!)
+        BigNumber(amount1Out).div(amount1In).toFixed(token1Decimals!)
+      );
+
+      const userLpBalance = await pairContract.read(address, 'balanceOf', [
+        userAddress,
+      ]);
+      const totalSupply = await pairContract.read(address, 'totalSupply', []);
+
+      setPoolShare(
+        BigNumber(userLpBalance)
+          .div(BigNumber(totalSupply))
+          .times(100)
+          .toFixed(8)
       );
     }
   };
 
   useEffect(() => {
-    getPairLPAddress();
-  }, [token1Address, token2Address]);
+    getLPInfo();
+  }, [token1Address, token2Address, isFirstLP]);
 
   return (
     <div
@@ -167,7 +181,7 @@ const LiquidityPairInfo = ({
                 {isFirstLP ? 0 : ratioToken2Token1}
               </div>
               <div className="text-[14px] mt-1.5 text-right ">
-                {isFirstLP ? '100%' : '<0.0000881%'}
+                {isFirstLP ? '100%' : `${poolShare}%`}
               </div>
               <div className="text-[14px] mt-1.5 text-right ">
                 <CopyableText text={lpAddress} />
