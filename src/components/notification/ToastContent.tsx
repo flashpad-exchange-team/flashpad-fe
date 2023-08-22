@@ -7,7 +7,7 @@ export interface NotificationProps {
   message: string | ReactNode;
   hideIcon?: boolean;
 }
-const Notification = ({ type, message, hideIcon }: NotificationProps) => {
+const ToastContent = ({ type, message, hideIcon }: NotificationProps) => {
   const renderIcon = () => {
     switch (type) {
       case 'error':
@@ -23,7 +23,7 @@ const Notification = ({ type, message, hideIcon }: NotificationProps) => {
   const renderBg = () => {
     switch (type) {
       case 'error':
-        return 'bg-[#FF160033]';
+        return 'bg-[#ff3522]';
       case 'success':
         return 'bg-[#17B26A]';
       case 'info':
@@ -34,12 +34,12 @@ const Notification = ({ type, message, hideIcon }: NotificationProps) => {
   };
   return (
     <div
-      className={`rounded-lg ${renderBg()} min-h-[56px] flex items-center pl-4 pr-6 leading-4 mb-2 gap-2 text-[14px]`}
+      className={`rounded-lg ${renderBg()} h-full min-h-[60px] py-4 px-6 flex items-center pr-12 w-full leading-4 gap-4 text-[14px] relative z-50 `}
     >
-      {hideIcon || renderIcon()}
+      <div className="w-[50] text-left">{hideIcon || renderIcon()}</div>
       {message}
     </div>
   );
 };
 
-export default Notification;
+export default ToastContent;

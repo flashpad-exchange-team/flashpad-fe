@@ -45,6 +45,24 @@ const MENU_ITEMS = [
   {
     icon: <LaunchPadIcon />,
     iconActive: <LaunchPadIcon active />,
+    name: 'Earn',
+    path: '/earn',
+    subMenu: [
+      {
+        name: 'Farming',
+        path: '/farming',
+        icon: <Liquidity width="18px" />,
+      },
+      {
+        name: 'Staking',
+        path: '/staking',
+        icon: <Liquidity width="18px" />,
+      },
+    ],
+  },
+  {
+    icon: <LaunchPadIcon />,
+    iconActive: <LaunchPadIcon active />,
     name: 'Launchpad',
     path: '/launchpad',
   },
@@ -114,7 +132,16 @@ const Header = (props: INavbarProps) => {
                       >
                         {menuItem.icon}
                         {menuItem.name}
-                        <ArrowDown />
+                        <ArrowDown
+                          stroke={
+                            menuItem.path === currentPath ||
+                            menuItem?.subMenu?.some(
+                              (subMenu: any) => subMenu.path === currentPath
+                            )
+                              ? ''
+                              : 'white'
+                          }
+                        />
                       </div>
                     }
                     transition

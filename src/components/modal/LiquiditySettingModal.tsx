@@ -21,7 +21,7 @@ export interface ILiquiditySettings {
 export interface LiquiditySettingModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-  saveSettings: (values: ILiquiditySettings) => void;
+  saveSettings?: (values: ILiquiditySettings) => void;
 }
 
 const LiquiditySettingModal = ({
@@ -54,11 +54,12 @@ const LiquiditySettingModal = ({
       toast.error('Please input valid numbers');
       return;
     }
-    saveSettings({
-      slippage: nSlippage,
-      deadline: nDeadline,
-      maxHops: nMaxHops,
-    });
+    if (saveSettings)
+      saveSettings({
+        slippage: nSlippage,
+        deadline: nDeadline,
+        maxHops: nMaxHops,
+      });
     toggleOpen();
   };
 

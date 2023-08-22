@@ -50,7 +50,7 @@ const SimpleTable: React.FC<TableProps> = ({ data }) => {
         </thead>
         <tbody>
           {data.map((item, index: number) => (
-            <tr key={index}>
+            <tr key={index} className="hover:bg-[#150E3980] cursor-pointer">
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
                 {item.locked ? <LockIcon active /> : <LockIcon />}
               </td>

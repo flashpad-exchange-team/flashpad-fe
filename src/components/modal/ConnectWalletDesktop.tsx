@@ -6,10 +6,10 @@ import Metamask from '@/icons/Metamask';
 import ProgressBar from '@/icons/ProgressBar';
 import WalletConnect from '@/icons/WalletConnect';
 import { LogoVertical } from '@/templates/LogoVertical';
-import { useEffect, useState } from 'react';
-import { useAccount, useConfig, useConnect } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 import Notification from '../notification/Notification';
+import { useEffect, useState } from 'react';
+import { useAccount, useConfig, useConnect } from 'wagmi';
 interface ConnectWalletProps {
   toggleOpen: () => void;
 }

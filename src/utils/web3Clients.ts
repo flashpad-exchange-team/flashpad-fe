@@ -9,7 +9,7 @@ const publicClient: any = createPublicClient({
 
 const walletClient = createWalletClient({
   chain: lineaTestnet,
-  transport: typeof window !== 'undefined' ? custom((window as any).ethereum) : http(),
+  transport: typeof window !== 'undefined' ? custom((window as any).ethereum) : http('https://polygon-mumbai-bor.publicnode.com'),
 })
 
 export {

@@ -3,6 +3,8 @@ import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
 import { ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET } from './constants';
 import { toast } from 'react-toastify';
+import BigNumber from 'bignumber.js';
+import customToast from '@/components/notification/customToast';
 
 const routerContract: any = getContract({
   address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
@@ -79,12 +81,48 @@ export const getPair = async (
  */
 export const getAmountsOut = async (amountIn: string, path: string[]) => {
   try {
-    const result = await routerContract.read.getAmountsOut!([amountIn, path]);
+    console.log({ amountIn, path, routerContract })
 
-    console.log({ result });
-    return result;
+    const result = await routerContract.read.getAmountsOut!([1, path]);
+    console.log({ result, a: BigNumber(result[result.length - 1]).div(BigNumber(result[0])).toNumber() })
+    return BigNumber(result[result.length - 1]).div(BigNumber(result[0])).toNumber();
   } catch (err: any) {
     console.log(err.message || err);
+    return 0;
+  }
+};
+
+
+
+export interface ISwapTokensForTokensParams {
+  amountIn: string;
+  amountOutMin: string;
+  path: any[];
+  to: Address;
+  referrer: Address;
+  deadline: string;
+}
+
+export const swapTokensForTokens = async (
+  account: Address,
+  params: ISwapTokensForTokensParams,
+) => {
+  try {
+    const { request, result } = await publicClient.simulateContract({
+      address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
+      abi: RouterABI,
+      functionName: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
+      args: Object.values(params),
+      account
+    });
+    const hash = await walletClient.writeContract(request);
+
+    return { hash, result };
+  } catch (err: any) {
+    customToast({
+      message: err.message || err,
+      type: 'error',
+    });
     return undefined;
   }
 };

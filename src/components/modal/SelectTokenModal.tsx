@@ -51,9 +51,12 @@ const SelectTokenModal = ({
         'balanceOf',
         [userAddress]
       );
+      console.log({ decimals, balance });
       newTokensList.push({
         ...token,
-        curBalance: ((balance as bigint) / nthPowerOf10(decimals)).toString(),
+        curBalance: (
+          BigInt(balance || '0') / nthPowerOf10(decimals)
+        ).toString(),
       });
     }
     setTokensList(newTokensList);

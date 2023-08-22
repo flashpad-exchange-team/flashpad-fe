@@ -19,6 +19,13 @@ import { publicProvider } from 'wagmi/providers/public';
 const { chains, publicClient } = configureChains(
   [lineaTestnet],
   [publicProvider()]
+  // [
+  //   jsonRpcProvider({
+  //     rpc: (chain) => ({
+  //       http: 'https://polygon-mumbai-bor.publicnode.com',
+  //     }),
+  //   }),
+  // ]
 );
 
 const config = createConfig({

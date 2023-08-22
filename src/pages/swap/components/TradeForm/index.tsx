@@ -1,20 +1,29 @@
 import { Button } from '@/components/button/Button';
 import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
-import Notification from '@/components/notification/Notification';
+import customToast from '@/components/notification/customToast';
+import { useLoading } from '@/context/LoadingContext';
 import ButtonStyle from '@/icons/ButtonStyle';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
+import {
+  ADDRESS_ZERO,
+  ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
+  K_5_MIN,
+} from '@/utils/constants';
+import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as routerContract from '@/utils/routerContract';
+import * as web3Helpers from '@/utils/web3Helpers';
+import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-
 interface TradeFormProps {
   title: string;
   buttonName: string;
@@ -30,7 +39,8 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
-  const { address } = useAccount();
+  const { address: userAddress } = useAccount();
+  const { startLoading, stopLoading } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -39,21 +49,45 @@ const TradeForm = ({
   const [token2, setToken2] = useState<any>();
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
+  const [rate, setRate] = useState(1);
+  const calculateToken2Value = async () => {
+    return routerContract.getAmountsOut(token1Amount, [
+      token1?.address,
+      token2?.address,
+    ]);
+  };
+  console.log({ rate });
+  useEffect(() => {
+    setToken2Amount('' + +token1Amount * rate);
+  }, [token1Amount]);
+
+  useEffect(() => {
+    const fetchRate = async () => {
+      const value = await calculateToken2Value();
+      setRate(value);
+    };
+
+    fetchRate();
+  }, [token1, token2]);
+
+  const resetInput = () => {
+    // setToken1(null);
+    // setToken2(null);
+    setToken1Amount('0');
+    setToken2Amount('0');
+    setTokenBeingSelected(0);
+  };
 
   const { data: balanceToken1 } = useBalance({
-    address,
+    address: userAddress,
     token: token1 ? (token1.address as Address) : undefined,
     watch: true,
-    cacheTime: 5000,
-    formatUnits: 'ether',
   });
 
   const { data: balanceToken2 } = useBalance({
-    address,
+    address: userAddress,
     token: token2 ? (token2.address as Address) : undefined,
     watch: true,
-    cacheTime: 5000,
-    formatUnits: 'ether',
   });
 
   const toggleOpen = () => setOpen(!isOpen);
@@ -67,19 +101,145 @@ const TradeForm = ({
     }
   };
 
-  const handleAction = () => {
-    if (buttonName === 'Add Liquidity') {
-      const bnToken1Amount = BigNumber(10)
-        .pow(balanceToken1?.decimals!)
-        .times(new BigNumber(token1Amount))
-        .toFixed(0, BigNumber.ROUND_DOWN);
-      const bnToken2Amount = BigNumber(10)
-        .pow(balanceToken2?.decimals!)
-        .times(new BigNumber(token2Amount))
-        .toFixed(0, BigNumber.ROUND_DOWN);
-      console.log({ bnToken1Amount, bnToken2Amount });
-    } else {
+  const handleSwap = async () => {
+    const bnToken1Amount = BigNumber(10)
+      .pow(balanceToken1?.decimals!)
+      .times(new BigNumber(token1Amount));
+
+    const bnToken2Amount = BigNumber(10)
+      .pow(balanceToken2?.decimals!)
+      .times(new BigNumber(token2Amount));
+    if (
+      bnToken1Amount.isNaN() ||
+      bnToken2Amount.isNaN() ||
+      bnToken1Amount.isZero() ||
+      bnToken2Amount.isZero()
+    ) {
+      customToast({
+        message: 'Please input valid amount! ',
+        type: 'error',
+      });
+
+      // toast.error('Please input valid amount');
+      return;
     }
+
+    if (
+      bnToken1Amount.isGreaterThan(
+        BigNumber(balanceToken1!.value.toString())
+      ) ||
+      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
+    ) {
+      customToast({
+        message: 'Insufficient balance! ',
+        type: 'error',
+      });
+      // toast.error('Insufficient balance!');
+      // setInsufficient(true);
+      return;
+    }
+    // setInsufficient(false);
+
+    startLoading();
+
+    const token1Allowance = (await erc20TokenContract.erc20Read(
+      token1.address,
+      'allowance',
+      [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
+    )) as bigint;
+    console.log({
+      token1Allowance: token1Allowance.toString(),
+      bnToken1Amount: bnToken1Amount.toString(),
+      ok: bnToken1Amount.comparedTo(new BigNumber(token1Allowance.toString())),
+    });
+
+    // if (token1Allowance.toString() < MAX_UINT256) {
+    //   const approveRes = await erc20TokenContract.erc20Write(
+    //     userAddress!,
+    //     token1.address,
+    //     'approve',
+    //     [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
+    //   );
+    //   if (!approveRes) {
+    //     // stopLoading();
+    //     // setSuccessful(false);
+    //     // setFailed(true);
+    //     return;
+    //   }
+
+    //   const hash = approveRes.hash;
+    //   const txReceipt = await waitForTransaction({ hash });
+    //   console.log({ txReceipt });
+    // }
+
+    const token2Allowance = (await erc20TokenContract.erc20Read(
+      token2.address,
+      'allowance',
+      [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
+    )) as bigint;
+    console.log({
+      token2Allowance: token2Allowance.toString(),
+      bnToken2Amount: bnToken2Amount.toString(),
+      ok: bnToken2Amount.comparedTo(new BigNumber(token2Allowance.toString())),
+    });
+
+    // if (token2Allowance.toString() < MAX_UINT256) {
+    //   const approveRes = await erc20TokenContract.erc20Write(
+    //     userAddress!,
+    //     token2.address,
+    //     'approve',
+    //     [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
+    //   );
+    //   if (!approveRes) {
+    //     // stopLoading();
+    //     // setSuccessful(false);
+    //     // setFailed(true);
+    //     return;
+    //   }
+
+    // const hash = approveRes.hash;
+    // const txReceipt = await waitForTransaction({ hash });
+    // console.log({ txReceipt });
+    // }
+
+    const { timestamp } = await web3Helpers.getBlock();
+    const txResult = await routerContract.swapTokensForTokens(userAddress!, {
+      amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+      path: [token1.address, token2.address],
+      to: userAddress!,
+      referrer: ADDRESS_ZERO,
+      deadline: timestamp + K_5_MIN + '',
+    });
+
+    if (!txResult) {
+      stopLoading();
+      // setSuccessful(false);
+      // setFailed(true);
+      return;
+    }
+
+    const hash = txResult.hash;
+    // const txReceipt =
+    await waitForTransaction({ hash });
+    customToast({
+      message: `Swap ${token1Amount} ${token1.symbol} to ${token2Amount} ${token2.symbol} successfully`,
+      type: 'success',
+    });
+    // toast.success(
+    //   `Swap ${token1Amount} ${token1.symbol} to ${token2Amount} ${token2.symbol} successfully`
+    // );
+    resetInput();
+    stopLoading();
+    // setSuccessful(true);
+    // setFailed(false);
+  };
+
+  const handleSwitchPair = () => {
+    setToken1(token2);
+    setToken2(token1);
+    setToken1Amount('0');
+    setToken2Amount('0');
   };
 
   return (
@@ -118,12 +278,19 @@ const TradeForm = ({
           }}
           title={inputTitle1}
           tokenData={{
-            symbol: balanceToken1?.symbol!,
-            balance: balanceToken1?.value!,
+            symbol: token1 ? balanceToken1?.symbol! : '',
+            balance: token1 ? balanceToken1?.formatted! : '?',
+            logo: token1 ? token1?.logoURI : '',
+            amount: token1Amount,
           }}
           setTokenAmount={(value) => setToken1Amount(value)}
         />
-        <div className="mx-auto w-fit">{dividerIcon}</div>
+        <div
+          className="mx-auto w-fit cursor-pointer"
+          onClick={handleSwitchPair}
+        >
+          {dividerIcon}
+        </div>
         <TokenForm
           openModal={() => {
             setTokenBeingSelected(2);
@@ -131,13 +298,29 @@ const TradeForm = ({
           }}
           title={inputTitle2}
           tokenData={{
-            symbol: balanceToken2?.symbol!,
-            balance: balanceToken2?.value!,
+            symbol: token2 ? balanceToken2?.symbol! : '',
+            balance: token2 ? balanceToken2?.formatted! : '?',
+            logo: token2 ? token2?.logoURI : '',
+            amount: token2Amount,
           }}
           setTokenAmount={(value) => setToken2Amount(value)}
         />
-        <LiquidityPairInfo />
-        <Notification message="Error: Insufficient Balance" type="error" />
+        <LiquidityPairInfo
+          token1Data={{
+            address: token1?.address,
+            symbol: token1?.symbol,
+            amountIn: token1Amount,
+            decimals: balanceToken1?.decimals,
+          }}
+          token2Data={{
+            address: token2?.address,
+            symbol: token2?.symbol,
+            amountIn: token2Amount,
+            decimals: balanceToken2?.decimals,
+          }}
+          rate={rate}
+        />
+        {/* <Notification message="Error: Insufficient Balance" type="error" />
         <Notification message="Wallet connected" type="success" />
         <Notification
           message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
@@ -153,12 +336,12 @@ const TradeForm = ({
           }
           type="error"
           hideIcon
-        />
+        /> */}
 
         <Button
-          onClick={() => handleAction()}
+          onClick={() => handleSwap()}
           className="w-full justify-center mb-2 px-[42px]"
-          disabled
+          // disabled
         >
           {buttonName}
         </Button>
