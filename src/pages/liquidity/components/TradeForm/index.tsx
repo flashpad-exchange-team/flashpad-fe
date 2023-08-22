@@ -25,7 +25,6 @@ import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
