@@ -5,7 +5,7 @@ import { ADDRESS_ZERO } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import * as routerContract from '@/utils/routerContract';
 import * as pairContract from '@/utils/pairContract';
-import { useAccount, useContractRead } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Address } from 'viem';
 import BigNumber from 'bignumber.js';
 
