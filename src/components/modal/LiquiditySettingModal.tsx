@@ -5,17 +5,63 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import ButtonStyle from '@/icons/ButtonStyle';
 import { useState } from 'react';
+import {
+  DEFAULT_DEADLINE,
+  DEFAULT_MAX_HOPS,
+  DEFAULT_SLIPPAGE,
+} from '@/utils/constants';
+import { toast } from 'react-toastify';
+
+export interface ILiquiditySettings {
+  slippage: number;
+  deadline: number;
+  maxHops: number;
+}
 
 export interface LiquiditySettingModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
+  saveSettings: (values: ILiquiditySettings) => void;
 }
 
 const LiquiditySettingModal = ({
   toggleOpen,
   isOpen,
+  saveSettings,
 }: LiquiditySettingModalProps) => {
-  const [search, setSearch] = useState<string>('');
+  const [slippage, setSlippage] = useState<string>(DEFAULT_SLIPPAGE);
+  const [deadline, setDeadline] = useState<string>(DEFAULT_DEADLINE);
+  const [maxHops, setMaxHops] = useState<string>(DEFAULT_MAX_HOPS);
+
+  const resetToDefault = () => {
+    setSlippage(DEFAULT_SLIPPAGE);
+    setDeadline(DEFAULT_DEADLINE);
+    setMaxHops(DEFAULT_MAX_HOPS);
+  };
+
+  const handleSaveSettings = () => {
+    const nSlippage = Number(slippage);
+    const nDeadline = Number(deadline);
+    const nMaxHops = Number(maxHops);
+    if (
+      Number.isNaN(nSlippage) ||
+      nSlippage <= 0 ||
+      Number.isNaN(nDeadline) ||
+      nDeadline <= 0 ||
+      Number.isNaN(nMaxHops) ||
+      nMaxHops <= 0
+    ) {
+      toast.error('Please input valid numbers');
+      return;
+    }
+    saveSettings({
+      slippage: nSlippage,
+      deadline: nDeadline,
+      maxHops: nMaxHops,
+    });
+    toggleOpen();
+  };
+
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} height="490px">
       <div className="flex items-center justify-between w-full">
@@ -32,36 +78,36 @@ const LiquiditySettingModal = ({
       <input
         className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none"
         placeholder="Enter value "
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={slippage}
+        onChange={(e) => setSlippage(e.target.value)}
       />
       <div className="text-[15px]">Deadline (mins)</div>
       <input
         className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none"
         placeholder="Enter value "
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={deadline}
+        onChange={(e) => setDeadline(e.target.value)}
       />
       <div className="text-[15px]">Max hops</div>
       <input
         className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none"
         placeholder="Enter value "
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={maxHops}
+        onChange={(e) => setMaxHops(e.target.value)}
       />
       <div className="block lg:flex items-center gap-2">
         <Button
-          onClick={toggleOpen}
+          onClick={resetToDefault}
           className="w-full justify-center mt-2 mb-2 px-[42px]"
           type="secondary"
         >
           Reset to default
         </Button>
         <Button
-          onClick={toggleOpen}
+          onClick={handleSaveSettings}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
         >
-          Save setting
+          Save settings
         </Button>
       </div>
 
