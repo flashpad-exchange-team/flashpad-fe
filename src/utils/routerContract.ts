@@ -92,7 +92,15 @@ export const getAmountsOut = async (amountIn: string, path: string[]) => {
   }
 };
 
-
+export const quote = async (amountA: string, reserveA: string, reserveB: string) => {
+  try {
+    const result = await routerContract.read.quote!([amountA, reserveA, reserveB]);
+    return BigNumber(result + '');
+  } catch (err: any) {
+    console.log(err.message || err);
+    return undefined;
+  }
+};
 
 export interface ISwapTokensForTokensParams {
   amountIn: string;

@@ -17,6 +17,7 @@ import {
   DEFAULT_DEADLINE,
   K_1_WEEK,
   MAX_UINT256,
+  minutesToSeconds,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as factoryContract from '@/utils/factoryContract';
@@ -26,10 +27,12 @@ import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { Address } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, useContractRead } from 'wagmi';
+import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import customToast from '@/components/notification/customToast';
+import { toast } from 'react-toastify';
 
 interface TradeFormProps {
   title: string;
@@ -57,6 +60,7 @@ const TradeForm = ({
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
   const [insufficient, setInsufficient] = useState(false);
+  const [pairAddress, setPairAddress] = useState<Address | undefined>(undefined);
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -75,6 +79,18 @@ const TradeForm = ({
     watch: true,
   });
 
+  const { data: reserves } = useContractRead({
+    address: pairAddress,
+    abi: ArthurPairABI,
+    functionName: 'getReserves',
+  });
+
+  const { data: pairToken1 } = useContractRead({
+    address: pairAddress,
+    abi: ArthurPairABI,
+    functionName: 'token0',
+  });
+
   const toggleOpen = () => setOpen(!isOpen);
   const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
 
@@ -85,6 +101,7 @@ const TradeForm = ({
       token2.address
     )) as Address;
     console.log({ factoryPairAddress: address });
+    setPairAddress(address && address != ADDRESS_ZERO ? address : undefined);
     setIsFirstLP(!address || address === ADDRESS_ZERO);
   };
 
@@ -110,7 +127,44 @@ const TradeForm = ({
     }
   };
 
+  const autoAdjustToken2Amount = async (token1Amount: any) => {
+    const reserve1 = BigNumber(reserves ? (reserves as any)[0] : 0);
+    const reserve2 = BigNumber(reserves ? (reserves as any)[1] : 0);
+    if (reserve1.isZero() || reserve2.isZero()) return;
+    const bnToken1Amount = BigNumber(10)
+      .pow(balanceToken1?.decimals!)
+      .times(BigNumber(token1Amount));
+    let adjustedToken2Amount;
+    if (pairToken1 === token1.address) {
+      adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
+    } else {
+      adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
+    }
+    setToken2Amount(
+      adjustedToken2Amount.div(BigNumber(10).pow(balanceToken2?.decimals!)).toString()
+    );
+  };
+
+  const autoAdjustToken1Amount = async (token2Amount: any) => {
+    const reserve1 = BigNumber(reserves ? (reserves as any)[0] : 0);
+    const reserve2 = BigNumber(reserves ? (reserves as any)[1] : 0);
+    if (reserve1.isZero() || reserve2.isZero()) return;
+    const bnToken2Amount = BigNumber(10)
+      .pow(balanceToken2?.decimals!)
+      .times(BigNumber(token2Amount));
+    let adjustedToken1Amount;
+    if (pairToken1 === token1.address) {
+      adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
+    } else {
+      adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
+    }
+    setToken1Amount(
+      adjustedToken1Amount.div(BigNumber(10).pow(balanceToken1?.decimals!)).toString()
+    );
+  };
+
   const handleAddLiquidity = async () => {
+    setSuccessful(false);
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
       .times(BigNumber(token1Amount));
@@ -211,7 +265,7 @@ const TradeForm = ({
       amountAMin: token1AmountIn,
       amountBMin: token2AmountIn,
       to: userAddress!,
-      deadline: (timestamp as bigint) + BigInt(deadline) + '',
+      deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
       timeLock: (timestamp as bigint) + K_1_WEEK + '',
     });
 
@@ -229,6 +283,7 @@ const TradeForm = ({
     stopLoading();
     setSuccessful(true);
     setFailed(false);
+    toast.success('Added liquidity successfully');
   };
 
   return (
@@ -272,7 +327,11 @@ const TradeForm = ({
             balance: token1 ? balanceToken1?.formatted! : '?',
             logo: token1 ? token1?.logoURI : '',
           }}
-          setTokenAmount={(value) => setToken1Amount(value)}
+          value={token1Amount}
+          setTokenAmount={(value) => {
+            setToken1Amount(value);
+            autoAdjustToken2Amount(value);
+          }}
         />
         <div className="mx-auto w-fit">{dividerIcon}</div>
         <TokenForm
@@ -286,9 +345,15 @@ const TradeForm = ({
             balance: token2 ? balanceToken2?.formatted! : '?',
             logo: token2 ? token2?.logoURI : '',
           }}
-          setTokenAmount={(value) => setToken2Amount(value)}
+          value={token2Amount}
+          setTokenAmount={(value) => {
+            setToken2Amount(value);
+            autoAdjustToken1Amount(value);
+          }}
         />
         <LiquidityPairInfo
+          pairToken1={pairToken1 as Address}
+          reserves={reserves as any}
           isFirstLP={isFirstLP}
           token1Data={{
             address: token1?.address,

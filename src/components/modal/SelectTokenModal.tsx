@@ -51,7 +51,6 @@ const SelectTokenModal = ({
         'balanceOf',
         [userAddress]
       );
-      console.log({ decimals, balance });
       newTokensList.push({
         ...token,
         curBalance: (
