@@ -1,5 +1,7 @@
 import { Button } from '@/components/button/Button';
-import LiquiditySettingModal, { ILiquiditySettings } from '@/components/modal/LiquiditySettingModal';
+import LiquiditySettingModal, {
+  ILiquiditySettings,
+} from '@/components/modal/LiquiditySettingModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
 import { useLoading } from '@/context/LoadingContext';
@@ -28,6 +30,7 @@ import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import customToast from '@/components/notification/customToast';
 
 interface TradeFormProps {
   title: string;
@@ -123,7 +126,10 @@ const TradeForm = ({
       bnToken1Amount.isZero() ||
       bnToken2Amount.isZero()
     ) {
-      toast.error('Please input valid amount');
+      customToast({
+        message: 'Please input valid amount! ',
+        type: 'error',
+      });
       return;
     }
 
@@ -131,11 +137,12 @@ const TradeForm = ({
       bnToken1Amount.isGreaterThan(
         BigNumber(balanceToken1!.value.toString())
       ) ||
-      bnToken2Amount.isGreaterThan(
-        BigNumber(balanceToken2!.value.toString())
-      )
+      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
     ) {
-      toast.error('Insufficient balance!');
+      customToast({
+        message: 'Insufficient balance! ',
+        type: 'error',
+      });
       setInsufficient(true);
       return;
     }
@@ -205,8 +212,8 @@ const TradeForm = ({
       amountAMin: token1AmountIn,
       amountBMin: token2AmountIn,
       to: userAddress!,
-      deadline: timestamp as bigint + BigInt(deadline) + '',
-      timeLock: timestamp as bigint + K_1_WEEK + '',
+      deadline: (timestamp as bigint) + BigInt(deadline) + '',
+      timeLock: (timestamp as bigint) + K_1_WEEK + '',
     });
 
     if (!txResult) {
