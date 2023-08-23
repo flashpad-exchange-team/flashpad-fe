@@ -24,7 +24,7 @@ const Landing = () => {
   return (
     <>
       <Header logo={<Logo xl />} />
-      <div className="block xl:grid grid-cols-2  h-full xl:max-h-[710px] px-7 xl:px-20 m-auto max-w-[1440px]">
+      <div className="block xl:grid grid-cols-2  h-auto xl:max-h-[710px] px-7 xl:px-20 m-auto max-w-[1440px] mb-0">
         <div className="flex items-end">
           <Image
             src={isHover ? UpSword : PullSword}
@@ -60,7 +60,7 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      <div className="h-[calc(100vh-756px)] min-h-[200px] bg-transparent xl:bg-[#00000080] mt-8 xl:mt-0 text-center pb-6 pt-6 box-content">
+      <div className="flex-1 bg-transparent xl:bg-[#00000080] mt-8 xl:mt-0 text-center pb-6 2xl:pb-0 pt-6 box-content">
         <div className="block text-center">
           <div className="text-[#FFAF1D] text-[36px] font-bold mb-4 font-rem text-center">
             GET READY!
@@ -79,7 +79,7 @@ const Landing = () => {
           <div className="text-white text-[22px] xl:text-[24px] mt-4 xl:mt-0 font-bold mb-1 font-rem">
             Find us on
           </div>
-          <div className="mx-auto w-fit">
+          <div className="mx-auto w-fit pb-4">
             <ListSocial />
           </div>
         </div>

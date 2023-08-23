@@ -28,7 +28,7 @@ const Liquidity = () => {
   return isClient ? (
     <div
       style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
-      className=" min-h-[100vh] "
+      className=" min-h-[104vh] flex flex-col  justify-between "
     >
       <Header logo={<Logo xl />} mode="app" />
       <>

@@ -231,6 +231,13 @@ const TradeForm = ({
     setFailed(false);
   };
 
+  const handleSwitchPair = () => {
+    setToken1(token2);
+    setToken2(token1);
+    setToken1Amount('0');
+    setToken2Amount('0');
+  };
+
   return (
     <>
       <SelectTokenModal
@@ -274,7 +281,12 @@ const TradeForm = ({
           }}
           setTokenAmount={(value) => setToken1Amount(value)}
         />
-        <div className="mx-auto w-fit">{dividerIcon}</div>
+        <div
+          className="mx-auto w-fit cursor-pointer"
+          onClick={handleSwitchPair}
+        >
+          {dividerIcon}
+        </div>{' '}
         <TokenForm
           openModal={() => {
             setTokenBeingSelected(2);
@@ -332,7 +344,6 @@ const TradeForm = ({
             hideIcon
           />
         )}
-
         <Button
           onClick={() => handleAddLiquidity()}
           className="w-full justify-center  mb-2 px-[42px]"
