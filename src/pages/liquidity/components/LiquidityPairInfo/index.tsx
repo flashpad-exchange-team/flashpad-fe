@@ -5,9 +5,8 @@ import { ADDRESS_ZERO } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import * as routerContract from '@/utils/routerContract';
 import * as pairContract from '@/utils/pairContract';
-import { useAccount, useContractRead } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Address } from 'viem';
-import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import BigNumber from 'bignumber.js';
 
 interface IPairTokenInfo {
@@ -21,12 +20,16 @@ interface LiquidityPairInfoProps {
   token1Data: IPairTokenInfo;
   token2Data: IPairTokenInfo;
   isFirstLP?: boolean;
+  reserves: any;
+  pairToken1?: Address;
 }
 
 const LiquidityPairInfo = ({
   isFirstLP,
   token1Data,
   token2Data,
+  reserves,
+  pairToken1,
 }: LiquidityPairInfoProps) => {
   const token1Address = token1Data?.address;
   const token1Symbol = token1Data?.symbol;
@@ -48,26 +51,12 @@ const LiquidityPairInfo = ({
 
   const toggleOpen = () => setOpen(!open);
 
-  const { data: reserves } = useContractRead({
-    address:
-      isFirstLP === false && lpAddress != ADDRESS_ZERO ? lpAddress : undefined,
-    abi: ArthurPairABI,
-    functionName: 'getReserves',
-  });
-
-  const { data: token1 } = useContractRead({
-    address:
-      isFirstLP === false && lpAddress != ADDRESS_ZERO ? lpAddress : undefined,
-    abi: ArthurPairABI,
-    functionName: 'token0',
-  });
-
   let ratioToken1Token2 = '0';
   let ratioToken2Token1 = '0';
   if (reserves) {
-    const reserve1 = BigNumber((reserves as any)[0]);
-    const reserve2 = BigNumber((reserves as any)[1]);
-    if (token1 == token1Address) {
+    const reserve1 = BigNumber(reserves[0]);
+    const reserve2 = BigNumber(reserves[1]);
+    if (pairToken1 === token1Address) {
       ratioToken1Token2 = reserve2.div(reserve1).toString();
       ratioToken2Token1 = reserve1.div(reserve2).toString();
     } else {
@@ -169,10 +158,10 @@ const LiquidityPairInfo = ({
                 {isStableSwap ? 'Stable' : 'Volatile'}
               </div>
               <div className="text-[14px] mt-1.5 text-right ">
-                {isFirstLP ? 0 : swapRate1To2}
+                {isFirstLP ? 0 : swapRate1To2} {token2Symbol}
               </div>
               <div className="text-[14px] mt-1.5 text-right ">
-                {isFirstLP ? 0 : swapRate2To1}
+                {isFirstLP ? 0 : swapRate2To1} {token1Symbol}
               </div>
               <div className="text-[14px] mt-1.5 text-right ">
                 {isFirstLP ? 0 : ratioToken1Token2}

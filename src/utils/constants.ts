@@ -20,10 +20,13 @@ export const K_1_DAY = BigInt(86400);
 
 export const K_1_WEEK = BigInt(604800);
 
+export const minutesToSeconds = (minutes: number) => {
+  return BigInt(minutes * 60);
+}
+
 export const daysToSeconds = (days: number) => {
   return BigInt(days * 86400);
 };
-
 
 export const LINEA_TESTNET_TOKENS_LIST = [
   {

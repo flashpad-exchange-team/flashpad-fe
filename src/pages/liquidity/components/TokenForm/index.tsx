@@ -11,6 +11,7 @@ export interface TokenFormProps {
     balance: string;
     logo?: string;
   };
+  value: string;
   setTokenAmount: (value: any) => void;
 }
 
@@ -18,6 +19,7 @@ const TokenForm = ({
   openModal,
   title,
   tokenData,
+  value,
   setTokenAmount,
 }: TokenFormProps) => {
   return (
@@ -48,7 +50,7 @@ const TokenForm = ({
         </div>
         <input
           className="text-[16px] lg:text-[20px] font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none"
-          defaultValue={'0.0'}
+          value={value}
           onChange={(event) => {
             setTokenAmount(event.target.value);
           }}
