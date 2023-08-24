@@ -33,7 +33,6 @@ import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import customToast from '@/components/notification/customToast';
-import { toast } from 'react-toastify';
 import LockManageIcon from '@/icons/LockManageIcon';
 import LockManageModal from '@/components/modal/LockManageModal';
 
@@ -309,7 +308,10 @@ const TradeForm = ({
     stopLoading();
     setSuccessful(true);
     setFailed(false);
-    toast.success('Added liquidity successfully');
+    customToast({
+      message: 'Added liquidity successfully',
+      type: 'success',
+    });
   };
 
   const handleSwitchPair = () => {

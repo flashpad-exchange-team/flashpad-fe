@@ -7,11 +7,10 @@ import dynamic from 'next/dynamic';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect, useState } from 'react';
 import PoolList from './components/PoolList';
-import TradeForm from './components/TradeForm';
 
-// const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
-//   ssr: false,
-// }); // Disable SSR
+const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
+  ssr: false,
+}); // Disable SSR
 
 const Liquidity = () => {
   const { startLoading, stopLoading } = useLoading();

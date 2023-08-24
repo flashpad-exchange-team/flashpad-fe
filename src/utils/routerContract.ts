@@ -2,7 +2,6 @@ import { Address, getContract } from 'viem';
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
 import { ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET } from './constants';
-import { toast } from 'react-toastify';
 import BigNumber from 'bignumber.js';
 import customToast from '@/components/notification/customToast';
 
@@ -52,7 +51,10 @@ export const addLiquidity = async (
     return { hash, result };
   } catch (err: any) {
     console.log(err.message || err);
-    toast.error(err.message || err);
+    customToast({
+      message: err.message || err,
+      type: 'error',
+    });
     return undefined;
   }
 };

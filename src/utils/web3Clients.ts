@@ -8,16 +8,17 @@ const publicClient: any = createPublicClient({
 });
 const getWalletClient = () => {
   try {
-    createWalletClient({
+    return createWalletClient({
       chain: lineaTestnet,
       transport: typeof window !== 'undefined' ? custom((window as any).ethereum) : http(),
     })
   }
   catch (err) {
     console.log({ err })
+    return {}
   }
 }
-const walletClient = getWalletClient()
+const walletClient: any = getWalletClient()
 
 export {
   publicClient,
