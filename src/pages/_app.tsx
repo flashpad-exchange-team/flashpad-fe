@@ -8,6 +8,8 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 import type { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-tooltip/dist/react-tooltip.css';
+
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';

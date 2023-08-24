@@ -10,6 +10,7 @@ import { lineaTestnet } from 'wagmi/chains';
 import Notification from '../notification/Notification';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
+import customToast from '../notification/customToast';
 interface ConnectWalletProps {
   toggleOpen: () => void;
 }
@@ -18,6 +19,22 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
   const { isConnected } = useAccount();
   const { connectors } = useConfig();
   const { connect } = useConnect();
+  const checkWalletInstalled = (type: string) => {
+    if (type === 'Metamask') {
+      if (typeof window.ethereum === 'undefined') {
+        customToast({
+          message:
+            'You have not installed Metamask. We will redirect you to installing page...',
+          type: 'error',
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          window.open('https://metamask.io/download.html', '_blank');
+        }, 3000);
+        window.location.reload();
+      }
+    }
+  };
   useEffect(() => {
     if (isConnected && isClick) setTimeout(() => toggleOpen(), 1000);
   }, [isConnected, isClick]);
@@ -53,6 +70,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                 className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer "
                 onClick={() => {
                   setIsClick(true);
+                  checkWalletInstalled('Metamask');
                   connect({
                     connector: connectors[1],
                     chainId: lineaTestnet.id,
@@ -66,6 +84,8 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                 className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer "
                 onClick={() => {
                   setIsClick(true);
+                  checkWalletInstalled('Coinbase');
+
                   connect({
                     connector: connectors[2],
                     chainId: lineaTestnet.id,

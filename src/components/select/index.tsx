@@ -62,6 +62,7 @@ const Select = ({ options, icon, value, disabled }: SelectProps) => {
       {children}
     </div>
   );
+  console.log({ value });
   return (
     <SelectComponent
       options={options}

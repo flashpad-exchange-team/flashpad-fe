@@ -64,7 +64,9 @@ const TradeForm = ({
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
   const [insufficient, setInsufficient] = useState(false);
-  const [pairAddress, setPairAddress] = useState<Address | undefined>(undefined);
+  const [pairAddress, setPairAddress] = useState<Address | undefined>(
+    undefined
+  );
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -99,6 +101,17 @@ const TradeForm = ({
   const toggleOpen = () => setOpen(!isOpen);
   const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
   const toggleLockManage = () => setOpenLockManage(!isOpenLockManage);
+
+  const resetInput = (isReload?: boolean) => {
+    if (isReload) {
+      setToken1(null);
+      setToken2(null);
+    }
+    setToken1Amount('0');
+    setToken2Amount('0');
+    setTokenBeingSelected(0);
+  };
+
   const getPairAddress = async () => {
     if (!token1 || !token2) return;
     const address = (await factoryContract.getPair(
@@ -146,7 +159,9 @@ const TradeForm = ({
       adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
     }
     setToken2Amount(
-      adjustedToken2Amount.div(BigNumber(10).pow(balanceToken2?.decimals!)).toString()
+      adjustedToken2Amount
+        .div(BigNumber(10).pow(balanceToken2?.decimals!))
+        .toString()
     );
   };
 
@@ -164,7 +179,9 @@ const TradeForm = ({
       adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
     }
     setToken1Amount(
-      adjustedToken1Amount.div(BigNumber(10).pow(balanceToken1?.decimals!)).toString()
+      adjustedToken1Amount
+        .div(BigNumber(10).pow(balanceToken1?.decimals!))
+        .toString()
     );
   };
 
@@ -288,7 +305,7 @@ const TradeForm = ({
     const hash = txResult.hash;
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
-
+    resetInput();
     stopLoading();
     setSuccessful(true);
     setFailed(false);
@@ -332,7 +349,7 @@ const TradeForm = ({
           </div>
 
           <div className="flex items-center gap-3 cursor-pointer">
-            <ReloadIcon />
+            <ReloadIcon onClick={() => resetInput(true)} />
             <LockManageIcon onClick={toggleLockManage} />
             <SettingIcon onClick={toggleOpenSetting} />
           </div>

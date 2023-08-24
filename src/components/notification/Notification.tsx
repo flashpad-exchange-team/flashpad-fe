@@ -6,6 +6,7 @@ export interface NotificationProps {
   type?: 'error' | 'success' | 'info';
   message: string | ReactNode;
   hideIcon?: boolean;
+  autoClose?: number;
 }
 const Notification = ({ type, message, hideIcon }: NotificationProps) => {
   const renderIcon = () => {

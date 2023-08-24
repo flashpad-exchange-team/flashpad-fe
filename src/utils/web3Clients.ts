@@ -6,11 +6,18 @@ const publicClient: any = createPublicClient({
   chain: lineaTestnet,
   transport: http(LINEA_GOERLI_INFURA_RPC)
 });
-
-const walletClient = createWalletClient({
-  chain: lineaTestnet,
-  transport: typeof window !== 'undefined' ? custom((window as any).ethereum) : http('https://polygon-mumbai-bor.publicnode.com'),
-})
+const getWalletClient = () => {
+  try {
+    createWalletClient({
+      chain: lineaTestnet,
+      transport: typeof window !== 'undefined' ? custom((window as any).ethereum) : http(),
+    })
+  }
+  catch (err) {
+    console.log({ err })
+  }
+}
+const walletClient = getWalletClient()
 
 export {
   publicClient,

@@ -70,9 +70,11 @@ const TradeForm = ({
     fetchRate();
   }, [token1, token2]);
 
-  const resetInput = () => {
-    // setToken1(null);
-    // setToken2(null);
+  const resetInput = (isReload?: boolean) => {
+    if (isReload) {
+      setToken1(null);
+      setToken2(null);
+    }
     setToken1Amount('0');
     setToken2Amount('0');
     setTokenBeingSelected(0);
@@ -267,7 +269,7 @@ const TradeForm = ({
           </div>
 
           <div className="flex items-center gap-6 cursor-pointer">
-            <ReloadIcon />
+            <ReloadIcon onClick={() => resetInput(true)} />
             <SettingIcon onClick={toggleOpenSetting} />
           </div>
         </div>
