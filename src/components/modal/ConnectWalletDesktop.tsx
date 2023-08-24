@@ -31,7 +31,9 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
         setTimeout(() => {
           window.open('https://metamask.io/download.html', '_blank');
         }, 3000);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       }
     }
   };
