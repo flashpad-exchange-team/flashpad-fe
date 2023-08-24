@@ -77,21 +77,21 @@ const LiquiditySettingModal = ({
       </div>
       <div className="text-[15px]">Slippage (%)</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none"
+        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
         placeholder="Enter value "
         value={slippage}
         onChange={(e) => setSlippage(e.target.value)}
       />
       <div className="text-[15px]">Deadline (mins)</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none"
+        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
         placeholder="Enter value "
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
       />
       <div className="text-[15px]">Max hops</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none"
+        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
         placeholder="Enter value "
         value={maxHops}
         onChange={(e) => setMaxHops(e.target.value)}

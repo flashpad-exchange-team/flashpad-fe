@@ -97,7 +97,7 @@ const FarmPoolList = () => {
       </div>
       <div className="flex items-center gap-3">
         <input
-          className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none"
+          className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
           placeholder="Search by name or address "
         />
         <Select options={FILTER_FARM} />

@@ -94,7 +94,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
         <div className="mt-2 mb-2 text-[14px] font-semibold">
           {isConnected
             ? 'Your wallet is now connected to Arthur DEX'
-            : 'Connecting your wallet is like “loggin in” to Web3. Select your wallet form the options to get started.'}
+            : 'Connecting your wallet is like “logging in” to Web3. Select your wallet form the options to get started.'}
         </div>
         <Notification message="I don't have a wallet" type="info" />
         <ProgressBar active={isConnected} />

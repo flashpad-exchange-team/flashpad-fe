@@ -33,6 +33,8 @@ import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import customToast from '@/components/notification/customToast';
 import { toast } from 'react-toastify';
+import LockManageIcon from '@/icons/LockManageIcon';
+import LockManageModal from '@/components/modal/LockManageModal';
 
 interface TradeFormProps {
   title: string;
@@ -54,6 +56,7 @@ const TradeForm = ({
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
+  const [isOpenLockManage, setOpenLockManage] = useState<boolean>(false);
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>(null);
   const [token2, setToken2] = useState<any>(null);
@@ -93,7 +96,7 @@ const TradeForm = ({
 
   const toggleOpen = () => setOpen(!isOpen);
   const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
-
+  const toggleLockManage = () => setOpenLockManage(!isOpenLockManage);
   const getPairAddress = async () => {
     if (!token1 || !token2) return;
     const address = (await factoryContract.getPair(
@@ -305,7 +308,10 @@ const TradeForm = ({
         isOpen={isOpenSetting}
         toggleOpen={toggleOpenSetting}
       />
-
+      <LockManageModal
+        isOpen={isOpenLockManage}
+        toggleOpen={toggleLockManage}
+      />
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3">
           <SwapLeftIcon />
@@ -318,8 +324,9 @@ const TradeForm = ({
             <QuestionIcon />
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 cursor-pointer">
             <ReloadIcon />
+            <LockManageIcon onClick={toggleLockManage} />
             <SettingIcon onClick={toggleOpenSetting} />
           </div>
         </div>
