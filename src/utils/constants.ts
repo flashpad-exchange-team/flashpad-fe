@@ -14,6 +14,8 @@ export const DEFAULT_SLIPPAGE = process.env.DEFAULT_SLIPPAGE || '0.5';
 export const DEFAULT_DEADLINE = process.env.DEFAULT_DEADLINE || '10';
 export const DEFAULT_MAX_HOPS = process.env.DEFAULT_MAX_HOPS || '4';
 
+export const DEFAULT_TIME_LOCK = '14';
+
 export const K_5_MIN = BigInt(300);
 
 export const K_1_DAY = BigInt(86400);

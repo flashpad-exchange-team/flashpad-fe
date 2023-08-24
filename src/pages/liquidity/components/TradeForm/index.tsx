@@ -15,8 +15,9 @@ import {
   ADDRESS_ZERO,
   ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
   DEFAULT_DEADLINE,
-  K_1_WEEK,
+  DEFAULT_TIME_LOCK,
   MAX_UINT256,
+  daysToSeconds,
   minutesToSeconds,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
@@ -69,6 +70,7 @@ const TradeForm = ({
   const [failed, setFailed] = useState(false);
 
   const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
+  const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
@@ -164,6 +166,10 @@ const TradeForm = ({
     setToken1Amount(
       adjustedToken1Amount.div(BigNumber(10).pow(balanceToken1?.decimals!)).toString()
     );
+  };
+
+  const saveTimeLock = (value: number) => {
+    setTimeLock(value);
   };
 
   const handleAddLiquidity = async () => {
@@ -269,7 +275,7 @@ const TradeForm = ({
       amountBMin: token2AmountIn,
       to: userAddress!,
       deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-      timeLock: (timestamp as bigint) + K_1_WEEK + '',
+      timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
     });
 
     if (!txResult) {
@@ -311,6 +317,7 @@ const TradeForm = ({
       <LockManageModal
         isOpen={isOpenLockManage}
         toggleOpen={toggleLockManage}
+        saveTimeLock={saveTimeLock}
       />
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3">

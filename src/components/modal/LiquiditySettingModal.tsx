@@ -10,7 +10,7 @@ import {
   DEFAULT_MAX_HOPS,
   DEFAULT_SLIPPAGE,
 } from '@/utils/constants';
-import { toast } from 'react-toastify';
+import customToast from '../notification/customToast';
 
 export interface ILiquiditySettings {
   slippage: number;
@@ -46,12 +46,15 @@ const LiquiditySettingModal = ({
     if (
       Number.isNaN(nSlippage) ||
       nSlippage <= 0 ||
-      Number.isNaN(nDeadline) ||
+      Number.isNaN(nDeadline) || !Number.isInteger(nDeadline) ||
       nDeadline <= 0 ||
-      Number.isNaN(nMaxHops) ||
+      Number.isNaN(nMaxHops) || !Number.isInteger(nMaxHops) ||
       nMaxHops <= 0
     ) {
-      toast.error('Please input valid numbers');
+      customToast({
+        message: 'Please input valid numbers',
+        type: 'error',
+      });
       return;
     }
     if (saveSettings)
