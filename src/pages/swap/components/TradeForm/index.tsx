@@ -266,7 +266,7 @@ const TradeForm = ({
             <QuestionIcon />
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 cursor-pointer">
             <ReloadIcon />
             <SettingIcon onClick={toggleOpenSetting} />
           </div>

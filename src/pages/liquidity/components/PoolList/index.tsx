@@ -78,7 +78,7 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
         </div>
         <div className="flex gap-3 items-center">
           <input
-            className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none"
+            className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
             placeholder="Search by name or address "
           />
           <Button
