@@ -15,7 +15,7 @@ import Image from 'next/image';
 export interface SelectTokenModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-  selectValue: (value: any) => void;
+  selectValue?: (value: any) => void;
 }
 
 const SelectTokenModal = ({
@@ -105,7 +105,7 @@ const SelectTokenModal = ({
               className={`w-2/4 lg:w-1/4`}
               key={item.symbol}
               onClick={() => {
-                selectValue(item);
+                if (selectValue) selectValue(item);
                 toggleOpen();
               }}
             >
@@ -131,7 +131,7 @@ const SelectTokenModal = ({
             className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2"
             key={item.symbol}
             onClick={() => {
-              selectValue(item);
+              if (selectValue) selectValue(item);
               toggleOpen();
             }}
           >

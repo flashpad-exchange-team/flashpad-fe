@@ -2,6 +2,8 @@ import { Button } from '@/components/button/Button';
 import AddIcon from '@/icons/AddIcon';
 import UploadIcon from '@/icons/UploadIcon';
 import TableStaking from './TableStaking';
+import SelectTokenModal from '@/components/modal/SelectTokenModal';
+import { useState } from 'react';
 const data = [
   {
     tvl: '482.85',
@@ -32,37 +34,46 @@ const data = [
   },
 ];
 const StakingMain = () => {
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const toggleOpen = () => setOpen(!isOpen);
+
   return (
-    <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <div className="font-bold text-[18px]">Poisition (Staking) </div>{' '}
-          <div className="text-[14px] text-[#98A2B3] mt-1 mb-3 font-semibold">
-            Create and manage all your staking positions.
+    <>
+      <SelectTokenModal isOpen={isOpen} toggleOpen={toggleOpen} />
+      <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <div className="font-bold text-[18px]">Poisition (Staking) </div>{' '}
+            <div className="text-[14px] text-[#98A2B3] mt-1 mb-3 font-semibold">
+              Create and manage all your staking positions.
+            </div>
+          </div>
+          <div className="flex gap-3 items-center"></div>
+        </div>
+
+        <div className="min-w-full bg-[#00000080] pb-3">
+          <div className="px-4 py-6">LP V2</div>
+          <div className="flex items-center gap-3">
+            <input
+              className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
+              placeholder="Search by name or address "
+            />
+            <Button
+              className="px-3 h-[52px] w-[270px] flex justify-center "
+              onClick={toggleOpen}
+            >
+              <UploadIcon />
+              Import Liquidity
+            </Button>
+            <Button className="px-3 h-[52px] w-[270px] flex justify-center ">
+              <AddIcon color="#0C111D" />
+              New Position
+            </Button>
           </div>
         </div>
-        <div className="flex gap-3 items-center"></div>
+        <TableStaking data={data} />
       </div>
-
-      <div className="min-w-full bg-[#00000080] pb-3">
-        <div className="px-4 py-6">LP V2</div>
-        <div className="flex items-center gap-3">
-          <input
-            className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
-            placeholder="Search by name or address "
-          />
-          <Button className="px-3 h-[52px] w-[270px] flex justify-center ">
-            <UploadIcon />
-            Import Liquidity
-          </Button>
-          <Button className="px-3 h-[52px] w-[270px] flex justify-center ">
-            <AddIcon color="#0C111D" />
-            New Position
-          </Button>
-        </div>
-      </div>
-      <TableStaking data={data} />
-    </div>
+    </>
   );
 };
 export default StakingMain;
