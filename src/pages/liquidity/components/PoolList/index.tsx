@@ -69,20 +69,20 @@ interface PoolListProps {
 const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
   return (
     <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
-      <div className="flex items-center justify-between">
+      <div className="block lg:flex items-center justify-between">
         <div>
           <div className="font-bold">Pools List</div>{' '}
           <div className="text-[14px] text-[#98A2B3] mt-2 font-semibold">
             Custom-built infrastructure for Linea native public sales
           </div>
         </div>
-        <div className="flex gap-3 items-center">
+        <div className="block lg:flex gap-3 items-center">
           <input
-            className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
+            className=" mt-3 lg:mt-0 mb-3 lg:mb-0 w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
             placeholder="Search by name or address "
           />
           <Button
-            className="px-6 h-[52px] w-[260px] "
+            className="px-6 h-[48px] lg:h-[52px] w-full lg:w-[260px] flex justify-center"
             onClick={() => setIsAddLiquidity(true)}
           >
             <AddIcon color="#0C111D" />

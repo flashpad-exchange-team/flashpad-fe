@@ -186,7 +186,7 @@ const Header = (props: INavbarProps) => {
             <ul className="navbar flex items-center text-[14px] lg:text-xl font-medium text-white">
               {props.mode === 'app' ? (
                 <>
-                  <Linea className="mr-8 lg:block" />
+                  <Linea className="mr-8 hidden lg:block" />
                   {
                     <Button
                       icon={<WalletIcon />}
