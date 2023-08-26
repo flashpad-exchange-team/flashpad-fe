@@ -15,10 +15,16 @@ interface TableProps {
     myPool: string;
     myStake: string;
     earnings: string;
+    [key: string]: any;
   }[];
 }
 
-const SimpleTable: React.FC<TableProps> = ({ data }) => {
+const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
+
+  const handleRemoveLiquidity = async () => {
+    alert('TODO: handle calling SC function "removeLiquidity"');
+  };
+
   return (
     <div className="overflow-x-auto mt-8">
       <table className="min-w-full bg-[#00000080] ">
@@ -93,7 +99,7 @@ const SimpleTable: React.FC<TableProps> = ({ data }) => {
                 ${item.totalStaked}
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
-                ${item.myPool}
+                {item.myPool}%
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
                 ${item.myStake}
@@ -102,9 +108,18 @@ const SimpleTable: React.FC<TableProps> = ({ data }) => {
                 ${item.earnings}
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
-                <div className="cursor-pointer text-[#475467] font-semibold">
-                  Remove
-                </div>
+                {item.locked ? (
+                  <div className="cursor-default text-[#475467] font-semibold">
+                    Remove
+                  </div>
+                ) : (
+                  <div
+                    className="cursor-pointer text-[#E6B300] font-semibold"
+                    onClick={handleRemoveLiquidity}
+                  >
+                    Remove
+                  </div>
+                )}
               </td>
             </tr>
           ))}
@@ -114,4 +129,4 @@ const SimpleTable: React.FC<TableProps> = ({ data }) => {
   );
 };
 
-export default SimpleTable;
+export default ListPoolsTable;

@@ -33,13 +33,23 @@ const Liquidity = () => {
       <Header logo={<Logo xl />} mode="app" />
       <>
         {isAddLiquidity ? (
-          <TradeForm
-            title="ADD LIQUIDITY"
-            buttonName="Add Liquidity"
-            inputTitle1="Token 1"
-            inputTitle2="Token 2"
-            dividerIcon={<LiquidityIcon />}
-          />
+          <>
+            <span
+              className="mx-auto mt-6 hover:underline cursor-pointer"
+              onClick={() => {
+                setIsAddLiquidity(false);
+              }}
+            >
+              {'<    '}Back to Pools List
+            </span>
+            <TradeForm
+              title="ADD LIQUIDITY"
+              buttonName="Add Liquidity"
+              inputTitle1="Token 1"
+              inputTitle2="Token 2"
+              dividerIcon={<LiquidityIcon />}
+            />
+          </>
         ) : (
           <PoolList setIsAddLiquidity={setIsAddLiquidity} />
         )}

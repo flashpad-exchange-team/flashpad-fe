@@ -26,3 +26,25 @@ export const getPair = async (
     return undefined;
   }
 }
+
+export const getPairByIndex = async (index: number) => {
+  try {
+    const allPairAddresses = await factoryContract.read.allPairs!([index]);
+
+    return allPairAddresses as any;
+  } catch (err: any) {
+    console.log(err.message || err);
+    return undefined;
+  }
+}
+
+export const allPairsLength = async () => {
+  try {
+    const length = await factoryContract.read.allPairsLength!([]);
+
+    return Number(length);
+  } catch (err: any) {
+    console.log(err.message || err);
+    return 0;
+  }
+}

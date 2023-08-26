@@ -111,6 +111,10 @@ const TradeForm = ({
     setTokenBeingSelected(0);
   };
 
+  const saveSettings = ({ deadline }: ILiquiditySettings) => {
+    setDeadline(deadline);
+  };
+
   const getPairAddress = async () => {
     if (!token1 || !token2) return;
     const address = (await factoryContract.getPair(
@@ -122,15 +126,12 @@ const TradeForm = ({
     setIsFirstLP(!address || address === ADDRESS_ZERO);
   };
 
-  const saveSettings = ({ deadline }: ILiquiditySettings) => {
-    setDeadline(deadline);
-  };
-
   useEffect(() => {
     getPairAddress();
   }, [token1, token2, successful]);
 
   const onSelectedToken = (token: any) => {
+    setIsFirstLP(true);
     if (tokenBeingSelected === 1) {
       if (token2?.address === token?.address) {
         setToken2(token1);
@@ -338,8 +339,8 @@ const TradeForm = ({
         toggleOpen={toggleLockManage}
         saveTimeLock={saveTimeLock}
       />
-      <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
-        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3">
+      <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
+        <div className="text-[24px] text-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />
           {title}
           <SwapRightIcon />

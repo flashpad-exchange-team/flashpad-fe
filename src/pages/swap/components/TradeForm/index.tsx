@@ -121,8 +121,6 @@ const TradeForm = ({
         message: 'Please input valid amount! ',
         type: 'error',
       });
-
-      // toast.error('Please input valid amount');
       return;
     }
 
@@ -136,11 +134,8 @@ const TradeForm = ({
         message: 'Insufficient balance! ',
         type: 'error',
       });
-      // toast.error('Insufficient balance!');
-      // setInsufficient(true);
       return;
     }
-    // setInsufficient(false);
 
     startLoading();
 
@@ -228,13 +223,8 @@ const TradeForm = ({
       message: `Swap ${token1Amount} ${token1.symbol} to ${token2Amount} ${token2.symbol} successfully`,
       type: 'success',
     });
-    // toast.success(
-    //   `Swap ${token1Amount} ${token1.symbol} to ${token2Amount} ${token2.symbol} successfully`
-    // );
     resetInput();
     stopLoading();
-    // setSuccessful(true);
-    // setFailed(false);
   };
 
   const handleSwitchPair = () => {
