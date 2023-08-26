@@ -35,11 +35,11 @@ const LiquidityPairInfo = ({
         <div>
           <div className="text-[14px] ">
             1 {token1Symbol} = {rate} {token2Symbol}{' '}
-            <span className="text-[#344054] ml-2">($1.8833,82)</span>
+            {/* <span className="text-[#344054] ml-2">($1.8833,82)</span> */}
           </div>
           <div className="text-[14px] ">
             1 {token2Symbol} = {rate ? 1 / rate : 1} {token1Symbol}{' '}
-            <span className="text-[#344054] ml-2">($1,91)</span>
+            {/* <span className="text-[#344054] ml-2">($1,91)</span> */}
           </div>
         </div>
         <div>{open ? <ArrowUp /> : <ArrowDown />}</div>
