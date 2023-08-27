@@ -138,7 +138,9 @@ const TradeForm = ({
   }, [token1, token2, successful]);
 
   const onSelectedToken = (token: any) => {
-    setIsFirstLP(true);
+    setIsFirstLP(undefined);
+    setToken1Amount('0');
+    setToken2Amount('0');
     if (tokenBeingSelected === 1) {
       if (token2?.address === token?.address) {
         setToken2(token1);
@@ -160,10 +162,10 @@ const TradeForm = ({
       .pow(balanceToken1?.decimals!)
       .times(BigNumber(token1Amount));
     let adjustedToken2Amount;
-    if (pairToken1 === token1.address) {
-      adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
+    if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+      adjustedToken2Amount = reserve2.div(reserve1).times(bnToken1Amount);
     } else {
-      adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
+      adjustedToken2Amount = reserve1.div(reserve2).times(bnToken1Amount);
     }
     setToken2Amount(
       adjustedToken2Amount
@@ -180,10 +182,10 @@ const TradeForm = ({
       .pow(balanceToken2?.decimals!)
       .times(BigNumber(token2Amount));
     let adjustedToken1Amount;
-    if (pairToken1 === token1.address) {
-      adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
+    if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+      adjustedToken1Amount = reserve1.div(reserve2).times(bnToken2Amount);
     } else {
-      adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
+      adjustedToken1Amount = reserve2.div(reserve1).times(bnToken2Amount);
     }
     setToken1Amount(
       adjustedToken1Amount
@@ -239,68 +241,96 @@ const TradeForm = ({
     const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
     const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
 
-    const token1Allowance = (await erc20TokenContract.erc20Read(
-      token1.address,
-      'allowance',
-      [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
-    )) as bigint;
-
-    if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
-      const approveRes = await erc20TokenContract.erc20Write(
-        userAddress!,
+    if (token1.symbol != 'ETH') {
+      const token1Allowance = (await erc20TokenContract.erc20Read(
         token1.address,
-        'approve',
-        [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
-      );
-      if (!approveRes) {
-        stopLoading();
-        setSuccessful(false);
-        setFailed(true);
-        return;
+        'allowance',
+        [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
+      )) as bigint;
+  
+      if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
+        const approveRes = await erc20TokenContract.erc20Write(
+          userAddress!,
+          token1.address,
+          'approve',
+          [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
+        );
+        if (!approveRes) {
+          stopLoading();
+          setSuccessful(false);
+          setFailed(true);
+          return;
+        }
+  
+        const hash = approveRes.hash;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
       }
-
-      const hash = approveRes.hash;
-      const txReceipt = await waitForTransaction({ hash });
-      console.log({ txReceipt });
     }
 
-    const token2Allowance = (await erc20TokenContract.erc20Read(
-      token2.address,
-      'allowance',
-      [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
-    )) as bigint;
-
-    if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
-      const approveRes = await erc20TokenContract.erc20Write(
-        userAddress!,
+    if (token2.symbol != 'ETH') {
+      const token2Allowance = (await erc20TokenContract.erc20Read(
         token2.address,
-        'approve',
-        [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
-      );
-      if (!approveRes) {
-        stopLoading();
-        setSuccessful(false);
-        setFailed(true);
-        return;
+        'allowance',
+        [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
+      )) as bigint;
+  
+      if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
+        const approveRes = await erc20TokenContract.erc20Write(
+          userAddress!,
+          token2.address,
+          'approve',
+          [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
+        );
+        if (!approveRes) {
+          stopLoading();
+          setSuccessful(false);
+          setFailed(true);
+          return;
+        }
+  
+        const hash = approveRes.hash;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
       }
-
-      const hash = approveRes.hash;
-      const txReceipt = await waitForTransaction({ hash });
-      console.log({ txReceipt });
     }
 
     const { timestamp } = await web3Helpers.getBlock();
-    const txResult = await routerContract.addLiquidity(userAddress!, {
-      tokenA: token1.address,
-      tokenB: token2.address,
-      amountADesired: token1AmountIn,
-      amountBDesired: token2AmountIn,
-      amountAMin: token1AmountIn,
-      amountBMin: token2AmountIn,
-      to: userAddress!,
-      deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-      timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
-    });
+    let txResult: any;
+    
+    if (token1.symbol == 'ETH') {
+      txResult = await routerContract.addLiquidityETH(userAddress!, {
+        token: token2.address,
+        amountTokenDesired: token2AmountIn,
+        amountTokenMin: token2AmountIn,
+        amountETHMin: token1AmountIn,
+        to: userAddress!,
+        deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
+        timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+      });
+    } else if (token2.symbol == 'ETH') {
+      txResult = await routerContract.addLiquidityETH(userAddress!, {
+        token: token1.address,
+        amountTokenDesired: token1AmountIn,
+        amountTokenMin: token1AmountIn,
+        amountETHMin: token2AmountIn,
+        to: userAddress!,
+        deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
+        timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+      });
+    } else {
+      txResult = await routerContract.addLiquidity(userAddress!, {
+        tokenA: token1.address,
+        tokenB: token2.address,
+        amountADesired: token1AmountIn,
+        amountBDesired: token2AmountIn,
+        amountAMin: token1AmountIn,
+        amountBMin: token2AmountIn,
+        to: userAddress!,
+        deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
+        timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+      });
+    }
 
     if (!txResult) {
       stopLoading();
@@ -371,7 +401,7 @@ const TradeForm = ({
           }}
           title={inputTitle1}
           tokenData={{
-            symbol: token1 ? balanceToken1?.symbol! : '',
+            symbol: token1 ? token1.symbol! : '',
             balance: token1 ? balanceToken1?.formatted! : '?',
             logo: token1 ? token1.logoURI : '',
           }}
@@ -394,7 +424,7 @@ const TradeForm = ({
           }}
           title={inputTitle2}
           tokenData={{
-            symbol: token2 ? balanceToken2?.symbol! : '',
+            symbol: token2 ? token2.symbol! : '',
             balance: token2 ? balanceToken2?.formatted! : '?',
             logo: token2 ? token2.logoURI : '',
           }}

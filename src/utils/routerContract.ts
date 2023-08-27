@@ -83,7 +83,8 @@ export const addLiquidityETH = async (
       abi: RouterABI,
       functionName: 'addLiquidityETH',
       args: Object.values(params),
-      account
+      account,
+      value: params.amountETHMin
     });
     const hash = await walletClient.writeContract(request);
 

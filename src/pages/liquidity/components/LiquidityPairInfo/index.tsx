@@ -56,12 +56,16 @@ const LiquidityPairInfo = ({
   if (reserves) {
     const reserve1 = BigNumber(reserves[0]);
     const reserve2 = BigNumber(reserves[1]);
-    if (pairToken1 === token1Address) {
-      ratioToken1Token2 = reserve2.div(reserve1).toString();
-      ratioToken2Token1 = reserve1.div(reserve2).toString();
+    if (pairToken1?.toLowerCase() === token1Address?.toLowerCase()) {
+      const reserve1Formatted = reserve1.div(BigNumber(10).pow(token1Decimals!));
+      const reserve2Formatted = reserve2.div(BigNumber(10).pow(token2Decimals!));
+      ratioToken1Token2 = reserve2Formatted.div(reserve1Formatted).toString();
+      ratioToken2Token1 = reserve1Formatted.div(reserve2Formatted).toString();
     } else {
-      ratioToken1Token2 = reserve1.div(reserve2).toString();
-      ratioToken2Token1 = reserve2.div(reserve1).toString();
+      const reserve1Formatted = reserve2.div(BigNumber(10).pow(token1Decimals!));
+      const reserve2Formatted = reserve1.div(BigNumber(10).pow(token2Decimals!));
+      ratioToken1Token2 = reserve2Formatted.div(reserve1Formatted).toString();
+      ratioToken2Token1 = reserve1Formatted.div(reserve2Formatted).toString();
     }
   }
 

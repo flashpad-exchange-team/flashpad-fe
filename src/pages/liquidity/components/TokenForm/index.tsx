@@ -77,7 +77,7 @@ const TokenForm = ({
 
         <div
           className="text-[12px] font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer"
-          onClick={() => {}}
+          onClick={() => setTokenAmount(tokenData.balance)}
         >
           Max
         </div>
