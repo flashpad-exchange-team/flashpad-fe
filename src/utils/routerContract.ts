@@ -1,12 +1,12 @@
 import { Address, getContract } from 'viem';
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
-import { ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET } from './constants';
+import { ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, ARTHUR_ROUTER_ADDRESS_MUMBAI } from './constants';
 import BigNumber from 'bignumber.js';
 import customToast from '@/components/notification/customToast';
 
 const routerContract: any = getContract({
-  address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
+  address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
   abi: RouterABI,
   publicClient,
   walletClient,
@@ -32,7 +32,17 @@ export interface IAddLiquidityParams {
   to: Address;
   deadline: string;
   timeLock: string;
-}
+};
+
+export interface IAddLiquidityETHParams {
+  token: string;
+  amountTokenDesired: string;
+  amountTokenMin: string;
+  amountETHMin: string;
+  to: string;
+  deadline: string;
+  timeLock: string;
+};
 
 export const addLiquidity = async (
   account: Address,
@@ -40,7 +50,7 @@ export const addLiquidity = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
+      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
       abi: RouterABI,
       functionName: 'addLiquidity',
       args: Object.values(params),
@@ -50,7 +60,32 @@ export const addLiquidity = async (
 
     return { hash, result };
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
+    customToast({
+      message: err.message || err,
+      type: 'error',
+    });
+    return undefined;
+  }
+};
+
+export const addLiquidityETH = async (
+  account: Address,
+  params: IAddLiquidityETHParams,
+) => {
+  try {
+    const { request, result } = await publicClient.simulateContract({
+      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
+      abi: RouterABI,
+      functionName: 'addLiquidityETH',
+      args: Object.values(params),
+      account
+    });
+    const hash = await walletClient.writeContract(request);
+
+    return { hash, result };
+  } catch (err: any) {
+    console.log(err);
     customToast({
       message: err.message || err,
       type: 'error',
@@ -71,7 +106,7 @@ export const getPair = async (
 
     return pairAddress as Address;
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
     return undefined;
   }
 }
@@ -89,7 +124,7 @@ export const getAmountsOut = async (amountIn: string, path: string[]) => {
     console.log({ result, a: BigNumber(result[result.length - 1]).div(BigNumber(result[0])).toNumber() })
     return BigNumber(result[result.length - 1]).div(BigNumber(result[0])).toNumber();
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
     return 0;
   }
 };
@@ -99,7 +134,7 @@ export const quote = async (amountA: string, reserveA: string, reserveB: string)
     const result = await routerContract.read.quote!([amountA, reserveA, reserveB]);
     return BigNumber(result + '');
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
     return undefined;
   }
 };

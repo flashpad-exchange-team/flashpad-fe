@@ -1,7 +1,9 @@
 import Select from '@/components/select';
 import BNBICon from '@/icons/BNBIcon';
-import { LINEA_TESTNET_TOKENS_LIST } from '@/utils/constants';
+import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import Image from 'next/image';
+import { polygonMumbai } from 'viem/chains';
+import { useAccount } from 'wagmi';
 
 export interface TokenFormProps {
   openModal?: () => void;
@@ -22,16 +24,23 @@ const TokenForm = ({
   value,
   setTokenAmount,
 }: TokenFormProps) => {
+  const { isConnected } = useAccount();
+  console.log({ tokenData });
+
+  const handleOpenSelectTokenModal = () => {
+    isConnected && openModal ? openModal() : void 0;
+  };
+
   return (
     <div className="bg-[#150E3980] rounded-lg my-2 p-4">
       <div className="block lg:flex items-start w-full">
         <div
           className="w-full justify-between lg:min-w-[215px] lg:w-fit rounded-md bg-[#150E39] px-2 py-1 flex items-center gap-2 text-[14px] lg:text-[16px] "
-          onClick={() => (openModal ? openModal() : void 0)}
+          onClick={handleOpenSelectTokenModal}
         >
           <div className="w-[60px]">{title}</div>
           <Select
-            options={LINEA_TESTNET_TOKENS_LIST}
+            options={CHAINS_TOKENS_LIST[polygonMumbai.id]}
             icon={
               tokenData?.logo ? (
                 <Image
@@ -64,7 +73,7 @@ const TokenForm = ({
       <div className="flex items-center justify-between w-full text-[14px] lg:[text-16px]">
         <div className="mt-2">
           Balance:{' '}
-          {tokenData?.symbol ? `${tokenData.balance} ${tokenData.symbol}` : 0}
+          {`${tokenData.balance} ${tokenData.symbol}`}
         </div>
 
         <div

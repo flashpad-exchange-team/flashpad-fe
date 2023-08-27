@@ -6,8 +6,9 @@ import * as factoryContract from '@/utils/factoryContract';
 import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
 import * as web3Helpers from '@/utils/web3Helpers';
-import { LINEA_TESTNET_TOKENS_LIST } from '@/utils/constants';
+import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useAccount } from 'wagmi';
+import { polygonMumbai } from 'viem/chains';
 import BigNumber from 'bignumber.js';
 
 // const data = [
@@ -84,29 +85,16 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
 
   const getAllPairs = async () => {
     const nPairs = await factoryContract.allPairsLength();
-    // setAllPairsLength(nPairs);
 
     const listPairs = [];
     const { timestamp } = await web3Helpers.getBlock();
     for (let i = 0; i < nPairs; i++) {
-      const pairAddress = await factoryContract.getPairByIndex(i); 
-      const timeLock = await pairContract.read(
-        pairAddress,
-        'timeLock',
-        []
-      );
+      const pairAddress = await factoryContract.getPairByIndex(i);
+      const timeLock = await pairContract.read(pairAddress, 'timeLock', []);
 
-      const token1Address = await pairContract.read(
-        pairAddress,
-        'token0',
-        []
-      );
+      const token1Address = await pairContract.read(pairAddress, 'token0', []);
 
-      const token2Address = await pairContract.read(
-        pairAddress,
-        'token1',
-        []
-      );
+      const token2Address = await pairContract.read(pairAddress, 'token1', []);
 
       const token1Symbol = await erc20Contract.erc20Read(
         token1Address,
@@ -120,26 +108,27 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
         []
       );
 
-      const token1Logo = LINEA_TESTNET_TOKENS_LIST.find((e) => {
+      const token1Logo = CHAINS_TOKENS_LIST[polygonMumbai.id].find((e) => {
         return e.symbol === token1Symbol;
       })?.logoURI;
 
-      const token2Logo = LINEA_TESTNET_TOKENS_LIST.find((e) => {
+      const token2Logo = CHAINS_TOKENS_LIST[polygonMumbai.id].find((e) => {
         return e.symbol === token2Symbol;
       })?.logoURI;
 
-      const userLpBalance = await pairContract.read(
+      const userLpBalance = userAddress ? await pairContract.read(pairAddress, 'balanceOf', [
+        userAddress,
+      ]) : 0;
+      const totalSupply = await pairContract.read(
         pairAddress,
-        'balanceOf',
-        [ userAddress ]
+        'totalSupply',
+        []
       );
-      const totalSupply = await pairContract.read(pairAddress, 'totalSupply', []);
 
-      const poolShare = 
-        BigNumber(userLpBalance)
-          .div(totalSupply)
-          .times(100)
-          .toFixed(2);
+      const poolShare = BigNumber(userLpBalance)
+        .div(totalSupply)
+        .times(100)
+        .toFixed(2);
 
       listPairs.push({
         locked: timestamp < timeLock,
@@ -147,7 +136,7 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
         token2: token2Symbol,
         token1Logo,
         token2Logo,
-        myPool: poolShare
+        myPool: poolShare,
       });
     }
     setAllPairsData(listPairs);

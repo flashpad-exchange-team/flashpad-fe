@@ -14,6 +14,7 @@ import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
   ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
+  ARTHUR_ROUTER_ADDRESS_MUMBAI,
   DEFAULT_DEADLINE,
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
@@ -51,7 +52,7 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress, isConnected } = useAccount();
   const { startLoading, stopLoading } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -75,13 +76,19 @@ const TradeForm = ({
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
-    token: token1 ? (token1.address as Address) : undefined,
+    token:
+      token1 && token1.symbol != 'ETH'
+        ? (token1.address as Address)
+        : undefined,
     watch: true,
   });
 
   const { data: balanceToken2 } = useBalance({
     address: userAddress,
-    token: token2 ? (token2.address as Address) : undefined,
+    token:
+      token2 && token2.symbol != 'ETH'
+        ? (token2.address as Address)
+        : undefined,
     watch: true,
   });
 
@@ -235,7 +242,7 @@ const TradeForm = ({
     const token1Allowance = (await erc20TokenContract.erc20Read(
       token1.address,
       'allowance',
-      [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
+      [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
     )) as bigint;
 
     if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
@@ -243,7 +250,7 @@ const TradeForm = ({
         userAddress!,
         token1.address,
         'approve',
-        [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
+        [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
       );
       if (!approveRes) {
         stopLoading();
@@ -260,7 +267,7 @@ const TradeForm = ({
     const token2Allowance = (await erc20TokenContract.erc20Read(
       token2.address,
       'allowance',
-      [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
+      [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
     )) as bigint;
 
     if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
@@ -268,7 +275,7 @@ const TradeForm = ({
         userAddress!,
         token2.address,
         'approve',
-        [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
+        [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
       );
       if (!approveRes) {
         stopLoading();
@@ -366,7 +373,7 @@ const TradeForm = ({
           tokenData={{
             symbol: token1 ? balanceToken1?.symbol! : '',
             balance: token1 ? balanceToken1?.formatted! : '?',
-            logo: token1 ? token1?.logoURI : '',
+            logo: token1 ? token1.logoURI : '',
           }}
           value={token1Amount}
           setTokenAmount={(value) => {
@@ -389,7 +396,7 @@ const TradeForm = ({
           tokenData={{
             symbol: token2 ? balanceToken2?.symbol! : '',
             balance: token2 ? balanceToken2?.formatted! : '?',
-            logo: token2 ? token2?.logoURI : '',
+            logo: token2 ? token2.logoURI : '',
           }}
           value={token2Amount}
           setTokenAmount={(value) => {
@@ -417,9 +424,9 @@ const TradeForm = ({
         {insufficient && (
           <Notification message="Error: Insufficient Balance" type="error" />
         )}
-        {/* {isConnected && (
-          <Notification message="Wallet connected" type="success" />
-        )} */}
+        {!isConnected && (
+          <Notification message="Please connect to a Wallet" type="error" />
+        )}
         {successful && (
           <Notification message="Add liquidity successfully" type="success" />
         )}

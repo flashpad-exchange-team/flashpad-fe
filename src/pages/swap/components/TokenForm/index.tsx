@@ -1,7 +1,8 @@
 import Select from '@/components/select';
 import BNBICon from '@/icons/BNBIcon';
-import { LINEA_TESTNET_TOKENS_LIST } from '@/utils/constants';
+import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import Image from 'next/image';
+import { polygonMumbai } from 'viem/chains';
 
 export interface TokenFormProps {
   openModal?: () => void;
@@ -32,7 +33,7 @@ const TokenForm = ({
           <div className="w-[40px]">{title}</div>
 
           <Select
-            options={LINEA_TESTNET_TOKENS_LIST}
+            options={CHAINS_TOKENS_LIST[polygonMumbai.id]}
             icon={
               tokenData?.logo ? (
                 <Image
@@ -54,7 +55,7 @@ const TokenForm = ({
             Amount
           </div>
           <input
-            className="text-[16px] lg:text-[20px] font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none  placeholder-[#667085]"
+            className="text-[16px] lg:text-[20px] font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none placeholder-[#667085]"
             defaultValue={'0.0'}
             value={
               tokenData?.amount && tokenData?.amount !== 'NaN'

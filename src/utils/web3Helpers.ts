@@ -1,8 +1,12 @@
-import { GetBlockParameters } from 'viem';
+import { GetBalanceParameters, GetBlockParameters } from 'viem';
 import { publicClient } from './web3Clients';
 
 export const getBlock = async (params?: GetBlockParameters) => {
   return await publicClient.getBlock(params);
+};
+
+export const getBalance = async (params?: GetBalanceParameters) => {
+  return await publicClient.getBalance(params);
 };
 
 export const daysToSeconds = (days: number) => {

@@ -17,7 +17,7 @@ export const erc20Read = async (
     });
     return result;
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
     return undefined;
   }
 };
@@ -39,7 +39,7 @@ export const erc20Write = async (
     const hash = await walletClient.writeContract(request);
     return { hash, result };
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
     customToast({
       message: err.message || err,
       type: 'error',

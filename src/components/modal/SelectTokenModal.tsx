@@ -7,10 +7,12 @@ import { Button } from '../button/Button';
 import ButtonStyle from '@/icons/ButtonStyle';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { LINEA_TESTNET_TOKENS_LIST } from '@/utils/constants';
+import { polygonMumbai } from 'viem/chains';
+import { CHAINS_TOKENS_LIST, IERC20TokenMetadata } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
-import { nthPowerOf10 } from '@/utils/web3Helpers';
+import { getBalance } from '@/utils/web3Helpers';
 import Image from 'next/image';
+import BigNumber from 'bignumber.js';
 
 export interface SelectTokenModalProps {
   toggleOpen: () => void;
@@ -25,8 +27,8 @@ const SelectTokenModal = ({
 }: SelectTokenModalProps) => {
   const { address: userAddress } = useAccount();
   const [search, setSearch] = useState<string>('');
-  const [tokensList, setTokensList] = useState<any>(
-    LINEA_TESTNET_TOKENS_LIST.map((e) => {
+  const [tokensList, setTokensList] = useState<IERC20TokenMetadata[]>(
+    CHAINS_TOKENS_LIST[polygonMumbai.id].map((e) => {
       return {
         ...e,
         address: e.address,
@@ -36,29 +38,32 @@ const SelectTokenModal = ({
       };
     })
   );
+  const [tokensListFiltered, setTokensListFiltered] = useState(tokensList);
 
   const fetchTokenBalances = async () => {
     if (!userAddress || !isOpen) return;
-    const newTokensList = [];
+    const tokensListWithBalances = [];
     for (const token of tokensList) {
       const decimals: any = await erc20TokenContract.erc20Read(
         token.address,
         'decimals',
         []
       );
-      const balance: any = await erc20TokenContract.erc20Read(
-        token.address,
-        'balanceOf',
-        [userAddress]
-      );
-      newTokensList.push({
+      const balance: any =
+        token.symbol === 'ETH'
+          ? await getBalance({ address: userAddress, blockTag: 'latest' })
+          : await erc20TokenContract.erc20Read(token.address, 'balanceOf', [
+              userAddress,
+            ]);
+      tokensListWithBalances.push({
         ...token,
-        curBalance: (
-          BigInt(balance || '0') / nthPowerOf10(decimals)
-        ).toString(),
+        curBalance: BigNumber(balance || '0')
+          .div(BigNumber(10).pow(decimals))
+          .toFixed(2),
       });
     }
-    setTokensList(newTokensList);
+    setTokensList(tokensListWithBalances);
+    setTokensListFiltered(tokensListWithBalances);
   };
 
   useEffect(() => {
@@ -69,12 +74,14 @@ const SelectTokenModal = ({
     const text = e.target.value;
     setSearch(text);
     if (text) {
-      setTokensList((prev: any) =>
-        prev.filter(
+      setTokensListFiltered(
+        tokensList.filter(
           (item: any) =>
-            item.symbol.includes(search) || item.name.includes(search)
+            item.symbol.includes(text) || item.name.includes(text)
         )
       );
+    } else {
+      setTokensListFiltered(tokensList);
     }
   };
 
@@ -126,7 +133,7 @@ const SelectTokenModal = ({
           ))}
         </div>
         <div className="text-[18px] font-semibold my-2">Tokens list</div>
-        {tokensList.map((item: any) => (
+        {tokensListFiltered.map((item: any) => (
           <div
             className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2"
             key={item.symbol}

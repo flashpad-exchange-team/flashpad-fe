@@ -43,7 +43,7 @@ const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
               Total Staked
             </th>
             <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
-              My Pool
+              My Pool Share
             </th>
             <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
               My Stake

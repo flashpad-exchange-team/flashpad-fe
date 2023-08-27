@@ -11,16 +11,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-tooltip/dist/react-tooltip.css';
 
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { publicProvider } from 'wagmi/providers/public';
+import { alchemyProvider } from '@wagmi/core/providers/alchemy';
+import { infuraProvider } from '@wagmi/core/providers/infura';
+import { ALCHEMY_MUMBAI_API_KEY, INFURA_API_KEY } from '@/utils/constants';
 
 const { chains, publicClient } = configureChains(
-  [lineaTestnet],
-  [publicProvider()]
+  [lineaTestnet, polygonMumbai],
+  [
+    publicProvider(),
+    alchemyProvider({
+      apiKey: ALCHEMY_MUMBAI_API_KEY!,
+    }),
+    infuraProvider({
+      apiKey: INFURA_API_KEY!,
+    }),
+  ]
   // [
   //   jsonRpcProvider({
   //     rpc: (chain) => ({

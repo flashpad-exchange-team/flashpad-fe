@@ -1,7 +1,7 @@
 import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import { publicClient } from './web3Clients';
 import { Address } from 'viem';
-// import { toast } from 'react-toastify';
+import customToast from '@/components/notification/customToast';
 
 export const read = async (
   address: Address,
@@ -17,7 +17,11 @@ export const read = async (
     });
     return result;
   } catch (err: any) {
-    console.log(err.message || err);
+    customToast({
+      message: err.message || err,
+      type: 'error',
+    });
+    console.log(err);
     return undefined;
   }
 };

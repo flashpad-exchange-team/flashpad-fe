@@ -1,10 +1,10 @@
 import { Address, getContract } from 'viem'
 import { abi as ArthurFactoryABI } from '@/resources/abis/ArthurFactory.json';
 import { publicClient, walletClient } from './web3Clients';
-import { ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET } from './constants';
+import { ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET, ARTHUR_FACTORY_ADDRESS_MUMBAI } from './constants';
 
 const factoryContract: any = getContract({
-  address: ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET as Address,
+  address: ARTHUR_FACTORY_ADDRESS_MUMBAI as Address,
   abi: ArthurFactoryABI,
   publicClient,
   walletClient,
@@ -22,18 +22,18 @@ export const getPair = async (
 
     return pairAddress as string;
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
     return undefined;
   }
 }
 
 export const getPairByIndex = async (index: number) => {
   try {
-    const allPairAddresses = await factoryContract.read.allPairs!([index]);
+    const pairAddress = await factoryContract.read.allPairs!([index]);
 
-    return allPairAddresses as any;
+    return pairAddress as any;
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log('getPairByIndex err:', err);
     return undefined;
   }
 }
@@ -44,7 +44,7 @@ export const allPairsLength = async () => {
 
     return Number(length);
   } catch (err: any) {
-    console.log(err.message || err);
+    console.log(err);
     return 0;
   }
 }

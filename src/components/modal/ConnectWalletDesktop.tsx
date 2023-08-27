@@ -6,7 +6,7 @@ import Metamask from '@/icons/Metamask';
 import ProgressBar from '@/icons/ProgressBar';
 import WalletConnect from '@/icons/WalletConnect';
 import { LogoVertical } from '@/templates/LogoVertical';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import Notification from '../notification/Notification';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
@@ -75,7 +75,8 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                   checkWalletInstalled('Metamask');
                   connect({
                     connector: connectors[1],
-                    chainId: lineaTestnet.id,
+                    // chainId: lineaTestnet.id,
+                    chainId: polygonMumbai.id,
                   });
                 }}
               >
