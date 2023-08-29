@@ -175,7 +175,7 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
             placeholder="Search by name or address "
           />
           <Button
-            className="px-6 h-[48px] lg:h-[52px] w-full lg:w-[260px] flex justify-center"
+            className="px-2 h-[48px] lg:h-[52px] w-full lg:w-[290px] flex justify-center"
             onClick={() => setIsAddLiquidity(true)}
           >
             <AddIcon color="#0C111D" />

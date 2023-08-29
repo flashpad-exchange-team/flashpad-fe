@@ -44,7 +44,7 @@ const Liquidity = () => {
               if (isFirstLoad) startLoading('Fetching contract data ...');
             }}
           >
-            {'<    '}Back to Pools List
+            {'<    '}View existing positions
           </div>
           <TradeForm
             title="ADD LIQUIDITY"
