@@ -64,7 +64,7 @@ const config = createConfig({
 });
 
 const openSans = Open_Sans({
-  weight: '400',
+  weight: ['400', '500', '600', '700', '800'],
   subsets: ['latin'],
 });
 const MyApp = ({ Component, pageProps }: AppProps) => (
