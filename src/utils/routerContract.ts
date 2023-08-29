@@ -1,7 +1,10 @@
 import { Address, getContract } from 'viem';
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
-import { ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, ARTHUR_ROUTER_ADDRESS_MUMBAI } from './constants';
+import {
+  // ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, 
+  ARTHUR_ROUTER_ADDRESS_MUMBAI
+} from './constants';
 import BigNumber from 'bignumber.js';
 import customToast from '@/components/notification/customToast';
 
@@ -116,13 +119,17 @@ export const getPair = async (
  * @param amountIn amount sent in to be swapped
  * @param path array of ERC20 token addresses
  */
-export const getAmountsOut = async (amountIn: string, path: string[]) => {
+export const getAmountsOut = async (amountIn: string, path: string[], token1Decimal: number, token2Decimal: number) => {
   try {
-    console.log({ amountIn, path, routerContract })
+    console.log({ amountIn, path, token1Decimal, token2Decimal })
 
     const result = await routerContract.read.getAmountsOut!([1, path]);
-    console.log({ result, a: BigNumber(result[result.length - 1]).div(BigNumber(result[0])).toNumber() })
-    return BigNumber(result[result.length - 1]).div(BigNumber(result[0])).toNumber();
+    const amountToken1 = (BigNumber(result[result.length - 1]).times(BigNumber(10)
+      .pow(token1Decimal))).toNumber()
+    const amountToken2 = (BigNumber(result[0]).times(BigNumber(10)
+      .pow(token2Decimal))).toNumber()
+
+    return amountToken1 / amountToken2;
   } catch (err: any) {
     console.log(err);
     return 0;
@@ -154,9 +161,35 @@ export const swapTokensForTokens = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET as Address,
+      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
       abi: RouterABI,
       functionName: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
+      args: Object.values(params),
+      account
+    });
+    const hash = await walletClient.writeContract(request);
+
+    return { hash, result };
+  } catch (err: any) {
+    customToast({
+      message: err.message || err,
+      type: 'error',
+    });
+    return undefined;
+  }
+};
+
+
+export const swapTokensForETH = async (
+  account: Address,
+  params: ISwapTokensForTokensParams,
+) => {
+  console.log({ params })
+  try {
+    const { request, result } = await publicClient.simulateContract({
+      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
+      abi: RouterABI,
+      functionName: 'swapExactTokensForETHSupportingFeeOnTransferTokens',
       args: Object.values(params),
       account
     });

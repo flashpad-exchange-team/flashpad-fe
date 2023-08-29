@@ -1,4 +1,4 @@
-import { useLoading } from '@/context/LoadingContext';
+// import { useLoading } from '@/context/LoadingContext';
 import LiquidityIcon from '@/icons/LiquidityIcon';
 import Footer from '@/layout/footer';
 import { Header } from '@/layout/header/Header';
@@ -13,16 +13,15 @@ const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
 }); // Disable SSR
 
 const Liquidity = () => {
-  const { startLoading, stopLoading } = useLoading();
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
   const [isAddLiquidity, setIsAddLiquidity] = useState(false); // Check content mismatch error
 
   useEffect(() => {
     setIsClient(true);
-    startLoading();
-    setTimeout(() => {
-      stopLoading();
-    }, 1000);
+    // startLoading();
+    // setTimeout(() => {
+    //   stopLoading();
+    // }, 1000);
   }, []);
 
   return isClient ? (
@@ -32,27 +31,27 @@ const Liquidity = () => {
     >
       <Header logo={<Logo xl />} mode="app" />
       <>
-        {isAddLiquidity ? (
-          <>
-            <span
-              className="mx-auto mt-6 hover:underline cursor-pointer"
-              onClick={() => {
-                setIsAddLiquidity(false);
-              }}
-            >
-              {'<    '}Back to Pools List
-            </span>
-            <TradeForm
-              title="ADD LIQUIDITY"
-              buttonName="Add Liquidity"
-              inputTitle1="Token 1"
-              inputTitle2="Token 2"
-              dividerIcon={<LiquidityIcon />}
-            />
-          </>
-        ) : (
-          <PoolList setIsAddLiquidity={setIsAddLiquidity} />
-        )}
+        <div className={isAddLiquidity ? '' : 'hidden'}>
+          <div
+            className="mx-auto w-fit mt-6 hover:underline cursor-pointer"
+            onClick={() => {
+              setIsAddLiquidity(false);
+            }}
+          >
+            {'<    '}Back to Pools List
+          </div>
+          <TradeForm
+            title="ADD LIQUIDITY"
+            buttonName="Add Liquidity"
+            inputTitle1="Token 1"
+            inputTitle2="Token 2"
+            dividerIcon={<LiquidityIcon />}
+          />
+        </div>
+        <PoolList
+          setIsAddLiquidity={setIsAddLiquidity}
+          isAddLiquidity={isAddLiquidity}
+        />
       </>
 
       <Footer />

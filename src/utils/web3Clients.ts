@@ -1,6 +1,12 @@
 import { createPublicClient, createWalletClient, custom, http } from 'viem'
-import { lineaTestnet, polygonMumbai } from 'viem/chains'
-import { LINEA_GOERLI_INFURA_RPC, MUMBAI_ALCHEMY_RPC } from './constants';
+import {
+  // lineaTestnet,
+  polygonMumbai
+} from 'viem/chains'
+import {
+  //  LINEA_GOERLI_INFURA_RPC,
+  MUMBAI_ALCHEMY_RPC
+} from './constants';
 
 const publicClient: any = createPublicClient({
   chain: polygonMumbai,

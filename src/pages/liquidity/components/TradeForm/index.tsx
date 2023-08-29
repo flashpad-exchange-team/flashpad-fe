@@ -13,7 +13,7 @@ import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
-  ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
+  // ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
   ARTHUR_ROUTER_ADDRESS_MUMBAI,
   DEFAULT_DEADLINE,
   DEFAULT_TIME_LOCK,

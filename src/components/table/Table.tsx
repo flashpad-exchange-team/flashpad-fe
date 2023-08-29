@@ -2,6 +2,7 @@ import BNBICon from '@/icons/BNBIcon';
 import LockIcon from '@/icons/LockIcon';
 import Image from 'next/image';
 import React from 'react';
+import { Tooltip } from 'react-tooltip';
 
 interface TableProps {
   data: {
@@ -20,11 +21,10 @@ interface TableProps {
 }
 
 const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
-
   const handleRemoveLiquidity = async () => {
     alert('TODO: handle calling SC function "removeLiquidity"');
   };
-
+  console.log({ data });
   return (
     <div className="overflow-x-auto mt-8">
       <table className="min-w-full bg-[#00000080] ">
@@ -58,7 +58,23 @@ const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
           {data.map((item, index: number) => (
             <tr key={index} className="hover:bg-[#150E3980] cursor-pointer">
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
-                {item.locked ? <LockIcon active /> : <LockIcon />}
+                {item.locked ? (
+                  <div
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content={`Lock until: ${item.timeLock}`}
+                  >
+                    <LockIcon active />
+                    <Tooltip id="my-tooltip" />
+                  </div>
+                ) : (
+                  <div
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="No Lock"
+                  >
+                    <LockIcon />
+                    <Tooltip id="my-tooltip" />
+                  </div>
+                )}
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left relative">
                 <div className="relative">
@@ -99,7 +115,7 @@ const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
                 ${item.totalStaked}
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
-                {item.myPool}%
+                {item.myPool || 0}%
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
                 ${item.myStake}

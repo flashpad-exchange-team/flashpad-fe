@@ -10,6 +10,8 @@ import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useAccount } from 'wagmi';
 import { polygonMumbai } from 'viem/chains';
 import BigNumber from 'bignumber.js';
+import { useLoading } from '@/context/LoadingContext';
+import clsx from 'clsx';
 
 // const data = [
 //   {
@@ -76,14 +78,18 @@ import BigNumber from 'bignumber.js';
 
 interface PoolListProps {
   setIsAddLiquidity: (val: boolean) => void;
+  isAddLiquidity: boolean;
 }
 
-const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
+const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
   const { address: userAddress } = useAccount();
+  const { startLoading, stopLoading } = useLoading();
+
   // const [allPairsLength, setAllPairsLength] = useState(0);
   const [allPairsData, setAllPairsData] = useState<any>([]);
 
   const getAllPairs = async () => {
+    startLoading('Fetching contract data ...');
     const nPairs = await factoryContract.allPairsLength();
 
     const listPairs = [];
@@ -116,9 +122,9 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
         return e.symbol === token2Symbol;
       })?.logoURI;
 
-      const userLpBalance = userAddress ? await pairContract.read(pairAddress, 'balanceOf', [
-        userAddress,
-      ]) : 0;
+      const userLpBalance = userAddress
+        ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
+        : 0;
       const totalSupply = await pairContract.read(
         pairAddress,
         'totalSupply',
@@ -129,8 +135,10 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
         .div(totalSupply)
         .times(100)
         .toFixed(2);
+      // JavaScript expects milliseconds
 
       listPairs.push({
+        timeLock: web3Helpers.getDateFormat(timeLock),
         locked: timestamp < timeLock,
         token1: token1Symbol,
         token2: token2Symbol,
@@ -140,6 +148,7 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
       });
     }
     setAllPairsData(listPairs);
+    stopLoading();
   };
 
   useEffect(() => {
@@ -147,7 +156,12 @@ const PoolList = ({ setIsAddLiquidity }: PoolListProps) => {
   }, []);
 
   return (
-    <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
+    <div
+      className={clsx([
+        'max-w-[1096px] w-full mx-auto my-20 px-2',
+        isAddLiquidity ? ' hidden' : '',
+      ])}
+    >
       <div className="block lg:flex items-center justify-between">
         <div>
           <div className="font-bold">Pools List</div>{' '}

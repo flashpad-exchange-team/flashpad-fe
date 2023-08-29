@@ -1,7 +1,10 @@
 import { Address, getContract } from 'viem'
 import { abi as ArthurFactoryABI } from '@/resources/abis/ArthurFactory.json';
 import { publicClient, walletClient } from './web3Clients';
-import { ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET, ARTHUR_FACTORY_ADDRESS_MUMBAI } from './constants';
+import {
+  // ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET,
+  ARTHUR_FACTORY_ADDRESS_MUMBAI
+} from './constants';
 
 const factoryContract: any = getContract({
   address: ARTHUR_FACTORY_ADDRESS_MUMBAI as Address,
