@@ -20,6 +20,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from '@wagmi/core/providers/alchemy';
 import { infuraProvider } from '@wagmi/core/providers/infura';
 import { ALCHEMY_MUMBAI_API_KEY, INFURA_API_KEY } from '@/utils/constants';
+import { Open_Sans } from 'next/font/google';
 
 const { chains, publicClient } = configureChains(
   [lineaTestnet, polygonMumbai],
@@ -62,13 +63,19 @@ const config = createConfig({
   publicClient,
 });
 
+const openSans = Open_Sans({
+  weight: '400',
+  subsets: ['latin'],
+});
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <WagmiConfig config={config}>
     <ModalProvider>
       <LoadingProvider>
-        <ToastContainer />
-        <LoadingIndicator />
-        <Component {...pageProps} />
+        <main className={openSans.className}>
+          <ToastContainer />
+          <LoadingIndicator />
+          <Component {...pageProps} />
+        </main>
       </LoadingProvider>
     </ModalProvider>
   </WagmiConfig>

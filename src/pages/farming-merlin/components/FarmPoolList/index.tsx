@@ -83,7 +83,7 @@ const FarmPoolList = () => {
     <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <div className="font-bold">Genesis Pools </div>{' '}
+          <div className="font-bold">Merlin Pools </div>{' '}
           <div className="text-[14px] text-[#98A2B3] mt-2 font-semibold">
             Custom-built infrastructure for Linea native public sales
           </div>

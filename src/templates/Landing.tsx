@@ -48,13 +48,13 @@ const Landing = () => {
             className="mt-7 mb-7 w-fit z-10 hidden xl:block"
             onMouseOver={handleMouseEnter}
             onMouseOut={handleMouseLeave}
-            onClick={() => router.push('/liquidity')}
+            onClick={() => router.push('/swap')}
           >
             {isHover ? <JoinButton /> : <JoinButtonActive />}
           </div>
           <div
             className="mt-6 mb-8 w-fit z-10 mx-auto block xl:hidden"
-            onClick={() => router.push('/liquidity')}
+            onClick={() => router.push('/swap')}
           >
             <JoinButton />
           </div>

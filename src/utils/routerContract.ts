@@ -51,6 +51,7 @@ export const addLiquidity = async (
   account: Address,
   params: IAddLiquidityParams,
 ) => {
+  console.log({ params })
   try {
     const { request, result } = await publicClient.simulateContract({
       address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,

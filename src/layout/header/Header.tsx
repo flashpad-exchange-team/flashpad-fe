@@ -9,6 +9,7 @@ import LaunchPadIcon from '@/icons/LaunchpadIcon';
 import Linea from '@/icons/Linea';
 import Liquidity from '@/icons/Liquidity';
 import Swap from '@/icons/Swap';
+import SwapIcon from '@/icons/SwapIcon';
 import TradeIcon from '@/icons/TradeIcon';
 import WalletIcon from '@/icons/WalletIcon';
 import { Menu, MenuItem } from '@szhsin/react-menu';
@@ -49,14 +50,19 @@ const MENU_ITEMS = [
     path: '/earn',
     subMenu: [
       {
-        name: 'Farming',
+        name: 'Genesis Pool',
         path: '/farming',
+        icon: <SwapIcon />,
+      },
+      {
+        name: 'Merlin Pool',
+        path: '/farming-merlin',
         icon: <Liquidity width="18px" />,
       },
       {
         name: 'Staking',
         path: '/staking',
-        icon: <Liquidity width="18px" />,
+        icon: <Swap width="18px" />,
       },
     ],
   },
@@ -202,7 +208,7 @@ const Header = (props: INavbarProps) => {
               ) : (
                 <Button
                   onClick={() => {
-                    router.push('/liquidity');
+                    router.push('/swap');
                   }}
                   icon={<CrossSword />}
                   className="hidden lg:flex px-[42px]"

@@ -83,13 +83,13 @@ interface PoolListProps {
 
 const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
   const { address: userAddress } = useAccount();
-  const { startLoading, stopLoading } = useLoading();
+  const { stopLoading } = useLoading();
 
   // const [allPairsLength, setAllPairsLength] = useState(0);
   const [allPairsData, setAllPairsData] = useState<any>([]);
 
   const getAllPairs = async () => {
-    startLoading('Fetching contract data ...');
+    // startLoading('Fetching contract data ...');
     const nPairs = await factoryContract.allPairsLength();
 
     const listPairs = [];

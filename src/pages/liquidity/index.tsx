@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect, useState } from 'react';
 import PoolList from './components/PoolList';
+import { useLoading } from '@/context/LoadingContext';
 
 const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
   ssr: false,
@@ -14,7 +15,10 @@ const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
 
 const Liquidity = () => {
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
-  const [isAddLiquidity, setIsAddLiquidity] = useState(false); // Check content mismatch error
+  const [isAddLiquidity, setIsAddLiquidity] = useState(true); // Check content mismatch error
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  const { startLoading } = useLoading();
 
   useEffect(() => {
     setIsClient(true);
@@ -36,6 +40,8 @@ const Liquidity = () => {
             className="mx-auto w-fit mt-6 hover:underline cursor-pointer"
             onClick={() => {
               setIsAddLiquidity(false);
+              setIsFirstLoad(false);
+              if (isFirstLoad) startLoading('Fetching contract data ...');
             }}
           >
             {'<    '}Back to Pools List

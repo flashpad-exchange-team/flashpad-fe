@@ -47,7 +47,7 @@ const TableStaking: React.FC<TableStakingProps> = ({ data }) => {
             <tr
               key={index}
               className="hover:bg-[#150E3980] cursor-pointer"
-              onClick={() => router.push('/farmDetail')}
+              onClick={() => router.push('/farm-detail')}
             >
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
                 <div className="relative">
