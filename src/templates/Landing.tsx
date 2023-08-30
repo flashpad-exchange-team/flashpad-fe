@@ -29,7 +29,7 @@ const Landing = () => {
           <Image
             src={isHover ? UpSword : PullSword}
             alt="pull-sword"
-            className="z-0 w-auto h-[90%] hidden xl:block"
+            className="z-0 w-auto h-[90%] hidden xl:!block"
             width={598}
           />
         </div>
