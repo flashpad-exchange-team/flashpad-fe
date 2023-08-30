@@ -84,11 +84,9 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
   const { address: userAddress } = useAccount();
   const { stopLoading } = useLoading();
 
-  // const [allPairsLength, setAllPairsLength] = useState(0);
   const [allPairsData, setAllPairsData] = useState<any>([]);
 
   const getAllPairs = async () => {
-    console.log('????');
     // startLoading('Fetching contract data ...');
     const nPairs = await factoryContract.allPairsLength();
 
@@ -97,6 +95,11 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
     for (let i = 0; i < nPairs; i++) {
       const pairAddress = await factoryContract.getPairByIndex(i);
       const timeLock = await pairContract.read(pairAddress, 'timeLock', []);
+      const lpTokenDecimals = await pairContract.read(
+        pairAddress,
+        'decimals',
+        []
+      );
 
       const token1Address = await pairContract.read(pairAddress, 'token0', []);
 
@@ -142,12 +145,15 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
         locked: timestamp < timeLock,
         token1: token1Symbol,
         token2: token2Symbol,
+        token1Address,
+        token2Address,
+        lpTokenDecimals: Number(lpTokenDecimals),
         token1Logo,
         token2Logo,
         myPool: poolShare,
+        pairAddress,
       });
     }
-    console.log({ listPairs });
     setAllPairsData(listPairs);
     stopLoading();
   };

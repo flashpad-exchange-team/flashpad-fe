@@ -105,7 +105,7 @@ export interface IRemoveLiquidityParams {
   liquidity: string;
   amountAMin: string;
   amountBMin: string;
-  to: string;
+  to: Address;
   deadline: string;
 }
 
@@ -139,7 +139,7 @@ export interface IRemoveLiquidityETHParams {
   liquidity: string;
   amountTokenMin: string;
   amountETHMin: string;
-  to: string;
+  to: Address;
   deadline: string;
 }
 

@@ -3,7 +3,7 @@ import LockIcon from '@/icons/LockIcon';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
-import RemoveLiquidityModal from '../modal/RemoveLiquidityModal.';
+import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
 
 interface TableProps {
   data: {
@@ -12,11 +12,15 @@ interface TableProps {
     token2: string;
     token1Logo: string;
     token2Logo: string;
+    token1Address: string;
+    token2Address: string;
+    lpTokenDecimals: number;
     apr: string;
     totalStaked: string;
     myPool: string;
     myStake: string;
     earnings: string;
+    pairAddress: string;
     [key: string]: any;
   }[];
 }
@@ -24,14 +28,42 @@ interface TableProps {
 const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
+  const [selectedPool, setSelectedPool] = useState<string>('');
+  const [token1Symbol, setToken1Symbol] = useState<string>('');
+  const [token2Symbol, setToken2Symbol] = useState<string>('');
+  const [token1Address, setToken1Address] = useState<string>('');
+  const [token2Address, setToken2Address] = useState<string>('');
+  const [lpTokenDecimals, setLPTokenDecimals] = useState<number>(18);
 
-  const handleRemoveLiquidity = async () => {
+  const openRemoveLiquidityModal = (
+    pairAddress: string,
+    tk1Symbol: string,
+    tk2Symbol: string,
+    tk1Address: string,
+    tk2Address: string,
+    lpTkDecimals: number
+  ) => {
+    setSelectedPool(pairAddress);
+    setToken1Symbol(tk1Symbol);
+    setToken2Symbol(tk2Symbol);
+    setToken1Address(tk1Address);
+    setToken2Address(tk2Address);
+    setLPTokenDecimals(lpTkDecimals);
     toggleOpen();
   };
-  console.log({ data });
+
   return (
     <>
-      <RemoveLiquidityModal isOpen={isOpen} toggleOpen={toggleOpen} />
+      <RemoveLiquidityModal
+        isOpen={isOpen}
+        toggleOpen={toggleOpen}
+        pairAddress={selectedPool}
+        token1Symbol={token1Symbol}
+        token2Symbol={token2Symbol}
+        token1Address={token1Address}
+        token2Address={token2Address}
+        lpTokenDecimals={lpTokenDecimals}
+      />
       <div className="overflow-x-auto mt-8">
         <table className="min-w-full bg-[#00000080] ">
           <thead>
@@ -137,7 +169,16 @@ const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
                   ) : (
                     <div
                       className="cursor-pointer text-[#E6B300] font-semibold"
-                      onClick={handleRemoveLiquidity}
+                      onClick={() => {
+                        openRemoveLiquidityModal(
+                          item.pairAddress,
+                          item.token1,
+                          item.token2,
+                          item.token1Address,
+                          item.token2Address,
+                          item.lpTokenDecimals
+                        );
+                      }}
                     >
                       Remove
                     </div>
