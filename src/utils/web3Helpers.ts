@@ -23,7 +23,6 @@ export const getDateFormat = (value: any) => {
     const timestampBigInt = BigInt(value.toString());
     const timestampInSeconds = Number(timestampBigInt);
     const date = fromUnixTime(timestampInSeconds);
-    console.log({ date })
     return format(date, 'dd/MM/yyyy')
   }
   return ''
