@@ -88,6 +88,7 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
   const [allPairsData, setAllPairsData] = useState<any>([]);
 
   const getAllPairs = async () => {
+    console.log('????');
     // startLoading('Fetching contract data ...');
     const nPairs = await factoryContract.allPairsLength();
 
@@ -146,6 +147,7 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
         myPool: poolShare,
       });
     }
+    console.log({ listPairs });
     setAllPairsData(listPairs);
     stopLoading();
   };

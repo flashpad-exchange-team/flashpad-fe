@@ -59,7 +59,7 @@ const StakingMain = () => {
               placeholder="Search by name or address "
             />
             <Button
-              className="px-3 h-[52px] w-[270px] flex justify-center "
+              className="px-2 h-[52px] w-[280px] flex justify-center "
               onClick={toggleOpen}
             >
               <UploadIcon />

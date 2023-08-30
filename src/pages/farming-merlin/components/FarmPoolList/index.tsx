@@ -89,7 +89,7 @@ const FarmPoolList = () => {
           </div>
         </div>
         <div className="flex gap-3 items-center">
-          <Button className="px-6 h-[52px] w-[180px] ">
+          <Button className="px-2 h-[52px] w-[210px] flex justify-center">
             <AddIcon color="#0C111D" />
             Add Liquidity
           </Button>
