@@ -13,6 +13,7 @@ import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
+  ARTHUR_ROUTER_ADDRESS,
   // ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
   ARTHUR_ROUTER_ADDRESS_MUMBAI,
   DEFAULT_DEADLINE,
@@ -245,15 +246,15 @@ const TradeForm = ({
       const token1Allowance = (await erc20TokenContract.erc20Read(
         token1.address,
         'allowance',
-        [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
+        [userAddress, ARTHUR_ROUTER_ADDRESS]
       )) as bigint;
-  
+
       if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,
           token1.address,
           'approve',
-          [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
+          [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
         );
         if (!approveRes) {
           stopLoading();
@@ -261,7 +262,7 @@ const TradeForm = ({
           setFailed(true);
           return;
         }
-  
+
         const hash = approveRes.hash;
         const txReceipt = await waitForTransaction({ hash });
         console.log({ txReceipt });
@@ -274,13 +275,13 @@ const TradeForm = ({
         'allowance',
         [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
       )) as bigint;
-  
+
       if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,
           token2.address,
           'approve',
-          [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
+          [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
         );
         if (!approveRes) {
           stopLoading();
@@ -288,7 +289,7 @@ const TradeForm = ({
           setFailed(true);
           return;
         }
-  
+
         const hash = approveRes.hash;
         const txReceipt = await waitForTransaction({ hash });
         console.log({ txReceipt });
@@ -297,7 +298,7 @@ const TradeForm = ({
 
     const { timestamp } = await web3Helpers.getBlock();
     let txResult: any;
-    
+
     if (token1.symbol == 'ETH') {
       txResult = await routerContract.addLiquidityETH(userAddress!, {
         token: token2.address,

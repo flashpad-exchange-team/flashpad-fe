@@ -13,7 +13,7 @@ import {
   ADDRESS_ZERO,
   // ADDRESS_ZERO,
   // ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
-  ARTHUR_ROUTER_ADDRESS_MUMBAI,
+  ARTHUR_ROUTER_ADDRESS,
   K_5_MIN,
   MAX_UINT256,
 } from '@/utils/constants';
@@ -142,7 +142,7 @@ const TradeForm = ({
     const token1Allowance = (await erc20TokenContract.erc20Read(
       token1.address,
       'allowance',
-      [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
+      [userAddress, ARTHUR_ROUTER_ADDRESS]
     )) as bigint;
 
     if (token1Allowance.toString() < MAX_UINT256) {
@@ -150,7 +150,7 @@ const TradeForm = ({
         userAddress!,
         token1.address,
         'approve',
-        [ARTHUR_ROUTER_ADDRESS_MUMBAI, MAX_UINT256]
+        [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
       );
       if (!approveRes) {
         // stopLoading();

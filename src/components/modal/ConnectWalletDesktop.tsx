@@ -11,6 +11,7 @@ import Notification from '../notification/Notification';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
 import customToast from '../notification/customToast';
+import { IS_LINEA } from '@/utils/constants';
 interface ConnectWalletProps {
   toggleOpen: () => void;
 }
@@ -76,7 +77,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                   connect({
                     connector: connectors[1],
                     // chainId: lineaTestnet.id,
-                    chainId: polygonMumbai.id,
+                    chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
                   });
                 }}
               >
@@ -91,7 +92,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
 
                   connect({
                     connector: connectors[2],
-                    chainId: lineaTestnet.id,
+                    chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
                   });
                 }}
               >
@@ -104,7 +105,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                   setIsClick(true);
                   connect({
                     connector: connectors[3],
-                    chainId: lineaTestnet.id,
+                    chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
                   });
                 }}
               >

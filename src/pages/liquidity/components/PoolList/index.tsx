@@ -8,7 +8,6 @@ import * as erc20Contract from '@/utils/erc20TokenContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useAccount } from 'wagmi';
-import { polygonMumbai } from 'viem/chains';
 import BigNumber from 'bignumber.js';
 import { useLoading } from '@/context/LoadingContext';
 import clsx from 'clsx';
@@ -114,11 +113,11 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
         []
       );
 
-      const token1Logo = CHAINS_TOKENS_LIST[polygonMumbai.id].find((e) => {
+      const token1Logo = CHAINS_TOKENS_LIST.find((e) => {
         return e.symbol === token1Symbol;
       })?.logoURI;
 
-      const token2Logo = CHAINS_TOKENS_LIST[polygonMumbai.id].find((e) => {
+      const token2Logo = CHAINS_TOKENS_LIST.find((e) => {
         return e.symbol === token2Symbol;
       })?.logoURI;
 

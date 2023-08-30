@@ -7,7 +7,6 @@ import { Button } from '../button/Button';
 import ButtonStyle from '@/icons/ButtonStyle';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { polygonMumbai } from 'viem/chains';
 import { CHAINS_TOKENS_LIST, IERC20TokenMetadata } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import { getBalance } from '@/utils/web3Helpers';
@@ -28,7 +27,7 @@ const SelectTokenModal = ({
   const { address: userAddress } = useAccount();
   const [search, setSearch] = useState<string>('');
   const [tokensList, setTokensList] = useState<IERC20TokenMetadata[]>(
-    CHAINS_TOKENS_LIST[polygonMumbai.id].map((e) => {
+    CHAINS_TOKENS_LIST.map((e) => {
       return {
         ...e,
         address: e.address,
@@ -76,8 +75,7 @@ const SelectTokenModal = ({
     if (text) {
       setTokensListFiltered(
         tokensList.filter(
-          (item: any) =>
-            item.symbol.includes(text) || item.name.includes(text)
+          (item: any) => item.symbol.includes(text) || item.name.includes(text)
         )
       );
     } else {

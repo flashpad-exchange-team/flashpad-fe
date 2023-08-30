@@ -2,7 +2,6 @@ import Select from '@/components/select';
 import BNBICon from '@/icons/BNBIcon';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import Image from 'next/image';
-import { polygonMumbai } from 'viem/chains';
 
 export interface TokenFormProps {
   openModal?: () => void;
@@ -33,7 +32,7 @@ const TokenForm = ({
           <div className="w-[40px]">{title}</div>
 
           <Select
-            options={CHAINS_TOKENS_LIST[polygonMumbai.id]}
+            options={CHAINS_TOKENS_LIST}
             icon={
               tokenData?.logo ? (
                 <Image

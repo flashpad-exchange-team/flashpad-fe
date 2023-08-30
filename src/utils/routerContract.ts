@@ -3,13 +3,13 @@ import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
 import {
   // ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, 
-  ARTHUR_ROUTER_ADDRESS_MUMBAI
+  ARTHUR_ROUTER_ADDRESS
 } from './constants';
 import BigNumber from 'bignumber.js';
 import customToast from '@/components/notification/customToast';
 
 const routerContract: any = getContract({
-  address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
+  address: ARTHUR_ROUTER_ADDRESS as Address,
   abi: RouterABI,
   publicClient,
   walletClient,
@@ -54,7 +54,7 @@ export const addLiquidity = async (
   console.log({ params })
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
+      address: ARTHUR_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'addLiquidity',
       args: Object.values(params),
@@ -79,7 +79,7 @@ export const addLiquidityETH = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
+      address: ARTHUR_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'addLiquidityETH',
       args: Object.values(params),
@@ -163,7 +163,7 @@ export const swapTokensForTokens = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
+      address: ARTHUR_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
       args: Object.values(params),
@@ -189,7 +189,7 @@ export const swapTokensForETH = async (
   console.log({ params })
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS_MUMBAI as Address,
+      address: ARTHUR_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'swapExactTokensForETHSupportingFeeOnTransferTokens',
       args: Object.values(params),

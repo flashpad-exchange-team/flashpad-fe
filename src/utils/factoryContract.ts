@@ -3,11 +3,11 @@ import { abi as ArthurFactoryABI } from '@/resources/abis/ArthurFactory.json';
 import { publicClient, walletClient } from './web3Clients';
 import {
   // ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET,
-  ARTHUR_FACTORY_ADDRESS_MUMBAI
+  ARTHUR_ROUTER_ADDRESS
 } from './constants';
 
 const factoryContract: any = getContract({
-  address: ARTHUR_FACTORY_ADDRESS_MUMBAI as Address,
+  address: ARTHUR_ROUTER_ADDRESS as Address,
   abi: ArthurFactoryABI,
   publicClient,
   walletClient,
