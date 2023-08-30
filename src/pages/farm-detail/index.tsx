@@ -1,5 +1,6 @@
 import { Button } from '@/components/button/Button';
 import { useLoading } from '@/context/LoadingContext';
+import useWindowWidth from '@/hooks/useWindowWith';
 import BNBICon from '@/icons/BNBIcon';
 import DownloadIcon from '@/icons/DownloadIcon';
 import LayerIcon from '@/icons/LayerIcon';
@@ -11,10 +12,12 @@ import { Logo } from '@/templates/Logo';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect, useState } from 'react';
 import TableDetail from './components/TableDetail';
+import TableDetailSp from './components/TableDetailSp';
 const FarmDetail = () => {
   const { startLoading, stopLoading } = useLoading();
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
-
+  const windowWidth = useWindowWidth();
+  const isSmallScreen = windowWidth < 768;
   useEffect(() => {
     setIsClient(true);
 
@@ -42,46 +45,51 @@ const FarmDetail = () => {
           </div>
           <div className="ml-16">Token A - Token B</div>
         </div>
-        <TableDetail />
-        <div className="flex justify-between items-center mt-6">
-          <div className="text-[24px] font-bold">Staked positions</div>
-          <Button className="px-6 flex gap-3" icon={<DownloadIcon />}>
+        {isSmallScreen ? <TableDetailSp /> : <TableDetail />}
+        <div className="flex flex-wrap justify-between items-center mt-6">
+          <div className="text-[24px] font-bold order-1">Staked positions</div>
+          <Button
+            className="px-6 flex gap-3 order-3 md:order-2 w-full justify-center"
+            icon={<DownloadIcon />}
+          >
             Deposit
           </Button>
-        </div>
-        <div className="bg-[#00000080] flex items-center gap-3 py-4 px-5">
-          <div className=" rounded-md w-1/3">
-            <div className="bg-[#150E3980] px-3 py-2 rounded-md w-full flex items-center justify-between">
-              <div>
-                <div className="text-[#344054] text-[12px]">AVERAGE APR</div>
-                <div className=" text-[14px]">0%</div>
-              </div>
-              <div>
-                <SaleIcon />
-              </div>
-            </div>
-          </div>
-          <div className=" rounded-md w-1/3">
-            <div className="bg-[#150E3980] px-3 py-2 rounded-md w-full flex items-center justify-between">
-              <div>
-                <div className="text-[#344054] text-[12px]">TOTAL DEPOSITS</div>
-                <div className=" text-[14px]">0 Token A - Token B</div>
-              </div>
-              <div>
-                <LayerIcon />
-              </div>
-            </div>
-          </div>
-          <div className=" rounded-md w-1/3">
-            <div className="bg-[#150E3980] px-3 py-2 rounded-md w-full flex items-center justify-between">
-              <div>
-                <div className="text-[#344054] text-[12px]">
-                  PENDING VELA REWARDS
+          <div className="w-full bg-[#00000080] flex flex-col md:flex-row items-center gap-3 py-4 px-5 order-2 md:order-3">
+            <div className=" rounded-md w-full md:w-1/3">
+              <div className="bg-[#150E3980] px-3 py-2 rounded-md w-full flex items-center justify-between">
+                <div>
+                  <div className="text-[#344054] text-[12px]">AVERAGE APR</div>
+                  <div className=" text-[14px]">0%</div>
                 </div>
-                <div className=" text-[14px]">0 Token</div>
+                <div>
+                  <SaleIcon />
+                </div>
               </div>
-              <div>
-                <TokenLogoIcon />
+            </div>
+            <div className=" rounded-md w-full md:w-1/3">
+              <div className="bg-[#150E3980] px-3 py-2 rounded-md w-full flex items-center justify-between">
+                <div>
+                  <div className="text-[#344054] text-[12px]">
+                    TOTAL DEPOSITS
+                  </div>
+                  <div className=" text-[14px]">0 Token A - Token B</div>
+                </div>
+                <div>
+                  <LayerIcon />
+                </div>
+              </div>
+            </div>
+            <div className=" rounded-md w-full md:w-1/3">
+              <div className="bg-[#150E3980] px-3 py-2 rounded-md w-full flex items-center justify-between">
+                <div>
+                  <div className="text-[#344054] text-[12px]">
+                    PENDING VELA REWARDS
+                  </div>
+                  <div className=" text-[14px]">0 Token</div>
+                </div>
+                <div>
+                  <TokenLogoIcon />
+                </div>
               </div>
             </div>
           </div>
