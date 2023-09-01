@@ -1,20 +1,25 @@
-import SwapLeftIcon from '@/icons/SwapLeft';
-import CommonModal from './CommonModal';
-import SwapRightIcon from '@/icons/SwapRight';
-import CloseIcon from '@/icons/CloseIcon';
-import { Button } from '../button/Button';
-import ButtonStyle from '@/icons/ButtonStyle';
-import { useEffect, useState } from 'react';
-import { ARTHUR_ROUTER_ADDRESS, DEFAULT_DEADLINE, MAX_UINT256, minutesToSeconds } from '@/utils/constants';
-import customToast from '../notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
-import BigNumber from 'bignumber.js';
-import { Address, useAccount } from 'wagmi';
+import ButtonStyle from '@/icons/ButtonStyle';
+import CloseIcon from '@/icons/CloseIcon';
+import SwapLeftIcon from '@/icons/SwapLeft';
+import SwapRightIcon from '@/icons/SwapRight';
+import {
+  ARTHUR_ROUTER_ADDRESS,
+  DEFAULT_DEADLINE,
+  MAX_UINT256,
+  minutesToSeconds,
+} from '@/utils/constants';
+import * as erc20Contract from '@/utils/erc20TokenContract';
 import * as pairContract from '@/utils/pairContract';
 import * as routerContract from '@/utils/routerContract';
-import * as erc20Contract from '@/utils/erc20TokenContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
+import { useEffect, useState } from 'react';
+import { Address, useAccount } from 'wagmi';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import CommonModal from './CommonModal';
 
 export interface RemoveLiquidityModalProps {
   toggleOpen: () => void;
@@ -38,7 +43,7 @@ const RemoveLiquidityModal = ({
   lpTokenDecimals,
 }: RemoveLiquidityModalProps) => {
   const { address: userAddress } = useAccount();
-  const { startLoading, stopLoading } = useLoading();
+  const { startLoadingTx, stopLoadingTx } = useLoading();
 
   const [amountToRemove, setAmountToRemove] = useState<string>('0');
   const [deadline, setDeadline] = useState<string>(DEFAULT_DEADLINE);
@@ -79,7 +84,7 @@ const RemoveLiquidityModal = ({
       return;
     }
     setSuccessful(undefined);
-    
+
     const nAmountToRemove = Number(amountToRemove);
     const nDeadline = Number(deadline);
 
@@ -101,26 +106,33 @@ const RemoveLiquidityModal = ({
       .pow(lpTokenDecimals)
       .times(BigNumber(nAmountToRemove));
 
-    startLoading();
-
+    startLoadingTx({
+      tokenPairs: token1Symbol + ' - ' + token2Symbol,
+      title: 'Removing liquidity ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
     const balance1 = await erc20Contract.erc20Read(
       token1Address as Address,
       'balanceOf',
-      [ pairAddress ]
+      [pairAddress]
     );
     const balance2 = await erc20Contract.erc20Read(
       token2Address as Address,
       'balanceOf',
-      [ pairAddress ]
+      [pairAddress]
     );
     const totalSupply = await pairContract.read(
       pairAddress as Address,
       'totalSupply',
       []
     );
-    
-    const amount1 = bnAmountToRemove.times(BigNumber(balance1)).dividedToIntegerBy(BigNumber(totalSupply)); 
-    const amount2 = bnAmountToRemove.times(BigNumber(balance2)).dividedToIntegerBy(BigNumber(totalSupply));
+
+    const amount1 = bnAmountToRemove
+      .times(BigNumber(balance1))
+      .dividedToIntegerBy(BigNumber(totalSupply));
+    const amount2 = bnAmountToRemove
+      .times(BigNumber(balance2))
+      .dividedToIntegerBy(BigNumber(totalSupply));
 
     const lpTokenAllowance = (await pairContract.read(
       pairAddress as Address,
@@ -137,7 +149,7 @@ const RemoveLiquidityModal = ({
       );
       if (!approveRes) {
         setSuccessful(false);
-        stopLoading();
+        stopLoadingTx();
         return;
       }
 
@@ -168,35 +180,29 @@ const RemoveLiquidityModal = ({
         amountETHMin = amount2.toString();
       }
 
-      txResult = await routerContract.removeLiquidityETH(
-        userAddress,
-        {
-          token: tokenAddress,
-          liquidity: bnAmountToRemove.toString(),
-          amountTokenMin,
-          amountETHMin,
-          to: userAddress,
-          deadline: (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
-        }
-      );
+      txResult = await routerContract.removeLiquidityETH(userAddress, {
+        token: tokenAddress,
+        liquidity: bnAmountToRemove.toString(),
+        amountTokenMin,
+        amountETHMin,
+        to: userAddress,
+        deadline: (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
+      });
     } else {
-      txResult = await routerContract.removeLiquidity(
-        userAddress,
-        {
-          tokenA: token1Address,
-          tokenB: token2Address,
-          liquidity: bnAmountToRemove.toString(),
-          amountAMin: amount1.toString(),
-          amountBMin: amount2.toString(),
-          to: userAddress,
-          deadline: (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
-        }
-      )
+      txResult = await routerContract.removeLiquidity(userAddress, {
+        tokenA: token1Address,
+        tokenB: token2Address,
+        liquidity: bnAmountToRemove.toString(),
+        amountAMin: amount1.toString(),
+        amountBMin: amount2.toString(),
+        to: userAddress,
+        deadline: (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
+      });
     }
 
     if (!txResult) {
       setSuccessful(false);
-      stopLoading();
+      stopLoadingTx();
       return;
     }
 
@@ -205,7 +211,7 @@ const RemoveLiquidityModal = ({
     console.log({ txReceipt });
 
     setSuccessful(true);
-    stopLoading();
+    stopLoadingTx();
     resetToDefault();
     customToast({
       message: 'Removed liquidity successfully',

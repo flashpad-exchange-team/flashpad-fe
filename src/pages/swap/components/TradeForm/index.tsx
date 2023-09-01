@@ -43,7 +43,7 @@ const TradeForm = ({
   dividerIcon,
 }: TradeFormProps) => {
   const { address: userAddress } = useAccount();
-  const { startLoading, stopLoading } = useLoading();
+  const { startLoadingTx, stopLoadingTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -134,7 +134,11 @@ const TradeForm = ({
       return;
     }
 
-    startLoading();
+    startLoadingTx({
+      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+      title: 'Swapping tokens ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
 
     const token1Allowance = (await erc20TokenContract.erc20Read(
       token1.address,
@@ -150,7 +154,7 @@ const TradeForm = ({
         [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
       );
       if (!approveRes) {
-        // stopLoading();
+        // stopLoadingTx();
         // setSuccessful(false);
         // setFailed(true);
         return;
@@ -175,7 +179,7 @@ const TradeForm = ({
     //     [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
     //   );
     //   if (!approveRes) {
-    //     // stopLoading();
+    //     // stopLoadingTx();
     //     // setSuccessful(false);
     //     // setFailed(true);
     //     return;
@@ -220,7 +224,7 @@ const TradeForm = ({
     }
 
     if (!txResult) {
-      stopLoading();
+      stopLoadingTx();
       return;
     }
 
@@ -232,7 +236,7 @@ const TradeForm = ({
       type: 'success',
     });
     resetInput();
-    stopLoading();
+    stopLoadingTx();
   };
 
   const handleSwitchPair = () => {

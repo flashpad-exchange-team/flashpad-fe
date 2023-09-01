@@ -1,10 +1,21 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
 
+interface LoadingTxInfo {
+  tokenPairs?: string;
+  title?: string;
+  message?: string;
+}
+
 interface LoadingContextType {
   isLoading: boolean;
   startLoading: (message?: string) => void;
   stopLoading: () => void;
   loadingInfo: string;
+  //Loading tx
+  isLoadingTx: boolean;
+  startLoadingTx: (message?: LoadingTxInfo) => void;
+  stopLoadingTx: () => void;
+  loadingTxInfo: LoadingTxInfo;
 }
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
@@ -12,6 +23,8 @@ const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 export function LoadingProvider({ children }: { children: ReactNode }) {
   const [isLoading, setLoading] = useState(false);
   const [loadingInfo, setLoadingInfo] = useState('');
+  const [isLoadingTx, setLoadingTx] = useState(false);
+  const [loadingTxInfo, setLoadingTxInfo] = useState({});
 
   const startLoading = (message?: string) => {
     if (message) setLoadingInfo(message);
@@ -22,9 +35,27 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
     setLoadingInfo('');
   };
 
+  const startLoadingTx = (message?: LoadingTxInfo) => {
+    if (message) setLoadingTxInfo(message);
+    setLoadingTx(true);
+  };
+  const stopLoadingTx = () => {
+    setLoadingTx(false);
+    setLoadingTxInfo('');
+  };
+
   return (
     <LoadingContext.Provider
-      value={{ isLoading, startLoading, stopLoading, loadingInfo }}
+      value={{
+        isLoading,
+        startLoading,
+        stopLoading,
+        loadingInfo,
+        isLoadingTx,
+        startLoadingTx,
+        stopLoadingTx,
+        loadingTxInfo,
+      }}
     >
       {children}
     </LoadingContext.Provider>

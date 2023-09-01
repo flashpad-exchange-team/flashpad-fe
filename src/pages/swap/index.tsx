@@ -17,6 +17,7 @@ const Swap = () => {
 
   useEffect(() => {
     setIsClient(true);
+
     startLoading();
     setTimeout(() => {
       stopLoading();

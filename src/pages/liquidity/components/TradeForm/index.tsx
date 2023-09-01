@@ -7,6 +7,7 @@ import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
+import BackIcon from '@/icons/BackIcon';
 import ButtonStyle from '@/icons/ButtonStyle';
 import LockManageIcon from '@/icons/LockManageIcon';
 import QuestionIcon from '@/icons/QuestionIcon';
@@ -35,7 +36,6 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import BackIcon from '@/icons/BackIcon';
 
 interface TradeFormProps {
   title: string;
@@ -54,8 +54,8 @@ const TradeForm = ({
   dividerIcon,
   handleClickViewExistingPosition,
 }: TradeFormProps) => {
-  const { address: userAddress, isConnected } = useAccount();
-  const { startLoading, stopLoading } = useLoading();
+  const { address: userAddress } = useAccount();
+  const { startLoadingTx, stopLoadingTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -237,8 +237,11 @@ const TradeForm = ({
     }
     setInsufficient(false);
 
-    startLoading();
-
+    startLoadingTx({
+      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+      title: 'Adding Liquidity ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
     const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
     const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
 
@@ -257,7 +260,7 @@ const TradeForm = ({
           [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
         );
         if (!approveRes) {
-          stopLoading();
+          stopLoadingTx();
           setSuccessful(false);
           setFailed(true);
           return;
@@ -284,7 +287,7 @@ const TradeForm = ({
           [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
         );
         if (!approveRes) {
-          stopLoading();
+          stopLoadingTx();
           setSuccessful(false);
           setFailed(true);
           return;
@@ -300,6 +303,30 @@ const TradeForm = ({
     let txResult: any;
 
     if (token1.symbol == 'ETH') {
+      const token1Allowance = (await erc20TokenContract.erc20Read(
+        token1.address,
+        'allowance',
+        [userAddress, ARTHUR_ROUTER_ADDRESS]
+      )) as bigint;
+      if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
+        const approveRes = await erc20TokenContract.erc20Write(
+          userAddress!,
+          token1.address,
+          'approve',
+          [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
+        );
+        if (!approveRes) {
+          stopLoadingTx();
+          setSuccessful(false);
+          setFailed(true);
+          return;
+        }
+
+        const hash = approveRes.hash;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
+      }
+
       txResult = await routerContract.addLiquidityETH(userAddress!, {
         token: token2.address,
         amountTokenDesired: token2AmountIn,
@@ -334,7 +361,7 @@ const TradeForm = ({
     }
 
     if (!txResult) {
-      stopLoading();
+      stopLoadingTx();
       setSuccessful(false);
       setFailed(true);
       return;
@@ -344,7 +371,7 @@ const TradeForm = ({
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
     resetInput();
-    stopLoading();
+    stopLoadingTx();
     setSuccessful(true);
     setFailed(false);
     customToast({
@@ -359,7 +386,6 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
-  console.log({ balanceToken1 });
   return (
     <>
       <SelectTokenModal
@@ -435,29 +461,31 @@ const TradeForm = ({
             autoAdjustToken1Amount(value);
           }}
         />
-        <LiquidityPairInfo
-          pairToken1={pairToken1 as Address}
-          reserves={reserves as any}
-          isFirstLP={isFirstLP}
-          token1Data={{
-            address: token1?.address,
-            symbol: token1?.symbol,
-            amountIn: token1Amount,
-            decimals: balanceToken1?.decimals,
-          }}
-          token2Data={{
-            address: token2?.address,
-            symbol: token2?.symbol,
-            amountIn: token2Amount,
-            decimals: balanceToken2?.decimals,
-          }}
-        />
+        {userAddress && (
+          <LiquidityPairInfo
+            pairToken1={pairToken1 as Address}
+            reserves={reserves as any}
+            isFirstLP={isFirstLP}
+            token1Data={{
+              address: token1?.address,
+              symbol: token1?.symbol,
+              amountIn: token1Amount,
+              decimals: balanceToken1?.decimals,
+            }}
+            token2Data={{
+              address: token2?.address,
+              symbol: token2?.symbol,
+              amountIn: token2Amount,
+              decimals: balanceToken2?.decimals,
+            }}
+          />
+        )}
         {insufficient && (
           <Notification message="Error: Insufficient Balance" type="error" />
         )}
-        {!isConnected && (
+        {/* {!isConnected && (
           <Notification message="Please connect to a Wallet" type="error" />
-        )}
+        )} */}
         {successful && (
           <Notification message="Add liquidity successfully" type="success" />
         )}
@@ -490,7 +518,9 @@ const TradeForm = ({
         <Button
           onClick={() => handleAddLiquidity()}
           className="w-full justify-center  mb-2 px-[42px]"
-          disabled={!token1 || !token2}
+          disabled={
+            !token1 || !token2 || !userAddress || !token1Amount || !token2Amount
+          }
         >
           {buttonName}
         </Button>
