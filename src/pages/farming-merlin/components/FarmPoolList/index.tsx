@@ -1,6 +1,8 @@
 import { Button } from '@/components/button/Button';
 import Select from '@/components/select';
 import AddIcon from '@/icons/AddIcon';
+import Menu from '@/icons/Menu';
+import Search from '@/icons/Search';
 import TableFarm from './TableFarm';
 const data = [
   {
@@ -81,27 +83,36 @@ const FILTER_FARM = [
 const FarmPoolList = () => {
   return (
     <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <div className="font-bold">Merlin Pools </div>{' '}
+      <div className="flex flex-col md:flex-wrap md:flex-row md:items-center md:justify-between md:mb-4">
+        <div className="order-1">
+          <div className="font-bold">Merlin Pools </div>
           <div className="text-[14px] text-[#98A2B3] mt-2 font-semibold">
             Custom-built infrastructure for Linea native public sales
           </div>
         </div>
-        <div className="flex gap-3 items-center">
-          <Button className="px-2 h-[52px] w-[210px] flex justify-center">
+        <div className="flex gap-3 items-center order-3 md:order-2">
+          <Button className="px-2 h-[52px] w-[100%] mr-2 md:mr-0 md:w-[210px] flex justify-center">
             <AddIcon color="#0C111D" />
             Add Liquidity
           </Button>
         </div>
-      </div>
-      <div className="flex items-center gap-3">
-        <input
-          className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
-          placeholder="Search by name or address "
-        />
-        <Select options={FILTER_FARM} />
-        <Select options={FILTER_FARM} />
+        <div className="flex mr-2 md:mr-4 mt-4 mb-2 md:mb-0 md:mr-0 items-center gap-3 order-2 md:order-3 md:w-full">
+          <input
+            className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085] w-full"
+            placeholder="Search by name or address"
+          />
+          <div className="hidden md:block">
+            <Select options={FILTER_FARM} />
+          </div>
+          <div className="hidden md:block">
+            <Select options={FILTER_FARM} />
+          </div>
+          <div className="md:hidden">
+            <Button className="h-[40px] w-[40px] flex justify-center">
+              <Menu color="#0C111D" />
+            </Button>
+          </div>
+        </div>
       </div>
       <TableFarm data={data} />
     </div>

@@ -1,9 +1,12 @@
 import { Button } from '@/components/button/Button';
 import { useLoading } from '@/context/LoadingContext';
 import useWindowWidth from '@/hooks/useWindowWith';
+import AddIcon from '@/icons/AddIcon';
 import BNBICon from '@/icons/BNBIcon';
+import Caculator from '@/icons/Caculator';
 import DownloadIcon from '@/icons/DownloadIcon';
 import LayerIcon from '@/icons/LayerIcon';
+import Link from '@/icons/Link';
 import SaleIcon from '@/icons/SaleIcon';
 import TokenLogoIcon from '@/icons/TokenLogoIcon';
 import Footer from '@/layout/footer';
@@ -34,16 +37,32 @@ const FarmDetail = () => {
     >
       <Header logo={<Logo xl />} mode="app" />
       <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
-        <div className="flex  text-[24px] font-bold gap-4">
-          <div className="relative">
-            <div className="absolute">
-              <BNBICon size={40} />
+        <div className="flex flex-col md:flex-row text-[24px] font-bold gap-4 justify-between">
+          <div>
+            <div className="relative">
+              <div className="absolute">
+                <BNBICon size={40} />
+              </div>
+              <div className="absolute left-[25px]">
+                <BNBICon size={40} />
+              </div>
             </div>
-            <div className="absolute left-[25px]">
-              <BNBICon size={40} />
-            </div>
+            <div className="ml-16">Token A - Token B</div>
           </div>
-          <div className="ml-16">Token A - Token B</div>
+          <div className="flex flex-wrap">
+            <Button className="px-2 hidden md:!flex order-1 h-[52px] w-[100%] mr-2 md:w-[172px] justify-center">
+              <Link />
+              Contract
+            </Button>
+            <Button className="px-2 h-[52px] w-[100%] order-3 md:order-2 mr-2 md:w-[210px] flex justify-center">
+              <Caculator />
+              APY Caculator
+            </Button>
+            <Button className="px-2 h-[52px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[210px] flex justify-center">
+              <AddIcon color="#0C111D" />
+              Add Liquidity
+            </Button>
+          </div>
         </div>
         {isSmallScreen ? <TableDetailSp /> : <TableDetail />}
         <div className="flex flex-wrap justify-between items-center mt-6">

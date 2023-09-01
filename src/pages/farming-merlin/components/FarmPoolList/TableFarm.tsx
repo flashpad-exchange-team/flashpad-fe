@@ -27,7 +27,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
   const router = useRouter();
   return (
     <div className="overflow-x-auto mt-8">
-      <table className="min-w-full bg-[#00000080] ">
+      <table className="min-w-full bg-[#00000080]">
         <thead>
           <tr>
             <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
@@ -58,7 +58,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
             <tr
               key={index}
               className="hover:bg-[#150E3980] cursor-pointer"
-              onClick={() => router.push('/farm-detail')}
+              onClick={() => router.push('/farm-detail-merlin')}
             >
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
                 <div className="relative">
@@ -75,7 +75,6 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                     )}
                   </div>
                   <div className="absolute left-[15px]">
-                    {' '}
                     {item?.token2Logo ? (
                       <Image
                         alt="logo"
@@ -90,10 +89,9 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                 </div>
                 <div className="ml-12">
                   {item?.token1} - {item?.token2}
-                </div>{' '}
+                </div>
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right relative">
-                {' '}
                 ${item?.tvl}
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
