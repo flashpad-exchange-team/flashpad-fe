@@ -18,8 +18,6 @@ import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import {
   ADDRESS_ZERO,
   ARTHUR_ROUTER_ADDRESS,
-  // ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
-  ARTHUR_ROUTER_ADDRESS_MUMBAI,
   DEFAULT_DEADLINE,
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
@@ -231,7 +229,7 @@ const TradeForm = ({
       bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
     ) {
       customToast({
-        message: 'Insufficient balance! ',
+        message: 'Insufficient balance!',
         type: 'error',
       });
       setInsufficient(true);
@@ -275,7 +273,7 @@ const TradeForm = ({
       const token2Allowance = (await erc20TokenContract.erc20Read(
         token2.address,
         'allowance',
-        [userAddress, ARTHUR_ROUTER_ADDRESS_MUMBAI]
+        [userAddress, ARTHUR_ROUTER_ADDRESS]
       )) as bigint;
 
       if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
