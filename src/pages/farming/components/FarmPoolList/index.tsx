@@ -108,7 +108,7 @@ const FarmPoolList = () => {
           </div>
           <div className="md:hidden">
             <Button className="h-[40px] w-[40px] flex justify-center">
-              <Menu color="#0C111D" />
+              <Menu />
             </Button>
           </div>
         </div>

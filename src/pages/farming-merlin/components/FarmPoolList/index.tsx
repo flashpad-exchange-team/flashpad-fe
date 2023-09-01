@@ -2,7 +2,6 @@ import { Button } from '@/components/button/Button';
 import Select from '@/components/select';
 import AddIcon from '@/icons/AddIcon';
 import Menu from '@/icons/Menu';
-import Search from '@/icons/Search';
 import TableFarm from './TableFarm';
 const data = [
   {
@@ -109,7 +108,7 @@ const FarmPoolList = () => {
           </div>
           <div className="md:hidden">
             <Button className="h-[40px] w-[40px] flex justify-center">
-              <Menu color="#0C111D" />
+              <Menu />
             </Button>
           </div>
         </div>

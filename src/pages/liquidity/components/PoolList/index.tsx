@@ -9,72 +9,7 @@ import * as web3Helpers from '@/utils/web3Helpers';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { useLoading } from '@/context/LoadingContext';
 import clsx from 'clsx';
-
-// const data = [
-//   {
-//     locked: false,
-//     token1: 'BNB',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalStaked: '482.58K',
-//     myPool: '0',
-//     myStake: '0',
-//     earnings: '0',
-//   },
-//   {
-//     locked: true,
-//     token1: 'BNB',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalStaked: '482.58K',
-//     myPool: '0',
-//     myStake: '0',
-//     earnings: '0',
-//   },
-//   {
-//     locked: true,
-//     token1: 'BNB',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalStaked: '482.58K',
-//     myPool: '0',
-//     myStake: '0',
-//     earnings: '0',
-//   },
-//   {
-//     locked: true,
-//     token1: 'BNB',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalStaked: '482.58K',
-//     myPool: '0',
-//     myStake: '0',
-//     earnings: '0',
-//   },
-//   {
-//     locked: true,
-//     token1: 'BNB',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     apr: '0,7748',
-//     totalStaked: '482.58K',
-//     myPool: '0',
-//     myStake: '0',
-//     earnings: '0',
-//   },
-// ];
-
 interface PoolListProps {
   setIsAddLiquidity: (val: boolean) => void;
   isAddLiquidity: boolean;
@@ -82,12 +17,14 @@ interface PoolListProps {
 
 const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
   const { address: userAddress } = useAccount();
-  const { stopLoading } = useLoading();
+  const [loading, setLoading] = useState<boolean>(false);
+  const startLoading = () => setLoading(true);
+  const stopLoading = () => setLoading(false);
 
   const [allPairsData, setAllPairsData] = useState<any>([]);
 
   const getAllPairs = async () => {
-    // startLoading('Fetching contract data ...');
+    startLoading();
     const nPairs = await factoryContract.allPairsLength();
 
     const listPairs = [];
@@ -191,7 +128,7 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
         </div>
       </div>
 
-      <ListPoolsTable data={allPairsData} />
+      <ListPoolsTable data={allPairsData} loading={loading} />
     </div>
   );
 };

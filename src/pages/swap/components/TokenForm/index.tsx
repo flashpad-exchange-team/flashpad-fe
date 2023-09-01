@@ -21,7 +21,6 @@ const TokenForm = ({
   tokenData,
   setTokenAmount,
 }: TokenFormProps) => {
-  console.log({ tokenData });
   return (
     <div className="bg-[#150E3980] rounded-lg my-2 p-4">
       <div className="block lg:flex items-start w-full">

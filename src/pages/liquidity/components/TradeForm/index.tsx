@@ -2,15 +2,19 @@ import { Button } from '@/components/button/Button';
 import LiquiditySettingModal, {
   ILiquiditySettings,
 } from '@/components/modal/LiquiditySettingModal';
+import LockManageModal from '@/components/modal/LockManageModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
+import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
 import ButtonStyle from '@/icons/ButtonStyle';
+import LockManageIcon from '@/icons/LockManageIcon';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
+import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import {
   ADDRESS_ZERO,
   ARTHUR_ROUTER_ADDRESS,
@@ -31,12 +35,9 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
-import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import customToast from '@/components/notification/customToast';
-import LockManageIcon from '@/icons/LockManageIcon';
-import LockManageModal from '@/components/modal/LockManageModal';
+import BackIcon from '@/icons/BackIcon';
 
 interface TradeFormProps {
   title: string;
@@ -44,6 +45,7 @@ interface TradeFormProps {
   inputTitle1: string;
   inputTitle2: string;
   dividerIcon: React.ReactNode;
+  handleClickViewExistingPosition: () => void;
 }
 
 const TradeForm = ({
@@ -52,6 +54,7 @@ const TradeForm = ({
   inputTitle1,
   inputTitle2,
   dividerIcon,
+  handleClickViewExistingPosition,
 }: TradeFormProps) => {
   const { address: userAddress, isConnected } = useAccount();
   const { startLoading, stopLoading } = useLoading();
@@ -129,7 +132,6 @@ const TradeForm = ({
       token1.address,
       token2.address
     )) as Address;
-    console.log({ factoryPairAddress: address });
     setPairAddress(address && address != ADDRESS_ZERO ? address : undefined);
     setIsFirstLP(!address || address === ADDRESS_ZERO);
   };
@@ -359,7 +361,7 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
-
+  console.log({ balanceToken1 });
   return (
     <>
       <SelectTokenModal
@@ -481,6 +483,12 @@ const TradeForm = ({
             hideIcon
           />
         )}
+        <div
+          className="mx-auto w-fit mt-4 mb-4 hover:underline cursor-pointer flex items-center gap-2 text-[#98A2B3]"
+          onClick={handleClickViewExistingPosition}
+        >
+          <BackIcon /> Back to Pool list
+        </div>
         <Button
           onClick={() => handleAddLiquidity()}
           className="w-full justify-center  mb-2 px-[42px]"

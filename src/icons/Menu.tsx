@@ -1,8 +1,4 @@
-interface MenuProps {
-  active?: boolean;
-  color?: string;
-}
-const Menu = ({ active, color }: MenuProps) => {
+const Menu = () => {
   return (
     <svg
       width="25"

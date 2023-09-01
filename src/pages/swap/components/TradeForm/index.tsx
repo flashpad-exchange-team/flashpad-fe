@@ -18,6 +18,7 @@ import {
   MAX_UINT256,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as pairContract from '@/utils/pairContract';
 import * as routerContract from '@/utils/routerContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
@@ -27,6 +28,7 @@ import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+
 interface TradeFormProps {
   title: string;
   buttonName: string;
@@ -52,26 +54,17 @@ const TradeForm = ({
   const [token2, setToken2] = useState<any>();
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
-  const [rate, setRate] = useState(1);
-  const calculateToken2Value = async () => {
-    return routerContract.getAmountsOut(
-      token1Amount,
-      [token1?.address, token2?.address],
-      balanceToken1?.decimals!,
-      balanceToken2?.decimals!
-    );
-  };
+  const [isStableSwap, setIsStableSwap] = useState(false);
+  const [swapRate1To2, setSwapRate1To2] = useState('-');
+  const [swapRate2To1, setSwapRate2To1] = useState('-');
+  const [isFetchingRate, setIsFetchingRate] = useState<boolean>(false);
+
   useEffect(() => {
-    setToken2Amount('' + +token1Amount * rate);
+    setToken2Amount('' + +token1Amount * +swapRate1To2);
   }, [token1Amount]);
 
   useEffect(() => {
-    const fetchRate = async () => {
-      const value = await calculateToken2Value();
-      setRate(value);
-    };
-
-    fetchRate();
+    getLPInfo();
   }, [token1, token2]);
 
   const resetInput = (isReload?: boolean) => {
@@ -86,13 +79,19 @@ const TradeForm = ({
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
-    token: token1 ? (token1.address as Address) : undefined,
+    token:
+      token1 && token1.symbol != 'ETH'
+        ? (token1.address as Address)
+        : undefined,
     watch: true,
   });
 
   const { data: balanceToken2 } = useBalance({
     address: userAddress,
-    token: token2 ? (token2.address as Address) : undefined,
+    token:
+      token2 && token2.symbol != 'ETH'
+        ? (token2.address as Address)
+        : undefined,
     watch: true,
   });
 
@@ -169,11 +168,6 @@ const TradeForm = ({
     //   'allowance',
     //   [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
     // )) as bigint;
-    // console.log({
-    //   token2Allowance: token2Allowance.toString(),
-    //   bnToken2Amount: bnToken2Amount.toString(),
-    //   ok: bnToken2Amount.comparedTo(new BigNumber(token2Allowance.toString())),
-    // });
 
     // if (token2Allowance.toString() < MAX_UINT256) {
     //   const approveRes = await erc20TokenContract.erc20Write(
@@ -191,16 +185,11 @@ const TradeForm = ({
 
     // const hash = approveRes.hash;
     // const txReceipt = await waitForTransaction({ hash });
-    // console.log({ txReceipt });
     // }
 
     const { timestamp } = await web3Helpers.getBlock();
     let txResult = undefined;
     if (token2?.symbol === 'ETH') {
-      console.log({
-        bnToken1Amount: bnToken1Amount.toString(),
-        token1Amount,
-      });
       txResult = await routerContract.swapTokensForETH(userAddress!, {
         amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
         amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
@@ -209,6 +198,18 @@ const TradeForm = ({
         referrer: ADDRESS_ZERO,
         deadline: timestamp + K_5_MIN + '',
       });
+    } else if (token1?.symbol === 'ETH') {
+      txResult = await routerContract.swapETHForTokens(
+        userAddress!,
+        bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        {
+          amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+          path: [token1.address, token2.address],
+          to: userAddress!,
+          referrer: ADDRESS_ZERO,
+          deadline: timestamp + K_5_MIN + '',
+        }
+      );
     } else {
       txResult = await routerContract.swapTokensForTokens(userAddress!, {
         amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
@@ -222,8 +223,6 @@ const TradeForm = ({
 
     if (!txResult) {
       stopLoading();
-      // setSuccessful(false);
-      // setFailed(true);
       return;
     }
 
@@ -244,7 +243,42 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
+  const getLPInfo = async () => {
+    setIsFetchingRate(true);
+    const token1Address = token1?.address;
+    const token2Address = token2?.address;
 
+    if (!token1Address || !token2Address) return;
+    const address = await routerContract.getPair(token1Address, token2Address);
+    if (address) {
+      const stableSwap = await pairContract.read(address, 'stableSwap', []);
+      setIsStableSwap(!!stableSwap);
+
+      const amount1In = BigNumber(10).pow(
+        BigNumber(balanceToken1?.decimals || 0)
+      );
+      const amount2In = BigNumber(10).pow(
+        BigNumber(balanceToken2?.decimals || 0)
+      );
+
+      const amount2Out = await pairContract.read(address, 'getAmountOut', [
+        amount1In,
+        token1Address,
+      ]);
+      setSwapRate1To2(
+        BigNumber(amount2Out).div(amount2In).toFixed(balanceToken2?.decimals!)
+      );
+
+      const amount1Out = await pairContract.read(address, 'getAmountOut', [
+        amount2In,
+        token2Address,
+      ]);
+      setSwapRate2To1(
+        BigNumber(amount1Out).div(amount1In).toFixed(balanceToken1?.decimals!)
+      );
+    }
+    setIsFetchingRate(false);
+  };
   return (
     <>
       <SelectTokenModal
@@ -281,7 +315,7 @@ const TradeForm = ({
           }}
           title={inputTitle1}
           tokenData={{
-            symbol: token1 ? balanceToken1?.symbol! : '',
+            symbol: token1 ? token1?.symbol! : '',
             balance: token1 ? balanceToken1?.formatted! : '?',
             logo: token1 ? token1?.logoURI : '',
             amount: token1Amount,
@@ -301,7 +335,7 @@ const TradeForm = ({
           }}
           title={inputTitle2}
           tokenData={{
-            symbol: token2 ? balanceToken2?.symbol! : '',
+            symbol: token2 ? token2?.symbol! : '',
             balance: token2 ? balanceToken2?.formatted! : '?',
             logo: token2 ? token2?.logoURI : '',
             amount: token2Amount,
@@ -309,6 +343,10 @@ const TradeForm = ({
           setTokenAmount={(value) => setToken2Amount(value)}
         />
         <LiquidityPairInfo
+          swapRate1To2={swapRate1To2}
+          swapRate2To1={swapRate2To1}
+          isStableSwap={isStableSwap}
+          isFetchingRate={isFetchingRate}
           token1Data={{
             address: token1?.address,
             symbol: token1?.symbol,
@@ -321,30 +359,13 @@ const TradeForm = ({
             amountIn: token2Amount,
             decimals: balanceToken2?.decimals,
           }}
-          rate={rate}
         />
-        {/* <Notification message="Error: Insufficient Balance" type="error" />
-        <Notification message="Wallet connected" type="success" />
-        <Notification
-          message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
-          type="info"
-        />
-        <Notification
-          message={
-            <div className="text-[#F04438]">
-              The AIDOGE token has a custom transfer tax that can prevent you
-              from swapping, you might need to significantly increase your
-              slippage and only use the V2 swap mode.
-            </div>
-          }
-          type="error"
-          hideIcon
-        /> */}
-
         <Button
           onClick={() => handleSwap()}
           className="w-full justify-center mb-2 px-[42px]"
-          // disabled
+          disabled={
+            !userAddress || !token1 || !token2 || !token1Amount || !token2Amount
+          }
         >
           {buttonName}
         </Button>

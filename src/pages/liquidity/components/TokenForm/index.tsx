@@ -24,8 +24,6 @@ const TokenForm = ({
   setTokenAmount,
 }: TokenFormProps) => {
   const { isConnected } = useAccount();
-  console.log({ tokenData });
-
   const handleOpenSelectTokenModal = () => {
     isConnected && openModal ? openModal() : void 0;
   };

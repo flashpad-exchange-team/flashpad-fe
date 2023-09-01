@@ -8,6 +8,7 @@ import * as pairContract from '@/utils/pairContract';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
 import BigNumber from 'bignumber.js';
+import InlineLoading from '@/components/loading/InlineLoading';
 
 interface IPairTokenInfo {
   symbol?: string;
@@ -37,6 +38,7 @@ const LiquidityPairInfo = ({
   const token2Symbol = token2Data?.symbol;
   const token1Decimals = token1Data?.decimals;
   const token2Decimals = token2Data?.decimals;
+  const [isFetchingRate, setIsFetchingRate] = useState<boolean>(false);
 
   const { address: userAddress } = useAccount();
 
@@ -57,19 +59,28 @@ const LiquidityPairInfo = ({
     const reserve1 = BigNumber(reserves[0]);
     const reserve2 = BigNumber(reserves[1]);
     if (pairToken1?.toLowerCase() === token1Address?.toLowerCase()) {
-      const reserve1Formatted = reserve1.div(BigNumber(10).pow(token1Decimals!));
-      const reserve2Formatted = reserve2.div(BigNumber(10).pow(token2Decimals!));
+      const reserve1Formatted = reserve1.div(
+        BigNumber(10).pow(token1Decimals!)
+      );
+      const reserve2Formatted = reserve2.div(
+        BigNumber(10).pow(token2Decimals!)
+      );
       ratioToken1Token2 = reserve2Formatted.div(reserve1Formatted).toString();
       ratioToken2Token1 = reserve1Formatted.div(reserve2Formatted).toString();
     } else {
-      const reserve1Formatted = reserve2.div(BigNumber(10).pow(token1Decimals!));
-      const reserve2Formatted = reserve1.div(BigNumber(10).pow(token2Decimals!));
+      const reserve1Formatted = reserve2.div(
+        BigNumber(10).pow(token1Decimals!)
+      );
+      const reserve2Formatted = reserve1.div(
+        BigNumber(10).pow(token2Decimals!)
+      );
       ratioToken1Token2 = reserve2Formatted.div(reserve1Formatted).toString();
       ratioToken2Token1 = reserve1Formatted.div(reserve2Formatted).toString();
     }
   }
 
   const getLPInfo = async () => {
+    setIsFetchingRate(true);
     if (!token1Address || !token2Address) return;
     const address = await routerContract.getPair(token1Address, token2Address);
     setLPAddress(address || ADDRESS_ZERO);
@@ -108,6 +119,7 @@ const LiquidityPairInfo = ({
           .toFixed(8)
       );
     }
+    setIsFetchingRate(false);
   };
 
   useEffect(() => {
@@ -124,16 +136,19 @@ const LiquidityPairInfo = ({
         className="flex items-center justify-between cursor-pointer"
         onClick={toggleOpen}
       >
-        <div>
-          <div className="text-[14px] ">
-            1 {token1Symbol} = {ratioToken1Token2} {token2Symbol}{' '}
-            {/* <span className="text-[#344054] ml-2">($1.8833,82)</span> */}
+        {isFetchingRate ? (
+          <InlineLoading message="Fetching liquidity ratio" className="mb-2" />
+        ) : (
+          <div>
+            <div className="text-[14px] ">
+              1 {token1Symbol} = {ratioToken1Token2} {token2Symbol}{' '}
+            </div>
+            <div className="text-[14px] ">
+              1 {token2Symbol} = {ratioToken2Token1} {token1Symbol}{' '}
+            </div>
           </div>
-          <div className="text-[14px] ">
-            1 {token2Symbol} = {ratioToken2Token1} {token1Symbol}{' '}
-            {/* <span className="text-[#344054] ml-2">($1,91)</span> */}
-          </div>
-        </div>
+        )}
+
         <div>{open ? <ArrowUp /> : <ArrowDown />}</div>
       </div>
       {open && (

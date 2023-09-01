@@ -7,6 +7,7 @@ import {
 } from './constants';
 import BigNumber from 'bignumber.js';
 import customToast from '@/components/notification/customToast';
+import { handleError } from './handleError';
 
 const routerContract: any = getContract({
   address: ARTHUR_ROUTER_ADDRESS as Address,
@@ -188,14 +189,12 @@ export const getPair = async (token1Address: string, token2Address: string) => {
  * @param path array of ERC20 token addresses
  */
 export const getAmountsOut = async (
-  amountIn: string,
+  // amountIn: string,
   path: string[],
   token1Decimal: number,
   token2Decimal: number
 ) => {
   try {
-    console.log({ amountIn, path, token1Decimal, token2Decimal });
-
     const result = await routerContract.read.getAmountsOut!([1, path]);
     const amountToken1 = BigNumber(result[result.length - 1])
       .times(BigNumber(10).pow(token1Decimal))
@@ -205,6 +204,20 @@ export const getAmountsOut = async (
       .toNumber();
 
     return amountToken1 / amountToken2;
+  } catch (err: any) {
+    console.log(err);
+    return 0;
+  }
+};
+export const getAmountsOutResult = async (amountIn: string, path: string[], token1Decimal: number, token2Decimal: number) => {
+  try {
+    const result = await routerContract.read.getAmountsOut!([amountIn, path]);
+    const amountToken1 = (BigNumber(result[result.length - 1]).times(BigNumber(10)
+      .pow(token1Decimal))).toNumber()
+    const amountToken2 = (BigNumber(result[0]).times(BigNumber(10)
+      .pow(token2Decimal))).toNumber()
+
+    return (BigNumber(amountToken1 / amountToken2)).toFixed(0, BigNumber.ROUND_DOWN);
   } catch (err: any) {
     console.log(err);
     return 0;
@@ -266,7 +279,6 @@ export const swapTokensForETH = async (
   account: Address,
   params: ISwapTokensForTokensParams
 ) => {
-  console.log({ params });
   try {
     const { request, result } = await publicClient.simulateContract({
       address: ARTHUR_ROUTER_ADDRESS as Address,
@@ -279,10 +291,43 @@ export const swapTokensForETH = async (
 
     return { hash, result };
   } catch (err: any) {
+    console.log({ err })
     customToast({
       message: err.message || err,
       type: 'error',
     });
+    return undefined;
+  }
+};
+
+
+export interface ISwapETHForTokensParams {
+  amountOutMin: string;
+  path: any[];
+  to: Address;
+  referrer: Address;
+  deadline: string;
+}
+
+export const swapETHForTokens = async (
+  account: Address,
+  value: string,
+  params: ISwapETHForTokensParams
+) => {
+  try {
+    const { request, result } = await publicClient.simulateContract({
+      address: ARTHUR_ROUTER_ADDRESS as Address,
+      abi: RouterABI,
+      functionName: 'swapExactETHForTokensSupportingFeeOnTransferTokens',
+      args: Object.values(params),
+      account,
+      value
+    });
+    const hash = await walletClient.writeContract(request);
+
+    return { hash, result };
+  } catch (err: any) {
+    handleError(err.message || err)
     return undefined;
   }
 };

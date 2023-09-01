@@ -16,17 +16,20 @@ const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
 const Liquidity = () => {
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
   const [isAddLiquidity, setIsAddLiquidity] = useState(true); // Check content mismatch error
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  const { startLoading } = useLoading();
+  const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
     setIsClient(true);
-    // startLoading();
-    // setTimeout(() => {
-    //   stopLoading();
-    // }, 1000);
+    startLoading();
+    setTimeout(() => {
+      stopLoading();
+    }, 1000);
   }, []);
+
+  const handleClickViewExistingPosition = () => {
+    setIsAddLiquidity(false);
+  };
 
   return isClient ? (
     <div
@@ -36,22 +39,14 @@ const Liquidity = () => {
       <Header logo={<Logo xl />} mode="app" />
       <>
         <div className={isAddLiquidity ? '' : 'hidden'}>
-          <div
-            className="mx-auto w-fit mt-6 hover:underline cursor-pointer"
-            onClick={() => {
-              setIsAddLiquidity(false);
-              setIsFirstLoad(false);
-              if (isFirstLoad) startLoading('Fetching contract data ...');
-            }}
-          >
-            {'<    '}View existing positions
-          </div>
           <TradeForm
             title="ADD LIQUIDITY"
             buttonName="Add Liquidity"
             inputTitle1="Token 1"
             inputTitle2="Token 2"
             dividerIcon={<LiquidityIcon />}
+            setIsAddLiquidity={setIsAddLiquidity}
+            handleClickViewExistingPosition={handleClickViewExistingPosition}
           />
         </div>
         <PoolList
