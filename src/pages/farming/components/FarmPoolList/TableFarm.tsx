@@ -90,7 +90,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                 </div>
                 <div className="ml-12">
                   {item?.token1} - {item?.token2}
-                </div>{' '}
+                </div>
               </td>
               <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right relative">
                 {' '}
