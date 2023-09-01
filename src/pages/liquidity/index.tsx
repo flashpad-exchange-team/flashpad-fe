@@ -22,10 +22,6 @@ const Liquidity = () => {
 
   useEffect(() => {
     setIsClient(true);
-    // startLoading();
-    // setTimeout(() => {
-    //   stopLoading();
-    // }, 1000);
   }, []);
 
   return isClient ? (

@@ -2,7 +2,6 @@ import { Address, getContract } from 'viem';
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import { publicClient, walletClient } from './web3Clients';
 import {
-  // ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET,
   ARTHUR_ROUTER_ADDRESS,
 } from './constants';
 import BigNumber from 'bignumber.js';

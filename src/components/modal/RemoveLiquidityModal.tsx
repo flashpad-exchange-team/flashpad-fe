@@ -43,6 +43,7 @@ const RemoveLiquidityModal = ({
   const [amountToRemove, setAmountToRemove] = useState<string>('0');
   const [deadline, setDeadline] = useState<string>(DEFAULT_DEADLINE);
   const [totalLiquidity, setTotalLiquidity] = useState<string>('?');
+  const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
 
   const fetchTotalLiquidityHeld = async () => {
     if (!isOpen || !userAddress) return;
@@ -62,7 +63,7 @@ const RemoveLiquidityModal = ({
 
   useEffect(() => {
     fetchTotalLiquidityHeld();
-  }, [userAddress, isOpen]);
+  }, [userAddress, isOpen, successful]);
 
   const resetToDefault = () => {
     setAmountToRemove('0');
@@ -77,7 +78,7 @@ const RemoveLiquidityModal = ({
       });
       return;
     }
-
+    setSuccessful(undefined);
     
     const nAmountToRemove = Number(amountToRemove);
     const nDeadline = Number(deadline);
@@ -135,6 +136,7 @@ const RemoveLiquidityModal = ({
         [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
       );
       if (!approveRes) {
+        setSuccessful(false);
         stopLoading();
         return;
       }
@@ -153,13 +155,26 @@ const RemoveLiquidityModal = ({
       token2Symbol == 'WFTM' ||
       token2Symbol == 'WETH'
     ) {
+      let tokenAddress;
+      let amountTokenMin;
+      let amountETHMin;
+      if (token1Symbol == 'WFTM' || token1Symbol == 'WETH') {
+        tokenAddress = token2Address;
+        amountTokenMin = amount2.toString();
+        amountETHMin = amount1.toString();
+      } else {
+        tokenAddress = token1Address;
+        amountTokenMin = amount1.toString();
+        amountETHMin = amount2.toString();
+      }
+
       txResult = await routerContract.removeLiquidityETH(
         userAddress,
         {
-          token: token1Address,
+          token: tokenAddress,
           liquidity: bnAmountToRemove.toString(),
-          amountTokenMin: amount1.toString(),
-          amountETHMin: amount2.toString(),
+          amountTokenMin,
+          amountETHMin,
           to: userAddress,
           deadline: (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
         }
@@ -180,6 +195,7 @@ const RemoveLiquidityModal = ({
     }
 
     if (!txResult) {
+      setSuccessful(false);
       stopLoading();
       return;
     }
@@ -188,6 +204,7 @@ const RemoveLiquidityModal = ({
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
 
+    setSuccessful(true);
     stopLoading();
     resetToDefault();
     customToast({

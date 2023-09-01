@@ -1,6 +1,7 @@
 import { Button } from '@/components/button/Button';
 import ListPoolsTable from '@/components/table/Table';
 import AddIcon from '@/icons/AddIcon';
+import Notification from '@/components/notification/Notification';
 import { useEffect, useState } from 'react';
 import * as factoryContract from '@/utils/factoryContract';
 import * as pairContract from '@/utils/pairContract';
@@ -82,12 +83,13 @@ interface PoolListProps {
 
 const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
   const { address: userAddress } = useAccount();
-  const { stopLoading } = useLoading();
+  const { stopLoading, isLoading } = useLoading();
 
   const [allPairsData, setAllPairsData] = useState<any>([]);
 
   const getAllPairs = async () => {
-    // startLoading('Fetching contract data ...');
+    if (isAddLiquidity) return;
+
     const nPairs = await factoryContract.allPairsLength();
 
     const listPairs = [];
@@ -160,7 +162,7 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
 
   useEffect(() => {
     getAllPairs();
-  }, []);
+  }, [isAddLiquidity, isLoading]);
 
   return (
     <div
@@ -191,6 +193,12 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
         </div>
       </div>
 
+      <div className="mt-5">
+        <Notification
+          message="Newly created LPs may need some time to be updated to the list"
+          type="info"
+        />
+      </div>
       <ListPoolsTable data={allPairsData} />
     </div>
   );

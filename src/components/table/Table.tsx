@@ -26,6 +26,7 @@ interface TableProps {
 }
 
 const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
+  console.log({data})
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
   const [selectedPool, setSelectedPool] = useState<string>('');
@@ -107,7 +108,7 @@ const ListPoolsTable: React.FC<TableProps> = ({ data }) => {
                   ) : (
                     <div
                       data-tooltip-id="my-tooltip"
-                      data-tooltip-content="No Lock"
+                      data-tooltip-content="Unlocked"
                     >
                       <LockIcon />
                       <Tooltip id="my-tooltip" />
