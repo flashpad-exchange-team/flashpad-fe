@@ -124,6 +124,7 @@ const Header = (props: INavbarProps) => {
                 menuItem.subMenu ? (
                   <Menu
                     key={menuItem.path}
+                    onClick={() => router.push(menuItem.path)}
                     menuButton={
                       <div
                         className={clsx([
@@ -181,6 +182,7 @@ const Header = (props: INavbarProps) => {
                         : '',
                     ])}
                     key={menuItem.path}
+                    onClick={() => router.push(menuItem.path)}
                   >
                     {menuItem.icon}
                     {menuItem.name}
@@ -238,6 +240,7 @@ const Header = (props: INavbarProps) => {
                           ? 'text-[#FFAF1D] active'
                           : '',
                       ])}
+                      onClick={() => router.push(menuItem.path)}
                     >
                       <div className=" w-fit ml-auto mr-auto mb-1 smallSVG">
                         {menuItem.icon}
@@ -276,6 +279,7 @@ const Header = (props: INavbarProps) => {
                       : '',
                   ])}
                   key={menuItem.path}
+                  onClick={() => router.push(menuItem.path)}
                 >
                   <div className=" w-fit ml-auto mr-auto mb-1 smallSVG">
                     {menuItem.icon}
