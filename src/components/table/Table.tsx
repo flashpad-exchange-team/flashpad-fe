@@ -28,6 +28,7 @@ interface TableProps {
 }
 
 const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
+
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
   const [selectedPool, setSelectedPool] = useState<string>('');
@@ -138,7 +139,6 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
                         )}
                       </div>
                       <div className="absolute left-[15px]">
-                        {' '}
                         {item.token2Logo ? (
                           <Image
                             alt="logo"
