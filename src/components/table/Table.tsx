@@ -3,8 +3,8 @@ import LockIcon from '@/icons/LockIcon';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
-import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
 import InlineLoading from '../loading/InlineLoading';
+import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
 
 interface TableProps {
   data: {
@@ -28,7 +28,7 @@ interface TableProps {
 }
 
 const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
-  console.log({ data });
+
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
   const [selectedPool, setSelectedPool] = useState<string>('');

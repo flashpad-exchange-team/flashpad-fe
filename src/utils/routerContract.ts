@@ -1,12 +1,11 @@
-import { Address, getContract } from 'viem';
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
-import { publicClient, walletClient } from './web3Clients';
+import BigNumber from 'bignumber.js';
+import { Address, getContract } from 'viem';
 import {
   ARTHUR_ROUTER_ADDRESS,
 } from './constants';
-import BigNumber from 'bignumber.js';
-import customToast from '@/components/notification/customToast';
 import { handleError } from './handleError';
+import { publicClient, walletClient } from './web3Clients';
 
 const routerContract: any = getContract({
   address: ARTHUR_ROUTER_ADDRESS as Address,
@@ -51,7 +50,6 @@ export const addLiquidity = async (
   account: Address,
   params: IAddLiquidityParams
 ) => {
-  console.log({ params });
   try {
     const { request, result } = await publicClient.simulateContract({
       address: ARTHUR_ROUTER_ADDRESS as Address,
@@ -64,11 +62,7 @@ export const addLiquidity = async (
 
     return { hash, result };
   } catch (err: any) {
-    console.log(err);
-    customToast({
-      message: err.message || err,
-      type: 'error',
-    });
+    handleError(err?.message || err)
     return undefined;
   }
 };
@@ -90,11 +84,7 @@ export const addLiquidityETH = async (
 
     return { hash, result };
   } catch (err: any) {
-    console.log(err);
-    customToast({
-      message: err.message || err,
-      type: 'error',
-    });
+    handleError(err?.message || err)
     return undefined;
   }
 };
@@ -125,11 +115,8 @@ export const removeLiquidity = async (
 
     return { hash, result };
   } catch (err: any) {
-    console.log(err);
-    customToast({
-      message: err.message || err,
-      type: 'error',
-    });
+    handleError(err?.message || err)
+
     return undefined;
   }
 };
@@ -159,11 +146,8 @@ export const removeLiquidityETH = async (
 
     return { hash, result };
   } catch (err: any) {
-    console.log(err);
-    customToast({
-      message: err.message || err,
-      type: 'error',
-    });
+    handleError(err?.message || err)
+
     return undefined;
   }
 }
@@ -266,10 +250,7 @@ export const swapTokensForTokens = async (
 
     return { hash, result };
   } catch (err: any) {
-    customToast({
-      message: err.message || err,
-      type: 'error',
-    });
+    handleError(err?.message || err)
     return undefined;
   }
 };
@@ -290,11 +271,7 @@ export const swapTokensForETH = async (
 
     return { hash, result };
   } catch (err: any) {
-    console.log({ err })
-    customToast({
-      message: err.message || err,
-      type: 'error',
-    });
+    handleError(err?.message || err)
     return undefined;
   }
 };
@@ -326,7 +303,7 @@ export const swapETHForTokens = async (
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err.message || err)
+    handleError(err?.message || err)
     return undefined;
   }
 };

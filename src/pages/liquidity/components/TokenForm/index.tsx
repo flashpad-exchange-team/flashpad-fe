@@ -2,7 +2,6 @@ import Select from '@/components/select';
 import BNBICon from '@/icons/BNBIcon';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import Image from 'next/image';
-import { useAccount } from 'wagmi';
 
 export interface TokenFormProps {
   openModal?: () => void;
@@ -23,9 +22,8 @@ const TokenForm = ({
   value,
   setTokenAmount,
 }: TokenFormProps) => {
-  const { isConnected } = useAccount();
   const handleOpenSelectTokenModal = () => {
-    isConnected && openModal ? openModal() : void 0;
+    openModal ? openModal() : void 0;
   };
 
   return (
@@ -69,7 +67,10 @@ const TokenForm = ({
       </div>
       <div className="flex items-center justify-between w-full text-[14px] lg:[text-16px]">
         <div className="mt-2 font-semibold">
-          Balance: {`${tokenData?.balance} ${tokenData?.symbol}`}
+          Balance:{' '}
+          {tokenData?.symbol
+            ? `${tokenData.balance || 0} ${tokenData.symbol || ''}`
+            : 0}
         </div>
 
         <div

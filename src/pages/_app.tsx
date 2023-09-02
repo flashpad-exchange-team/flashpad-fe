@@ -21,6 +21,7 @@ import { alchemyProvider } from '@wagmi/core/providers/alchemy';
 import { infuraProvider } from '@wagmi/core/providers/infura';
 import { ALCHEMY_MUMBAI_API_KEY, INFURA_API_KEY } from '@/utils/constants';
 import { Open_Sans } from 'next/font/google';
+import LoadingTx from '@/components/loading/LoadingTx';
 
 const { chains, publicClient } = configureChains(
   [lineaTestnet, polygonMumbai],
@@ -74,6 +75,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
         <main className={openSans.className}>
           <ToastContainer />
           <LoadingIndicator />
+          <LoadingTx />
           <Component {...pageProps} />
         </main>
       </LoadingProvider>
