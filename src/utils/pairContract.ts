@@ -17,7 +17,7 @@ export const read = async (
     });
     return result;
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
 
     return undefined;
   }
@@ -40,7 +40,7 @@ export const write = async (
     const hash = await walletClient.writeContract(request);
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
     return undefined;
   }
 };

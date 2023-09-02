@@ -164,9 +164,9 @@ const TradeForm = ({
       .times(BigNumber(token1Amount));
     let adjustedToken2Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
-      adjustedToken2Amount = reserve2.div(reserve1).times(bnToken1Amount);
+      adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
     } else {
-      adjustedToken2Amount = reserve1.div(reserve2).times(bnToken1Amount);
+      adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
     }
     setToken2Amount(
       adjustedToken2Amount
@@ -184,9 +184,9 @@ const TradeForm = ({
       .times(BigNumber(token2Amount));
     let adjustedToken1Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
-      adjustedToken1Amount = reserve1.div(reserve2).times(bnToken2Amount);
+      adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
     } else {
-      adjustedToken1Amount = reserve2.div(reserve1).times(bnToken2Amount);
+      adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
     }
     setToken1Amount(
       adjustedToken1Amount
@@ -242,8 +242,10 @@ const TradeForm = ({
       title: 'Adding Liquidity ...',
       message: 'Confirming your transaction. Please wait.',
     });
+
     const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
     const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    console.log({token1AmountIn, token2AmountIn})
 
     if (token1.symbol != 'ETH') {
       const token1Allowance = (await erc20TokenContract.erc20Read(
@@ -303,30 +305,6 @@ const TradeForm = ({
     let txResult: any;
 
     if (token1.symbol == 'ETH') {
-      const token1Allowance = (await erc20TokenContract.erc20Read(
-        token1.address,
-        'allowance',
-        [userAddress, ARTHUR_ROUTER_ADDRESS]
-      )) as bigint;
-      if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
-        const approveRes = await erc20TokenContract.erc20Write(
-          userAddress!,
-          token1.address,
-          'approve',
-          [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
-        );
-        if (!approveRes) {
-          stopLoadingTx();
-          setSuccessful(false);
-          setFailed(true);
-          return;
-        }
-
-        const hash = approveRes.hash;
-        const txReceipt = await waitForTransaction({ hash });
-        console.log({ txReceipt });
-      }
-
       txResult = await routerContract.addLiquidityETH(userAddress!, {
         token: token2.address,
         amountTokenDesired: token2AmountIn,

@@ -109,7 +109,7 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
                     {item.locked ? (
                       <div
                         data-tooltip-id="my-tooltip"
-                        data-tooltip-content={`Lock until: ${item.timeLock}`}
+                        data-tooltip-content={`Locked until: ${item.timeLock}`}
                       >
                         <LockIcon active />
                         <Tooltip id="my-tooltip" />

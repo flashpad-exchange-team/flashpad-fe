@@ -1,9 +1,7 @@
 import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
 import BigNumber from 'bignumber.js';
 import { Address, getContract } from 'viem';
-import {
-  ARTHUR_ROUTER_ADDRESS,
-} from './constants';
+import { ARTHUR_ROUTER_ADDRESS } from './constants';
 import { handleError } from './handleError';
 import { publicClient, walletClient } from './web3Clients';
 
@@ -62,7 +60,7 @@ export const addLiquidity = async (
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
     return undefined;
   }
 };
@@ -84,7 +82,7 @@ export const addLiquidityETH = async (
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
     return undefined;
   }
 };
@@ -115,7 +113,7 @@ export const removeLiquidity = async (
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
 
     return undefined;
   }
@@ -146,11 +144,11 @@ export const removeLiquidityETH = async (
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
 
     return undefined;
   }
-}
+};
 
 export const getPair = async (token1Address: string, token2Address: string) => {
   try {
@@ -192,15 +190,25 @@ export const getAmountsOut = async (
     return 0;
   }
 };
-export const getAmountsOutResult = async (amountIn: string, path: string[], token1Decimal: number, token2Decimal: number) => {
+export const getAmountsOutResult = async (
+  amountIn: string,
+  path: string[],
+  token1Decimal: number,
+  token2Decimal: number
+) => {
   try {
     const result = await routerContract.read.getAmountsOut!([amountIn, path]);
-    const amountToken1 = (BigNumber(result[result.length - 1]).times(BigNumber(10)
-      .pow(token1Decimal))).toNumber()
-    const amountToken2 = (BigNumber(result[0]).times(BigNumber(10)
-      .pow(token2Decimal))).toNumber()
+    const amountToken1 = BigNumber(result[result.length - 1])
+      .times(BigNumber(10).pow(token1Decimal))
+      .toNumber();
+    const amountToken2 = BigNumber(result[0])
+      .times(BigNumber(10).pow(token2Decimal))
+      .toNumber();
 
-    return (BigNumber(amountToken1 / amountToken2)).toFixed(0, BigNumber.ROUND_DOWN);
+    return BigNumber(amountToken1 / amountToken2).toFixed(
+      0,
+      BigNumber.ROUND_DOWN
+    );
   } catch (err: any) {
     console.log(err);
     return 0;
@@ -250,7 +258,7 @@ export const swapTokensForTokens = async (
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
     return undefined;
   }
 };
@@ -271,11 +279,10 @@ export const swapTokensForETH = async (
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
     return undefined;
   }
 };
-
 
 export interface ISwapETHForTokensParams {
   amountOutMin: string;
@@ -297,13 +304,13 @@ export const swapETHForTokens = async (
       functionName: 'swapExactETHForTokensSupportingFeeOnTransferTokens',
       args: Object.values(params),
       account,
-      value
+      value,
     });
     const hash = await walletClient.writeContract(request);
 
     return { hash, result };
   } catch (err: any) {
-    handleError(err?.message || err)
+    handleError(err);
     return undefined;
   }
 };
