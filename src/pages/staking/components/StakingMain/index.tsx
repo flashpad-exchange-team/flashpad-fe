@@ -4,6 +4,7 @@ import UploadIcon from '@/icons/UploadIcon';
 import TableStaking from './TableStaking';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import { useState } from 'react';
+import CreatePositionModal from '@/components/modal/CreatePositionModal';
 const data = [
   {
     tvl: '482.85',
@@ -34,12 +35,25 @@ const data = [
   },
 ];
 const StakingMain = () => {
-  const [isOpen, setOpen] = useState<boolean>(false);
-  const toggleOpen = () => setOpen(!isOpen);
+  const [isOpenSelectToken, setOpenSelectToken] = useState<boolean>(false);
+  const [isOpenCreatePosition, setOpenCreatePosition] =
+    useState<boolean>(false);
+
+  const toggleOpenSelectToken = () => setOpenSelectToken(!isOpenSelectToken);
+  const toggleOpenCreatePosition = () => {
+    setOpenCreatePosition(!isOpenCreatePosition);
+  };
 
   return (
     <>
-      <SelectTokenModal isOpen={isOpen} toggleOpen={toggleOpen} />
+      <CreatePositionModal
+        isOpen={isOpenCreatePosition}
+        toggleOpen={toggleOpenCreatePosition}
+      />
+      <SelectTokenModal
+        isOpen={isOpenSelectToken}
+        toggleOpen={toggleOpenSelectToken}
+      />
       <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -60,12 +74,15 @@ const StakingMain = () => {
             />
             <Button
               className="px-2 h-[52px] w-[280px] flex justify-center "
-              onClick={toggleOpen}
+              onClick={toggleOpenSelectToken}
             >
               <UploadIcon />
               Import Liquidity
             </Button>
-            <Button className="px-3 h-[52px] w-[270px] flex justify-center ">
+            <Button
+              className="px-3 h-[52px] w-[270px] flex justify-center "
+              onClick={toggleOpenCreatePosition}
+            >
               <AddIcon color="#0C111D" />
               New Position
             </Button>

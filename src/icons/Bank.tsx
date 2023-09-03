@@ -1,4 +1,4 @@
-const Bank = ({ stroke }: any) => {
+const Bank = () => {
   return (
     <svg
       width="40"

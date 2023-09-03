@@ -1,4 +1,4 @@
-const ArrowLeft = ({ stroke }: any) => {
+const ArrowLeft = () => {
   return (
     <svg
       width="15"

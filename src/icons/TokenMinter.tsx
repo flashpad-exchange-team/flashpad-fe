@@ -1,4 +1,4 @@
-const TokenMinter = ({ stroke }: any) => {
+const TokenMinter = () => {
   return (
     <svg
       width="40"

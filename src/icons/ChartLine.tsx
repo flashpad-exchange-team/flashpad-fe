@@ -1,4 +1,4 @@
-const ChartLine = ({ stroke }: any) => {
+const ChartLine = () => {
   return (
     <svg
       width="32"

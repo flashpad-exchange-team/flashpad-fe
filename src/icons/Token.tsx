@@ -1,4 +1,4 @@
-const Token = ({ stroke }: any) => {
+const Token = () => {
   return (
     <svg
       width="40"

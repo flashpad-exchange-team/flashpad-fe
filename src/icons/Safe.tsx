@@ -1,4 +1,4 @@
-const Safe = ({ stroke }: any) => {
+const Safe = () => {
   return (
     <svg
       width="40"

@@ -1,4 +1,4 @@
-const Error = ({ stroke }: any) => {
+const Error = () => {
   return (
     <svg
       width="24"
