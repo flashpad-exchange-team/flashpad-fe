@@ -64,7 +64,7 @@ const FooterMobile = () => {
           onClick={toggleShow3}
         >
           Tools <ArrowDown stroke="white" />
-        </div>{' '}
+        </div>
         {show3 && (
           <>
             <div className=" text-[16px] mb-[4px] mt-4">Analytics</div>
