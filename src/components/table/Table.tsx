@@ -77,14 +77,14 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
                 Name
               </th>
+              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
+                My Pool Share
+              </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
                 APR
               </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
                 Total Staked
-              </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
-                My Pool Share
               </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
                 My Stake
@@ -151,18 +151,18 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
                         )}
                       </div>
                     </div>
-                    <div className="ml-12">
+                    <div>
                       {item.token1} - {item.token2}
                     </div>
+                  </td>
+                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
+                    {item.myPool || 0}%
                   </td>
                   <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
                     {item.apr}%
                   </td>
                   <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
                     ${item.totalStaked}
-                  </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
-                    {item.myPool || 0}%
                   </td>
                   <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
                     ${item.myStake}
