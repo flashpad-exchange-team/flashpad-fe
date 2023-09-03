@@ -164,9 +164,11 @@ const TradeForm = ({
       .times(BigNumber(token1Amount));
     let adjustedToken2Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
-      adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
+      // adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
+      adjustedToken2Amount = web3Helpers.bnQuote(bnToken1Amount, reserve1, reserve2);
     } else {
-      adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
+      // adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
+      adjustedToken2Amount = web3Helpers.bnQuote(bnToken1Amount, reserve2, reserve1);
     }
     setToken2Amount(
       adjustedToken2Amount
@@ -184,9 +186,11 @@ const TradeForm = ({
       .times(BigNumber(token2Amount));
     let adjustedToken1Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
-      adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
+      // adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
+      adjustedToken1Amount = web3Helpers.bnQuote(bnToken2Amount, reserve2, reserve1);
     } else {
-      adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
+      // adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
+      adjustedToken1Amount = web3Helpers.bnQuote(bnToken2Amount, reserve1, reserve2);
     }
     setToken1Amount(
       adjustedToken1Amount
@@ -226,7 +230,9 @@ const TradeForm = ({
       bnToken1Amount.isGreaterThan(
         BigNumber(balanceToken1!.value.toString())
       ) ||
-      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
+      bnToken2Amount.isGreaterThan(
+        BigNumber(balanceToken2!.value.toString())
+      )
     ) {
       customToast({
         message: 'Insufficient balance!',
@@ -243,8 +249,26 @@ const TradeForm = ({
       message: 'Confirming your transaction. Please wait.',
     });
 
-    const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    let reserve1, reserve2;
+    const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
+    const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
+    if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+      reserve1 = reserveA;
+      reserve2 = reserveB;
+    } else {
+      reserve1 = reserveB;
+      reserve2 = reserveA;
+    }
+
+    let token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    let token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    if (bnToken1Amount.isGreaterThan(token1AmountIn)) {
+      // token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_UP);
+      token2AmountIn = web3Helpers.bnQuote(BigNumber(token1AmountIn), reserve1, reserve2).toFixed(0, BigNumber.ROUND_DOWN);
+    } else if (bnToken2Amount.isGreaterThan(token2AmountIn)) {
+      // token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_UP);
+      token1AmountIn = web3Helpers.bnQuote(BigNumber(token2AmountIn), reserve2, reserve1).toFixed(0, BigNumber.ROUND_DOWN);
+    }
     console.log({token1AmountIn, token2AmountIn})
 
     if (token1.symbol != 'ETH') {

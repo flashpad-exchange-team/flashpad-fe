@@ -1,6 +1,7 @@
 import { GetBalanceParameters, GetBlockParameters } from 'viem';
 import { publicClient } from './web3Clients';
 import { format, fromUnixTime } from 'date-fns';
+import BigNumber from 'bignumber.js';
 
 export const getBlock = async (params?: GetBlockParameters) => {
   return await publicClient.getBlock(params);
@@ -8,6 +9,21 @@ export const getBlock = async (params?: GetBlockParameters) => {
 
 export const getBalance = async (params?: GetBalanceParameters) => {
   return await publicClient.getBalance(params);
+};
+
+/**
+ * BigNumber version of the UniswapV2Library function `quote`
+ * @param amountA 
+ * @param reserveA 
+ * @param reserveB 
+ * @returns amountB
+ */
+export const bnQuote = (
+  amountA: BigNumber,
+  reserveA: BigNumber,
+  reserveB: BigNumber,
+) => {
+  return amountA.times(reserveB).div(reserveA);
 };
 
 export const daysToSeconds = (days: number) => {
