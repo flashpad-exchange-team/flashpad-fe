@@ -1,5 +1,26 @@
-const ArrowRight = () => {
-  return (
+const ArrowRight = ({ fill }: any) => {
+  return fill ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="12"
+      viewBox="0 0 15 12"
+      fill="none"
+    >
+      <path
+        d="M1.5 6H13.5"
+        stroke="#0C111D"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
+      <path
+        d="M9.5 1.5L13.5 6L9.5 10.5"
+        stroke="#0C111D"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
+    </svg>
+  ) : (
     <svg
       width="25"
       height="24"

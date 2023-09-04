@@ -71,6 +71,23 @@ const MENU_ITEMS = [
     iconActive: <LaunchPadIcon active />,
     name: 'Launchpad',
     path: '/launchpad',
+    subMenu: [
+      {
+        name: 'launchpad',
+        path: '/launchpad',
+        icon: <SwapIcon />,
+      },
+      {
+        name: 'launchpad detail',
+        path: '/launchpad-detail',
+        icon: <Liquidity width="18px" />,
+      },
+      {
+        name: 'fair launchpad',
+        path: '/fair-launchpad',
+        icon: <Swap width="18px" />,
+      },
+    ],
   },
   {
     icon: <AnalyticsIcon />,
