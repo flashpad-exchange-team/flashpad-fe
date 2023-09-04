@@ -31,37 +31,39 @@ const Launchpad = () => {
     >
       <Header logo={<Logo xl />} mode="app" />
       <>
-        <div className="max-w-[1096px] w-full mx-auto">
-          <div className="overflow-x-auto my-10 bg-[#00000080] px-4">
+        <div className="max-w-[1096px] p-8 md:p-0 w-full mx-auto">
+          <div className="my-10 bg-[#00000080] px-4">
             <div className="w-full text-[18px] py-3 text-left">
               Support Request Form
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col md:flex-row gap-3">
               <div
                 onClick={() => handleChooseOption(1)}
-                className="h-[80px] w-1/3 rounded-lg border border-[#150E39] flex items-center justify-center"
+                className="h-[80px] w-full md:w-1/3 rounded-lg border border-[#150E39] flex items-center justify-center"
               >
                 <Radio active={index === 1} />
                 <span
                   className={`ml-4 ${index === 1 ? '' : 'text-[#474747]'} `}
                 >
                   Ask For Funds
+                  <span className="opacity-0 md:hidden">coins</span>
                 </span>
               </div>
               <div
                 onClick={() => handleChooseOption(2)}
-                className="h-[80px] w-1/3 rounded-lg border border-[#150E39] flex items-center justify-center"
+                className="h-[80px] w-full md:w-1/3 rounded-lg border border-[#150E39] flex items-center justify-center"
               >
                 <Radio active={index === 2} />
                 <span
                   className={`ml-4 ${index === 2 ? '' : 'text-[#474747]'} `}
                 >
                   Ask for Incubator
+                  <span className="opacity-0 md:hidden">co</span>
                 </span>
               </div>
               <div
                 onClick={() => handleChooseOption(3)}
-                className="h-[80px] w-1/3 rounded-lg border border-[#150E39] flex items-center justify-center"
+                className="h-[80px] w-full md:w-1/3 rounded-lg border border-[#150E39] flex items-center justify-center"
               >
                 <Radio active={index === 3} />
                 <span
@@ -72,7 +74,7 @@ const Launchpad = () => {
               </div>
             </div>
             <div className="flex flex-wrap">
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <div className="mt-5 text-[#98A2B3]">Name/Company</div>
                 <div className="relative">
                   <input
@@ -84,7 +86,7 @@ const Launchpad = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/2 pl-3">
+              <div className="w-full md:w-1/2 md:pl-3">
                 <div className="mt-5 text-[#98A2B3]">Name/Company</div>
                 <div className="relative">
                   <input
@@ -96,7 +98,7 @@ const Launchpad = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <div className="mt-5 text-[#98A2B3]">Website</div>
                 <div className="relative">
                   <input
@@ -108,7 +110,7 @@ const Launchpad = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/2 pl-3">
+              <div className="w-full md:w-1/2 md:pl-3">
                 <div className="mt-5 text-[#98A2B3]">Field of Activity</div>
                 <div className="relative">
                   <input
@@ -120,7 +122,7 @@ const Launchpad = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <div className="mt-5 text-[#98A2B3]">Telegram</div>
                 <div className="relative">
                   <input
@@ -132,7 +134,7 @@ const Launchpad = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/2 pl-3">
+              <div className="w-full md:w-1/2 md:pl-3">
                 <div className="mt-5 text-[#98A2B3]">Email</div>
                 <div className="relative">
                   <input
@@ -144,7 +146,7 @@ const Launchpad = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <div className="mt-5 text-[#98A2B3]">Link Documents</div>
                 <div className="relative">
                   <input
@@ -161,7 +163,7 @@ const Launchpad = () => {
                 <textarea className="w-full bg-[#150E3980] h-[160px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]" />
               </div>
             </div>
-            <Button className="w-1/9 justify-center my-4 h-[52px] text-[16px] px-[42px]">
+            <Button className="w-full md:w-1/6 justify-center my-4 h-[52px] text-[16px] px-[42px]">
               Send <ArrowRight fill />
             </Button>
           </div>

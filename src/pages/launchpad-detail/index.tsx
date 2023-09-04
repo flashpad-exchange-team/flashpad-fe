@@ -37,7 +37,7 @@ const Launchpad = () => {
     >
       <Header logo={<Logo xl />} mode="app" />
       <>
-        <div className="max-w-[1096px] w-full mx-auto ">
+        <div className="max-w-[1096px] w-full mx-auto p-6 md:p-0">
           <header className="text-[#ffaf1d] text-[36px] mt-20 font-bold">
             Rodeo auction
           </header>
@@ -128,7 +128,7 @@ const Launchpad = () => {
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="w-full bg-[#150E3980] my-4 px-2 py-6">
               <div className="text-[#FFAF1D]">Claims</div>
               <div className="text-[12px] my-4 px-4 border-b border-[#344054] text-left"></div>
@@ -154,7 +154,7 @@ const Launchpad = () => {
               <div className="text-[#FFAF1D]">Summary</div>
               <div className="text-[12px] my-4 px-4 border-b border-[#344054] text-left"></div>
               <div className="mt-2 flex flex-wrap gap-12">
-                <div className="flex w-[250px]">
+                <div className="flex w-full md:w-[250px]">
                   <Bank />
                   <div className="ml-2">
                     <div className="text-[#98A2B3] text-[14px]">
@@ -165,7 +165,7 @@ const Launchpad = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex w-[200px]">
+                <div className="flex w-full md:w-[200px]">
                   <Bank />
                   <div className="ml-2">
                     <div className="text-[#98A2B3] text-[14px]">
@@ -174,7 +174,7 @@ const Launchpad = () => {
                     <div className="text-[14px]">$0,088</div>
                   </div>
                 </div>
-                <div className="flex w-[250px]">
+                <div className="flex w-full md:w-[250px]">
                   <TokenMinter />
                   <div className="ml-2">
                     <div className="text-[#98A2B3] text-[14px]">
@@ -183,7 +183,7 @@ const Launchpad = () => {
                     <div className="text-[14px]">FDV</div>
                   </div>
                 </div>
-                <div className="flex w-[200px]">
+                <div className="flex w-full md:w-[200px]">
                   <Safe />
                   <div className="ml-2">
                     <div className="text-[#98A2B3] text-[14px]">FDV</div>
@@ -194,7 +194,7 @@ const Launchpad = () => {
             </div>
           </div>
 
-          <div className="flex gap-3 my-5">
+          <div className="flex flex-col md:flex-row gap-3 my-5">
             <div className="w-full bg-[#150E3980] px-2 py-6">
               <div className="flex">
                 <Coin />

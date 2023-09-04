@@ -36,14 +36,13 @@ const TableLaunchpad: React.FC<TableLaunchpadProps> = ({ data }) => {
               <input
                 className="w-full bg-[#1D2939] h-[52px] pl-8 text-[15px] font-semibold mb-2 mt-3.5 rounded-md focus:outline-none placeholder-[#667085]"
                 placeholder="Search by name or address"
-                value={''}
+                value=""
               />
             </div>
           </tr>
           <tr>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left flex">
+            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
               Name
-              <ArrowLeft />
             </th>
             <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
               Hardcap

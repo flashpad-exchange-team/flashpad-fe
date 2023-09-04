@@ -12,6 +12,7 @@ export interface SelectProps {
   icon?: ReactNode;
   value?: any;
   disabled?: boolean;
+  placeHolder?: string;
 }
 
 const customStyles: any = {
@@ -28,6 +29,7 @@ const customStyles: any = {
     '& input ': {
       display: 'none',
     },
+    cursor: 'pointer',
   }),
   singleValue: (provided: IndicatorsContainerProps) => ({
     ...provided,
@@ -55,7 +57,13 @@ const customStyles: any = {
   }),
 };
 
-const Select = ({ options, icon, value, disabled }: SelectProps) => {
+const Select = ({
+  options,
+  icon,
+  value,
+  disabled,
+  placeHolder,
+}: SelectProps) => {
   const CustomSingleValue: React.FC<SingleValueProps> = ({ children }) => (
     <div className="flex items-center gap-2">
       {icon}
@@ -71,7 +79,7 @@ const Select = ({ options, icon, value, disabled }: SelectProps) => {
       components={{ SingleValue: CustomSingleValue }}
       isSearchable={false}
       isDisabled={disabled}
-      placeholder="Select"
+      placeholder={placeHolder}
     />
   );
 };
