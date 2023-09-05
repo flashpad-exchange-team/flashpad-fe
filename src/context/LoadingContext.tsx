@@ -11,11 +11,13 @@ interface LoadingTxInfo {
   title?: string;
   message?: string;
 }
-interface SuccessTxInfo {
+
+export interface SuccessTxInfo {
   mainMessage?: ReactElement;
   subMessage?: ReactElement;
   tx?: string;
 }
+
 interface LoadingContextType {
   isLoading: boolean;
   startLoading: (message?: string) => void;

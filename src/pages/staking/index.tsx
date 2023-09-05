@@ -5,6 +5,7 @@ import { Logo } from '@/templates/Logo';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useEffect, useState } from 'react';
 import StakingMain from './components/StakingMain';
+
 const Staking = () => {
   const { startLoading, stopLoading } = useLoading();
   const [isClient, setIsClient] = useState(false); // Check content mismatch error

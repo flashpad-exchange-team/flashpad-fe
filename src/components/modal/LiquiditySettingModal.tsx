@@ -3,7 +3,7 @@ import CommonModal from './CommonModal';
 import SwapRightIcon from '@/icons/SwapRight';
 import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
-import ButtonStyle from '@/icons/ButtonStyle';
+import DividerDown from '@/icons/DividerDown';
 import { useState } from 'react';
 import {
   DEFAULT_DEADLINE,
@@ -46,9 +46,11 @@ const LiquiditySettingModal = ({
     if (
       Number.isNaN(nSlippage) ||
       nSlippage <= 0 ||
-      Number.isNaN(nDeadline) || !Number.isInteger(nDeadline) ||
+      Number.isNaN(nDeadline) ||
+      !Number.isInteger(nDeadline) ||
       nDeadline <= 0 ||
-      Number.isNaN(nMaxHops) || !Number.isInteger(nMaxHops) ||
+      Number.isNaN(nMaxHops) ||
+      !Number.isInteger(nMaxHops) ||
       nMaxHops <= 0
     ) {
       customToast({
@@ -115,7 +117,7 @@ const LiquiditySettingModal = ({
         </Button>
       </div>
 
-      <ButtonStyle />
+      <DividerDown />
     </CommonModal>
   );
 };

@@ -5,6 +5,7 @@ import TableStaking from './TableStaking';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import { useState } from 'react';
 import CreatePositionModal from '@/components/modal/CreatePositionModal';
+
 const data = [
   {
     tvl: '482.85',
@@ -46,10 +47,10 @@ const StakingMain = () => {
 
   return (
     <>
-      <CreatePositionModal
+      {/* <CreatePositionModal
         isOpen={isOpenCreatePosition}
         toggleOpen={toggleOpenCreatePosition}
-      />
+      /> */}
       <SelectTokenModal
         isOpen={isOpenSelectToken}
         toggleOpen={toggleOpenSelectToken}
@@ -57,7 +58,7 @@ const StakingMain = () => {
       <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <div className="font-bold text-[18px]">Poisition (Staking) </div>{' '}
+            <div className="font-bold text-[18px]">Position (Staking) </div>{' '}
             <div className="text-[14px] text-[#98A2B3] mt-1 mb-3 font-semibold">
               Create and manage all your staking positions.
             </div>

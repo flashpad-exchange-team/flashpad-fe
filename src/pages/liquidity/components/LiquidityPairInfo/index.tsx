@@ -5,6 +5,7 @@ import { ADDRESS_ZERO } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import * as routerContract from '@/utils/routerContract';
 import * as pairContract from '@/utils/pairContract';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
 import BigNumber from 'bignumber.js';
@@ -22,12 +23,14 @@ interface LiquidityPairInfoProps {
   token1Data: IPairTokenInfo;
   token2Data: IPairTokenInfo;
   isFirstLP?: boolean;
+  isSpNFT: boolean;
   reserves: any;
   pairToken1?: Address;
 }
 
 const LiquidityPairInfo = ({
   isFirstLP,
+  isSpNFT,
   token1Data,
   token2Data,
   reserves,
@@ -45,6 +48,7 @@ const LiquidityPairInfo = ({
 
   const [open, setOpen] = useState<boolean>(false);
   const [lpAddress, setLPAddress] = useState<Address>(ADDRESS_ZERO);
+  const [nftPoolAddress, setNftPoolAddress] = useState<Address>(ADDRESS_ZERO);
   const [isStableSwap, setIsStableSwap] = useState(false);
 
   const [swapRate1To2, setSwapRate1To2] = useState('-');
@@ -86,6 +90,9 @@ const LiquidityPairInfo = ({
     const address = await routerContract.getPair(token1Address, token2Address);
     setLPAddress(address || ADDRESS_ZERO);
     if (address && isFirstLP === false) {
+      const spNftPool = await nftPoolFactoryContract.getPool(address);
+      setNftPoolAddress(spNftPool || ADDRESS_ZERO);
+
       const stableSwap = await pairContract.read(address, 'stableSwap', []);
       setIsStableSwap(!!stableSwap);
 
@@ -174,6 +181,9 @@ const LiquidityPairInfo = ({
               </div>
               <div className="text-[14px] mt-1.5 ">Pool share</div>
               <div className="text-[14px] mt-1.5 ">LP address</div>
+              {isSpNFT && (
+                <div className="text-[14px] mt-1.5 ">NFT Pool address</div>
+              )}
             </div>
             <div>
               <div className="text-[14px] mt-0 text-right text-[#FFAF1D] ">
@@ -197,6 +207,11 @@ const LiquidityPairInfo = ({
               <div className="text-[14px] mt-1.5 text-right ">
                 <CopyableText text={lpAddress} />
               </div>
+              {isSpNFT && (
+                <div className="text-[14px] mt-1.5 text-right ">
+                  <CopyableText text={nftPoolAddress} />
+                </div>
+              )}
             </div>
           </div>
         </>

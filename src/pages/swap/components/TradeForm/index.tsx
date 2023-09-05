@@ -3,7 +3,7 @@ import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
-import ButtonStyle from '@/icons/ButtonStyle';
+import DividerDown from '@/icons/DividerDown';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
@@ -371,7 +371,7 @@ const TradeForm = ({
         >
           {buttonName}
         </Button>
-        <ButtonStyle />
+        <DividerDown />
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import { useLoading } from '@/context/LoadingContext';
-import ButtonStyle from '@/icons/ButtonStyle';
+import DividerDown from '@/icons/DividerDown';
 import CloseIcon from '@/icons/CloseIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
@@ -269,7 +269,7 @@ const RemoveLiquidityModal = ({
         </Button>
       </div>
 
-      <ButtonStyle />
+      <DividerDown />
     </CommonModal>
   );
 };

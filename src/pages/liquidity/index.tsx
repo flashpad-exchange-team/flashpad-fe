@@ -40,8 +40,6 @@ const Liquidity = () => {
       <>
         <div className={isAddLiquidity ? '' : 'hidden'}>
           <TradeForm
-            title="ADD LIQUIDITY"
-            buttonName="Add Liquidity"
             inputTitle1="Token 1"
             inputTitle2="Token 2"
             dividerIcon={<LiquidityIcon />}

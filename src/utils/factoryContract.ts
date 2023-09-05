@@ -1,4 +1,4 @@
-import { Address, getContract } from 'viem'
+import { Address, getContract } from 'viem';
 import { abi as ArthurFactoryABI } from '@/resources/abis/ArthurFactory.json';
 import { publicClient, walletClient } from './web3Clients';
 import {

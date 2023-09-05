@@ -1,4 +1,4 @@
-const ButtonStyle = () => {
+const DividerDown = () => {
   return (
     <svg
       width="100%"
@@ -35,4 +35,4 @@ const ButtonStyle = () => {
   );
 };
 
-export default ButtonStyle;
+export default DividerDown;

@@ -1,4 +1,4 @@
-import ButtonStyle from '@/icons/ButtonStyle';
+import DividerDown from '@/icons/DividerDown';
 import CloseIcon from '@/icons/CloseIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
@@ -138,7 +138,7 @@ const LockManageModal = ({
         </Button>
       </div>
 
-      <ButtonStyle />
+      <DividerDown />
     </CommonModal>
   );
 };

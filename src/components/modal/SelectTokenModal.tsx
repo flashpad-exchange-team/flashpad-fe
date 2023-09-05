@@ -4,7 +4,7 @@ import SwapRightIcon from '@/icons/SwapRight';
 import CloseIcon from '@/icons/CloseIcon';
 import BNBICon from '@/icons/BNBIcon';
 import { Button } from '../button/Button';
-import ButtonStyle from '@/icons/ButtonStyle';
+import DividerDown from '@/icons/DividerDown';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { CHAINS_TOKENS_LIST, IERC20TokenMetadata } from '@/utils/constants';
@@ -163,7 +163,7 @@ const SelectTokenModal = ({
       >
         Close
       </Button>
-      <ButtonStyle />
+      <DividerDown />
     </CommonModal>
   );
 };

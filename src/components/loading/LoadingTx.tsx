@@ -1,5 +1,5 @@
 import { useLoading } from '@/context/LoadingContext';
-import ButtonStyle from '@/icons/ButtonStyle';
+import DividerDown from '@/icons/DividerDown';
 import ReloadIcon from '@/icons/ReloadIcon';
 import styles from './loading.module.css';
 const LoadingTx = () => {
@@ -20,7 +20,7 @@ const LoadingTx = () => {
         <div className="text-[18px] text-[#98A2B3] mb-2">
           {loadingTxInfo?.message}
         </div>
-        <ButtonStyle />
+        <DividerDown />
       </div>
     </div>
   );
