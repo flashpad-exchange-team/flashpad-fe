@@ -68,7 +68,7 @@ const TradeForm = ({
 }: TradeFormProps) => {
   const [feature, setFeature] = useState('STAKE POSITION');
   const { address: userAddress } = useAccount();
-  const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -267,9 +267,7 @@ const TradeForm = ({
       bnToken1Amount.isGreaterThan(
         BigNumber(balanceToken1!.value.toString())
       ) ||
-      bnToken2Amount.isGreaterThan(
-        BigNumber(balanceToken2!.value.toString())
-      )
+      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
     ) {
       customToast({
         message: 'Insufficient balance!',
@@ -474,6 +472,10 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
+
+  // useEffect(() => {
+  //   startSuccessTx(handleSuccessTxMessage({}));
+  // }, []);
   return (
     <>
       <SelectTokenModal
