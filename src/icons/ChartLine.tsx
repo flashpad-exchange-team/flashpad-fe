@@ -1,5 +1,42 @@
-const ChartLine = () => {
-  return (
+const ChartLine = ({ isInButton }: any) => {
+  return isInButton ? (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_720_15809)">
+        <path
+          d="M3.33301 10.593L6.71367 7.21233C6.77553 7.15036 6.849 7.1012 6.92988 7.06766C7.01076 7.03412 7.09745 7.01686 7.18501 7.01686C7.27256 7.01686 7.35926 7.03412 7.44014 7.06766C7.52101 7.1012 7.59448 7.15036 7.65634 7.21233L9.08367 8.63966C9.14553 8.70162 9.219 8.75078 9.29988 8.78432C9.38076 8.81786 9.46745 8.83513 9.55501 8.83513C9.64256 8.83513 9.72926 8.81786 9.81014 8.78432C9.89101 8.75078 9.96448 8.70162 10.0263 8.63966L13.9997 4.66699"
+          stroke="#0C111D"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M12.2217 4.66699H13.9997V6.44499"
+          stroke="#0C111D"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M13.9999 13.9528H1.2832V2.14746"
+          stroke="#0C111D"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_720_15809">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  ) : (
     <svg
       width="32"
       height="32"

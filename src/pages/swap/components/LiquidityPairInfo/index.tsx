@@ -1,4 +1,5 @@
 import InlineLoading from '@/components/loading/InlineLoading';
+import AnimatedNumber from '@/components/number/AnimatedNumber';
 import ArrowDown from '@/icons/ArrowDown';
 import ArrowUp from '@/icons/ArrowUp';
 import { useState } from 'react';
@@ -44,10 +45,12 @@ const LiquidityPairInfo = ({
         ) : (
           <div>
             <div className="text-[14px] ">
-              1 {token1Symbol} = {swapRate1To2} {token2Symbol}{' '}
+              1 {token1Symbol} = <AnimatedNumber value={swapRate1To2} />
+              {token2Symbol}{' '}
             </div>
             <div className="text-[14px] ">
-              1 {token2Symbol} = {swapRate2To1} {token1Symbol}{' '}
+              1 {token2Symbol} = <AnimatedNumber value={swapRate2To1} />
+              {token1Symbol}{' '}
             </div>
           </div>
         )}
@@ -72,10 +75,13 @@ const LiquidityPairInfo = ({
                 {isStableSwap ? 'Stable' : 'Volatile'}
               </div>
               <div className="text-[14px] mt-1.5 text-right ">
-                {swapRate1To2} {token2Symbol}
+                <AnimatedNumber value={swapRate1To2} />
+                {/* {swapRate1To2}  */}
+                {token2Symbol}
               </div>
               <div className="text-[14px] mt-1.5 text-right ">
-                {swapRate2To1} {token1Symbol}
+                <AnimatedNumber value={swapRate2To1} />
+                {token1Symbol}
               </div>
             </div>
           </div>

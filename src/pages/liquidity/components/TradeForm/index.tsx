@@ -55,7 +55,7 @@ const TradeForm = ({
   handleClickViewExistingPosition,
 }: TradeFormProps) => {
   const { address: userAddress } = useAccount();
-  const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -165,10 +165,18 @@ const TradeForm = ({
     let adjustedToken2Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
       // adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
-      adjustedToken2Amount = web3Helpers.bnQuote(bnToken1Amount, reserve1, reserve2);
+      adjustedToken2Amount = web3Helpers.bnQuote(
+        bnToken1Amount,
+        reserve1,
+        reserve2
+      );
     } else {
       // adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
-      adjustedToken2Amount = web3Helpers.bnQuote(bnToken1Amount, reserve2, reserve1);
+      adjustedToken2Amount = web3Helpers.bnQuote(
+        bnToken1Amount,
+        reserve2,
+        reserve1
+      );
     }
     setToken2Amount(
       adjustedToken2Amount
@@ -187,10 +195,18 @@ const TradeForm = ({
     let adjustedToken1Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
       // adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
-      adjustedToken1Amount = web3Helpers.bnQuote(bnToken2Amount, reserve2, reserve1);
+      adjustedToken1Amount = web3Helpers.bnQuote(
+        bnToken2Amount,
+        reserve2,
+        reserve1
+      );
     } else {
       // adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
-      adjustedToken1Amount = web3Helpers.bnQuote(bnToken2Amount, reserve1, reserve2);
+      adjustedToken1Amount = web3Helpers.bnQuote(
+        bnToken2Amount,
+        reserve1,
+        reserve2
+      );
     }
     setToken1Amount(
       adjustedToken1Amount
@@ -230,9 +246,7 @@ const TradeForm = ({
       bnToken1Amount.isGreaterThan(
         BigNumber(balanceToken1!.value.toString())
       ) ||
-      bnToken2Amount.isGreaterThan(
-        BigNumber(balanceToken2!.value.toString())
-      )
+      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
     ) {
       customToast({
         message: 'Insufficient balance!',
@@ -264,12 +278,16 @@ const TradeForm = ({
     let token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
     if (bnToken1Amount.isGreaterThan(token1AmountIn)) {
       // token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_UP);
-      token2AmountIn = web3Helpers.bnQuote(BigNumber(token1AmountIn), reserve1, reserve2).toFixed(0, BigNumber.ROUND_DOWN);
+      token2AmountIn = web3Helpers
+        .bnQuote(BigNumber(token1AmountIn), reserve1, reserve2)
+        .toFixed(0, BigNumber.ROUND_DOWN);
     } else if (bnToken2Amount.isGreaterThan(token2AmountIn)) {
       // token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_UP);
-      token1AmountIn = web3Helpers.bnQuote(BigNumber(token2AmountIn), reserve2, reserve1).toFixed(0, BigNumber.ROUND_DOWN);
+      token1AmountIn = web3Helpers
+        .bnQuote(BigNumber(token2AmountIn), reserve2, reserve1)
+        .toFixed(0, BigNumber.ROUND_DOWN);
     }
-    console.log({token1AmountIn, token2AmountIn})
+    console.log({ token1AmountIn, token2AmountIn });
 
     if (token1.symbol != 'ETH') {
       const token1Allowance = (await erc20TokenContract.erc20Read(
@@ -388,6 +406,10 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
+
+  // useEffect(() => {
+  //   startSuccessTx(handleSuccessTxMessage({}));
+  // }, []);
   return (
     <>
       <SelectTokenModal

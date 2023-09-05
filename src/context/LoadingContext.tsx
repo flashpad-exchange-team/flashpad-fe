@@ -1,11 +1,21 @@
-import { ReactNode, createContext, useContext, useState } from 'react';
+import {
+  ReactElement,
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
 
 interface LoadingTxInfo {
   tokenPairs?: string;
   title?: string;
   message?: string;
 }
-
+interface SuccessTxInfo {
+  mainMessage?: ReactElement;
+  subMessage?: ReactElement;
+  tx?: string;
+}
 interface LoadingContextType {
   isLoading: boolean;
   startLoading: (message?: string) => void;
@@ -16,6 +26,11 @@ interface LoadingContextType {
   startLoadingTx: (message?: LoadingTxInfo) => void;
   stopLoadingTx: () => void;
   loadingTxInfo: LoadingTxInfo;
+  //success tx
+  isSuccessTx: boolean;
+  startSuccessTx: (message?: SuccessTxInfo) => void;
+  stopSuccessTx: () => void;
+  successTxInfo: SuccessTxInfo;
 }
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
@@ -25,7 +40,8 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
   const [loadingInfo, setLoadingInfo] = useState('');
   const [isLoadingTx, setLoadingTx] = useState(false);
   const [loadingTxInfo, setLoadingTxInfo] = useState({});
-
+  const [isSuccessTx, setSuccessTx] = useState(false);
+  const [successTxInfo, setSuccessTxInfo] = useState({});
   const startLoading = (message?: string) => {
     if (message) setLoadingInfo(message);
     setLoading(true);
@@ -44,6 +60,15 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
     setLoadingTxInfo('');
   };
 
+  const startSuccessTx = (message?: SuccessTxInfo) => {
+    if (message) setSuccessTxInfo(message);
+    setSuccessTx(true);
+  };
+  const stopSuccessTx = () => {
+    setSuccessTx(false);
+    setSuccessTxInfo('');
+  };
+
   return (
     <LoadingContext.Provider
       value={{
@@ -55,6 +80,10 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
         startLoadingTx,
         stopLoadingTx,
         loadingTxInfo,
+        isSuccessTx,
+        successTxInfo,
+        startSuccessTx,
+        stopSuccessTx,
       }}
     >
       {children}

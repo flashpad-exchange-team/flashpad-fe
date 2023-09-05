@@ -9,6 +9,7 @@ import { useAccount } from 'wagmi';
 import { Address } from 'viem';
 import BigNumber from 'bignumber.js';
 import InlineLoading from '@/components/loading/InlineLoading';
+import AnimatedNumber from '@/components/number/AnimatedNumber';
 
 interface IPairTokenInfo {
   symbol?: string;
@@ -141,10 +142,12 @@ const LiquidityPairInfo = ({
         ) : (
           <div>
             <div className="text-[14px] ">
-              1 {token1Symbol} = {ratioToken1Token2} {token2Symbol}{' '}
+              1 {token1Symbol} = <AnimatedNumber value={ratioToken1Token2} />{' '}
+              {token2Symbol}{' '}
             </div>
             <div className="text-[14px] ">
-              1 {token2Symbol} = {ratioToken2Token1} {token1Symbol}{' '}
+              1 {token2Symbol} = <AnimatedNumber value={ratioToken2Token1} />{' '}
+              {token1Symbol}{' '}
             </div>
           </div>
         )}
