@@ -39,6 +39,7 @@ import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import Select from '@/components/select';
 import CreatePositionModal from '@/components/modal/CreatePositionModal';
+import { handleSuccessTxMessage } from '@/components/successTxMessage';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -419,6 +420,13 @@ const TradeForm = ({
       message: 'Added liquidity successfully',
       type: 'success',
     });
+
+    startSuccessTx(handleSuccessTxMessage({
+      action: 'provided liquidity',
+      token1: token1.symbol,
+      token2: token2.symbol,
+      txHash: hash,
+    }));
   };
 
   const handleCreatePosition = async () => {
@@ -473,9 +481,6 @@ const TradeForm = ({
     setToken2Amount('0');
   };
 
-  // useEffect(() => {
-  //   startSuccessTx(handleSuccessTxMessage({}));
-  // }, []);
   return (
     <>
       <SelectTokenModal

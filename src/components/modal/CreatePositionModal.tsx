@@ -16,6 +16,7 @@ import * as pairContract from '@/utils/pairContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { daysToSeconds } from '@/utils/web3Helpers';
 import { useLoading } from '@/context/LoadingContext';
+import { handleSuccessTxMessage } from '@/components/successTxMessage';
 
 export interface CreatePositionModalProps {
   isOpen: boolean;
@@ -49,7 +50,7 @@ const CreatePositionModal = ({
   token1Data,
   token2Data,
 }: CreatePositionModalProps) => {
-  const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
   const { address: userAddress } = useAccount();
   const [lockTime, setLockTime] = useState(DEFAULT_TIME_LOCK);
@@ -164,6 +165,13 @@ const CreatePositionModal = ({
       message: 'Created stake position successfully',
       type: 'success',
     });
+
+    startSuccessTx(handleSuccessTxMessage({
+      action: 'created staking position',
+      token1: token1Data.symbol,
+      token2: token2Data.symbol,
+      txHash: hash,
+    }));
   };
 
   return (

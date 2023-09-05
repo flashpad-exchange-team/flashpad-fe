@@ -1,11 +1,13 @@
 import { useLoading } from '@/context/LoadingContext';
 import ButtonStyle from '@/icons/ButtonStyle';
-import ReloadIcon from '@/icons/ReloadIcon';
-import styles from './loading.module.css';
+// import ReloadIcon from '@/icons/ReloadIcon';
+// import styles from './loading.module.css';
 import CloseIcon from '@/icons/CloseIcon';
 import SuccessIcon from '@/icons/SuccessIcon';
 import { Button } from '../button/Button';
 import ChartLine from '@/icons/ChartLine';
+import { CHAIN_EXPLORER_URL } from '@/utils/constants';
+
 const SuccessTx = () => {
   const { isSuccessTx, stopSuccessTx, successTxInfo } = useLoading();
 
@@ -34,11 +36,14 @@ const SuccessTx = () => {
           <Button
             className="px-4 mx-auto !py-2"
             onClick={() => {
-              console.log(successTxInfo?.tx);
-              // Go to tx + scan url
+              const txHash = successTxInfo?.tx;
+              console.log({ txHash });
+              if (txHash) {
+                window.open(`${CHAIN_EXPLORER_URL}/tx/${txHash}`, '_blank');
+              }
             }}
           >
-            <ChartLine isInButton /> Tx
+            <ChartLine isInButton /> View Tx
           </Button>
         </div>
 
