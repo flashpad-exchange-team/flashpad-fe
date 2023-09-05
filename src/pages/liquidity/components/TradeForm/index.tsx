@@ -55,7 +55,7 @@ const TradeForm = ({
   handleClickViewExistingPosition,
 }: TradeFormProps) => {
   const { address: userAddress } = useAccount();
-  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  const { startLoadingTx, stopLoadingTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);

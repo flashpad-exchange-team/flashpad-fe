@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const handleSuccessTxMessage = (params: any) => {
+export const handleSuccessTxMessage = () => {
   return {
     mainMessage: (
       <div>
@@ -27,3 +27,7 @@ export const handleSuccessTxMessage = (params: any) => {
     ),
   };
 };
+
+export default function Utils() {
+  return <div></div>;
+}

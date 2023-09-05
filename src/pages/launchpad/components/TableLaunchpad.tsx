@@ -1,4 +1,3 @@
-import ArrowLeft from '@/icons/ArrowLeft';
 import BNBICon from '@/icons/BNBIcon';
 import Eligibility from '@/icons/Eligibility';
 import { useRouter } from 'next/router';

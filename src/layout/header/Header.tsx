@@ -73,17 +73,17 @@ const MENU_ITEMS = [
     path: '/launchpad',
     subMenu: [
       {
-        name: 'launchpad',
+        name: 'Launchpad',
         path: '/launchpad',
         icon: <SwapIcon />,
       },
       {
-        name: 'launchpad detail',
+        name: 'Launchpad detail',
         path: '/launchpad-detail',
         icon: <Liquidity width="18px" />,
       },
       {
-        name: 'fair launchpad',
+        name: 'Fair launchpad',
         path: '/fair-launchpad',
         icon: <Swap width="18px" />,
       },

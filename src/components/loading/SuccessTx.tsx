@@ -1,11 +1,9 @@
 import { useLoading } from '@/context/LoadingContext';
 import ButtonStyle from '@/icons/ButtonStyle';
-import ReloadIcon from '@/icons/ReloadIcon';
-import styles from './loading.module.css';
+import ChartLine from '@/icons/ChartLine';
 import CloseIcon from '@/icons/CloseIcon';
 import SuccessIcon from '@/icons/SuccessIcon';
 import { Button } from '../button/Button';
-import ChartLine from '@/icons/ChartLine';
 const SuccessTx = () => {
   const { isSuccessTx, stopSuccessTx, successTxInfo } = useLoading();
 
