@@ -13,6 +13,7 @@ export interface SelectProps {
   value?: any;
   disabled?: boolean;
   placeHolder?: string;
+  onChange?: (value: any) => void;
 }
 
 const customStyles: any = {
@@ -24,7 +25,7 @@ const customStyles: any = {
     '&:focus': {
       boxShadow: 'none',
     },
-    width: '130px',
+    width: 'fit-content',
     color: '#fff',
     '& input ': {
       display: 'none',
@@ -63,6 +64,7 @@ const Select = ({
   value,
   disabled,
   placeHolder,
+  onChange,
 }: SelectProps) => {
   const CustomSingleValue: React.FC<SingleValueProps> = ({ children }) => (
     <div className="flex items-center gap-2">
@@ -80,6 +82,7 @@ const Select = ({
       isSearchable={false}
       isDisabled={disabled}
       placeholder={placeHolder}
+      onChange={onChange}
     />
   );
 };

@@ -1,16 +1,37 @@
-import ArrowDownBig from '@/icons/ArrowDownBig';
 import BNBICon from '@/icons/BNBIcon';
-import ButtonStyle from '@/icons/ButtonStyle';
 import CloseIcon from '@/icons/CloseIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import { useState } from 'react';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
+import Image from 'next/image';
+import { Address } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
+import { waitForTransaction } from '@wagmi/core';
+import { DEFAULT_TIME_LOCK, MAX_UINT256 } from '@/utils/constants';
+import BigNumber from 'bignumber.js';
+import customToast from '../notification/customToast';
+import * as pairContract from '@/utils/pairContract';
+import * as nftPoolContract from '@/utils/nftPoolContract';
+import { daysToSeconds } from '@/utils/web3Helpers';
+import { useLoading } from '@/context/LoadingContext';
 
 export interface CreatePositionModalProps {
   isOpen: boolean;
   toggleOpen: () => void;
+  lpAddress?: Address;
+  nftPoolAddress?: Address;
+  token1Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  token2Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
 }
 
 enum LockTimeOptions {
@@ -23,16 +44,128 @@ enum LockTimeOptions {
 const CreatePositionModal = ({
   toggleOpen,
   isOpen,
+  lpAddress,
+  nftPoolAddress,
+  token1Data,
+  token2Data,
 }: CreatePositionModalProps) => {
-  const [lockTime, setLockTime] = useState('14');
+  const { startLoadingTx, stopLoadingTx } = useLoading();
+
+  const { address: userAddress } = useAccount();
+  const [lockTime, setLockTime] = useState(DEFAULT_TIME_LOCK);
   const [lockTimeOption, setLockTimeOption] = useState<LockTimeOptions>(
     LockTimeOptions.TWO_WEEKS
   );
+  const [stakeAmount, setStakeAmount] = useState('0');
 
   const is2WeeksSelected = lockTimeOption == LockTimeOptions.TWO_WEEKS;
   const is1MonthSelected = lockTimeOption == LockTimeOptions.ONE_MONTH;
   const is3MonthsSelected = lockTimeOption == LockTimeOptions.THREE_MONTHS;
   const isCustomSelected = lockTimeOption == LockTimeOptions.CUSTOM;
+
+  const { data: balanceLP } = useBalance({
+    address: isOpen ? userAddress : undefined,
+    token: lpAddress,
+    watch: true,
+  });
+
+  const resetInput = () => {
+    setStakeAmount('0');
+    setLockTime('14');
+    setLockTimeOption(LockTimeOptions.TWO_WEEKS);
+  };
+
+  const handleCreatePosition = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      })
+      return;
+    }
+
+    if (!balanceLP) {
+      customToast({
+        message: 'Could not get LP balance info',
+        type: 'error',
+      });
+      return;
+    }
+
+    let bnStakeAmount = BigNumber(stakeAmount);
+    const nLockTime = Number(lockTime);
+
+    if (
+      bnStakeAmount.isNaN() ||
+      bnStakeAmount.isLessThanOrEqualTo(0) ||
+      bnStakeAmount.isGreaterThan(balanceLP?.formatted!) ||
+      Number.isNaN(nLockTime) ||
+      !Number.isInteger(nLockTime) ||
+      nLockTime <= 0
+    ) {
+      customToast({
+        message: 'Please input valid amount and lock time',
+        type: 'error',
+      });
+      return;
+    }
+
+    bnStakeAmount = bnStakeAmount.times(
+      BigNumber(10).pow(balanceLP?.decimals!)
+    );
+
+    startLoadingTx({
+      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+      title: 'Creating Stake Position ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
+    const lpAllowance = (await pairContract.read(
+      lpAddress!,
+      'allowance',
+      [userAddress, nftPoolAddress]
+    )) as bigint;
+
+    if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmount)) {
+      const approveRes = await pairContract.write(
+        userAddress!,
+        lpAddress!,
+        'approve',
+        [nftPoolAddress, MAX_UINT256]
+      );
+      if (!approveRes) {
+        stopLoadingTx();
+        return;
+      }
+
+      const approveHash = approveRes.hash;
+      const txReceipt = await waitForTransaction({ hash: approveHash });
+      console.log({ txReceipt });
+    }
+
+    const txResult = await nftPoolContract.write(
+      userAddress,
+      nftPoolAddress!,
+      'createPosition',
+      [bnStakeAmount, daysToSeconds(nLockTime) + '']
+    );
+
+    if (!txResult) {
+      stopLoadingTx();
+      return;
+    }
+
+    const hash = txResult.hash;
+    const txReceipt = await waitForTransaction({ hash });
+    console.log({ txReceipt });
+    resetInput();
+    stopLoadingTx();
+    customToast({
+      message: 'Created stake position successfully',
+      type: 'success',
+    });
+  };
+
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} height="666px">
       <div className="flex items-center justify-between w-full">
@@ -46,11 +179,29 @@ const CreatePositionModal = ({
         </div>
       </div>
       <div className="text-[16px] font-semibold mb-3 flex items-center gap-2 w-fit mx-auto">
-        <BNBICon size="54" />
+        {token1Data.logo ? (
+          <Image alt="logo" src={token1Data.logo} width={54} height={54} />
+        ) : (
+          <BNBICon size={54} />
+        )}
         <div>
-          <div className="text-[14px]"> Token</div>
+          <div className="text-[14px]">Token</div>
           <div className="text-[22px] flex items-center gap-2">
-            USDC <ArrowDownBig />
+            {token1Data.symbol}
+          </div>
+        </div>
+
+        <div className="text-[22px] ml-3 mr-3">-</div>
+
+        {token2Data.logo ? (
+          <Image alt="logo" src={token2Data.logo} width={54} height={54} />
+        ) : (
+          <BNBICon size={54} />
+        )}
+        <div>
+          <div className="text-[14px]">Token</div>
+          <div className="text-[22px] flex items-center gap-2">
+            {token2Data.symbol}
           </div>
         </div>
       </div>
@@ -59,15 +210,19 @@ const CreatePositionModal = ({
         <input
           className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
           placeholder="Enter value "
+          value={stakeAmount}
+          onChange={(event) => setStakeAmount(event.target.value)}
         />
         <div
           className="text-[12px] font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer absolute top-[20px] right-[20px]"
-          // onClick={() => setAmountToRemove(totalLiquidity)}
+          onClick={() => setStakeAmount(balanceLP?.formatted || '0')}
         >
           Max
         </div>
       </div>
-      <div className=" mb-3 text-[15px]">Balance: 0</div>
+      <div className=" mb-3 text-[15px]">
+        Balance: {balanceLP?.formatted || '?'} LP tokens
+      </div>
       <div className="text-[15px]">Lock duration (days)</div>
       <div className="flex gap-2 items-center my-2">
         <div
@@ -139,12 +294,13 @@ const CreatePositionModal = ({
         </div>
       </div>
       <div className="block lg:flex items-center gap-2">
-        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]">
+        <Button
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          onClick={handleCreatePosition}
+        >
           Create
         </Button>
       </div>
-
-      <ButtonStyle />
     </CommonModal>
   );
 };

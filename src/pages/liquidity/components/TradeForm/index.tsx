@@ -28,6 +28,7 @@ import {
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as factoryContract from '@/utils/factoryContract';
 import * as routerContract from '@/utils/routerContract';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -36,10 +37,23 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import Select from '@/components/select';
+import CreatePositionModal from '@/components/modal/CreatePositionModal';
+
+const FEATURE_PROPS: { [k: string]: any } = {
+  'ADD LIQUIDITY': {
+    value: 'ADD LIQUIDITY',
+    label: 'Add Liquidity',
+    buttonName: 'Add Liquidity',
+  },
+  'STAKE POSITION': {
+    value: 'STAKE POSITION',
+    label: 'Stake position',
+    buttonName: 'Create Position',
+  },
+};
 
 interface TradeFormProps {
-  title: string;
-  buttonName: string;
   inputTitle1: string;
   inputTitle2: string;
   dividerIcon: React.ReactNode;
@@ -47,19 +61,23 @@ interface TradeFormProps {
 }
 
 const TradeForm = ({
-  title,
-  buttonName,
   inputTitle1,
   inputTitle2,
   dividerIcon,
   handleClickViewExistingPosition,
 }: TradeFormProps) => {
+  const [feature, setFeature] = useState('STAKE POSITION');
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [isOpenLockManage, setOpenLockManage] = useState<boolean>(false);
+  const [isOpenCreatePosition, setOpenCreatePosition] =
+    useState<boolean>(false);
+  const toggleOpenCreatePosition = () => {
+    setOpenCreatePosition(!isOpenCreatePosition);
+  };
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>(null);
   const [token2, setToken2] = useState<any>(null);
@@ -67,6 +85,9 @@ const TradeForm = ({
   const [token2Amount, setToken2Amount] = useState<string>('0');
   const [insufficient, setInsufficient] = useState(false);
   const [pairAddress, setPairAddress] = useState<Address | undefined>(
+    undefined
+  );
+  const [nftPoolAddress, setNftPoolAddress] = useState<Address | undefined>(
     undefined
   );
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
@@ -165,10 +186,18 @@ const TradeForm = ({
     let adjustedToken2Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
       // adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
-      adjustedToken2Amount = web3Helpers.bnQuote(bnToken1Amount, reserve1, reserve2);
+      adjustedToken2Amount = web3Helpers.bnQuote(
+        bnToken1Amount,
+        reserve1,
+        reserve2
+      );
     } else {
       // adjustedToken2Amount = reserve1.times(bnToken1Amount).div(reserve2);
-      adjustedToken2Amount = web3Helpers.bnQuote(bnToken1Amount, reserve2, reserve1);
+      adjustedToken2Amount = web3Helpers.bnQuote(
+        bnToken1Amount,
+        reserve2,
+        reserve1
+      );
     }
     setToken2Amount(
       adjustedToken2Amount
@@ -187,10 +216,18 @@ const TradeForm = ({
     let adjustedToken1Amount;
     if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
       // adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
-      adjustedToken1Amount = web3Helpers.bnQuote(bnToken2Amount, reserve2, reserve1);
+      adjustedToken1Amount = web3Helpers.bnQuote(
+        bnToken2Amount,
+        reserve2,
+        reserve1
+      );
     } else {
       // adjustedToken1Amount = reserve2.times(bnToken2Amount).div(reserve1);
-      adjustedToken1Amount = web3Helpers.bnQuote(bnToken2Amount, reserve1, reserve2);
+      adjustedToken1Amount = web3Helpers.bnQuote(
+        bnToken2Amount,
+        reserve1,
+        reserve2
+      );
     }
     setToken1Amount(
       adjustedToken1Amount
@@ -264,12 +301,16 @@ const TradeForm = ({
     let token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
     if (bnToken1Amount.isGreaterThan(token1AmountIn)) {
       // token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_UP);
-      token2AmountIn = web3Helpers.bnQuote(BigNumber(token1AmountIn), reserve1, reserve2).toFixed(0, BigNumber.ROUND_DOWN);
+      token2AmountIn = web3Helpers
+        .bnQuote(BigNumber(token1AmountIn), reserve1, reserve2)
+        .toFixed(0, BigNumber.ROUND_DOWN);
     } else if (bnToken2Amount.isGreaterThan(token2AmountIn)) {
       // token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_UP);
-      token1AmountIn = web3Helpers.bnQuote(BigNumber(token2AmountIn), reserve2, reserve1).toFixed(0, BigNumber.ROUND_DOWN);
+      token1AmountIn = web3Helpers
+        .bnQuote(BigNumber(token2AmountIn), reserve2, reserve1)
+        .toFixed(0, BigNumber.ROUND_DOWN);
     }
-    console.log({token1AmountIn, token2AmountIn})
+    console.log({ token1AmountIn, token2AmountIn });
 
     if (token1.symbol != 'ETH') {
       const token1Allowance = (await erc20TokenContract.erc20Read(
@@ -382,6 +423,51 @@ const TradeForm = ({
     });
   };
 
+  const handleCreatePosition = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      })
+      return;
+    }
+    
+    let spNftPool: any;
+    if (pairAddress) {
+      spNftPool = await nftPoolFactoryContract.getPool(pairAddress);
+
+      if (!spNftPool || spNftPool === ADDRESS_ZERO) {
+        startLoadingTx({
+          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+          title: 'Creating spNFT pool ...',
+          message: 'Confirming your transaction. Please wait.',
+        });
+        const createPoolRes = await nftPoolFactoryContract.createPool(
+          userAddress,
+          {
+            lpTokenAddress: pairAddress
+          }
+        );
+
+        if (!createPoolRes) {
+          stopLoadingTx();
+          setSuccessful(false);
+          setFailed(true);
+          return;
+        }
+
+        const hash = createPoolRes.hash;
+        spNftPool = createPoolRes.result;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
+        stopLoadingTx();
+      }
+
+      setNftPoolAddress(spNftPool);
+      toggleOpenCreatePosition();
+    }
+  };
+
   const handleSwitchPair = () => {
     setToken1(token2);
     setToken2(token1);
@@ -405,10 +491,30 @@ const TradeForm = ({
         toggleOpen={toggleLockManage}
         saveTimeLock={saveTimeLock}
       />
+      <CreatePositionModal
+        isOpen={isOpenCreatePosition}
+        toggleOpen={toggleOpenCreatePosition}
+        lpAddress={pairAddress}
+        nftPoolAddress={nftPoolAddress}
+        token1Data={{
+          symbol: token1 ? token1.symbol : '',
+          logo: token1 ? token1.logoURI : '',
+        }}
+        token2Data={{
+          symbol: token2 ? token2.symbol : '',
+          logo: token2 ? token2.logoURI : '',
+        }}
+      />
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] font-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />
-          {title}
+          <Select
+            options={Object.values(FEATURE_PROPS)}
+            value={FEATURE_PROPS[feature]}
+            onChange={(option) => {
+              setFeature(option.value);
+            }}
+          />
           <SwapRightIcon />
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
@@ -468,6 +574,7 @@ const TradeForm = ({
             pairToken1={pairToken1 as Address}
             reserves={reserves as any}
             isFirstLP={isFirstLP}
+            isSpNFT={feature === 'STAKE POSITION'}
             token1Data={{
               address: token1?.address,
               symbol: token1?.symbol,
@@ -489,9 +596,9 @@ const TradeForm = ({
           <Notification message="Please connect to a Wallet" type="error" />
         )} */}
         {successful && (
-          <Notification message="Add liquidity successfully" type="success" />
+          <Notification message={`${FEATURE_PROPS[feature].buttonName} successfully`} type="success" />
         )}
-        {failed && <Notification message="Add liquidity failed" type="error" />}
+        {failed && <Notification message={`${FEATURE_PROPS[feature].buttonName} failed`} type="error" />}
         {isFirstLP && (
           <Notification
             message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
@@ -518,13 +625,17 @@ const TradeForm = ({
           <BackIcon /> Back to Pool list
         </div>
         <Button
-          onClick={() => handleAddLiquidity()}
+          onClick={() => {
+            (feature === 'ADD LIQUIDITY')
+              ? handleAddLiquidity()
+              : handleCreatePosition();
+          }}
           className="w-full justify-center  mb-2 px-[42px]"
           disabled={
             !token1 || !token2 || !userAddress || !token1Amount || !token2Amount
           }
         >
-          {buttonName}
+          {FEATURE_PROPS[feature]?.buttonName}
         </Button>
         <ButtonStyle />
       </div>
