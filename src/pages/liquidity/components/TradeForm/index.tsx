@@ -37,7 +37,6 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import Select from '@/components/select';
 import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import { handleSuccessTxMessage } from '@/components/successTxMessage';
 
@@ -97,6 +96,11 @@ const TradeForm = ({
 
   const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
+  const [activeTab, setActiveTab] = useState(1);
+
+  const switchTab = (tabNumber: number) => {
+    setActiveTab(tabNumber);
+  };
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
@@ -517,13 +521,7 @@ const TradeForm = ({
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-[24px] font-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />
-          <Select
-            options={Object.values(FEATURE_PROPS)}
-            value={FEATURE_PROPS[feature]}
-            onChange={(option) => {
-              setFeature(option.value);
-            }}
-          />
+          {FEATURE_PROPS[feature].label}
           <SwapRightIcon />
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
@@ -537,6 +535,20 @@ const TradeForm = ({
             <LockManageIcon onClick={toggleLockManage} />
             <SettingIcon onClick={toggleOpenSetting} />
           </div>
+        </div>
+        <div className="flex bg-[#150E3980] mt-3 rounded-lg">
+          {Object.keys(FEATURE_PROPS).map((key: string) => (
+            <button
+              className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
+                feature === key
+                  ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
+                  : ''
+              }`}
+              onClick={() => setFeature(FEATURE_PROPS[key].value)}
+            >
+              {FEATURE_PROPS[key].label}
+            </button>
+          ))}
         </div>
         <TokenForm
           openModal={() => {
