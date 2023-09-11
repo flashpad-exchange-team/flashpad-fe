@@ -44,6 +44,9 @@ module.exports = {
       fontFamily: {
         rem: ['REM', 'sans-serif'],
       },
+      backgroundColor: {
+        'blue-opacity-50': 'rgba(21, 14, 57, 0.50)',
+      },
     },
   },
   plugins: [],

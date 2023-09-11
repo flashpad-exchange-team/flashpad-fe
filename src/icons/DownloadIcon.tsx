@@ -1,4 +1,4 @@
-const DownloadIcon = () => {
+const DownloadIcon = ({ stroke }: any) => {
   return (
     <svg
       width="20"
@@ -9,7 +9,7 @@ const DownloadIcon = () => {
     >
       <path
         d="M1 19H19M10 1V15M10 15L17 8M10 15L3 8"
-        stroke="#0A071E"
+        stroke={stroke || '#0A071E'}
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
