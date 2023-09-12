@@ -4,7 +4,6 @@ import UploadIcon from '@/icons/UploadIcon';
 import TableStaking from './TableStaking';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import { useState } from 'react';
-import CreatePositionModal from '@/components/modal/CreatePositionModal';
 
 const data = [
   {

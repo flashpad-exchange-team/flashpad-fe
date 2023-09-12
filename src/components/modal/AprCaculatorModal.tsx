@@ -19,7 +19,7 @@ const AprCaculatorModal = ({
   isOpen,
   saveTimeLock,
 }: LockManageModalProps) => {
-  const [lockTime, setLockTime] = useState('14');
+  const [lockTime] = useState('14');
 
   const handleConfirmLock = () => {
     const nLockTime = Number(lockTime);

@@ -16,7 +16,7 @@ import * as pairContract from '@/utils/pairContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { daysToSeconds } from '@/utils/web3Helpers';
 import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessage } from '@/components/successTxMessage';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
 import DividerDown from '@/icons/DividerDown';
 
 export interface CreatePositionModalProps {
@@ -82,7 +82,7 @@ const CreatePositionModal = ({
       customToast({
         message: 'A wallet is not yet connected',
         type: 'error',
-      })
+      });
       return;
     }
 
@@ -122,11 +122,10 @@ const CreatePositionModal = ({
       message: 'Confirming your transaction. Please wait.',
     });
 
-    const lpAllowance = (await pairContract.read(
-      lpAddress!,
-      'allowance',
-      [userAddress, nftPoolAddress]
-    )) as bigint;
+    const lpAllowance = (await pairContract.read(lpAddress!, 'allowance', [
+      userAddress,
+      nftPoolAddress,
+    ])) as bigint;
 
     if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmount)) {
       const approveRes = await pairContract.write(
@@ -167,12 +166,14 @@ const CreatePositionModal = ({
       type: 'success',
     });
 
-    startSuccessTx(handleSuccessTxMessage({
-      action: 'created staking position',
-      token1: token1Data.symbol,
-      token2: token2Data.symbol,
-      txHash: hash,
-    }));
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: 'created staking position',
+        token1: token1Data.symbol,
+        token2: token2Data.symbol,
+        txHash: hash,
+      })
+    );
   };
 
   return (
@@ -306,11 +307,11 @@ const CreatePositionModal = ({
         <Button
           className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
           onClick={handleCreatePosition}
-          >
+        >
           Create
         </Button>
       </div>
-      <DividerDown/>
+      <DividerDown />
     </CommonModal>
   );
 };

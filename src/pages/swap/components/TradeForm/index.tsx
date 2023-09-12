@@ -26,6 +26,7 @@ import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import { handleSuccessTxMessageSwap } from '@/components/successTxMessage';
 
 interface TradeFormProps {
   title: string;
@@ -43,7 +44,7 @@ const TradeForm = ({
   dividerIcon,
 }: TradeFormProps) => {
   const { address: userAddress } = useAccount();
-  const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -231,10 +232,21 @@ const TradeForm = ({
     const hash = txResult.hash;
     // const txReceipt =
     await waitForTransaction({ hash });
-    customToast({
-      message: `Swap ${token1Amount} ${token1.symbol} to ${token2Amount} ${token2.symbol} successfully`,
-      type: 'success',
-    });
+    hash;
+    startSuccessTx(
+      handleSuccessTxMessageSwap({
+        action: 'swapped',
+        token1: token1.symbol,
+        token2: token2.symbol,
+        token1Amount,
+        token2Amount,
+        txHash: hash,
+      })
+    );
+    // customToast({
+    //   message: `Swap ${token1Amount} ${token1.symbol} to ${token2Amount} ${token2.symbol} successfully`,
+    //   type: 'success',
+    // });
     resetInput();
     stopLoadingTx();
   };

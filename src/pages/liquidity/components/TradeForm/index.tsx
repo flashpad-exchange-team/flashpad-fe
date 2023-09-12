@@ -1,4 +1,5 @@
 import { Button } from '@/components/button/Button';
+import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import LiquiditySettingModal, {
   ILiquiditySettings,
 } from '@/components/modal/LiquiditySettingModal';
@@ -6,6 +7,7 @@ import LockManageModal from '@/components/modal/LockManageModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
 import BackIcon from '@/icons/BackIcon';
 import DividerDown from '@/icons/DividerDown';
@@ -27,8 +29,8 @@ import {
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as factoryContract from '@/utils/factoryContract';
-import * as routerContract from '@/utils/routerContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
+import * as routerContract from '@/utils/routerContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -37,8 +39,6 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import CreatePositionModal from '@/components/modal/CreatePositionModal';
-import { handleSuccessTxMessage } from '@/components/successTxMessage';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -96,11 +96,6 @@ const TradeForm = ({
 
   const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
-  const [activeTab, setActiveTab] = useState(1);
-
-  const switchTab = (tabNumber: number) => {
-    setActiveTab(tabNumber);
-  };
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
@@ -426,7 +421,7 @@ const TradeForm = ({
     });
 
     startSuccessTx(
-      handleSuccessTxMessage({
+      handleSuccessTxMessageCreatePositionAndLiquidity({
         action: 'provided liquidity',
         token1: token1.symbol,
         token2: token2.symbol,

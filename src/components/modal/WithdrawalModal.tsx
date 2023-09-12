@@ -17,7 +17,7 @@ const WithdrawalModal = ({
   isOpen,
   saveTimeLock,
 }: LockManageModalProps) => {
-  const [lockTime, setLockTime] = useState('14');
+  const [lockTime, _] = useState('14');
 
   const handleConfirmLock = () => {
     const nLockTime = Number(lockTime);
