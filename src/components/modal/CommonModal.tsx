@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import ReactModal from 'react-modal';
-import styles from './modal.module.css';
+import React, { useEffect, useRef } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,50 +7,46 @@ interface ModalProps {
   height?: string;
   className?: string;
   paddingBottom?: string;
+  width?: string;
 }
 
 const CommonModal: React.FC<ModalProps> = ({
   isOpen,
   onRequestClose,
   children,
-  height,
-  paddingBottom,
-  className,
+  width,
 }) => {
+  const modalRef = useRef(null as any);
+  const handleClickOutside = (e: any) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      onRequestClose();
+    }
+  };
   useEffect(() => {
-    if (isOpen) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = 'unset';
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [isOpen]);
-  return (
-    <ReactModal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      ariaHideApp={false} // Prevents an accessibility issue
-      style={{
-        overlay: {
-          backgroundColor: '#000000E5', // Overlay background color
-        },
-        content: {
-          border: 'none', // Remove border
-          borderRadius: '8px', // Customize border radius
-          padding: '20px', // Customize padding
-          top: '50%', // Center vertically
-          left: '50%', // Center horizontally
-          transform: 'translate(-50%, -50%)', // Center content
-          backgroundColor: '#0A071E',
-          height: height || 700,
-          overflow: 'hidden',
-          position: 'fixed',
-          paddingBottom,
-        },
-      }}
-      className={`${styles.modal} ${
-        className === 'big-modal' && styles.bigModal
-      }`}
-    >
-      {children}
-    </ReactModal>
-  );
+
+  return isOpen ? (
+    <>
+      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-[#000000E5]">
+        <div
+          ref={modalRef}
+          className={`relative w-auto my-6 mx-auto max-w-[90vw] bg-[#0A071E] p-[20px] pb-[30px]`}
+          style={{ width }}
+        >
+          {children}
+        </div>
+      </div>
+    </>
+  ) : null;
 };
 
 export default CommonModal;

@@ -16,13 +16,7 @@ const ConnectWalletModal = ({
 
   const isSmallScreen = windowWidth <= 900;
   return (
-    <CommonModal
-      isOpen={isOpen}
-      onRequestClose={toggleOpen}
-      height={isSmallScreen ? '600px' : '378px'}
-      className="big-modal"
-      paddingBottom={'0'}
-    >
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width={'872px'}>
       {isSmallScreen ? (
         <ConnectWalletMobile toggleOpen={toggleOpen} />
       ) : (

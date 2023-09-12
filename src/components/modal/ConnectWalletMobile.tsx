@@ -3,7 +3,6 @@ import Coinbase from '@/icons/Coinbase';
 import ConnectSuccess from '@/icons/ConnectSuccess';
 import InfoIcon from '@/icons/InfoIcon';
 import Metamask from '@/icons/Metamask';
-import ProgressBar from '@/icons/ProgressBar';
 import WalletConnect from '@/icons/WalletConnect';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
@@ -97,7 +96,6 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
             : 'Connecting your wallet is like “logging in” to Web3. Select your wallet form the options to get started.'}
         </div>
         <Notification message="I don't have a wallet" type="info" />
-        <ProgressBar active={isConnected} />
       </div>
     </div>
   );

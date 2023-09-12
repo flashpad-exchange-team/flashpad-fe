@@ -2,40 +2,14 @@ import DividerDown from '@/icons/DividerDown';
 import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
-import { useState } from 'react';
-import customToast from '../notification/customToast';
 import BNBICon from '@/icons/BNBIcon';
 
 export interface LockManageModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-  saveTimeLock: (value: number) => void;
 }
 
-const HarvestModal = ({
-  toggleOpen,
-  isOpen,
-  saveTimeLock,
-}: LockManageModalProps) => {
-  const [lockTime, _] = useState('14');
-
-  const handleConfirmLock = () => {
-    const nLockTime = Number(lockTime);
-    if (
-      Number.isNaN(nLockTime) ||
-      !Number.isInteger(nLockTime) ||
-      nLockTime <= 0
-    ) {
-      customToast({
-        message: 'Please input valid number',
-        type: 'error',
-      });
-      return;
-    }
-    saveTimeLock(nLockTime);
-    toggleOpen();
-  };
-
+const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} height="600px">
       <div className="flex items-center justify-center w-full">
@@ -123,10 +97,7 @@ const HarvestModal = ({
         >
           Cancel
         </Button>
-        <Button
-          onClick={handleConfirmLock}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
-        >
+        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]">
           Withdraw
         </Button>
       </div>

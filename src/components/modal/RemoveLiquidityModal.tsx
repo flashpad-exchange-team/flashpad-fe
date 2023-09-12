@@ -220,7 +220,7 @@ const RemoveLiquidityModal = ({
   };
 
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} height="420px">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
         <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
