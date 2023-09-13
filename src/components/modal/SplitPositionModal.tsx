@@ -3,20 +3,17 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
-import CurrencyDollar from '@/icons/CurrencyDollar';
-import SaleIcon from '@/icons/SaleIcon';
-import CalendarIcon from '@/icons/CalendarIcon';
-import UnlockIcon from '@/icons/UnlockIcon';
-import ArrowRight from '@/icons/ArrowRight';
-import Error from '@/icons/Error';
 
-export interface AddPositionModalProps {
+export interface SplitPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   saveTimeLock: (value: number) => void;
 }
 
-const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
+const SplitPositionModal = ({
+  toggleOpen,
+  isOpen,
+}: SplitPositionModalProps) => {
   const handleStake = () => {};
 
   return (
@@ -41,49 +38,25 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
         </div>
       </div>
       <div className="text-[15px] text-center text-[24px]">
-        <span className="text-[#E6B300] font-bold">Add</span> your position
+        <span className="text-[#E6B300] font-bold">Split</span> your position
       </div>
       <div className="text-center text-[#667085] mb-5">
-        Deposit more into this spNFT to increase your yield.
+        Send your spNFT to a new address
       </div>
-      <div className="text-center">More action</div>
-      <div className="text-[14px] my-4">
-        You need to own NAME - NAME LP tokens to directly add more liquidity to
-        this poisition. If that’s not the case, head to the liquidity page that.
-      </div>
-      <div className="px-2 pt-4 bg-blue-opacity-50 flex justify-between mt-2">
+      <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Amount to split</div>
+      <div className="p-2 bg-blue-opacity-50 flex justify-between">
         <div className="text-[#98A2B3]">Amount</div>
-        <div>0</div>
+        <div>0.0000000004564</div>
       </div>
-      <div className="px-2 pb-4 bg-blue-opacity-50 flex justify-between mb-2">
-        <div className="text-[#fff]">Balance: 0</div>
+      <div className="px-2 bg-blue-opacity-50 flex justify-between">
+        <div className="text-[#fff]">Balance: 0.0000000000 Name - Name</div>
         <Button className="w-[50px] h-[10px] rounded-none flex justify-center items-center">
           Max
         </Button>
       </div>
-      <div className="py-2 bg-blue-opacity-50">
-        <div className="text-[#fff]">Estimates</div>
+      <div className="text-right text-[#667085] my-4">
+        split table amount: 0.000000000000456 NAME - NAME
       </div>
-      <div className="flex justify-between my-5">
-        <div>Deposit value</div>
-        <div>$0</div>
-      </div>
-      <div className="flex justify-between mb-5">
-        <div>Total APR</div>
-        <div className="flex items-center">
-          <div className="text-[#667085]">20.3%</div>
-          <ArrowRight />
-          <div className="text-[#FFAF1D]">20.3%</div>
-        </div>
-      </div>
-      <div className="px-2 py-4 flex items-center bg-blue-opacity-50">
-        <Error stroke="#fff" />
-        <div className="text-[14px] pl-2">
-          By making a new deposit on thí poisition, you will renew its lock for
-          4 days from now
-        </div>
-      </div>
-
       <div className="block lg:flex items-center gap-2">
         <Button
           className="w-full justify-center mt-2 mb-2 px-[42px]"
@@ -96,7 +69,7 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
           onClick={handleStake}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
         >
-          Add Position
+          Split
         </Button>
       </div>
 
@@ -105,4 +78,4 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
   );
 };
 
-export default AddPositionModal;
+export default SplitPositionModal;

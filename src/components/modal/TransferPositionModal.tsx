@@ -3,21 +3,16 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
-import CurrencyDollar from '@/icons/CurrencyDollar';
-import SaleIcon from '@/icons/SaleIcon';
-import CalendarIcon from '@/icons/CalendarIcon';
-import UnlockIcon from '@/icons/UnlockIcon';
-
-export interface BoostPositionModalProps {
+export interface TransferPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   saveTimeLock: (value: number) => void;
 }
 
-const BoostPositionModal = ({
+const TransferPositionModal = ({
   toggleOpen,
   isOpen,
-}: BoostPositionModalProps) => {
+}: TransferPositionModalProps) => {
   const handleStake = () => {};
 
   return (
@@ -42,48 +37,15 @@ const BoostPositionModal = ({
         </div>
       </div>
       <div className="text-[15px] text-center text-[24px]">
-        <span className="text-[#E6B300] font-bold">Boost</span> your position
+        <span className="text-[#E6B300] font-bold">Transfer</span> your position
       </div>
       <div className="text-center text-[#667085] mb-5">
         Allocate TOKENS to your spNFT for more yield
       </div>
-      <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          <div className="relative -mt-[30px]">
-            <div className="absolute">
-              <BNBICon size={34} />
-            </div>
-            <div className="absolute left-[25px]">
-              <BNBICon size={34} />
-            </div>
-          </div>
-          <div className="text-bold ml-[70px]">Token A - Token B</div>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="rounded-full bg-[#E6B300] h-5 w-5"></div>
-          <div className="text-[#667085]">Rewards</div>
-        </div>
-      </div>
-      <div className="flex mt-4">
-        <div className="flex items-center">
-          <CurrencyDollar />
-          <div className="pl-1">$1.1M</div>
-          <div className="pl-1 text-[#667085]">TVL</div>
-        </div>
-        <div className="flex items-center pl-5">
-          <SaleIcon />
-          <div className="pl-1">24.88%</div>
-          <div className="pl-1 text-[#667085]">Bonus APR</div>
-        </div>
-      </div>
-      <div className="flex my-4">
-        <CalendarIcon />
-        <div className="pl-2 text-[#667085]">Ends in 14 days</div>
-      </div>
-      <div className="flex my-4">
-        <UnlockIcon />
-        <div className="pl-2 text-[#667085]">No requirement</div>
-      </div>
+      <input
+        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px] mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+        placeholder="0x..."
+      />
       <div className="block lg:flex items-center gap-2">
         <Button
           className="w-full justify-center mt-2 mb-2 px-[42px]"
@@ -96,7 +58,7 @@ const BoostPositionModal = ({
           onClick={handleStake}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
         >
-          Stake
+          Transfer
         </Button>
       </div>
 
@@ -105,4 +67,4 @@ const BoostPositionModal = ({
   );
 };
 
-export default BoostPositionModal;
+export default TransferPositionModal;
