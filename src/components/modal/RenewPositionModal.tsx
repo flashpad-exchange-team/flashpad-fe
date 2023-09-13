@@ -4,19 +4,20 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
 import ArrowRight from '@/icons/ArrowRight';
-import Error from '@/icons/Error';
 
-export interface AddPositionModalProps {
+export interface RenewPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   saveTimeLock: (value: number) => void;
 }
 
-const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
+const RenewPositionModal = ({
+  toggleOpen,
+  isOpen,
+}: RenewPositionModalProps) => {
   const handleStake = () => {};
-
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="600px">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
         <div className="text-[14px] mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
@@ -36,28 +37,40 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
           <CloseIcon />
         </div>
       </div>
-      <div className="text-[15px] text-center text-[24px]">
-        <span className="text-[#E6B300] font-bold">Add</span> your position
+      <div className="text-center text-[24px]">
+        <span className="text-[#E6B300] font-bold">Renew</span> the lock of your
+        position
       </div>
-      <div className="text-center text-[#667085] mb-5">
-        Deposit more into this spNFT to increase your yield.
+      <div className="text-center text-[#667085] mb-5 text-[14px]">
+        Provide long-tern liquidity to increase your yield
       </div>
-      <div className="text-center">More action</div>
-      <div className="text-[14px] my-4">
-        You need to own NAME - NAME LP tokens to directly add more liquidity to
-        this poisition. If that’s not the case, head to the liquidity page that.
+      <div className="p-2 bg-blue-opacity-50 text-[14px]">
+        <div className="text-[#fff]">Settings</div>
       </div>
-      <div className="px-2 pt-4 bg-blue-opacity-50 flex justify-between mt-2">
-        <div className="text-[#98A2B3]">Amount</div>
-        <div>0</div>
+      <div className="flex justify-between mt-3">
+        <div className="">Lock duration</div>
+        <div className="text-[#E6B300] text-[14px]">Set max</div>
       </div>
-      <div className="px-2 pb-4 bg-blue-opacity-50 flex justify-between mb-2">
-        <div className="text-[#fff]">Balance: 0</div>
-        <Button className="w-[50px] h-[10px] rounded-none flex justify-center items-center">
-          Max
-        </Button>
+      <div className="flex gap-0 md:gap-3">
+        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-0 md:mr-2">
+          -
+        </div>
+        <div className="flex items-center bg-blue-opacity-50 w-[30%] md:w-[40%] justify-end px-6 py-2">
+          <span className="text-[#E6B300] mr-4">0</span> Days
+        </div>
+        <div className="flex items-center bg-blue-opacity-50 w-[35%] md:w-[40%] justify-end px-6 py-2">
+          <span className="text-[#E6B300] mr-4">0</span> Months
+        </div>
+        <div>
+          <Button className="w-[60px] rounded-none flex justify-center items-center rounded-[4px]">
+            +
+          </Button>
+        </div>
       </div>
-      <div className="py-2 bg-blue-opacity-50">
+      <div className="text-right text-[#667085] text-[14px]">
+        4.37% lock bonus (x1.04)
+      </div>
+      <div className="p-2 bg-blue-opacity-50 my-4">
         <div className="text-[#fff]">Estimates</div>
       </div>
       <div className="flex justify-between my-5">
@@ -72,11 +85,20 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
           <div className="text-[#FFAF1D]">20.3%</div>
         </div>
       </div>
-      <div className="px-2 py-4 flex items-center bg-blue-opacity-50">
-        <Error stroke="#fff" />
-        <div className="text-[14px] pl-2">
-          By making a new deposit on thí poisition, you will renew its lock for
-          4 days from now
+      <div className="flex justify-between my-3">
+        <div>Swap fees APR</div>
+        <div>10.11%</div>
+      </div>
+      <div className="flex justify-between my-3">
+        <div>Farm base APR</div>
+        <div>23.55%</div>
+      </div>
+      <div className="flex justify-between my-3">
+        <div>Lock bonus APR</div>
+        <div className="flex items-center">
+          <div className="text-[#667085]">20.3%</div>
+          <ArrowRight />
+          <div>20.3%</div>
         </div>
       </div>
 
@@ -92,7 +114,7 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
           onClick={handleStake}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
         >
-          Add Position
+          Create
         </Button>
       </div>
 
@@ -101,4 +123,4 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
   );
 };
 
-export default AddPositionModal;
+export default RenewPositionModal;

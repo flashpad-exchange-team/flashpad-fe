@@ -11,7 +11,7 @@ export interface LockManageModalProps {
 
 const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} height="600px">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
         <div className="text-[14px] mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">

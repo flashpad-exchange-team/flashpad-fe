@@ -96,7 +96,3 @@ body {
   right: 0 !important;
   top: 3px !important;
 }
-
-.searchInput::placeholder {
-  padding-left: 30px;
-}

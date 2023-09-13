@@ -84,7 +84,7 @@ const SelectTokenModal = ({
   };
 
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-between w-full mt-4 lg:mt-0">
         <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3 justify-start ml-0 mr-auto">
           <SwapLeftIcon />

@@ -4,24 +4,25 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
 import CurrencyDollar from '@/icons/CurrencyDollar';
-import SaleIcon from '@/icons/SaleIcon';
-import CalendarIcon from '@/icons/CalendarIcon';
-import UnlockIcon from '@/icons/UnlockIcon';
+import LaunchPadIcon from '@/icons/LaunchpadIcon';
+import Lock from '@/icons/Lock';
+import ChartBreakoutIcon from '@/icons/ChartBreakoutIcon';
+import Eligibility from '@/icons/Eligibility';
 
-export interface BoostPositionModalProps {
+export interface MergePositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   saveTimeLock: (value: number) => void;
 }
 
-const BoostPositionModal = ({
+const MergePositionModal = ({
   toggleOpen,
   isOpen,
-}: BoostPositionModalProps) => {
+}: MergePositionModalProps) => {
   const handleStake = () => {};
 
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="40vw">
       <div className="flex items-center justify-center w-full">
         <div className="text-[14px] mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
@@ -42,47 +43,30 @@ const BoostPositionModal = ({
         </div>
       </div>
       <div className="text-[15px] text-center text-[24px]">
-        <span className="text-[#E6B300] font-bold">Boost</span> your position
+        <span className="text-[#E6B300] font-bold">Merge</span> multiple
+        positions
       </div>
       <div className="text-center text-[#667085] mb-5">
-        Allocate TOKENS to your spNFT for more yield
+        Regroup spNFTs into a single one
       </div>
-      <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          <div className="relative -mt-[30px]">
-            <div className="absolute">
-              <BNBICon size={34} />
-            </div>
-            <div className="absolute left-[25px]">
-              <BNBICon size={34} />
-            </div>
-          </div>
-          <div className="text-bold ml-[70px]">Token A - Token B</div>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="rounded-full bg-[#E6B300] h-5 w-5"></div>
-          <div className="text-[#667085]">Rewards</div>
-        </div>
+      <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Select poisitions</div>
+      <div className="m-2 flex justify-between">
+        <div>NAME - NAME</div>
+        <div className="text-[14px] text-[#E6B300]">Unselect all</div>
       </div>
-      <div className="flex mt-4">
+      <div className="bg-blue-opacity-50 p-2 flex justify-between items-center my-4">
+        <div className="text-[14px]">Balance: 0</div>
+        <div className="">
+          <div>0.002</div>
+          <div className="text-[#667085] text-[12px]">$0.19</div>
+        </div>
         <div className="flex items-center">
           <CurrencyDollar />
-          <div className="pl-1">$1.1M</div>
-          <div className="pl-1 text-[#667085]">TVL</div>
+          <Lock />
+          <LaunchPadIcon />
+          <ChartBreakoutIcon />
         </div>
-        <div className="flex items-center pl-5">
-          <SaleIcon />
-          <div className="pl-1">24.88%</div>
-          <div className="pl-1 text-[#667085]">Bonus APR</div>
-        </div>
-      </div>
-      <div className="flex my-4">
-        <CalendarIcon />
-        <div className="pl-2 text-[#667085]">Ends in 14 days</div>
-      </div>
-      <div className="flex my-4">
-        <UnlockIcon />
-        <div className="pl-2 text-[#667085]">No requirement</div>
+        <Eligibility />
       </div>
       <div className="block lg:flex items-center gap-2">
         <Button
@@ -96,7 +80,7 @@ const BoostPositionModal = ({
           onClick={handleStake}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
         >
-          Stake
+          Merge
         </Button>
       </div>
 
@@ -105,4 +89,4 @@ const BoostPositionModal = ({
   );
 };
 
-export default BoostPositionModal;
+export default MergePositionModal;
