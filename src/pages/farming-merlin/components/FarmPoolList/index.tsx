@@ -3,7 +3,6 @@ import Select from '@/components/select';
 import AddIcon from '@/icons/AddIcon';
 import Menu from '@/icons/Menu';
 import Search from '@/icons/Search';
-import { useState } from 'react';
 import TableFarm from './TableFarm';
 const data = [
   {
