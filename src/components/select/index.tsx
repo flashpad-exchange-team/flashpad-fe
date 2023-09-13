@@ -25,7 +25,7 @@ const customStyles: any = {
     '&:focus': {
       boxShadow: 'none',
     },
-    width: 'fit-content',
+    width: '100%',
     color: '#fff',
     '& input ': {
       display: 'none',
@@ -73,17 +73,19 @@ const Select = ({
     </div>
   );
   return (
-    <SelectComponent
-      options={options}
-      styles={customStyles}
-      // defaultValue={options?.length && options[0]}
-      value={value}
-      components={{ SingleValue: CustomSingleValue }}
-      isSearchable={false}
-      isDisabled={disabled}
-      placeholder={placeHolder}
-      onChange={onChange}
-    />
+    <div className="w-full">
+      <SelectComponent
+        options={options}
+        styles={customStyles}
+        // defaultValue={options?.length && options[0]}
+        value={value}
+        components={{ SingleValue: CustomSingleValue }}
+        isSearchable={false}
+        isDisabled={disabled}
+        placeholder={placeHolder}
+        onChange={onChange}
+      />
+    </div>
   );
 };
 
