@@ -4,6 +4,7 @@ import UploadIcon from '@/icons/UploadIcon';
 import TableStaking from './TableStaking';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import { useState } from 'react';
+import Search from '@/icons/Search';
 
 const data = [
   {
@@ -68,10 +69,15 @@ const StakingMain = () => {
         <div className="min-w-full bg-[#00000080] pb-3">
           <div className="px-4 py-6">LP V2</div>
           <div className="flex items-center gap-3">
-            <input
-              className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
-              placeholder="Search by name or address "
-            />
+            <div className="w-full w-[300px] flex">
+              <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+                <Search />
+              </div>
+              <input
+                className="w-full w-[300px] bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+                placeholder="Search by name or address"
+              />
+            </div>
             <Button
               className="px-2 h-[52px] w-[280px] flex justify-center "
               onClick={toggleOpenSelectToken}

@@ -3,10 +3,6 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
-import CurrencyDollar from '@/icons/CurrencyDollar';
-import SaleIcon from '@/icons/SaleIcon';
-import CalendarIcon from '@/icons/CalendarIcon';
-import UnlockIcon from '@/icons/UnlockIcon';
 import ArrowRight from '@/icons/ArrowRight';
 
 export interface RenewPositionModalProps {
@@ -20,9 +16,8 @@ const RenewPositionModal = ({
   isOpen,
 }: RenewPositionModalProps) => {
   const handleStake = () => {};
-
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="40vw">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
         <div className="text-[14px] mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
@@ -56,14 +51,14 @@ const RenewPositionModal = ({
         <div className="">Lock duration</div>
         <div className="text-[#E6B300] text-[14px]">Set max</div>
       </div>
-      <div className="flex gap-3">
-        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-2">
+      <div className="flex gap-0 md:gap-3">
+        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-0 md:mr-2">
           -
         </div>
-        <div className="flex items-center bg-blue-opacity-50 w-[40%] justify-end px-6 py-2">
+        <div className="flex items-center bg-blue-opacity-50 w-[30%] md:w-[40%] justify-end px-6 py-2">
           <span className="text-[#E6B300] mr-4">0</span> Days
         </div>
-        <div className="flex items-center bg-blue-opacity-50 w-[40%] justify-end px-6 py-2">
+        <div className="flex items-center bg-blue-opacity-50 w-[35%] md:w-[40%] justify-end px-6 py-2">
           <span className="text-[#E6B300] mr-4">0</span> Months
         </div>
         <div>

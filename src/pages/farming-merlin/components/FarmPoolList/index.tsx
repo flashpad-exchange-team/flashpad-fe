@@ -82,14 +82,6 @@ const FILTER_FARM = [
   },
 ];
 const FarmPoolList = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const handleInputClick = () => {
-    setIsExpanded(true);
-  };
-  const inputStyle = {
-    paddingLeft: isExpanded ? '60px' : '1rem',
-    transition: 'padding-left 0.3s ease',
-  };
   return (
     <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
       <div className="flex flex-col md:flex-wrap md:flex-row md:items-center md:justify-between md:mb-4">
@@ -106,15 +98,15 @@ const FarmPoolList = () => {
           </Button>
         </div>
         <div className="flex mr-2 md:mr-4 mt-4 mb-2 md:mb-0 md:mr-0 items-center gap-3 order-2 md:order-3 md:w-full">
-          <div className="relative w-full w-[300px]">
-            <input
-              className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085] w-full searchInput"
-              placeholder="Search by name or address"
-              onClick={handleInputClick}
-              style={inputStyle}
-            />
-            <div className="absolute inset-y-0 left-2 pl-3 flex items-center pointer-events-none">
-              <Search />
+          <div className="w-full w-[300px] flex">
+            <div className="w-full w-[300px] flex">
+              <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+                <Search />
+              </div>
+              <input
+                className="w-full w-[300px] bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+                placeholder="Search by name or address"
+              />
             </div>
           </div>
 

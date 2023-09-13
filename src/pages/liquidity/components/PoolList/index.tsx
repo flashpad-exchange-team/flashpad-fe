@@ -11,6 +11,7 @@ import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import clsx from 'clsx';
+import Search from '@/icons/Search';
 
 interface PoolListProps {
   setIsAddLiquidity: (val: boolean) => void;
@@ -118,10 +119,15 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
           </div>
         </div>
         <div className="block lg:flex gap-3 items-center">
-          <input
-            className=" mt-3 lg:mt-0 mb-3 lg:mb-0 w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085]"
-            placeholder="Search by name or address "
-          />
+          <div className="w-full w-[300px] flex">
+            <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+              <Search />
+            </div>
+            <input
+              className="w-full w-[300px] bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+              placeholder="Search by name or address"
+            />
+          </div>
           <Button
             className="px-2 h-[48px] lg:h-[52px] w-full lg:w-[290px] flex justify-center"
             onClick={() => setIsAddLiquidity(true)}
@@ -138,7 +144,7 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
           type="info"
         />
       </div>
-      <ListPoolsTable data={allPairsData} loading={loading}/>
+      <ListPoolsTable data={allPairsData} loading={loading} />
     </div>
   );
 };

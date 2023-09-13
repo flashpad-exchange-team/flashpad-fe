@@ -21,7 +21,7 @@ const BoostPositionModal = ({
   const handleStake = () => {};
 
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="40vw">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
         <div className="text-[14px] mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">

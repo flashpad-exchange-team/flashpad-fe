@@ -3,10 +3,6 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
-import CurrencyDollar from '@/icons/CurrencyDollar';
-import SaleIcon from '@/icons/SaleIcon';
-import CalendarIcon from '@/icons/CalendarIcon';
-import UnlockIcon from '@/icons/UnlockIcon';
 import ArrowRight from '@/icons/ArrowRight';
 import Error from '@/icons/Error';
 
@@ -20,7 +16,7 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
   const handleStake = () => {};
 
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="40vw">
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="600px">
       <div className="flex items-center justify-center w-full">
         <div className="text-[14px] mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">

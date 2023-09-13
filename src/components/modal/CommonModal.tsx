@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import useWindowWidth from '@/hooks/useWindowWith';
 
 interface ModalProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ const CommonModal: React.FC<ModalProps> = ({
   children,
   width,
 }) => {
+  const windowWidth = useWindowWidth();
+  const isSmallScreen = windowWidth < 768;
   const modalRef = useRef(null as any);
   const handleClickOutside = (e: any) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -40,7 +43,7 @@ const CommonModal: React.FC<ModalProps> = ({
         <div
           ref={modalRef}
           className={`relative w-auto my-6 mx-auto max-w-[90vw] bg-[#0A071E] p-[20px] pb-[30px]`}
-          style={{ width }}
+          style={{ width: isSmallScreen ? '90vw' : width }}
         >
           {children}
         </div>

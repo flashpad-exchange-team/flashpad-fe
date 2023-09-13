@@ -2,6 +2,7 @@ import { Button } from '@/components/button/Button';
 import Select from '@/components/select';
 import AddIcon from '@/icons/AddIcon';
 import Menu from '@/icons/Menu';
+import Search from '@/icons/Search';
 import TableFarm from './TableFarm';
 const data = [
   {
@@ -96,10 +97,15 @@ const FarmPoolList = () => {
           </Button>
         </div>
         <div className="flex mr-2 md:mr-4 mt-4 mb-2 md:mb-0 md:mr-0 items-center gap-3 order-2 md:order-3 md:w-full">
-          <input
-            className="w-full w-[300px] bg-[#150E39] h-[52px] pl-6 text-[15px] font-semibold  rounded-lg focus:outline-none  placeholder-[#667085] w-full "
-            placeholder="Search by name or address"
-          />
+          <div className="w-full w-[300px] flex">
+            <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+              <Search />
+            </div>
+            <input
+              className="w-full w-[300px] bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+              placeholder="Search by name or address"
+            />
+          </div>
           <div className="hidden md:block">
             <Select options={FILTER_FARM} />
           </div>
