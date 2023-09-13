@@ -1,5 +1,6 @@
 import BNBICon from '@/icons/BNBIcon';
 import Eligibility from '@/icons/Eligibility';
+import Search from '@/icons/Search';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -32,11 +33,15 @@ const TableLaunchpad: React.FC<TableLaunchpadProps> = ({ data }) => {
           </tr>
           <tr>
             <div className="w-full text-[14px] text-[#98A2B3] pb-3 px-4 text-left">
-              <input
-                className="w-full bg-[#1D2939] h-[52px] pl-8 text-[15px] font-semibold mb-2 mt-3.5 rounded-md focus:outline-none placeholder-[#667085]"
-                placeholder="Search by name or address"
-                value=""
-              />
+              <div className="w-full w-[300px] flex">
+                <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+                  <Search />
+                </div>
+                <input
+                  className="w-full w-[300px] bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+                  placeholder="Search by name or address"
+                />
+              </div>
             </div>
           </tr>
           <tr>
