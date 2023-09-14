@@ -39,7 +39,7 @@ const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
           $0.3 - <span className="text-[#E6B300]">1.43%</span> APR
         </div>
         <div className="text-center">
-          This poisition has 0% pending farming rewards
+          This position has 0% pending farming rewards
         </div>
         <div className="flex px-10 py-2 justify-around">
           <div className="p-4 flex justify-center bg-blue-opacity-50">

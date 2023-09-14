@@ -23,7 +23,7 @@ export const getPair = async (
       token2Address,
     ]);
 
-    return pairAddress as string;
+    return pairAddress as Address;
   } catch (err: any) {
     console.log(err);
     return undefined;

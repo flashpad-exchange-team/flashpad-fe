@@ -51,6 +51,11 @@ const FEATURE_PROPS: { [k: string]: any } = {
     label: 'Stake position',
     buttonName: 'Create Position',
   },
+  INITIALIZE: {
+    value: 'INITIALIZE',
+    label: 'Stake position',
+    buttonName: 'Initialize',
+  },
 };
 
 interface TradeFormProps {
@@ -78,6 +83,12 @@ const TradeForm = ({
   const toggleOpenCreatePosition = () => {
     setOpenCreatePosition(!isOpenCreatePosition);
   };
+  const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
+    useState<boolean>(false);
+  const toggleOpenAddLiquidityCreatePosition = () => {
+    setOpenAddLiquidityCreatePosition(!isOpenAddLiquidityCreatePosition);
+  };
+
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>(null);
   const [token2, setToken2] = useState<any>(null);
@@ -91,6 +102,9 @@ const TradeForm = ({
     undefined
   );
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
+  const [isFirstSpMinter, setIsFirstSpMinter] = useState<boolean | undefined>(
+    undefined
+  );
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -147,16 +161,36 @@ const TradeForm = ({
 
   const getPairAddress = async () => {
     if (!token1 || !token2) return;
-    const address = (await factoryContract.getPair(
+    const address = await factoryContract.getPair(
       token1.address,
       token2.address
-    )) as Address;
+    );
     setPairAddress(address && address != ADDRESS_ZERO ? address : undefined);
     setIsFirstLP(!address || address === ADDRESS_ZERO);
   };
 
   useEffect(() => {
     getPairAddress();
+  }, [token1, token2, successful]);
+
+  const getPoolAddress = async () => {
+    if (!token1 || !token2) return;
+    const lpAddress = await routerContract.getPair(
+      token1.address,
+      token2.address
+    );
+    if (!lpAddress) return;
+    const address = await nftPoolFactoryContract.getPool(lpAddress);
+    setNftPoolAddress(address);
+    const firstSpNftMinter = !address || address === ADDRESS_ZERO;
+    setIsFirstSpMinter(firstSpNftMinter);
+    if (firstSpNftMinter) {
+      setFeature('INITIALIZE');
+    }
+  };
+
+  useEffect(() => {
+    getPoolAddress();
   }, [token1, token2, successful]);
 
   const onSelectedToken = (token: any) => {
@@ -430,7 +464,7 @@ const TradeForm = ({
     );
   };
 
-  const handleCreatePosition = async () => {
+  const handleAddLiquidityCreatePosition = async () => {
     if (!userAddress) {
       customToast({
         message: 'A wallet is not yet connected',
@@ -439,40 +473,72 @@ const TradeForm = ({
       return;
     }
 
-    let spNftPool: any;
-    if (pairAddress) {
-      spNftPool = await nftPoolFactoryContract.getPool(pairAddress);
-
-      if (!spNftPool || spNftPool === ADDRESS_ZERO) {
-        startLoadingTx({
-          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-          title: 'Creating spNFT pool ...',
-          message: 'Confirming your transaction. Please wait.',
-        });
-        const createPoolRes = await nftPoolFactoryContract.createPool(
-          userAddress,
-          {
-            lpTokenAddress: pairAddress,
-          }
-        );
-
-        if (!createPoolRes) {
-          stopLoadingTx();
-          setSuccessful(false);
-          setFailed(true);
-          return;
+    if (isFirstSpMinter) {
+      startLoadingTx({
+        tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+        title: 'Creating spNFT pool ...',
+        message: 'Confirming your transaction. Please wait.',
+      });
+      const lpAddress = await routerContract.getPair(
+        token1.address,
+        token2.address
+      );
+      const createPoolRes = await nftPoolFactoryContract.createPool(
+        userAddress,
+        {
+          lpTokenAddress: lpAddress!,
         }
+      );
 
-        const hash = createPoolRes.hash;
-        spNftPool = createPoolRes.result;
-        const txReceipt = await waitForTransaction({ hash });
-        console.log({ txReceipt });
+      if (!createPoolRes) {
         stopLoadingTx();
+        setSuccessful(false);
+        setFailed(true);
+        return;
       }
 
-      setNftPoolAddress(spNftPool);
-      toggleOpenCreatePosition();
+      const hash = createPoolRes.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      stopLoadingTx();
     }
+
+    // toggleOpenAddLiquidityCreatePosition();
+    toggleOpenCreatePosition
+
+    // if (pairAddress) {
+    //   spNftPool = await nftPoolFactoryContract.getPool(pairAddress);
+
+    //   if (!spNftPool || spNftPool === ADDRESS_ZERO) {
+    //     startLoadingTx({
+    //       tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+    //       title: 'Creating spNFT pool ...',
+    //       message: 'Confirming your transaction. Please wait.',
+    //     });
+    //     const createPoolRes = await nftPoolFactoryContract.createPool(
+    //       userAddress,
+    //       {
+    //         lpTokenAddress: pairAddress,
+    //       }
+    //     );
+
+    //     if (!createPoolRes) {
+    //       stopLoadingTx();
+    //       setSuccessful(false);
+    //       setFailed(true);
+    //       return;
+    //     }
+
+    //     const hash = createPoolRes.hash;
+    //     spNftPool = createPoolRes.result;
+    //     const txReceipt = await waitForTransaction({ hash });
+    //     console.log({ txReceipt });
+    //     stopLoadingTx();
+    //   }
+
+    //   setNftPoolAddress(spNftPool);
+    //   toggleOpenCreatePosition();
+    // }
   };
 
   const handleSwitchPair = () => {
@@ -499,6 +565,10 @@ const TradeForm = ({
         toggleOpen={toggleLockManage}
         saveTimeLock={saveTimeLock}
       />
+      {/* <AddLiquidityCreatePositionModal
+        isOpen={isOpenAddLiquidityCreatePosition}
+        toggleOpen={toggleOpenAddLiquidityCreatePosition}
+      /> */}
       <CreatePositionModal
         isOpen={isOpenCreatePosition}
         toggleOpen={toggleOpenCreatePosition}
@@ -532,18 +602,20 @@ const TradeForm = ({
           </div>
         </div>
         <div className="flex bg-[#150E3980] mt-3 rounded-lg">
-          {Object.keys(FEATURE_PROPS).map((key: string) => (
-            <button
-              className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
-                feature === key
-                  ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
-                  : ''
-              }`}
-              onClick={() => setFeature(FEATURE_PROPS[key].value)}
-            >
-              {FEATURE_PROPS[key].label}
-            </button>
-          ))}
+          {Object.keys(FEATURE_PROPS)
+            .slice(0, 2)
+            .map((key: string) => (
+              <button
+                className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
+                  feature === key
+                    ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
+                    : ''
+                }`}
+                onClick={() => setFeature(FEATURE_PROPS[key].value)}
+              >
+                {FEATURE_PROPS[key].label}
+              </button>
+            ))}
         </div>
         <TokenForm
           openModal={() => {
@@ -629,6 +701,12 @@ const TradeForm = ({
             type="info"
           />
         )}
+        {isFirstSpMinter && (
+          <Notification
+            message="You are the first spNFT minter for this asset! You will need to initialize the spNFT contract first."
+            type="info"
+          />
+        )}
         {(token1?.symbol === 'AIDOGE' || token2?.symbol === 'AIDOGE') && (
           <Notification
             message={
@@ -652,11 +730,15 @@ const TradeForm = ({
           onClick={() => {
             feature === 'ADD LIQUIDITY'
               ? handleAddLiquidity()
-              : handleCreatePosition();
+              : handleAddLiquidityCreatePosition();
           }}
           className="w-full justify-center  mb-2 px-[42px]"
           disabled={
-            !token1 || !token2 || !userAddress || !token1Amount || !token2Amount
+            !token1 ||
+            !token2 ||
+            !userAddress ||
+            (feature != 'INITIALIZE' && !token1Amount) ||
+            !token2Amount
           }
         >
           {FEATURE_PROPS[feature]?.buttonName}

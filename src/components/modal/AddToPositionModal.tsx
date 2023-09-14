@@ -6,13 +6,16 @@ import BNBICon from '@/icons/BNBIcon';
 import ArrowRight from '@/icons/ArrowRight';
 import Error from '@/icons/Error';
 
-export interface AddPositionModalProps {
+export interface AddToPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   saveTimeLock: (value: number) => void;
 }
 
-const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
+const AddToPositionModal = ({
+  toggleOpen,
+  isOpen,
+}: AddToPositionModalProps) => {
   const handleStake = () => {};
 
   return (
@@ -37,7 +40,7 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
         </div>
       </div>
       <div className="text-[15px] text-center text-[24px]">
-        <span className="text-[#E6B300] font-bold">Add</span> your position
+        <span className="text-[#E6B300] font-bold">Add</span> to your position
       </div>
       <div className="text-center text-[#667085] mb-5">
         Deposit more into this spNFT to increase your yield.
@@ -45,7 +48,7 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
       <div className="text-center">More action</div>
       <div className="text-[14px] my-4">
         You need to own NAME - NAME LP tokens to directly add more liquidity to
-        this poisition. If that’s not the case, head to the liquidity page that.
+        this position. If that’s not the case, head to the liquidity page that.
       </div>
       <div className="px-2 pt-4 bg-blue-opacity-50 flex justify-between mt-2">
         <div className="text-[#98A2B3]">Amount</div>
@@ -75,7 +78,7 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
       <div className="px-2 py-4 flex items-center bg-blue-opacity-50">
         <Error stroke="#fff" />
         <div className="text-[14px] pl-2">
-          By making a new deposit on thí poisition, you will renew its lock for
+          By making a new deposit on this position, you will renew its lock for
           4 days from now
         </div>
       </div>
@@ -92,7 +95,7 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
           onClick={handleStake}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
         >
-          Add Position
+          Add to Position
         </Button>
       </div>
 
@@ -101,4 +104,4 @@ const AddPositionModal = ({ toggleOpen, isOpen }: AddPositionModalProps) => {
   );
 };
 
-export default AddPositionModal;
+export default AddToPositionModal;

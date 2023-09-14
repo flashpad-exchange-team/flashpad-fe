@@ -49,7 +49,7 @@ const MergePositionModal = ({
       <div className="text-center text-[#667085] mb-5">
         Regroup spNFTs into a single one
       </div>
-      <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Select poisitions</div>
+      <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Select positions</div>
       <div className="m-2 flex justify-between">
         <div>NAME - NAME</div>
         <div className="text-[14px] text-[#E6B300]">Unselect all</div>
