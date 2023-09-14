@@ -30,10 +30,10 @@ const TokenForm = ({
     <div className="bg-[#150E3980] rounded-lg my-2 p-4">
       <div className="block lg:flex items-start w-full">
         <div
-          className="w-full justify-between lg:min-w-[215px] lg:w-fit rounded-md bg-[#150E39] px-2 py-1 flex items-center gap-2 text-[14px] lg:text-[16px] "
+          className="w-full justify-between lg:min-w-[235px] lg:w-fit rounded-md bg-[#150E39] px-2 py-1 flex items-center gap-2 text-[14px] lg:text-[16px] "
           onClick={handleOpenSelectTokenModal}
         >
-          <div className="w-[60px]">{title}</div>
+          <div className="w-[90px]">{title}</div>
           <Select
             options={CHAINS_TOKENS_LIST}
             icon={

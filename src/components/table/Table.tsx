@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import InlineLoading from '../loading/InlineLoading';
 import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
+import { useRouter } from 'next/router';
 
 interface TableProps {
   data: {
@@ -28,7 +29,6 @@ interface TableProps {
 }
 
 const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
-
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
   const [selectedPool, setSelectedPool] = useState<string>('');
@@ -37,6 +37,8 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
   const [token1Address, setToken1Address] = useState<string>('');
   const [token2Address, setToken2Address] = useState<string>('');
   const [lpTokenDecimals, setLPTokenDecimals] = useState<number>(18);
+
+  const router = useRouter();
 
   const openRemoveLiquidityModal = (
     pairAddress: string,
@@ -54,7 +56,7 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
     setLPTokenDecimals(lpTkDecimals);
     toggleOpen();
   };
-
+  console.log({ data });
   return (
     <>
       <RemoveLiquidityModal
@@ -124,7 +126,12 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
                       </div>
                     )}
                   </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left relative">
+                  <td
+                    className="py-4 text-[14px] px-4 border-b border-[#344054] text-left relative"
+                    onClick={() => {
+                      router.push('/liquidity/pool-detail');
+                    }}
+                  >
                     <div className="relative">
                       <div className="absolute">
                         {item.token1Logo ? (

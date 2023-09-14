@@ -91,16 +91,21 @@ const CreatePositionModal = ({
         message: 'Could not get LP balance info',
         type: 'error',
       });
-      return;
+      // return;
     }
 
     let bnStakeAmount = BigNumber(stakeAmount);
     const nLockTime = Number(lockTime);
-
+    if (bnStakeAmount.isGreaterThan(balanceLP?.formatted!)) {
+      customToast({
+        message: 'Not enough LP Balance',
+        type: 'error',
+      });
+      return;
+    }
     if (
       bnStakeAmount.isNaN() ||
       bnStakeAmount.isLessThanOrEqualTo(0) ||
-      bnStakeAmount.isGreaterThan(balanceLP?.formatted!) ||
       Number.isNaN(nLockTime) ||
       !Number.isInteger(nLockTime) ||
       nLockTime <= 0
@@ -112,22 +117,23 @@ const CreatePositionModal = ({
       return;
     }
 
-    bnStakeAmount = bnStakeAmount.times(
+    const bnStakeAmountParsed = bnStakeAmount.times(
       BigNumber(10).pow(balanceLP?.decimals!)
     );
-
+    console.log(1);
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Creating Stake Position ...',
       message: 'Confirming your transaction. Please wait.',
     });
+    console.log(2);
 
     const lpAllowance = (await pairContract.read(lpAddress!, 'allowance', [
       userAddress,
       nftPoolAddress,
     ])) as bigint;
 
-    if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmount)) {
+    if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmountParsed)) {
       const approveRes = await pairContract.write(
         userAddress!,
         lpAddress!,
@@ -148,7 +154,7 @@ const CreatePositionModal = ({
       userAddress,
       nftPoolAddress!,
       'createPosition',
-      [bnStakeAmount, daysToSeconds(nLockTime) + '']
+      [bnStakeAmountParsed, daysToSeconds(nLockTime) + '']
     );
 
     if (!txResult) {
@@ -161,10 +167,6 @@ const CreatePositionModal = ({
     console.log({ txReceipt });
     resetInput();
     stopLoadingTx();
-    customToast({
-      message: 'Created stake position successfully',
-      type: 'success',
-    });
 
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
@@ -172,6 +174,7 @@ const CreatePositionModal = ({
         token1: token1Data.symbol,
         token2: token2Data.symbol,
         txHash: hash,
+        usdValue: bnStakeAmount.toString(),
       })
     );
   };

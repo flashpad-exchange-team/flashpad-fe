@@ -8,6 +8,8 @@ import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import { IS_LINEA } from '@/utils/constants';
 import customToast from '@/components/notification/customToast';
+import { Meta } from '../Meta';
+import { AppConfig } from '@/utils/AppConfig';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -69,6 +71,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
       className=" min-h-[104vh] flex flex-col  justify-between "
     >
+      <Meta title={AppConfig.title} description={AppConfig.description} />
+
       <Header logo={<Logo xl />} mode="app" />
       {children}
       <Footer />

@@ -15,7 +15,7 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
         {' '}
         You’ve successfully {action} worth{' '}
         <span className="text-[#FFAF1D]">
-          ${usdValue} of {token1} - {token2} LP
+          {usdValue} of {token1} - {token2} LP
         </span>
       </div>
     ),

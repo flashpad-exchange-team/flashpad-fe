@@ -4,11 +4,14 @@ import ReloadIcon from '@/icons/ReloadIcon';
 import styles from './loading.module.css';
 const LoadingTx = () => {
   const { isLoadingTx, loadingTxInfo } = useLoading();
-
+  console.log({ isLoadingTx });
   if (!isLoadingTx) return null;
 
   return (
-    <div className="fixed inset-0  bg-[#000000E5] top-[0px] z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0  bg-[#000000E5] top-[0px]  flex items-center justify-center"
+      style={{ zIndex: 100 }}
+    >
       <div className="w-[648px] bg-[#0A071E] p-6 text-center">
         <div className="flex items-center justify-between mb-2">
           <div>{loadingTxInfo?.tokenPairs}</div>
