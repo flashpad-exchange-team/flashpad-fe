@@ -28,29 +28,29 @@ const TableDetailSp: React.FC<TableDetailProps> = () => {
         >
           <p className="text-sm font-bold text-left w-[120px] ">Pool</p>
           <div className="flex justify-between pt-2">
-            <div className="flex space-between text-xs text-[#344054]">
+            <div className="flex space-between text-xs text-lightGray">
               Total value locked
             </div>
             <div>$482.58K</div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">APR</div>
+            <div className="text-xs text-lightGray">APR</div>
             <div className="flex gap-2 items-center justify-end">
               0.7749% <QuestionIcon />
             </div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Pending rewards #1</div>
+            <div className="text-xs text-lightGray">Pending rewards #1</div>
             <div className="flex gap-1 items-center justify-end">
               0.7749%
-              <div className="text-xs text-[#344054]">($1,75k)</div>
+              <div className="text-xs text-lightGray">($1,75k)</div>
             </div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Pending rewards #2</div>
+            <div className="text-xs text-lightGray">Pending rewards #2</div>
             <div className="flex gap-1 items-center justify-end">
               0.7749%
-              <div className="text-xs text-[#344054]">($1,75k)</div>
+              <div className="text-xs text-lightGray">($1,75k)</div>
             </div>
           </div>
         </div>
@@ -60,11 +60,11 @@ const TableDetailSp: React.FC<TableDetailProps> = () => {
         >
           <p className="text-sm font-bold text-left w-[120px] ">Status</p>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Status</div>
+            <div className="text-xs text-lightGray">Status</div>
             <div className="text-[#F04438] font-semibold">Ended</div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Duration</div>
+            <div className="text-xs text-lightGray">Duration</div>
             <div>7 months 1 day</div>
           </div>
         </div>
@@ -76,30 +76,30 @@ const TableDetailSp: React.FC<TableDetailProps> = () => {
             Authorizations
           </p>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Deposits</div>
+            <div className="text-xs text-lightGray">Deposits</div>
             <div className="text-[#F04438] font-semibold">Disabled</div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Harvests</div>
+            <div className="text-xs text-lightGray">Harvests</div>
             <div className="text-[#17B26A] font-semibold">Enabled</div>
           </div>
         </div>
         <div className="py-1 px-4 " onClick={() => router.push('/farm-detail')}>
           <p className="text-sm font-bold text-left w-[120px] ">Requirements</p>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Minimum amount</div>
+            <div className="text-xs text-lightGray">Minimum amount</div>
             <div>-</div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Minimum lock</div>
+            <div className="text-xs text-lightGray">Minimum lock</div>
             <div>-</div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Locked until</div>
+            <div className="text-xs text-lightGray">Locked until</div>
             <div>-</div>
           </div>
           <div className="flex justify-between pt-2">
-            <div className="text-xs text-[#344054]">Whitelist</div>
+            <div className="text-xs text-lightGray">Whitelist</div>
             <div>-</div>
           </div>
         </div>

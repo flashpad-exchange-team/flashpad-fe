@@ -95,7 +95,7 @@ const TableLaunchpad: React.FC<TableLaunchpadProps> = ({ data }) => {
               <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                 {item.totalRaise.toLocaleString()} {item.incentivesToken}
               </td>
-              <td className="py-4 text-sm text-[#344054] px-4 border-b border-[#344054] text-center">
+              <td className="py-4 text-sm text-lightGray px-4 border-b border-[#344054] text-center">
                 {item.about}
               </td>
             </tr>

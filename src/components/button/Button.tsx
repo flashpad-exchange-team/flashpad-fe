@@ -8,6 +8,7 @@ type IButtonProps = {
   className?: string;
   disabled?: boolean;
   type?: string;
+  style?: any;
 };
 
 const Button = (props: IButtonProps) => {

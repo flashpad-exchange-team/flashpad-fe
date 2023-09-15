@@ -17,6 +17,7 @@ module.exports = {
       colors: {
         primary: "#FFAF1D",
         secondary:'#667085',
+        lightGray:'#344054'
       },
       lineHeight: {
         hero: '4.5rem',

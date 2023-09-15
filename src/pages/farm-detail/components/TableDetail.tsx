@@ -31,27 +31,27 @@ const TableDetail: React.FC<TableDetailProps> = () => {
               Pool
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
-              <div className="text-xs text-[#344054]">Total value locked</div>
+              <div className="text-xs text-lightGray">Total value locked</div>
               <div>$482.58K</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
-              <div className="text-xs text-[#344054]">APR</div>
+              <div className="text-xs text-lightGray">APR</div>
               <div className="flex gap-2 items-center justify-end">
                 0.7749% <QuestionIcon />
               </div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
-              <div className="text-xs text-[#344054]">Pending rewards #1</div>
+              <div className="text-xs text-lightGray">Pending rewards #1</div>
               <div className="flex gap-1 items-center justify-end">
                 0.7749%
-                <div className="text-xs text-[#344054]">($1,75k)</div>
+                <div className="text-xs text-lightGray">($1,75k)</div>
               </div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
-              <div className="text-xs text-[#344054]">Pending rewards #2</div>
+              <div className="text-xs text-lightGray">Pending rewards #2</div>
               <div className="flex gap-1 items-center justify-end">
                 0.7749%
-                <div className="text-xs text-[#344054]">($1,75k)</div>
+                <div className="text-xs text-lightGray">($1,75k)</div>
               </div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right "></td>
@@ -64,11 +64,11 @@ const TableDetail: React.FC<TableDetailProps> = () => {
               Status
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Status</div>
+              <div className="text-xs text-lightGray">Status</div>
               <div className="text-[#F04438] font-semibold">Ended</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Duration</div>
+              <div className="text-xs text-lightGray">Duration</div>
               <div>7 months 1 day</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-left"></td>
@@ -83,11 +83,11 @@ const TableDetail: React.FC<TableDetailProps> = () => {
               Authorizations
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Deposits</div>
+              <div className="text-xs text-lightGray">Deposits</div>
               <div className="text-[#F04438] font-semibold">Disabled</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Harvests</div>
+              <div className="text-xs text-lightGray">Harvests</div>
               <div className="text-[#17B26A] font-semibold">Enabled</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-left"></td>
@@ -102,19 +102,19 @@ const TableDetail: React.FC<TableDetailProps> = () => {
               Requirements
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Minimum amount</div>
+              <div className="text-xs text-lightGray">Minimum amount</div>
               <div>-</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Minimum lock</div>
+              <div className="text-xs text-lightGray">Minimum lock</div>
               <div>-</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Locked until</div>
+              <div className="text-xs text-lightGray">Locked until</div>
               <div>-</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-              <div className="text-xs text-[#344054]">Whitelist</div>
+              <div className="text-xs text-lightGray">Whitelist</div>
               <div>-</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right "></td>

@@ -55,7 +55,7 @@ const FarmDetail = () => {
           <div className=" rounded-md w-full md:w-1/3">
             <div className="bg-darkBlue px-3 py-2 rounded-md w-full flex items-center justify-between">
               <div>
-                <div className="text-[#344054] text-xs">AVERAGE APR</div>
+                <div className="text-lightGray text-xs">AVERAGE APR</div>
                 <div className=" text-sm">0%</div>
               </div>
               <div>
@@ -66,7 +66,7 @@ const FarmDetail = () => {
           <div className=" rounded-md w-full md:w-1/3">
             <div className="bg-darkBlue px-3 py-2 rounded-md w-full flex items-center justify-between">
               <div>
-                <div className="text-[#344054] text-xs">TOTAL DEPOSITS</div>
+                <div className="text-lightGray text-xs">TOTAL DEPOSITS</div>
                 <div className=" text-sm">0 Token A - Token B</div>
               </div>
               <div>
@@ -77,7 +77,7 @@ const FarmDetail = () => {
           <div className=" rounded-md w-full md:w-1/3">
             <div className="bg-darkBlue px-3 py-2 rounded-md w-full flex items-center justify-between">
               <div>
-                <div className="text-[#344054] text-xs">
+                <div className="text-lightGray text-xs">
                   PENDING VELA REWARDS
                 </div>
                 <div className=" text-sm">0 Token</div>
