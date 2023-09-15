@@ -7,7 +7,7 @@ import InlineLoading from '../loading/InlineLoading';
 import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
 import { useRouter } from 'next/router';
 
-interface TableProps {
+interface ListPoolsTableProps {
   data: {
     locked: boolean;
     token1: string;
@@ -28,7 +28,7 @@ interface TableProps {
   loading: boolean;
 }
 
-const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
+const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
   const [selectedPool, setSelectedPool] = useState<string>('');

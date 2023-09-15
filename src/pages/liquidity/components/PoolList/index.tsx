@@ -1,5 +1,5 @@
 import { Button } from '@/components/button/Button';
-import ListPoolsTable from '@/components/table/Table';
+import ListPoolsTable from '@/components/table/ListPoolsTable';
 import AddIcon from '@/icons/AddIcon';
 import Notification from '@/components/notification/Notification';
 import { useEffect, useState } from 'react';
