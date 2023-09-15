@@ -4,12 +4,11 @@ import { Logo } from '@/templates/Logo';
 import Footer from '../footer';
 import { useLoading } from '@/context/LoadingContext';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
-import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
-import { IS_LINEA } from '@/utils/constants';
-import customToast from '@/components/notification/customToast';
+import { useNetwork } from 'wagmi';
 import { Meta } from '../Meta';
 import { AppConfig } from '@/utils/AppConfig';
+import { APP_BASED_CHAIN } from '@/utils/constants';
+import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -17,64 +16,44 @@ interface AppLayoutProps {
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
   const { startLoading, stopLoading } = useLoading();
+  const [isOpenSwitchNetwork, setOpenSwitchNetwork] = useState(false);
   const { chain } = useNetwork();
-  const { error, switchNetworkAsync } = useSwitchNetwork();
 
-  const selectedChain = IS_LINEA ? lineaTestnet : polygonMumbai;
-
-  const checkAndSwitchNetwork = async () => {
-    // // if (chain?.id != selectedChain.id) {
-    // //   if (!switchNetworkAsync) {
-    // //     customToast({
-    // //       message: `Please switch to ${selectedChain.name} testnet on your browser wallet`,
-    // //       type: 'error',
-    // //     });
-    // //   } else {
-    // startLoading(`Switching to ${selectedChain.name} network...`);
-    // try {
-    //   await switchNetworkAsync(IS_LINEA ? lineaTestnet.id : polygonMumbai.id);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // stopLoading();
-    // // }
-    // // }
+  const toggleSwitchNetwork = () => {
+    setOpenSwitchNetwork(!isOpenSwitchNetwork);
   };
 
   useEffect(() => {
     setIsClient(true);
     startLoading();
-    // if (chain?.id === selectedChain.id) {
     setTimeout(() => {
       stopLoading();
     }, 1000);
-    // }
   }, []);
 
   useEffect(() => {
-    if (error) {
-      customToast({
-        message: error.message,
-        type: 'error',
-      });
+    if (chain?.id != APP_BASED_CHAIN.id) {
+      setOpenSwitchNetwork(true);
     }
-  }, [error]);
-
-  useEffect(() => {
-    checkAndSwitchNetwork();
-  }, [chain, switchNetworkAsync]);
+  }, [chain]);
 
   return isClient ? (
-    <div
-      style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
-      className=" min-h-[104vh] flex flex-col  justify-between "
-    >
-      <Meta title={AppConfig.title} description={AppConfig.description} />
+    <>
+      <SwitchNetworkModal
+        isOpen={isOpenSwitchNetwork}
+        toggleOpen={toggleSwitchNetwork}
+      />
+      <div
+        style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
+        className=" min-h-[104vh] flex flex-col  justify-between "
+      >
+        <Meta title={AppConfig.title} description={AppConfig.description} />
 
-      <Header logo={<Logo xl />} mode="app" />
-      {children}
-      <Footer />
-    </div>
+        <Header logo={<Logo xl />} mode="app" />
+        {children}
+        <Footer />
+      </div>
+    </>
   ) : (
     'Loading'
   );

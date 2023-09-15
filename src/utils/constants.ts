@@ -1,4 +1,5 @@
 import { Address } from 'viem';
+import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 
 export const IS_LINEA = process.env.NEXT_PUBLIC_IS_LINEA
   ? process.env.NEXT_PUBLIC_IS_LINEA === 'true'
@@ -30,6 +31,8 @@ export const LINEA_GOERLI_EXPLORER_URL =
 export const CHAIN_EXPLORER_URL = IS_LINEA
   ? LINEA_GOERLI_EXPLORER_URL
   : MUMBAI_EXPLORER_URL;
+
+export const APP_BASED_CHAIN = IS_LINEA ? lineaTestnet : polygonMumbai;
 
 export const ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET =
   process.env.NEXT_PUBLIC_ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET ||

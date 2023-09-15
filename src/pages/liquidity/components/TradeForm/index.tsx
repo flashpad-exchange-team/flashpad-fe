@@ -52,11 +52,6 @@ const FEATURE_PROPS: { [k: string]: any } = {
     label: 'Stake position',
     buttonName: 'Create Position',
   },
-  INITIALIZE: {
-    value: 'INITIALIZE',
-    label: 'Stake position',
-    buttonName: 'Initialize',
-  },
 };
 
 interface TradeFormProps {
@@ -185,9 +180,6 @@ const TradeForm = ({
     setNftPoolAddress(address);
     const firstSpNftMinter = !address || address === ADDRESS_ZERO;
     setIsFirstSpMinter(firstSpNftMinter);
-    if (firstSpNftMinter) {
-      setFeature('INITIALIZE');
-    }
   };
 
   useEffect(() => {
@@ -505,7 +497,7 @@ const TradeForm = ({
     }
 
     // toggleOpenAddLiquidityCreatePosition();
-    toggleOpenCreatePosition;
+    toggleOpenCreatePosition();
 
     // if (pairAddress) {
     //   spNftPool = await nftPoolFactoryContract.getPool(pairAddress);
@@ -702,7 +694,7 @@ const TradeForm = ({
             type="info"
           />
         )}
-        {isFirstSpMinter && (
+        {feature === 'STAKE POSITION' && isFirstSpMinter && (
           <Notification
             message="You are the first spNFT minter for this asset! You will need to initialize the spNFT contract first."
             type="info"
@@ -742,7 +734,7 @@ const TradeForm = ({
             !token2Amount
           }
         >
-          {FEATURE_PROPS[feature]?.buttonName}
+          {feature === 'STAKE POSITION' && isFirstSpMinter ? 'Initialize' : FEATURE_PROPS[feature]?.buttonName}
         </Button>
         <DividerDown />
       </div>

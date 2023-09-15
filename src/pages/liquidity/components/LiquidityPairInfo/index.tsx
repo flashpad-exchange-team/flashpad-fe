@@ -89,10 +89,9 @@ const LiquidityPairInfo = ({
     if (!token1Address || !token2Address) return;
     const address = await routerContract.getPair(token1Address, token2Address);
     setLPAddress(address || ADDRESS_ZERO);
+    const spNftPool = await nftPoolFactoryContract.getPool(address!);
+    setNftPoolAddress(spNftPool || ADDRESS_ZERO);
     if (address && isFirstLP === false) {
-      const spNftPool = await nftPoolFactoryContract.getPool(address);
-      setNftPoolAddress(spNftPool || ADDRESS_ZERO);
-
       const stableSwap = await pairContract.read(address, 'stableSwap', []);
       setIsStableSwap(!!stableSwap);
 
