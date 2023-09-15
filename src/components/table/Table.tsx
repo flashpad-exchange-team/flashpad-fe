@@ -83,16 +83,16 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
                 My Pool Share
               </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
-                APR
+                APR Range
               </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
-                Total Staked
+                TVL
               </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
-                My Stake
+                Your deposit
               </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
-                Earnings
+                Pending rewards
               </th>
               <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center"></th>
             </tr>

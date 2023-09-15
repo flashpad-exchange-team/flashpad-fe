@@ -12,6 +12,7 @@ import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import clsx from 'clsx';
 import Search from '@/icons/Search';
+import Bank from '@/icons/Bank';
 
 interface PoolListProps {
   setIsAddLiquidity: (val: boolean) => void;
@@ -118,23 +119,39 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
             Custom-built infrastructure for Linea native public sales
           </div>
         </div>
-        <div className="block lg:flex gap-3 items-center">
-          <div className="w-full w-[300px] flex">
-            <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
-              <Search />
-            </div>
-            <input
-              className="w-full w-[300px] bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
-              placeholder="Search by name or address"
-            />
+      </div>
+      <div className="block lg:flex gap-5 items-center mt-3">
+        <div className="w-full w-[300px] flex">
+          <div className="w-[70px] bg-[#00000080] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+            <Search />
           </div>
-          <Button
-            className="px-2 h-[48px] lg:h-[52px] w-full lg:w-[290px] flex justify-center"
-            onClick={() => setIsAddLiquidity(true)}
-          >
-            <AddIcon color="#0C111D" />
-            Add Liquidity
-          </Button>
+          <input
+            className="w-full w-[300px] bg-[#00000080] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+            placeholder="Search "
+          />
+        </div>
+        <Button
+          className="px-2 h-[48px] lg:h-[52px] w-full lg:w-[290px] flex justify-center"
+          onClick={() => setIsAddLiquidity(true)}
+        >
+          <AddIcon color="#0C111D" />
+          Add Liquidity
+        </Button>
+      </div>
+      <div className="flex items-center gap-4 mt-4">
+        <div className="bg-[#00000080] rounded-md w-1/2 px-4 py-3 flex justify-between">
+          <div>
+            <div className="text-[14px] text-[#98A2B3]">Total TVL</div>
+            <div className="text-[14px]">53M$</div>
+          </div>
+          <Bank />
+        </div>
+        <div className="bg-[#00000080] rounded-md w-1/2 px-4 py-3 flex justify-between">
+          <div>
+            <div className="text-[14px] text-[#98A2B3]">V2 Pool TVL</div>
+            <div className="text-[14px]">53M$</div>
+          </div>
+          <div className="text-[24px] font-bold text-[#FFAF1D]">V2</div>
         </div>
       </div>
 

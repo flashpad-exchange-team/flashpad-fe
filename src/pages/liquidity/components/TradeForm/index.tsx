@@ -39,6 +39,7 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -504,7 +505,7 @@ const TradeForm = ({
     }
 
     // toggleOpenAddLiquidityCreatePosition();
-    toggleOpenCreatePosition
+    toggleOpenCreatePosition;
 
     // if (pairAddress) {
     //   spNftPool = await nftPoolFactoryContract.getPool(pairAddress);

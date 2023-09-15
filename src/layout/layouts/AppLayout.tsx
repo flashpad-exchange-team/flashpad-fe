@@ -23,34 +23,32 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const selectedChain = IS_LINEA ? lineaTestnet : polygonMumbai;
 
   const checkAndSwitchNetwork = async () => {
-    if (chain?.id != selectedChain.id) {
-      if (!switchNetworkAsync) {
-        customToast({
-          message: `Please switch to ${selectedChain.name} testnet on your browser wallet`,
-          type: 'error',
-        });
-      } else {
-        startLoading(`Switching to ${selectedChain.name} network...`);
-        try {
-          await switchNetworkAsync(
-            IS_LINEA ? lineaTestnet.id : polygonMumbai.id
-          );
-        } catch (error) {
-          console.log(error);
-        }
-        stopLoading();
-      }
-    }
+    // // if (chain?.id != selectedChain.id) {
+    // //   if (!switchNetworkAsync) {
+    // //     customToast({
+    // //       message: `Please switch to ${selectedChain.name} testnet on your browser wallet`,
+    // //       type: 'error',
+    // //     });
+    // //   } else {
+    // startLoading(`Switching to ${selectedChain.name} network...`);
+    // try {
+    //   await switchNetworkAsync(IS_LINEA ? lineaTestnet.id : polygonMumbai.id);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    // stopLoading();
+    // // }
+    // // }
   };
 
   useEffect(() => {
     setIsClient(true);
     startLoading();
-    if (chain?.id === selectedChain.id) {
-      setTimeout(() => {
-        stopLoading();
-      }, 1000);
-    }
+    // if (chain?.id === selectedChain.id) {
+    setTimeout(() => {
+      stopLoading();
+    }, 1000);
+    // }
   }, []);
 
   useEffect(() => {
