@@ -13,7 +13,7 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
-        <div className="text-[14px] mx-auto flex items-center justify-center">
+        <div className="text-sm mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
             <div className="absolute">
               <BNBICon size={34} />
@@ -24,22 +24,22 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
           </div>
           <div className="ml-[70px]">
             <div className="text-bold">Token A - Token B</div>
-            <div className="text-[12px] font-normal">#ID-1644</div>
+            <div className="text-xs font-normal">#ID-1644</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
           <CloseIcon />
         </div>
       </div>
-      <div className="text-center text-[24px]">
+      <div className="text-center text-2xl">
         <span className="text-[#E6B300]">Harvest</span> from your position
       </div>
-      <div className="text-center text-[#667085] mb-5">
+      <div className="text-center text-secondary mb-5">
         Recover underlying tokens from a spNFT
       </div>
       <div className="p-2 bg-blue-opacity-50">
         <div className="">All Rewards</div>
-        <div className="text-[#667085] text-[14px] py-2">
+        <div className="text-secondary text-sm py-2">
           Harvest farming and Nitro rewards
         </div>
       </div>
@@ -47,7 +47,7 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       <div className="p-2 bg-blue-opacity-50 flex justify-between items-center mt-4">
         <div>
           <div className="">spNFT Rewards</div>
-          <div className="text-[#667085] text-[14px] py-2">
+          <div className="text-secondary text-sm py-2">
             Harvest farming and Nitro rewards
           </div>
         </div>
@@ -61,10 +61,10 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       <div className="flex justify-between p-2 bg-blue-opacity-50">
         <div className="flex items-end">
           <div>Name</div>
-          <div className="pl-2 text-[#667085] text-[12px]">Farm</div>
+          <div className="pl-2 text-secondary text-xs">Farm</div>
         </div>
         <div className="flex items-center">
-          <div className="text-[#667085] pr-1">
+          <div className="text-secondary pr-1">
             ($<span></span>0.01)
           </div>
           <div className="pr-1">&lt;0.0000001</div>
@@ -76,10 +76,10 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       <div className="flex justify-between p-2 bg-blue-opacity-50">
         <div className="flex items-end">
           <div>Name</div>
-          <div className="pl-2 text-[#667085] text-[12px]">Farm</div>
+          <div className="pl-2 text-secondary text-xs">Farm</div>
         </div>
         <div className="flex items-center">
-          <div className="text-[#667085] pr-1">
+          <div className="text-secondary pr-1">
             ($<span></span>0.01)
           </div>
           <div className="pr-1">&lt;0.0000001</div>
@@ -97,7 +97,7 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
         >
           Cancel
         </Button>
-        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]">
+        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
           Withdraw
         </Button>
       </div>

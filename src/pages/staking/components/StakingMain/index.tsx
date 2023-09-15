@@ -58,15 +58,15 @@ const StakingMain = () => {
       <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <div className="font-bold text-[18px]">Position (Staking) </div>{' '}
-            <div className="text-[14px] text-[#98A2B3] mt-1 mb-3 font-semibold">
+            <div className="font-bold text-lg">Position (Staking) </div>{' '}
+            <div className="text-sm text-[#98A2B3] mt-1 mb-3 font-semibold">
               Create and manage all your staking positions.
             </div>
           </div>
           <div className="flex gap-3 items-center"></div>
         </div>
 
-        <div className="min-w-full bg-[#00000080] pb-3">
+        <div className="min-w-full bg-dark pb-3">
           <div className="px-4 py-6">LP V2</div>
           <div className="flex items-center gap-3">
             <div className="w-full w-[300px] flex">

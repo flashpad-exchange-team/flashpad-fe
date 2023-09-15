@@ -28,14 +28,14 @@ const Notification = ({ type, message, hideIcon }: NotificationProps) => {
       case 'success':
         return 'bg-[#17B26A]';
       case 'info':
-        return 'bg-[#150E3980]';
+        return 'bg-darkBlue';
       default:
         return null;
     }
   };
   return (
     <div
-      className={`rounded-lg ${renderBg()} min-h-[56px] flex items-center pl-4 pr-6 leading-4 mb-2 gap-2 text-[14px]`}
+      className={`rounded-lg ${renderBg()} min-h-[56px] flex items-center pl-4 pr-6 leading-4 mb-2 gap-2 text-sm`}
     >
       {hideIcon || renderIcon()}
       {message}

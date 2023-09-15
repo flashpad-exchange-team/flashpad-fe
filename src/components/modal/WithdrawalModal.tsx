@@ -13,7 +13,7 @@ const WithdrawalModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
-        <div className="text-[14px] mx-auto flex items-center justify-center">
+        <div className="text-sm mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
             <div className="absolute">
               <BNBICon size={34} />
@@ -24,17 +24,17 @@ const WithdrawalModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
           </div>
           <div className="ml-[70px]">
             <div className="text-bold">Token A - Token B</div>
-            <div className="text-[12px] font-normal">#ID-1644</div>
+            <div className="text-xs font-normal">#ID-1644</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
           <CloseIcon />
         </div>
       </div>
-      <div className="text-center text-[24px]">
+      <div className="text-center text-2xl">
         <span className="text-[#E6B300]">Withdraw</span> from your position
       </div>
-      <div className="text-center text-[#667085] mb-5">
+      <div className="text-center text-secondary mb-5">
         Recover underlying tokens from a spNFT
       </div>
       <div className="p-2 bg-blue-opacity-50 flex justify-between">
@@ -51,8 +51,8 @@ const WithdrawalModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Options</div>
       <div className="p-2 flex justify-between">
         <div>
-          <div className="text-[18px]">LP auto-unbind</div>
-          <div className="text-[#667085] text-[14px]">
+          <div className="text-lg">LP auto-unbind</div>
+          <div className="text-secondary text-sm">
             Auto unbind your underlying LP tokens
           </div>
         </div>
@@ -65,9 +65,7 @@ const WithdrawalModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
           </Button>
         </div>
       </div>
-      <div className="p-2 my-4 mb-5 bg-blue-opacity-50 text-[20px]">
-        Estimates
-      </div>
+      <div className="p-2 my-4 mb-5 bg-blue-opacity-50 text-xl">Estimates</div>
 
       <div className="p-2 flex justify-between">
         <div>Withdrawal amount</div>
@@ -87,7 +85,7 @@ const WithdrawalModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
         >
           Cancel
         </Button>
-        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]">
+        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
           Withdraw
         </Button>
       </div>

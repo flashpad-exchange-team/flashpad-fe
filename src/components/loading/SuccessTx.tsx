@@ -27,10 +27,10 @@ const SuccessTx = () => {
         <div className="w-full text-center mx-auto">
           <SuccessIcon className="mx-auto" />
         </div>
-        <div className="text-[16px] my-2 font-bold">
+        <div className="text-base my-2 font-bold">
           {successTxInfo?.mainMessage}
         </div>
-        <div className="text-[12px] text-[#98A2B3] mb-2 font-semibold">
+        <div className="text-xs text-[#98A2B3] mb-2 font-semibold">
           {successTxInfo?.subMessage}
         </div>
         <div className="mt-4 mb-2">

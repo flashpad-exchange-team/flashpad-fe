@@ -12,7 +12,7 @@ const LoadingIndicator = () => {
       <div className="absolute text-center">
         <LogoLoading />
         {loadingInfo && (
-          <div className="text-[20px] absolute top-[160px] w-[300px] left-[-110px]">
+          <div className="text-xl absolute top-[160px] w-[300px] left-[-110px]">
             {loadingInfo}
           </div>
         )}

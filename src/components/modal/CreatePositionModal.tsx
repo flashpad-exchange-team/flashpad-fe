@@ -182,7 +182,7 @@ const CreatePositionModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
-        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
+        <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
           Create position
           <SwapRightIcon />
@@ -191,14 +191,14 @@ const CreatePositionModal = ({
           <CloseIcon />
         </div>
       </div>
-      <div className="text-[16px] font-semibold mb-3 flex items-center gap-2 w-fit mx-auto">
+      <div className="text-base font-semibold mb-3 flex items-center gap-2 w-fit mx-auto">
         {token1Data.logo ? (
           <Image alt="logo" src={token1Data.logo} width={54} height={54} />
         ) : (
           <BNBICon size={54} />
         )}
         <div>
-          <div className="text-[14px]">Token</div>
+          <div className="text-sm">Token</div>
           <div className="text-[22px] flex items-center gap-2">
             {token1Data.symbol}
           </div>
@@ -212,7 +212,7 @@ const CreatePositionModal = ({
           <BNBICon size={54} />
         )}
         <div>
-          <div className="text-[14px]">Token</div>
+          <div className="text-sm">Token</div>
           <div className="text-[22px] flex items-center gap-2">
             {token2Data.symbol}
           </div>
@@ -221,13 +221,13 @@ const CreatePositionModal = ({
       <div className="text-[15px]">Amount</div>
       <div className="relative">
         <input
-          className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+          className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
           placeholder="Enter value "
           value={stakeAmount}
           onChange={(event) => setStakeAmount(event.target.value)}
         />
         <div
-          className="text-[12px] font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer absolute top-[20px] right-[20px]"
+          className="text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer absolute top-[20px] right-[20px]"
           onClick={() => setStakeAmount(balanceLP?.formatted || '0')}
         >
           Max
@@ -239,9 +239,9 @@ const CreatePositionModal = ({
       <div className="text-[15px]">Lock duration (days)</div>
       <div className="flex gap-2 items-center my-2">
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             is2WeeksSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.TWO_WEEKS);
             setLockTime('14');
@@ -250,9 +250,9 @@ const CreatePositionModal = ({
           2 WEEKS
         </div>
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             is1MonthSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.ONE_MONTH);
             setLockTime('30');
@@ -261,9 +261,9 @@ const CreatePositionModal = ({
           1 MONTH
         </div>
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             is3MonthsSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.THREE_MONTHS);
             setLockTime('90');
@@ -272,9 +272,9 @@ const CreatePositionModal = ({
           3 MONTHS
         </div>
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             isCustomSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.CUSTOM);
           }}
@@ -283,32 +283,32 @@ const CreatePositionModal = ({
         </div>
       </div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
         value={lockTime}
         disabled={!isCustomSelected}
         onChange={(e) => setLockTime(e.target.value)}
         placeholder="Enter the number of lock days "
       />
-      <div className="text-[16px] font-semibold mt-2">Estimates</div>
+      <div className="text-base font-semibold mt-2">Estimates</div>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-[14px] mt-1 ">Deposit value</div>
-          <div className="text-[14px] mt-1 ">Total APR</div>
-          <div className="text-[14px] mt-1 ">Farm base APR</div>
-          <div className="text-[14px] mt-1 ">Farm bonus APR</div>
-          <div className="text-[14px] mt-1 ">Earned fees APR</div>
+          <div className="text-sm mt-1 ">Deposit value</div>
+          <div className="text-sm mt-1 ">Total APR</div>
+          <div className="text-sm mt-1 ">Farm base APR</div>
+          <div className="text-sm mt-1 ">Farm bonus APR</div>
+          <div className="text-sm mt-1 ">Earned fees APR</div>
         </div>
         <div>
-          <div className="text-[14px] mt-1 text-right ">0</div>{' '}
-          <div className="text-[14px] mt-1 text-right text-[#FFAF1D] ">0%</div>
-          <div className="text-[14px] mt-1 text-right ">0%</div>
-          <div className="text-[14px] mt-1 text-right ">0%</div>
-          <div className="text-[14px] mt-1 text-right ">0%</div>
+          <div className="text-sm mt-1 text-right ">0</div>{' '}
+          <div className="text-sm mt-1 text-right text-primary ">0%</div>
+          <div className="text-sm mt-1 text-right ">0%</div>
+          <div className="text-sm mt-1 text-right ">0%</div>
+          <div className="text-sm mt-1 text-right ">0%</div>
         </div>
       </div>
       <div className="block lg:flex items-center gap-2">
         <Button
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
           onClick={handleCreatePosition}
         >
           Create

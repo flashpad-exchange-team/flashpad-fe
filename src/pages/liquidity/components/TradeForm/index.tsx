@@ -584,14 +584,14 @@ const TradeForm = ({
           logo: token2 ? token2.logoURI : '',
         }}
       />
-      <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
-        <div className="text-[24px] font-bold mx-auto w-fit flex items-center gap-3">
+      <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
+        <div className="text-2xl font-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />
           {FEATURE_PROPS[feature].label}
           <SwapRightIcon />
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
-          <div className="text-[#FFAF1D] font-semibold flex items-center gap-2 text-[14px] lg:text-[16px] ">
+          <div className="text-primary font-semibold flex items-center gap-2 text-sm lg:text-base ">
             V2 MODE
             <QuestionIcon />
           </div>
@@ -602,7 +602,7 @@ const TradeForm = ({
             <SettingIcon onClick={toggleOpenSetting} />
           </div>
         </div>
-        <div className="flex bg-[#150E3980] mt-3 rounded-lg">
+        <div className="flex bg-darkBlue mt-3 rounded-lg">
           {Object.keys(FEATURE_PROPS)
             .slice(0, 2)
             .map((key: string) => (

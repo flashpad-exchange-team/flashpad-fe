@@ -21,7 +21,7 @@ const AddToPositionModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="600px">
       <div className="flex items-center justify-center w-full">
-        <div className="text-[14px] mx-auto flex items-center justify-center">
+        <div className="text-sm mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
             <div className="absolute">
               <BNBICon size={34} />
@@ -32,21 +32,21 @@ const AddToPositionModal = ({
           </div>
           <div className="ml-[70px]">
             <div className="text-bold">Token A - Token B</div>
-            <div className="text-[12px] font-normal">#ID-1644</div>
+            <div className="text-xs font-normal">#ID-1644</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
           <CloseIcon />
         </div>
       </div>
-      <div className="text-[15px] text-center text-[24px]">
+      <div className="text-[15px] text-center text-2xl">
         <span className="text-[#E6B300] font-bold">Add</span> to your position
       </div>
-      <div className="text-center text-[#667085] mb-5">
+      <div className="text-center text-secondary mb-5">
         Deposit more into this spNFT to increase your yield.
       </div>
       <div className="text-center">More action</div>
-      <div className="text-[14px] my-4">
+      <div className="text-sm my-4">
         You need to own NAME - NAME LP tokens to directly add more liquidity to
         this position. If that’s not the case, head to the liquidity page that.
       </div>
@@ -70,14 +70,14 @@ const AddToPositionModal = ({
       <div className="flex justify-between mb-5">
         <div>Total APR</div>
         <div className="flex items-center">
-          <div className="text-[#667085]">20.3%</div>
+          <div className="text-secondary">20.3%</div>
           <ArrowRight />
-          <div className="text-[#FFAF1D]">20.3%</div>
+          <div className="text-primary">20.3%</div>
         </div>
       </div>
       <div className="px-2 py-4 flex items-center bg-blue-opacity-50">
         <Error stroke="#fff" />
-        <div className="text-[14px] pl-2">
+        <div className="text-sm pl-2">
           By making a new deposit on this position, you will renew its lock for
           4 days from now
         </div>
@@ -93,7 +93,7 @@ const AddToPositionModal = ({
         </Button>
         <Button
           onClick={handleStake}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Add to Position
         </Button>

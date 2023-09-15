@@ -19,7 +19,7 @@ const RenewPositionModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
-        <div className="text-[14px] mx-auto flex items-center justify-center">
+        <div className="text-sm mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
             <div className="absolute">
               <BNBICon size={34} />
@@ -30,26 +30,26 @@ const RenewPositionModal = ({
           </div>
           <div className="ml-[70px]">
             <div className="text-bold">Token A - Token B</div>
-            <div className="text-[12px] font-normal">#ID-1644</div>
+            <div className="text-xs font-normal">#ID-1644</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
           <CloseIcon />
         </div>
       </div>
-      <div className="text-center text-[24px]">
+      <div className="text-center text-2xl">
         <span className="text-[#E6B300] font-bold">Renew</span> the lock of your
         position
       </div>
-      <div className="text-center text-[#667085] mb-5 text-[14px]">
+      <div className="text-center text-secondary mb-5 text-sm">
         Provide long-tern liquidity to increase your yield
       </div>
-      <div className="p-2 bg-blue-opacity-50 text-[14px]">
+      <div className="p-2 bg-blue-opacity-50 text-sm">
         <div className="text-[#fff]">Settings</div>
       </div>
       <div className="flex justify-between mt-3">
         <div className="">Lock duration</div>
-        <div className="text-[#E6B300] text-[14px]">Set max</div>
+        <div className="text-[#E6B300] text-sm">Set max</div>
       </div>
       <div className="flex gap-0 md:gap-3">
         <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-0 md:mr-2">
@@ -67,7 +67,7 @@ const RenewPositionModal = ({
           </Button>
         </div>
       </div>
-      <div className="text-right text-[#667085] text-[14px]">
+      <div className="text-right text-secondary text-sm">
         4.37% lock bonus (x1.04)
       </div>
       <div className="p-2 bg-blue-opacity-50 my-4">
@@ -80,9 +80,9 @@ const RenewPositionModal = ({
       <div className="flex justify-between mb-5">
         <div>Total APR</div>
         <div className="flex items-center">
-          <div className="text-[#667085]">20.3%</div>
+          <div className="text-secondary">20.3%</div>
           <ArrowRight />
-          <div className="text-[#FFAF1D]">20.3%</div>
+          <div className="text-primary">20.3%</div>
         </div>
       </div>
       <div className="flex justify-between my-3">
@@ -96,7 +96,7 @@ const RenewPositionModal = ({
       <div className="flex justify-between my-3">
         <div>Lock bonus APR</div>
         <div className="flex items-center">
-          <div className="text-[#667085]">20.3%</div>
+          <div className="text-secondary">20.3%</div>
           <ArrowRight />
           <div>20.3%</div>
         </div>
@@ -112,7 +112,7 @@ const RenewPositionModal = ({
         </Button>
         <Button
           onClick={handleStake}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Create
         </Button>

@@ -19,8 +19,8 @@ const LoadingTx = () => {
         <div className={styles.loadingContainer}>
           <ReloadIcon />
         </div>
-        <div className="text-[24px] my-2 font-bold">{loadingTxInfo?.title}</div>
-        <div className="text-[18px] text-[#98A2B3] mb-2">
+        <div className="text-2xl my-2 font-bold">{loadingTxInfo?.title}</div>
+        <div className="text-lg text-[#98A2B3] mb-2">
           {loadingTxInfo?.message}
         </div>
         <DividerDown />

@@ -27,10 +27,10 @@ const TokenForm = ({
   };
 
   return (
-    <div className="bg-[#150E3980] rounded-lg my-2 p-4">
+    <div className="bg-darkBlue rounded-lg my-2 p-4">
       <div className="block lg:flex items-start w-full">
         <div
-          className="w-full justify-between lg:min-w-[235px] lg:w-fit rounded-md bg-[#150E39] px-2 py-1 flex items-center gap-2 text-[14px] lg:text-[16px] "
+          className="w-full justify-between lg:min-w-[235px] lg:w-fit rounded-md bg-[#150E39] px-2 py-1 flex items-center gap-2 text-sm lg:text-base "
           onClick={handleOpenSelectTokenModal}
         >
           <div className="w-[90px]">{title}</div>
@@ -53,11 +53,11 @@ const TokenForm = ({
           />
         </div>
         <div className="w-full lg:text-right flex lg:block justify-between items-center">
-          <div className="text-[14px] lg:text-[12px] lg:text-[#98A2B3] mt-4 mb-1 lg:my-0 ">
+          <div className="text-sm lg:text-xs lg:text-[#98A2B3] mt-4 mb-1 lg:my-0 ">
             Amount
           </div>
           <input
-            className="text-[16px] lg:text-[20px] font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none  placeholder-[#667085]"
+            className="text-base lg:text-xl font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none  placeholder-[#667085]"
             value={value}
             onChange={(event) => {
               setTokenAmount(event.target.value);
@@ -65,7 +65,7 @@ const TokenForm = ({
           />
         </div>
       </div>
-      <div className="flex items-center justify-between w-full text-[14px] lg:[text-16px]">
+      <div className="flex items-center justify-between w-full text-sm lg:[text-16px]">
         <div className="mt-2 font-semibold">
           Balance:{' '}
           {tokenData?.symbol
@@ -74,7 +74,7 @@ const TokenForm = ({
         </div>
 
         <div
-          className="text-[12px] font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer"
+          className="text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer"
           onClick={() => setTokenAmount(tokenData.balance)}
         >
           Max

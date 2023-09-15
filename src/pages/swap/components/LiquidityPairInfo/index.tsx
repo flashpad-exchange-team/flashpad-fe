@@ -35,7 +35,7 @@ const LiquidityPairInfo = ({
   const { address: userAddress } = useAccount();
 
   return token1Data?.symbol && token2Data?.symbol && userAddress ? (
-    <div className="bg-[#150E3980] rounded-lg my-2 p-4">
+    <div className="bg-darkBlue rounded-lg my-2 p-4">
       <div
         className="flex items-center justify-between cursor-pointer"
         onClick={toggleOpen}
@@ -44,11 +44,11 @@ const LiquidityPairInfo = ({
           <InlineLoading message="Fetching swap rate" className="mb-2" />
         ) : (
           <div>
-            <div className="text-[14px] ">
+            <div className="text-sm ">
               1 {token1Symbol} = <AnimatedNumber value={swapRate1To2} />
               {token2Symbol}{' '}
             </div>
-            <div className="text-[14px] ">
+            <div className="text-sm ">
               1 {token2Symbol} = <AnimatedNumber value={swapRate2To1} />
               {token1Symbol}{' '}
             </div>
@@ -62,24 +62,20 @@ const LiquidityPairInfo = ({
           <div className="h-[1px] w-full bg-[#1D2939] my-2"></div>
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-[14px] mt-0 ">Pair Type</div>
-              <div className="text-[14px] mt-1.5 ">
-                {token1Symbol} Swap rate
-              </div>
-              <div className="text-[14px] mt-1.5 ">
-                {token2Symbol} Swap rate
-              </div>
+              <div className="text-sm mt-0 ">Pair Type</div>
+              <div className="text-sm mt-1.5 ">{token1Symbol} Swap rate</div>
+              <div className="text-sm mt-1.5 ">{token2Symbol} Swap rate</div>
             </div>
             <div>
-              <div className="text-[14px] mt-0 text-right text-[#FFAF1D] ">
+              <div className="text-sm mt-0 text-right text-primary ">
                 {isStableSwap ? 'Stable' : 'Volatile'}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 <AnimatedNumber value={swapRate1To2} />
                 {/* {swapRate1To2}  */}
                 {token2Symbol}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 <AnimatedNumber value={swapRate2To1} />
                 {token1Symbol}
               </div>

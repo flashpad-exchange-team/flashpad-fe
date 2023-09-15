@@ -27,28 +27,28 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
   const router = useRouter();
   return (
     <div className="overflow-x-auto mt-8">
-      <table className="min-w-full bg-[#00000080] ">
+      <table className="min-w-full bg-dark ">
         <thead>
           <tr>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
               Pool
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               TVL
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
               Incentives
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               APR
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
               Requirements
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               Total deposit
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               Pending rewards
             </th>
           </tr>
@@ -57,10 +57,10 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
           {data?.map((item, index: number) => (
             <tr
               key={index}
-              className="hover:bg-[#150E3980] cursor-pointer"
+              className="hover:bg-darkBlue cursor-pointer"
               onClick={() => router.push('/farm-detail')}
             >
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                 <div className="relative">
                   <div className="absolute">
                     {item?.token1Logo ? (
@@ -92,11 +92,11 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                   {item?.token1} - {item?.token2}
                 </div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right relative">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
                 {' '}
                 ${item?.tvl}
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                 {item?.incentivesLogo ? (
                   <Image
                     className="mx-auto"
@@ -109,12 +109,12 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                   <BNBICon className="mx-auto" />
                 )}
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                 <div className="flex items-center gap-2 cursor-pointer justify-end">
                   {item?.apr}% <QuestionIcon />
                 </div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                 <div className="flex items-center gap-2 cursor-pointer justify-center">
                   <ClockIcon />
                   <TokenIcon />
@@ -122,10 +122,10 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                   <LiquidityLockIcon />
                 </div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                 {item?.totalDeposit}
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                 {item?.pendingRewards}
               </td>
             </tr>

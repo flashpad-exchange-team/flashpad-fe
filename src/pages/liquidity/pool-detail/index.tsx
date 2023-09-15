@@ -33,10 +33,9 @@ const PoolDetail = () => {
           ),
     [poolInfo]
   );
-  console.log({ token1Data, token2Data: token2Data.logoURI });
   return (
     <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
-      <div className="flex  text-[24px] font-bold gap-4">
+      <div className="flex  text-2xl font-bold gap-4">
         <div className="relative">
           <div className="absolute">
             {token1Data?.logoURI ? (
@@ -69,42 +68,42 @@ const PoolDetail = () => {
           {token1Data?.symbol} - {token2Data?.symbol}
         </div>
       </div>
+
+      <div className="flex items-center gap-2">
+        <div>
+          $44k <span className="text-secondary font-semibold text-sm">TVL</span>
+        </div>
+      </div>
       <div className="overflow-x-auto mt-8">
-        <table className="min-w-full bg-[#00000080]">
+        <table className="min-w-full bg-dark">
           <tbody>
-            <tr className="hover:bg-[#150E3980] cursor-pointer">
-              <td className="py-4 text-[14px] font-bold px-4 border-b border-[#344054] text-left w-[120px]">
+            <tr className="hover:bg-darkBlue cursor-pointer">
+              <td className="py-4 text-sm font-bold px-4 border-b border-[#344054] text-left w-[120px]">
                 Pool
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right w-[200px]">
-                <div className="text-[12px] text-[#344054]">
-                  Total value locked
-                </div>
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
+                <div className="text-xs text-[#344054]">Total value locked</div>
                 <div>$482.58K</div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right w-[200px]">
-                <div className="text-[12px] text-[#344054]">APR</div>
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
+                <div className="text-xs text-[#344054]">APR</div>
                 <div className="flex gap-2 items-center justify-end">s</div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right w-[200px]">
-                <div className="text-[12px] text-[#344054]">
-                  Pending rewards #1
-                </div>
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
+                <div className="text-xs text-[#344054]">Pending rewards #1</div>
                 <div className="flex gap-1 items-center justify-end">
                   0.7749%
-                  <div className="text-[12px] text-[#344054]">($1,75k)</div>
+                  <div className="text-xs text-[#344054]">($1,75k)</div>
                 </div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right w-[200px]">
-                <div className="text-[12px] text-[#344054]">
-                  Pending rewards #2
-                </div>
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
+                <div className="text-xs text-[#344054]">Pending rewards #2</div>
                 <div className="flex gap-1 items-center justify-end">
                   0.7749%
-                  <div className="text-[12px] text-[#344054]">($1,75k)</div>
+                  <div className="text-xs text-[#344054]">($1,75k)</div>
                 </div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right "></td>
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right "></td>
             </tr>
           </tbody>
         </table>

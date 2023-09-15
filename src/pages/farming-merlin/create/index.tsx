@@ -11,16 +11,16 @@ import { useState } from 'react';
 const CreateMerlinPool = () => {
   const [type, setType] = useState(0);
   return (
-    <div className="max-w-[648px] w-[calc(100%-26px)] bg-[#00000080] rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
-      <div className="text-[24px] font-bold mx-auto w-fit flex items-center gap-3">
+    <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
+      <div className="text-2xl font-bold mx-auto w-fit flex items-center gap-3">
         <SwapLeftIcon />
         Create Nitro Pool
         <SwapRightIcon />
       </div>
-      <div className="text-[#98A2B3] text-[14px] mt-3 mb-2 font-semibold text-center">
+      <div className="text-[#98A2B3] text-sm mt-3 mb-2 font-semibold text-center">
         Custom-built infrastructure for Linea native public sales
       </div>
-      <div className="flex bg-[#150E3980] mt-3 rounded-lg">
+      <div className="flex bg-darkBlue mt-3 rounded-lg">
         <button
           className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
             type === 0 ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black' : ''
@@ -43,7 +43,7 @@ const CreateMerlinPool = () => {
           <>
             {' '}
             <div
-              className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex items-center gap-2 text-[14px] lg:text-[16px] "
+              className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex items-center gap-2 text-sm lg:text-base "
               // onClick={handleOpenSelectTokenModal}
             >
               <Select
@@ -60,7 +60,7 @@ const CreateMerlinPool = () => {
               <LiquidityIcon />
             </div>{' '}
             <div
-              className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex items-center gap-2 text-[14px] lg:text-[16px] "
+              className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex items-center gap-2 text-sm lg:text-base "
               // onClick={handleOpenSelectTokenModal}
             >
               <Select
@@ -73,7 +73,7 @@ const CreateMerlinPool = () => {
           </>
         ) : (
           <div
-            className="w-full rounded-md bg-[#150E39] px-2 py-2 text-[16px] "
+            className="w-full rounded-md bg-[#150E39] px-2 py-2 text-base "
             // onClick={handleOpenSelectTokenModal}
           >
             <Select

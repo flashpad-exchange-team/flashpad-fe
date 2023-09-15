@@ -27,14 +27,14 @@ const ToastContent = ({ type, message, hideIcon }: NotificationProps) => {
       case 'success':
         return 'bg-[#17B26A]';
       case 'info':
-        return 'bg-[#150E3980]';
+        return 'bg-darkBlue';
       default:
         return null;
     }
   };
   return (
     <div
-      className={`rounded-lg ${renderBg()} h-full min-h-[60px] py-4 px-6 flex items-center pr-12 w-full leading-4 gap-4 text-[14px] relative z-50 `}
+      className={`rounded-lg ${renderBg()} h-full min-h-[60px] py-4 px-6 flex items-center pr-12 w-full leading-4 gap-4 text-sm relative z-50 `}
     >
       <div className="w-[50] text-left">{hideIcon || renderIcon()}</div>
       {message}

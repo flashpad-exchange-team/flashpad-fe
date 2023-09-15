@@ -24,7 +24,7 @@ const MergePositionModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="40vw">
       <div className="flex items-center justify-center w-full">
-        <div className="text-[14px] mx-auto flex items-center justify-center">
+        <div className="text-sm mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
             <div className="absolute">
               <BNBICon size={34} />
@@ -35,30 +35,30 @@ const MergePositionModal = ({
           </div>
           <div className="ml-[70px]">
             <div className="text-bold">Token A - Token B</div>
-            <div className="text-[12px] font-normal">#ID-1644</div>
+            <div className="text-xs font-normal">#ID-1644</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
           <CloseIcon />
         </div>
       </div>
-      <div className="text-[15px] text-center text-[24px]">
+      <div className="text-[15px] text-center text-2xl">
         <span className="text-[#E6B300] font-bold">Merge</span> multiple
         positions
       </div>
-      <div className="text-center text-[#667085] mb-5">
+      <div className="text-center text-secondary mb-5">
         Regroup spNFTs into a single one
       </div>
       <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Select positions</div>
       <div className="m-2 flex justify-between">
         <div>NAME - NAME</div>
-        <div className="text-[14px] text-[#E6B300]">Unselect all</div>
+        <div className="text-sm text-[#E6B300]">Unselect all</div>
       </div>
       <div className="bg-blue-opacity-50 p-2 flex justify-between items-center my-4">
-        <div className="text-[14px]">Balance: 0</div>
+        <div className="text-sm">Balance: 0</div>
         <div className="">
           <div>0.002</div>
-          <div className="text-[#667085] text-[12px]">$0.19</div>
+          <div className="text-secondary text-xs">$0.19</div>
         </div>
         <div className="flex items-center">
           <CurrencyDollar />
@@ -78,7 +78,7 @@ const MergePositionModal = ({
         </Button>
         <Button
           onClick={handleStake}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Merge
         </Button>

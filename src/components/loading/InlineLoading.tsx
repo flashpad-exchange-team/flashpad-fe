@@ -8,7 +8,7 @@ interface InlineLoadingProps {
 
 const InlineLoading = ({ message, className }: InlineLoadingProps) => {
   return (
-    <div className={'text-[14px] flex items-center gap-3 ' + className}>
+    <div className={'text-sm flex items-center gap-3 ' + className}>
       <div className={styles.loadingContainer}>
         <ReloadIcon />
       </div>

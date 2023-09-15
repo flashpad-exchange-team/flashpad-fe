@@ -76,10 +76,10 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               </div>
             </div>
             <div className="bg-[#FF160080]  rounded-md px-3 py-2 mt-4 ">
-              <div className="text-[14px] flex items-center justify-between ">
+              <div className="text-sm flex items-center justify-between ">
                 Why don't I see my wallet? <InfoIcon />
               </div>
-              <div className="text-[14px] text-[#ffaf1d] mt-2">
+              <div className="text-sm text-primary mt-2">
                 Click here to learn more
               </div>
             </div>
@@ -87,10 +87,10 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
         )}
       </div>
       <div className="">
-        <div className="mt-2 font-bold text-[18px]">
+        <div className="mt-2 font-bold text-lg">
           {isConnected ? 'Connection successful' : 'Connect your wallet'}
         </div>
-        <div className="mt-2 mb-2 text-[14px] font-semibold">
+        <div className="mt-2 mb-2 text-sm font-semibold">
           {isConnected
             ? 'Your wallet is now connected to Arthur DEX'
             : 'Connecting your wallet is like “logging in” to Web3. Select your wallet form the options to get started.'}

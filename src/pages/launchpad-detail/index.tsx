@@ -15,10 +15,10 @@ import launchpadlanding from 'public/assets/images/launchpadlanding.png';
 const Launchpad = () => {
   return (
     <div className="max-w-[1096px] w-full mx-auto p-6 md:p-0">
-      <header className="text-[#ffaf1d] text-[36px] mt-20 font-bold">
+      <header className="text-primary text-[36px] mt-20 font-bold">
         Rodeo auction
       </header>
-      <div className="text-[#FCFCFD] text-[16px]">
+      <div className="text-[#FCFCFD] text-base">
         Rodeo Finance is the largest platform of leveraged DeFi products on
         Arbitrum, allowing users to earn yield on a diverse range of managed and
         passive investment strategies. The protocol utilizes undercollateralized
@@ -34,20 +34,20 @@ const Launchpad = () => {
         next generation of DeFi users through a simplified, composable solution
       </div>
       <Button
-        className="justify-center my-8 h-[52px] text-[16px] px-[42px]"
+        className="justify-center my-8 h-[52px] text-base px-[42px]"
         disabled
       >
         <ArrowLeft /> Back to Sales list
       </Button>
       <Image alt="logo" src={launchpadlanding.src} width={1096} height={740} />
-      <div className="text-[#FCFCFD] text-[16px] mt-8">
+      <div className="text-[#FCFCFD] text-base mt-8">
         Disclaimer: The $RDO token is not intended to constitute securities in
         any jurisdiction. This announcement is not an invitation to invest in
         securities or solicitations thereof in any jurisdiction. Please do your
         own due diligence.
       </div>
-      <div className="text-[12px] py-3 px-4 border-b border-[#344054] text-left"></div>
-      <div className="text-[#FCFCFD] text-[16px] mt-8">
+      <div className="text-xs py-3 px-4 border-b border-[#344054] text-left"></div>
+      <div className="text-[#FCFCFD] text-base mt-8">
         Please ensure you understand the public sale mechanics and terms before
         proceeding, deposited amounts CANNOT be withdrawn.Initially, the auction
         will start with a fully diluted valuation (FDV) of $830k, fixing a
@@ -57,7 +57,7 @@ const Launchpad = () => {
         at every purchase.
       </div>
 
-      <div className="text-[#FCFCFD] text-[16px] mt-2 flex">
+      <div className="text-[#FCFCFD] text-base mt-2 flex">
         <div>
           <Error />
         </div>
@@ -66,7 +66,7 @@ const Launchpad = () => {
           same final price.
         </div>
       </div>
-      <div className="text-[#FCFCFD] text-[16px] mt-2 flex">
+      <div className="text-[#FCFCFD] text-base mt-2 flex">
         <div>
           <Error />
         </div>
@@ -77,7 +77,7 @@ const Launchpad = () => {
         </div>
       </div>
 
-      <div className="w-full bg-[#150E3980] my-4 p-6">
+      <div className="w-full bg-darkBlue my-4 p-6">
         <div className="flex justify-around">
           <div>Whitelist stage</div>
           <div>
@@ -91,19 +91,19 @@ const Launchpad = () => {
           <div>
             <ArrowRight />
           </div>
-          <div className="text-[#FFAF1D]">Claims</div>
+          <div className="text-primary">Claims</div>
         </div>
-        <div className="text-[12px] my-4 px-4 border-b border-[#344054] text-left"></div>
-        <div className="text-[#FFAF1D] font-bold center flex justify-center">
+        <div className="text-xs my-4 px-4 border-b border-[#344054] text-left"></div>
+        <div className="text-primary font-bold center flex justify-center">
           Public sale has ended - Contributions are now claimable
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="w-full bg-[#150E3980] my-4 px-2 py-6">
-          <div className="text-[#FFAF1D]">Claims</div>
-          <div className="text-[12px] my-4 px-4 border-b border-[#344054] text-left"></div>
-          <div className="flex text-[14px] font-bold gap-4 justify-center">
+        <div className="w-full bg-darkBlue my-4 px-2 py-6">
+          <div className="text-primary">Claims</div>
+          <div className="text-xs my-4 px-4 border-b border-[#344054] text-left"></div>
+          <div className="flex text-sm font-bold gap-4 justify-center">
             <BNBICon size={40} />
             <div>
               <div className="">Token A - Token B</div>
@@ -115,46 +115,44 @@ const Launchpad = () => {
             <div>0 Token A</div>
           </div>
           <Button
-            className="justify-center h-[52px] mt-4 w-full text-[16px] px-[42px]"
+            className="justify-center h-[52px] mt-4 w-full text-base px-[42px]"
             disabled
           >
             Claim
           </Button>
         </div>
-        <div className="w-full bg-[#150E3980] my-4 px-2 py-6">
-          <div className="text-[#FFAF1D]">Summary</div>
-          <div className="text-[12px] my-4 px-4 border-b border-[#344054] text-left"></div>
+        <div className="w-full bg-darkBlue my-4 px-2 py-6">
+          <div className="text-primary">Summary</div>
+          <div className="text-xs my-4 px-4 border-b border-[#344054] text-left"></div>
           <div className="mt-2 flex flex-wrap gap-12">
             <div className="flex w-full md:w-[250px]">
               <Bank />
               <div className="ml-2">
-                <div className="text-[#98A2B3] text-[14px]">
+                <div className="text-[#98A2B3] text-sm">
                   Total raised / Hardcap
                 </div>
-                <div className="text-[14px]">1.061.115,56 / 1.200.000 USDC</div>
+                <div className="text-sm">1.061.115,56 / 1.200.000 USDC</div>
               </div>
             </div>
             <div className="flex w-full md:w-[200px]">
               <Bank />
               <div className="ml-2">
-                <div className="text-[#98A2B3] text-[14px]">Token B price</div>
-                <div className="text-[14px]">$0,088</div>
+                <div className="text-[#98A2B3] text-sm">Token B price</div>
+                <div className="text-sm">$0,088</div>
               </div>
             </div>
             <div className="flex w-full md:w-[250px]">
               <TokenMinter />
               <div className="ml-2">
-                <div className="text-[#98A2B3] text-[14px]">
-                  Circ. marketcap
-                </div>
-                <div className="text-[14px]">FDV</div>
+                <div className="text-[#98A2B3] text-sm">Circ. marketcap</div>
+                <div className="text-sm">FDV</div>
               </div>
             </div>
             <div className="flex w-full md:w-[200px]">
               <Safe />
               <div className="ml-2">
-                <div className="text-[#98A2B3] text-[14px]">FDV</div>
-                <div className="text-[14px]">$8,84M</div>
+                <div className="text-[#98A2B3] text-sm">FDV</div>
+                <div className="text-sm">$8,84M</div>
               </div>
             </div>
           </div>
@@ -162,10 +160,10 @@ const Launchpad = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-3 my-5">
-        <div className="w-full bg-[#150E3980] px-2 py-6">
+        <div className="w-full bg-darkBlue px-2 py-6">
           <div className="flex">
             <Coin />
-            <div className="ml-2 font-bold text-[24px]">
+            <div className="ml-2 font-bold text-2xl">
               How price is determined
             </div>
           </div>
@@ -178,16 +176,16 @@ const Launchpad = () => {
             price will therefore be:
           </div>
           <Button
-            className="justify-center w-full mt-4 h-[52px] text-[16px] px-[42px]"
+            className="justify-center w-full mt-4 h-[52px] text-base px-[42px]"
             disabled
           >
             Total $ raised / 1,200,000
           </Button>
         </div>
-        <div className="w-full bg-[#150E3980] px-2 py-6">
+        <div className="w-full bg-darkBlue px-2 py-6">
           <div className="flex">
             <ChartLine />
-            <div className="ml-2 font-bold text-[24px]">
+            <div className="ml-2 font-bold text-2xl">
               How price is determined
             </div>
           </div>
@@ -201,10 +199,10 @@ const Launchpad = () => {
             first-served basis. This stage will last for 48 hours.
           </div>
         </div>
-        <div className="w-full bg-[#150E3980] px-2 py-6">
+        <div className="w-full bg-darkBlue px-2 py-6">
           <div className="flex">
             <Wallet />
-            <div className="ml-2 font-bold text-[24px]">Claiming process</div>
+            <div className="ml-2 font-bold text-2xl">Claiming process</div>
           </div>
           <div className="text-[#98A2B3]">
             The public sale will last until July 3rd @ 12pm UTC. Shortly after

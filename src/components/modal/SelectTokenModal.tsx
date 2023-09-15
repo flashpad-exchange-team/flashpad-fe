@@ -86,7 +86,7 @@ const SelectTokenModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-between w-full mt-4 lg:mt-0">
-        <div className="text-[24px] text-bold mx-auto ] w-fit flex items-center gap-3 justify-start ml-0 mr-auto">
+        <div className="text-2xl text-bold mx-auto ] w-fit flex items-center gap-3 justify-start ml-0 mr-auto">
           <SwapLeftIcon />
           Select a token
           <SwapRightIcon />
@@ -103,7 +103,7 @@ const SelectTokenModal = ({
         onChange={onSearchChange}
       />
       <div className="max-h-[450px] overflow-y-auto pr-3">
-        <div className="text-[18px] font-semibold my-2">Common bases</div>
+        <div className="text-lg font-semibold my-2">Common bases</div>
         <div className="flex flex-wrap ">
           {tokensList.slice(0, 8).map((item: any, index: number) => (
             <div
@@ -130,7 +130,7 @@ const SelectTokenModal = ({
             </div>
           ))}
         </div>
-        <div className="text-[18px] font-semibold my-2">Tokens list</div>
+        <div className="text-lg font-semibold my-2">Tokens list</div>
         {tokensListFiltered.map((item: any) => (
           <div
             className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2"
@@ -148,11 +148,11 @@ const SelectTokenModal = ({
               )}
 
               <div>
-                <div className="text-[14px]">{item.symbol}</div>
-                <div className="text-[12px] text-[#475467]">{item.name}</div>
+                <div className="text-sm">{item.symbol}</div>
+                <div className="text-xs text-[#475467]">{item.name}</div>
               </div>
             </div>
-            <div className="text-[18px] pr-2">{item.curBalance}</div>
+            <div className="text-lg pr-2">{item.curBalance}</div>
           </div>
         ))}
       </div>

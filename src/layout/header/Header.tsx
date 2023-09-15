@@ -125,7 +125,7 @@ const Header = (props: INavbarProps) => {
         isOpen={isOpenConnectWallet}
         toggleOpen={toggleConnectWallet}
       />
-      <div className="bg-[#00000080] h-[80px] items-center flex ">
+      <div className="bg-dark h-[80px] items-center flex ">
         <div className=" m-auto w-full flex flex-wrap items-center justify-between px-4 lg:px-20  max-w-[1440px]">
           <div
             className={clsx([
@@ -144,12 +144,12 @@ const Header = (props: INavbarProps) => {
                     menuButton={
                       <div
                         className={clsx([
-                          ' text-[18px] gap-1 items-center cursor-pointer hover:text-[#FFAF1D] hoverItem hidden lg:flex',
+                          ' text-lg gap-1 items-center cursor-pointer hover:text-primary hoverItem hidden lg:flex',
                           menuItem.path === currentPath ||
                           menuItem?.subMenu?.some(
                             (subMenu: any) => subMenu.path === currentPath
                           )
-                            ? 'text-[#FFAF1D] active'
+                            ? 'text-primary active'
                             : '',
                         ])}
                       >
@@ -179,7 +179,7 @@ const Header = (props: INavbarProps) => {
                           className={clsx([
                             'flex items-center gap-2',
                             item.path === currentPath
-                              ? 'text-[#FFAF1D] active'
+                              ? 'text-primary active'
                               : '',
                           ])}
                         >
@@ -192,9 +192,9 @@ const Header = (props: INavbarProps) => {
                 ) : (
                   <div
                     className={clsx([
-                      'flex text-[18px] gap-1 items-center cursor-pointer hover:text-[#FFAF1D] hoverItem hidden lg:flex',
+                      'flex text-lg gap-1 items-center cursor-pointer hover:text-primary hoverItem hidden lg:flex',
                       menuItem.path === currentPath
-                        ? 'text-[#FFAF1D] active'
+                        ? 'text-primary active'
                         : '',
                     ])}
                     key={menuItem.path}
@@ -207,7 +207,7 @@ const Header = (props: INavbarProps) => {
               )}
           </div>
           <nav>
-            <ul className="navbar flex items-center text-[14px] lg:text-xl font-medium text-white">
+            <ul className="navbar flex items-center text-sm lg:text-xl font-medium text-white">
               {props.mode === 'app' ? (
                 <>
                   <Linea className="mr-8 hidden lg:block" />
@@ -248,12 +248,12 @@ const Header = (props: INavbarProps) => {
                   menuButton={
                     <div
                       className={clsx([
-                        ' text-[14px] cursor-pointer ',
+                        ' text-sm cursor-pointer ',
                         menuItem.path === currentPath ||
                         menuItem?.subMenu?.some(
                           (subMenu: any) => subMenu.path === currentPath
                         )
-                          ? 'text-[#FFAF1D] active'
+                          ? 'text-primary active'
                           : '',
                       ])}
                     >
@@ -275,7 +275,7 @@ const Header = (props: INavbarProps) => {
                         className={clsx([
                           'flex items-center gap-2',
                           item.path === currentPath
-                            ? 'text-[#FFAF1D] active'
+                            ? 'text-primary active'
                             : '',
                         ])}
                       >
@@ -288,10 +288,8 @@ const Header = (props: INavbarProps) => {
               ) : (
                 <div
                   className={clsx([
-                    ' text-[14px] gap-1 cursor-pointer text-center',
-                    menuItem.path === currentPath
-                      ? 'text-[#FFAF1D] active'
-                      : '',
+                    ' text-sm gap-1 cursor-pointer text-center',
+                    menuItem.path === currentPath ? 'text-primary active' : '',
                   ])}
                   key={menuItem.path}
                   onClick={() => router.push(menuItem.path)}

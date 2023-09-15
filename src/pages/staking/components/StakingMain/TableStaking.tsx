@@ -22,22 +22,22 @@ const TableStaking: React.FC<TableStakingProps> = ({ data }) => {
   const router = useRouter();
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-[#00000080] ">
+      <table className="min-w-full bg-dark ">
         <thead>
           <tr>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
               Token
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               TVL
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
               Composition
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               Fees APR
             </th>
-            <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               Pool share
             </th>
           </tr>
@@ -46,10 +46,10 @@ const TableStaking: React.FC<TableStakingProps> = ({ data }) => {
           {data?.map((item, index: number) => (
             <tr
               key={index}
-              className="hover:bg-[#150E3980] cursor-pointer"
+              className="hover:bg-darkBlue cursor-pointer"
               onClick={() => router.push('/farm-detail')}
             >
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                 <div className="relative">
                   <div className="absolute">
                     {item?.token1Logo ? (
@@ -81,11 +81,11 @@ const TableStaking: React.FC<TableStakingProps> = ({ data }) => {
                   {item?.token1} - {item?.token2}
                 </div>{' '}
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right relative">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
                 {' '}
                 ${item?.tvl}
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                 <div className="flex items-center gap-2 mb-1">
                   {item?.token1Logo ? (
                     <Image
@@ -113,12 +113,12 @@ const TableStaking: React.FC<TableStakingProps> = ({ data }) => {
                   1344.5556
                 </div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                 <div className="flex items-center gap-2 cursor-pointer justify-end">
                   {item?.apr}%
                 </div>
               </td>
-              <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
+              <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                 <div className="flex items-center gap-2 cursor-pointer justify-end">
                   {item?.apr}%
                 </div>

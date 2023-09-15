@@ -70,31 +70,31 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
         lpTokenDecimals={lpTokenDecimals}
       />
       <div className="overflow-x-auto mt-8">
-        <table className="min-w-full bg-[#00000080] relative">
+        <table className="min-w-full bg-dark relative">
           <thead>
             <tr>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
                 Lock
               </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-left">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
                 Name
               </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 My Pool Share
               </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 APR Range
               </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-right">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 TVL
               </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 Your deposit
               </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 Pending rewards
               </th>
-              <th className="text-[12px] py-3 px-4 border-b border-[#344054] text-center"></th>
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center"></th>
             </tr>
           </thead>
           {loading ? (
@@ -106,8 +106,8 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
           ) : (
             <tbody>
               {data.map((item, index: number) => (
-                <tr key={index} className="hover:bg-[#150E3980] cursor-pointer">
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-left">
+                <tr key={index} className="hover:bg-darkBlue cursor-pointer">
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                     {item.locked ? (
                       <div
                         data-tooltip-id="my-tooltip"
@@ -127,7 +127,7 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
                     )}
                   </td>
                   <td
-                    className="py-4 text-[14px] px-4 border-b border-[#344054] text-left relative"
+                    className="py-4 text-sm px-4 border-b border-[#344054] text-left relative"
                     onClick={() => {
                       router.push('/liquidity/pool-detail');
                     }}
@@ -162,22 +162,22 @@ const ListPoolsTable: React.FC<TableProps> = ({ data, loading }) => {
                       {item.token1} - {item.token2}
                     </div>
                   </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     {item.myPool || 0}%
                   </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     {item.apr}%
                   </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-right">
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     ${item.totalStaked}
                   </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     ${item.myStake}
                   </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     ${item.earnings}
                   </td>
-                  <td className="py-4 text-[14px] px-4 border-b border-[#344054] text-center">
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     {item.locked ? (
                       <div className="cursor-default text-[#475467] font-semibold">
                         Remove

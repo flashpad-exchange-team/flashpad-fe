@@ -115,18 +115,18 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
       <div className="block lg:flex items-center justify-between">
         <div>
           <div className="font-bold">Pools List</div>{' '}
-          <div className="text-[14px] text-[#98A2B3] mt-2 font-semibold">
+          <div className="text-sm text-[#98A2B3] mt-2 font-semibold">
             Custom-built infrastructure for Linea native public sales
           </div>
         </div>
       </div>
       <div className="block lg:flex gap-5 items-center mt-3">
         <div className="w-full w-[300px] flex">
-          <div className="w-[70px] bg-[#00000080] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+          <div className="w-[70px] bg-dark flex items-center justify-center rounded-tl-lg rounded-bl-lg">
             <Search />
           </div>
           <input
-            className="w-full w-[300px] bg-[#00000080] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+            className="w-full w-[300px] bg-dark h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
             placeholder="Search "
           />
         </div>
@@ -139,19 +139,19 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
         </Button>
       </div>
       <div className="flex items-center gap-4 mt-4">
-        <div className="bg-[#00000080] rounded-md w-1/2 px-4 py-3 flex justify-between">
+        <div className="bg-dark rounded-md w-1/2 px-4 py-3 flex justify-between">
           <div>
-            <div className="text-[14px] text-[#98A2B3]">Total TVL</div>
-            <div className="text-[14px]">53M$</div>
+            <div className="text-sm text-[#98A2B3]">Total TVL</div>
+            <div className="text-sm">53M$</div>
           </div>
           <Bank />
         </div>
-        <div className="bg-[#00000080] rounded-md w-1/2 px-4 py-3 flex justify-between">
+        <div className="bg-dark rounded-md w-1/2 px-4 py-3 flex justify-between">
           <div>
-            <div className="text-[14px] text-[#98A2B3]">V2 Pool TVL</div>
-            <div className="text-[14px]">53M$</div>
+            <div className="text-sm text-[#98A2B3]">V2 Pool TVL</div>
+            <div className="text-sm">53M$</div>
           </div>
-          <div className="text-[24px] font-bold text-[#FFAF1D]">V2</div>
+          <div className="text-2xl font-bold text-primary">V2</div>
         </div>
       </div>
 

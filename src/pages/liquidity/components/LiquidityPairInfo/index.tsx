@@ -136,7 +136,7 @@ const LiquidityPairInfo = ({
 
   return (
     <div
-      className={`bg-[#150E3980] rounded-lg my-2 p-4 ${
+      className={`bg-darkBlue rounded-lg my-2 p-4 ${
         token1Address && token2Address ? '' : 'hidden'
       }`}
     >
@@ -148,11 +148,11 @@ const LiquidityPairInfo = ({
           <InlineLoading message="Fetching liquidity ratio" className="mb-2" />
         ) : (
           <div>
-            <div className="text-[14px] ">
+            <div className="text-sm ">
               1 {token1Symbol} = <AnimatedNumber value={ratioToken1Token2} />{' '}
               {token2Symbol}{' '}
             </div>
-            <div className="text-[14px] ">
+            <div className="text-sm ">
               1 {token2Symbol} = <AnimatedNumber value={ratioToken2Token1} />{' '}
               {token1Symbol}{' '}
             </div>
@@ -166,49 +166,45 @@ const LiquidityPairInfo = ({
           <div className="h-[1px] w-full bg-[#1D2939] my-2"></div>
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-[14px] mt-0 ">Pair Type</div>
-              <div className="text-[14px] mt-1.5 ">
-                {token1Symbol} Swap rate
-              </div>
-              <div className="text-[14px] mt-1.5 ">
-                {token2Symbol} Swap rate
-              </div>
-              <div className="text-[14px] mt-1.5 ">
+              <div className="text-sm mt-0 ">Pair Type</div>
+              <div className="text-sm mt-1.5 ">{token1Symbol} Swap rate</div>
+              <div className="text-sm mt-1.5 ">{token2Symbol} Swap rate</div>
+              <div className="text-sm mt-1.5 ">
                 {token1Symbol}/{token2Symbol} Liquidity ratio
               </div>
-              <div className="text-[14px] mt-1.5 ">
+              <div className="text-sm mt-1.5 ">
                 {token2Symbol}/{token1Symbol} Liquidity ratio
               </div>
-              <div className="text-[14px] mt-1.5 ">Pool share</div>
-              <div className="text-[14px] mt-1.5 ">LP address</div>
+              <div className="text-sm mt-1.5 ">Pool share</div>
+              <div className="text-sm mt-1.5 ">LP address</div>
               {isSpNFT && (
-                <div className="text-[14px] mt-1.5 ">NFT Pool address</div>
+                <div className="text-sm mt-1.5 ">NFT Pool address</div>
               )}
             </div>
             <div>
-              <div className="text-[14px] mt-0 text-right text-[#FFAF1D] ">
+              <div className="text-sm mt-0 text-right text-primary ">
                 {isStableSwap ? 'Stable' : 'Volatile'}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 {isFirstLP ? 0 : swapRate1To2} {token2Symbol}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 {isFirstLP ? 0 : swapRate2To1} {token1Symbol}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 {isFirstLP ? 0 : ratioToken1Token2}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 {isFirstLP ? 0 : ratioToken2Token1}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 {isFirstLP ? '100%' : `${poolShare}%`}
               </div>
-              <div className="text-[14px] mt-1.5 text-right ">
+              <div className="text-sm mt-1.5 text-right ">
                 <CopyableText text={lpAddress} />
               </div>
               {isSpNFT && (
-                <div className="text-[14px] mt-1.5 text-right ">
+                <div className="text-sm mt-1.5 text-right ">
                   <CopyableText text={nftPoolAddress} />
                 </div>
               )}

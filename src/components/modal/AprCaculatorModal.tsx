@@ -14,9 +14,9 @@ export interface LockManageModalProps {
 const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
-      <div className="text-[14px]">
+      <div className="text-sm">
         <div className="flex items-center justify-center w-full">
-          <div className="text-[14px] mx-auto flex items-center justify-center">
+          <div className="text-sm mx-auto flex items-center justify-center">
             <div className="relative -mt-[30px]">
               <div className="absolute">
                 <BNBICon size={34} />
@@ -27,7 +27,7 @@ const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
             </div>
             <div className="ml-[70px]">
               <div className="text-bold">Token A - Token B</div>
-              <div className="text-[12px] font-normal">#ID-1644</div>
+              <div className="text-xs font-normal">#ID-1644</div>
             </div>
           </div>
           <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
@@ -35,7 +35,7 @@ const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
           </div>
         </div>
 
-        <div className="text-[15px] text-center text-[24px]">
+        <div className="text-[15px] text-center text-2xl">
           $0.3 - <span className="text-[#E6B300]">1.43%</span> APR
         </div>
         <div className="text-center">
@@ -85,12 +85,12 @@ const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
             <Eligibility />
             <div className="pl-2">
               <div>Locked</div>
-              <div className="text-[12px] text-[#667085]">1.61x Multiplier</div>
+              <div className="text-xs text-secondary">1.61x Multiplier</div>
             </div>
           </div>
           <div className="flex flex-col items-end">
             <div>110D 21D 26min 35s</div>
-            <div className="text-[12px] text-[#667085]">Remaining time</div>
+            <div className="text-xs text-secondary">Remaining time</div>
           </div>
         </div>
         <div className="flex justify-between items-center my-2">
@@ -195,7 +195,7 @@ const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
           >
             Cancel
           </Button>
-          <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]">
+          <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
             Harvest
           </Button>
         </div>

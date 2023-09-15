@@ -222,7 +222,7 @@ const RemoveLiquidityModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
-        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
+        <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
           Remove Liquidity {token1Symbol} - {token2Symbol}
           <SwapRightIcon />
@@ -231,22 +231,22 @@ const RemoveLiquidityModal = ({
           <CloseIcon />
         </div>
       </div>
-      <div className="text-[16px] font-semibold mb-3">
+      <div className="text-base font-semibold mb-3">
         Total Liquidity held:
-        <span className="text-[#E6B300] text-[18px] font-semibold ml-2">
+        <span className="text-[#E6B300] text-lg font-semibold ml-2">
           {totalLiquidity} LP Tokens
         </span>
       </div>
       <div className="text-[15px]">Amount to remove</div>
       <div className="relative">
         <input
-          className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+          className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
           placeholder="Enter value "
           value={amountToRemove}
           onChange={(e) => setAmountToRemove(e.target.value)}
         />
         <div
-          className="text-[12px] font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer absolute top-[20px] right-[20px]"
+          className="text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer absolute top-[20px] right-[20px]"
           onClick={() => setAmountToRemove(totalLiquidity)}
         >
           Max
@@ -254,7 +254,7 @@ const RemoveLiquidityModal = ({
       </div>
       <div className="text-[15px]">Deadline (mins)</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
         placeholder="Enter value "
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
@@ -263,7 +263,7 @@ const RemoveLiquidityModal = ({
       <div className="block lg:flex items-center gap-2">
         <Button
           onClick={handleRemoveLiquidity}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Remove Liquidity
         </Button>

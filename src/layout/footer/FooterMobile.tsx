@@ -14,7 +14,7 @@ const FooterMobile = () => {
   const toggleShow3 = () => setShow3(!show3);
 
   return (
-    <div className="bg-[#00000080] mb-[75px] h-100% min-h-[450px]  px-4 pt-4 text  pb-10">
+    <div className="bg-dark mb-[75px] h-100% min-h-[450px]  px-4 pt-4 text  pb-10">
       <div className="text-center mb-3">
         <Logo xl />
       </div>
@@ -29,46 +29,46 @@ const FooterMobile = () => {
       </div>
       <div>
         <div
-          className="text-[#FFAF1D] text-[18px] mt-6 flex items-center justify-between "
+          className="text-primary text-lg mt-6 flex items-center justify-between "
           onClick={toggleShow1}
         >
           Resources <ArrowDown stroke="white" />
         </div>
         {show1 && (
           <>
-            <div className=" text-[16px] mb-[4px] mt-4">Audit</div>
-            <div className=" text-[16px] mb-[4px]">Contact us</div>
-            <div className=" text-[16px] mb-[4px]">Contracts</div>
-            <div className=" text-[16px] mb-[4px]">Documentation</div>
+            <div className=" text-base mb-[4px] mt-4">Audit</div>
+            <div className=" text-base mb-[4px]">Contact us</div>
+            <div className=" text-base mb-[4px]">Contracts</div>
+            <div className=" text-base mb-[4px]">Documentation</div>
           </>
         )}
       </div>
       <div>
         <div
-          className="text-[#FFAF1D] text-[18px] mt-6 flex items-center justify-between "
+          className="text-primary text-lg mt-6 flex items-center justify-between "
           onClick={toggleShow2}
         >
           Help <ArrowDown stroke="white" />
         </div>{' '}
         {show2 && (
           <>
-            <div className=" text-[16px] mb-[4px] mt-4">FAQ</div>
-            <div className=" text-[16px] mb-[4px]">Guides</div>
-            <div className=" text-[16px] mb-[4px]">Support</div>
+            <div className=" text-base mb-[4px] mt-4">FAQ</div>
+            <div className=" text-base mb-[4px]">Guides</div>
+            <div className=" text-base mb-[4px]">Support</div>
           </>
         )}
       </div>
       <div>
         <div
-          className="text-[#FFAF1D] text-[18px] mt-6 flex items-center justify-between "
+          className="text-primary text-lg mt-6 flex items-center justify-between "
           onClick={toggleShow3}
         >
           Tools <ArrowDown stroke="white" />
         </div>
         {show3 && (
           <>
-            <div className=" text-[16px] mb-[4px] mt-4">Analytics</div>
-            <div className=" text-[16px] mb-[4px]">Bridge</div>
+            <div className=" text-base mb-[4px] mt-4">Analytics</div>
+            <div className=" text-base mb-[4px]">Bridge</div>
           </>
         )}
       </div>

@@ -18,7 +18,7 @@ const TransferPositionModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
-        <div className="text-[14px] mx-auto flex items-center justify-center">
+        <div className="text-sm mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
             <div className="absolute">
               <BNBICon size={34} />
@@ -29,21 +29,21 @@ const TransferPositionModal = ({
           </div>
           <div className="ml-[70px]">
             <div className="text-bold">Token A - Token B</div>
-            <div className="text-[12px] font-normal">#ID-1644</div>
+            <div className="text-xs font-normal">#ID-1644</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
           <CloseIcon />
         </div>
       </div>
-      <div className="text-[15px] text-center text-[24px]">
+      <div className="text-[15px] text-center text-2xl">
         <span className="text-[#E6B300] font-bold">Transfer</span> your position
       </div>
-      <div className="text-center text-[#667085] mb-5">
+      <div className="text-center text-secondary mb-5">
         Allocate TOKENS to your spNFT for more yield
       </div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px] mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
         placeholder="0x..."
       />
       <div className="block lg:flex items-center gap-2">
@@ -56,7 +56,7 @@ const TransferPositionModal = ({
         </Button>
         <Button
           onClick={handleStake}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Transfer
         </Button>

@@ -71,7 +71,7 @@ const LiquiditySettingModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
-        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
+        <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
           Setting
           <SwapRightIcon />
@@ -82,21 +82,21 @@ const LiquiditySettingModal = ({
       </div>
       <div className="text-[15px]">Slippage (%)</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
         placeholder="Enter value "
         value={slippage}
         onChange={(e) => setSlippage(e.target.value)}
       />
       <div className="text-[15px]">Deadline (mins)</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
         placeholder="Enter value "
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
       />
       <div className="text-[15px]">Max hops</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
         placeholder="Enter value "
         value={maxHops}
         onChange={(e) => setMaxHops(e.target.value)}
@@ -111,7 +111,7 @@ const LiquiditySettingModal = ({
         </Button>
         <Button
           onClick={handleSaveSettings}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Save settings
         </Button>

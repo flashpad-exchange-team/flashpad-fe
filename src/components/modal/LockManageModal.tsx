@@ -55,7 +55,7 @@ const LockManageModal = ({
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
-        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
+        <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
           Lock Manage
           <SwapRightIcon />
@@ -66,15 +66,15 @@ const LockManageModal = ({
       </div>
       <div className="text-[15px]">Select Pool</div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px] mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
         placeholder="Enter value"
       />
       <div className="text-[15px]">Lock time (days)</div>
       <div className="flex gap-2 items-center my-2">
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             is2WeeksSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.TWO_WEEKS);
             setLockTime('14');
@@ -83,9 +83,9 @@ const LockManageModal = ({
           2 WEEKS
         </div>
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             is1MonthSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.ONE_MONTH);
             setLockTime('30');
@@ -94,9 +94,9 @@ const LockManageModal = ({
           1 MONTH
         </div>
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             is3MonthsSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.THREE_MONTHS);
             setLockTime('90');
@@ -105,9 +105,9 @@ const LockManageModal = ({
           3 MONTHS
         </div>
         <div
-          className={`p-2 text-center bg-[#150E3980] cursor-pointer border-[${
+          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
             isCustomSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-[14px]`}
+          }] hover:border-[#E6B300] border w-1/4 text-sm`}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.CUSTOM);
           }}
@@ -116,7 +116,7 @@ const LockManageModal = ({
         </div>
       </div>
       <input
-        className="w-full bg-[#150E3980] h-[44px] pl-3 text-[14px]  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+        className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
         value={lockTime}
         disabled={!isCustomSelected}
         onChange={(e) => setLockTime(e.target.value)}
@@ -132,7 +132,7 @@ const LockManageModal = ({
         </Button>
         <Button
           onClick={handleConfirmLock}
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-[16px] px-[42px]"
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Confirm Lock
         </Button>

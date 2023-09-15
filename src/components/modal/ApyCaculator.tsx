@@ -15,7 +15,7 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
-        <div className="text-[24px] text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
+        <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
           APY Caculator
           <SwapRightIcon />
@@ -37,7 +37,7 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       </div>
       <div className="flex justify-between mb-2">
         <div className="">Lock duration</div>
-        <div className="text-[#E6B300] text-[14px]">Set max</div>
+        <div className="text-[#E6B300] text-sm">Set max</div>
       </div>
       <div className="flex gap-3">
         <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-2">
@@ -57,7 +57,7 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       </div>
       <div className="flex justify-between">
         <div>Yield Booster</div>
-        <div className="text-[#E6B300] text-[14px]">Set max bonus</div>
+        <div className="text-[#E6B300] text-sm">Set max bonus</div>
       </div>
       <div className="px-2 pt-4 bg-blue-opacity-50 flex justify-between mt-2">
         <div className="text-[#98A2B3]">Amount</div>
@@ -72,7 +72,7 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
 
       <div className="p-2 bg-blue-opacity-50 flex justify-between mt-2">
         <div>Nitro pool</div>
-        <div className="text-[#667085]">No compatible Nitro</div>
+        <div className="text-secondary">No compatible Nitro</div>
       </div>
 
       <div className="my-2">Estimates</div>

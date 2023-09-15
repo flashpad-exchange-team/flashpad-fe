@@ -86,7 +86,7 @@ const FarmPoolList = () => {
       <div className="flex flex-col md:flex-wrap md:flex-row md:items-center md:justify-between md:mb-4">
         <div className="order-1">
           <div className="font-bold">Merlin Pools </div>
-          <div className="text-[14px] text-[#98A2B3] mt-2 font-semibold">
+          <div className="text-sm text-[#98A2B3] mt-2 font-semibold">
             Custom-built infrastructure for Linea native public sales
           </div>
         </div>
