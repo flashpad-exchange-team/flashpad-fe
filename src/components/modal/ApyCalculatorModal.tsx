@@ -5,13 +5,13 @@ import SwapRightIcon from '@/icons/SwapRight';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 
-export interface LockManageModalProps {
+export interface ApyCalculatorModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-  saveTimeLock: (value: number) => void;
+  // saveTimeLock: (value: number) => void;
 }
 
-const ApyCalculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
+const ApyCalculatorModal = ({ toggleOpen, isOpen }: ApyCalculatorModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">

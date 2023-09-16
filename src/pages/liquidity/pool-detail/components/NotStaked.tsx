@@ -1,7 +1,15 @@
+import { Button } from '@/components/button/Button';
+import AddIcon from '@/icons/AddIcon';
 import ArrowRight from '@/icons/ArrowRight';
 import QuestionIcon from '@/icons/QuestionIcon';
 
-const NotStaked = () => {
+interface PoolDetailNotStakedProps {
+  toggleOpenCreatePosition: () => void;
+}
+
+const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
+  toggleOpenCreatePosition,
+}) => {
   return (
     <div className="overflow-x-auto mt-8">
       <table className="min-w-full bg-dark">
@@ -60,6 +68,15 @@ const NotStaked = () => {
           </tr>
         </tbody>
       </table>
+      <div className="flex flex-col mt-10 items-center">
+        <Button
+          className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center  text-base"
+          onClick={toggleOpenCreatePosition}
+        >
+          <AddIcon color="#0C111D" />
+          New Position
+        </Button>
+      </div>
     </div>
   );
 };
