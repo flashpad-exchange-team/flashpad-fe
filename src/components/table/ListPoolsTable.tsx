@@ -129,7 +129,7 @@ const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
                   <td
                     className="py-4 text-sm px-4 border-b border-[#344054] text-left relative"
                     onClick={() => {
-                      router.push('/liquidity/pool-detail');
+                      router.push(`/liquidity/pool-detail/${item.pairAddress}`);
                     }}
                   >
                     <div className="relative">
