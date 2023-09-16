@@ -11,7 +11,7 @@ export interface LockManageModalProps {
   isOpen: boolean;
 }
 
-const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
+const AprCalculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="text-sm">
@@ -206,4 +206,4 @@ const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   );
 };
 
-export default AprCaculatorModal;
+export default AprCalculatorModal;

@@ -11,13 +11,13 @@ export interface LockManageModalProps {
   saveTimeLock: (value: number) => void;
 }
 
-const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
+const ApyCalculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
         <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
-          APY Caculator
+          APY Calculator
           <SwapRightIcon />
         </div>
         <div className="cursor-pointer" onClick={toggleOpen}>
@@ -117,4 +117,4 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   );
 };
 
-export default ApyCaculator;
+export default ApyCalculatorModal;

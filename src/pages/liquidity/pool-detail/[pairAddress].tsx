@@ -1,12 +1,16 @@
 import { Button } from '@/components/button/Button';
 import BNBICon from '@/icons/BNBIcon';
-import CalculatorIcon from '@/icons/Caculator';
+import CalculatorIcon from '@/icons/Calculator';
 import ChartLineIcon from '@/icons/ChartLineIcon';
 import DollarIcon from '@/icons/DollarIcon';
 import FeeIcon from '@/icons/FeeIcon';
 import FlowIcon from '@/icons/FlowIcon';
 import Link from '@/icons/Link';
-import { ADDRESS_ZERO, CHAINS_TOKENS_LIST, CHAIN_EXPLORER_URL } from '@/utils/constants';
+import {
+  ADDRESS_ZERO,
+  CHAINS_TOKENS_LIST,
+  CHAIN_EXPLORER_URL,
+} from '@/utils/constants';
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import Staked from './components/Staked';
@@ -21,7 +25,7 @@ import { useAccount } from 'wagmi';
 const PoolDetail = () => {
   const router = useRouter();
   const {
-    pairAddress
+    pairAddress,
     //...queryParams,
   } = router.query;
 
@@ -46,28 +50,16 @@ const PoolDetail = () => {
     const userLpBalance = userAddress
       ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
       : 0;
-    const totalSupply = await pairContract.read(
-      pairAddress,
-      'totalSupply',
-      []
-    );
+    const totalSupply = await pairContract.read(pairAddress, 'totalSupply', []);
 
     const [token1Address, token2Address] = await Promise.all([
       pairContract.read(pairAddress, 'token0', []),
-      pairContract.read(pairAddress, 'token1', [])
+      pairContract.read(pairAddress, 'token1', []),
     ]);
 
     const [token1Symbol, token2Symbol] = await Promise.all([
-      erc20Contract.erc20Read(
-        token1Address,
-        'symbol',
-        []
-      ),
-      erc20Contract.erc20Read(
-        token2Address,
-        'symbol',
-        []
-      ),
+      erc20Contract.erc20Read(token1Address, 'symbol', []),
+      erc20Contract.erc20Read(token2Address, 'symbol', []),
     ]);
 
     setToken1Symbol(token1Symbol);
@@ -79,7 +71,7 @@ const PoolDetail = () => {
 
     const token2Logo = CHAINS_TOKENS_LIST.find((e) => {
       return e.symbol === token2Symbol;
-    })?.logoURI;    
+    })?.logoURI;
   };
 
   useEffect(() => {
