@@ -40,7 +40,7 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       <div className="p-2 bg-blue-opacity-50">
         <div className="">All Rewards</div>
         <div className="text-secondary text-sm py-2">
-          Harvest farming and Nitro rewards
+          Harvest farming and Merlin rewards
         </div>
       </div>
 
@@ -48,7 +48,7 @@ const HarvestModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
         <div>
           <div className="">spNFT Rewards</div>
           <div className="text-secondary text-sm py-2">
-            Harvest farming and Nitro rewards
+            Harvest farming and Merlin rewards
           </div>
         </div>
         <div className="text-[#E6B300]">

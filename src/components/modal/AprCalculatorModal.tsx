@@ -103,7 +103,7 @@ const AprCalculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
         <div className="flex justify-between items-center my-2">
           <div className="flex items-center">
             <CloseIcon />
-            <div className="pl-2">No staked in a Nitro pool</div>
+            <div className="pl-2">No staked in a Merlin pool</div>
           </div>
           <div>-</div>
         </div>

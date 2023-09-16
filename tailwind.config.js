@@ -1,5 +1,5 @@
 module.exports = {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}',"./node_modules/tailwind-datepicker-react/dist/**/*.js",],
   theme: {
     fontSize: {
       xs: '0.75rem',
@@ -17,6 +17,7 @@ module.exports = {
       colors: {
         primary: "#FFAF1D",
         secondary:'#667085',
+
         lightGray:'#344054'
       },
       lineHeight: {
@@ -33,4 +34,8 @@ module.exports = {
     },
   },
   plugins: [],
+//   content: [
+//     "./node_modules/tailwind-datepicker-react/dist/**/*.js",
+// ],
+
 };
