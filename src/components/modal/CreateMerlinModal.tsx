@@ -1,19 +1,13 @@
-import SwapLeftIcon from '@/icons/SwapLeft';
-import CommonModal from './CommonModal';
-import SwapRightIcon from '@/icons/SwapRight';
-import CloseIcon from '@/icons/CloseIcon';
-import { Button } from '../button/Button';
-import DividerDown from '@/icons/DividerDown';
-import { useState } from 'react';
-import {
-  DEFAULT_DEADLINE,
-  DEFAULT_MAX_HOPS,
-  DEFAULT_SLIPPAGE,
-} from '@/utils/constants';
-import customToast from '../notification/customToast';
 import BNBICon from '@/icons/BNBIcon';
+import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
+import SwapLeftIcon from '@/icons/SwapLeft';
+import SwapRightIcon from '@/icons/SwapRight';
+import { useState } from 'react';
 import DatePicker from 'tailwind-datepicker-react';
+import { Button } from '../button/Button';
 import Switch from '../switch/Switch';
+import CommonModal from './CommonModal';
 const options = {
   autoHide: true,
   todayBtn: false,

@@ -52,6 +52,8 @@ const PoolDetail = () => {
       : 0;
     const totalSupply = await pairContract.read(pairAddress, 'totalSupply', []);
 
+    console.log({ lpTokenDecimals, userLpBalance, totalSupply });
+
     const [token1Address, token2Address] = await Promise.all([
       pairContract.read(pairAddress, 'token0', []),
       pairContract.read(pairAddress, 'token1', []),
@@ -72,6 +74,8 @@ const PoolDetail = () => {
     const token2Logo = CHAINS_TOKENS_LIST.find((e) => {
       return e.symbol === token2Symbol;
     })?.logoURI;
+
+    console.log({ token1Logo, token2Logo });
   };
 
   useEffect(() => {
