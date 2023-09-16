@@ -39,7 +39,6 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -79,11 +78,11 @@ const TradeForm = ({
   const toggleOpenCreatePosition = () => {
     setOpenCreatePosition(!isOpenCreatePosition);
   };
-  const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
-    useState<boolean>(false);
-  const toggleOpenAddLiquidityCreatePosition = () => {
-    setOpenAddLiquidityCreatePosition(!isOpenAddLiquidityCreatePosition);
-  };
+  // const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
+  //   useState<boolean>(false);
+  // const toggleOpenAddLiquidityCreatePosition = () => {
+  //   setOpenAddLiquidityCreatePosition(!isOpenAddLiquidityCreatePosition);
+  // };
 
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>(null);
@@ -734,7 +733,9 @@ const TradeForm = ({
             !token2Amount
           }
         >
-          {feature === 'STAKE POSITION' && isFirstSpMinter ? 'Initialize' : FEATURE_PROPS[feature]?.buttonName}
+          {feature === 'STAKE POSITION' && isFirstSpMinter
+            ? 'Initialize'
+            : FEATURE_PROPS[feature]?.buttonName}
         </Button>
         <DividerDown />
       </div>

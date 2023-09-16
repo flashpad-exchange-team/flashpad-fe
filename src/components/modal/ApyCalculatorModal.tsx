@@ -71,8 +71,8 @@ const ApyCalculatorModal = ({ toggleOpen, isOpen }: ApyCalculatorModalProps) => 
       </div>
 
       <div className="p-2 bg-blue-opacity-50 flex justify-between mt-2">
-        <div>Nitro pool</div>
-        <div className="text-secondary">No compatible Nitro</div>
+        <div>Merlin pool</div>
+        <div className="text-secondary">No compatible Merlin</div>
       </div>
 
       <div className="my-2">Estimates</div>
@@ -94,7 +94,7 @@ const ApyCalculatorModal = ({ toggleOpen, isOpen }: ApyCalculatorModalProps) => 
         <div>5.88%</div>
       </div>
       <div className="flex justify-between mb-2">
-        <div>Nitro APR</div>
+        <div>Merlin APR</div>
         <div>5.88%</div>
       </div>
       <div className="flex justify-between mb-2">

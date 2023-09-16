@@ -5,7 +5,6 @@ import BNBICon from '@/icons/BNBIcon';
 import ClockIcon from '@/icons/ClockIcon';
 import FileIcon from '@/icons/FileIcon';
 import LiquidityLockIcon from '@/icons/LiquidityLockIcon';
-// import QuestionIcon from '@/icons/QuestionIcon';
 import TokenIcon from '@/icons/TokenIcon';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
