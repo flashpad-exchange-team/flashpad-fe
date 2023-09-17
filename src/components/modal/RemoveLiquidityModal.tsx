@@ -20,7 +20,8 @@ import { Address, useAccount } from 'wagmi';
 import { Button } from '../button/Button';
 import customToast from '../notification/customToast';
 import CommonModal from './CommonModal';
-
+import { v4 as uuidv4 } from 'uuid';
+import { useKeyContext } from '@/context/KeyContext';
 export interface RemoveLiquidityModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
@@ -49,6 +50,7 @@ const RemoveLiquidityModal = ({
   const [deadline, setDeadline] = useState<string>(DEFAULT_DEADLINE);
   const [totalLiquidity, setTotalLiquidity] = useState<string>('?');
   const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
+  const { setKey } = useKeyContext(); // Access the dataKey from the context
 
   const fetchTotalLiquidityHeld = async () => {
     if (!isOpen || !userAddress) return;
@@ -209,6 +211,7 @@ const RemoveLiquidityModal = ({
     const hash = txResult.hash;
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
+    setKey(uuidv4());
 
     setSuccessful(true);
     stopLoadingTx();

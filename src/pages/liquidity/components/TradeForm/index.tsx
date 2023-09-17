@@ -454,7 +454,7 @@ const TradeForm = ({
       message: 'Added liquidity successfully',
       type: 'success',
     });
-
+    setKey(uuidv4());
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
         action: 'provided liquidity',
@@ -589,13 +589,6 @@ const TradeForm = ({
           <SwapLeftIcon />
           {FEATURE_PROPS[feature].label}
           <SwapRightIcon />
-          <Button
-            onClick={() => {
-              setKey(uuidv4());
-            }}
-          >
-            Refetch
-          </Button>
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
           <div className="text-primary font-semibold flex items-center gap-2 text-sm lg:text-base ">
