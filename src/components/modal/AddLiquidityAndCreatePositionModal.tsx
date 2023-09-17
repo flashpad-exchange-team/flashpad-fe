@@ -7,6 +7,8 @@ import DividerDown from '@/icons/DividerDown';
 import BNBICon from '@/icons/BNBIcon';
 import GroupIcon from '@/icons/GroupIcon';
 import ArrowDown from '@/icons/ArrowDown';
+import ArrowUp from '@/icons/ArrowUp';
+import { useState } from 'react';
 
 export interface AddLiquidityAndCreatePositionModalProps {
   isOpen: boolean;
@@ -17,6 +19,8 @@ const AddLiquidityAndCreatePositionModal = ({
   isOpen,
   toggleOpen,
 }: AddLiquidityAndCreatePositionModalProps) => {
+  const [isOpenTotalApr, setIsOpenTotalApr] = useState(true);
+  const [selectedButton, setSelectedButton] = useState('OFF');
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-between w-full">
@@ -102,10 +106,20 @@ const AddLiquidityAndCreatePositionModal = ({
           </div>
         </div>
         <div className="flex">
-          <Button className="w-[50px] !bg-[#000] text-[#fff] rounded-[2px] !text-[12px] flex justify-center items-center">
-            On
+          <Button
+            onClick={() => setSelectedButton('ON')}
+            className={`w-[50px] ${
+              selectedButton === 'ON' ? '' : '!bg-[#000] text-[#fff]'
+            } rounded-[2px] !text-[12px] flex justify-center items-center`}
+          >
+            ON
           </Button>
-          <Button className="w-[50px] rounded-[2px] !text-[12px] flex justify-center items-center">
+          <Button
+            onClick={() => setSelectedButton('OFF')}
+            className={`w-[50px] ${
+              selectedButton === 'OFF' ? '' : '!bg-[#000] text-[#fff]'
+            } rounded-[2px] !text-[12px] flex justify-center items-center`}
+          >
             OFF
           </Button>
         </div>
@@ -119,21 +133,30 @@ const AddLiquidityAndCreatePositionModal = ({
         <div>$0</div>
       </div>
       <div className="flex justify-between mb-5 text-[12px]">
-        <div>Total APR</div>
+        <div
+          className="flex items-center"
+          onClick={() => setIsOpenTotalApr(!isOpenTotalApr)}
+        >
+          <div>Total APR</div> {isOpenTotalApr ? <ArrowUp /> : <ArrowDown />}
+        </div>
         <div className="text-secondary">20.3%</div>
       </div>
-      <div className="flex justify-between my-3 text-[12px]">
-        <div>Swap fees APR</div>
-        <div>0</div>
-      </div>
-      <div className="flex justify-between my-3 text-[12px]">
-        <div>Farm base APR</div>
-        <div>0</div>
-      </div>
-      <div className="flex justify-between my-3 text-[12px]">
-        <div>Lock bonus APR</div>
-        <div>0</div>
-      </div>
+      {isOpenTotalApr && (
+        <>
+          <div className="flex justify-between my-3 text-[12px]">
+            <div>Swap fees APR</div>
+            <div>0</div>
+          </div>
+          <div className="flex justify-between my-3 text-[12px]">
+            <div>Farm base APR</div>
+            <div>0</div>
+          </div>
+          <div className="flex justify-between my-3 text-[12px]">
+            <div>Lock bonus APR</div>
+            <div>0</div>
+          </div>
+        </>
+      )}
 
       <div className="block lg:flex items-center gap-2">
         <Button
