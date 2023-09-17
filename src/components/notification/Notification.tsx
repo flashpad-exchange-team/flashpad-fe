@@ -7,8 +7,14 @@ export interface NotificationProps {
   message: string | ReactNode;
   hideIcon?: boolean;
   autoClose?: number;
+  className?: string;
 }
-const Notification = ({ type, message, hideIcon }: NotificationProps) => {
+const Notification = ({
+  type,
+  message,
+  hideIcon,
+  className,
+}: NotificationProps) => {
   const renderIcon = () => {
     switch (type) {
       case 'error':
@@ -35,7 +41,7 @@ const Notification = ({ type, message, hideIcon }: NotificationProps) => {
   };
   return (
     <div
-      className={`rounded-lg ${renderBg()} min-h-[56px] flex items-center pl-4 pr-6 leading-4 mb-2 gap-2 text-sm`}
+      className={`rounded-lg ${renderBg()} min-h-[56px] flex items-center pl-4 pr-6 leading-4 mb-2 gap-2 text-sm ${className}`}
     >
       {hideIcon || renderIcon()}
       {message}

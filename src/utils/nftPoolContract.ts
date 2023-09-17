@@ -15,7 +15,7 @@ export const read = async (
       functionName,
       args,
     });
-    return result;
+    return mapResultArrayToObj(functionName, result);
   } catch (err: any) {
     handleError(err);
     return undefined;
@@ -43,3 +43,28 @@ export const write = async (
     return undefined;
   }
 };
+
+const getStakingPositionResultKeys = [
+  'amount',
+  'amountWithMultiplier',
+  'startLockTime',
+  'lockDuration',
+  'lockMultiplier',
+  'rewardDebt',
+  'boostPoints',
+  'totalMultiplier',
+];
+
+const functionResultKeysMap: { [k: string]: string[] } = {
+  'getStakingPosition': getStakingPositionResultKeys,
+};
+
+const mapResultArrayToObj = (functionName: string, result: any[]) => {
+  const props = functionResultKeysMap[functionName];
+  if (!props) return result;
+  const resObj: { [k: string]: any } = {};
+  props.forEach((prop, i) => {
+    resObj[prop] = result[i];
+  });
+  return resObj;
+}

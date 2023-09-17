@@ -39,6 +39,7 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import { useRouter } from 'next/router';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -57,15 +58,14 @@ interface TradeFormProps {
   inputTitle1: string;
   inputTitle2: string;
   dividerIcon: React.ReactNode;
-  handleClickViewExistingPosition: () => void;
 }
 
 const TradeForm = ({
   inputTitle1,
   inputTitle2,
   dividerIcon,
-  handleClickViewExistingPosition,
 }: TradeFormProps) => {
+  const router = useRouter();
   const [feature, setFeature] = useState('STAKE POSITION');
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
@@ -78,11 +78,11 @@ const TradeForm = ({
   const toggleOpenCreatePosition = () => {
     setOpenCreatePosition(!isOpenCreatePosition);
   };
-  const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
-    useState<boolean>(false);
-  const toggleOpenAddLiquidityCreatePosition = () => {
-    setOpenAddLiquidityCreatePosition(!isOpenAddLiquidityCreatePosition);
-  };
+  // const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
+  //   useState<boolean>(false);
+  // const toggleOpenAddLiquidityCreatePosition = () => {
+  //   setOpenAddLiquidityCreatePosition(!isOpenAddLiquidityCreatePosition);
+  // };
 
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>(null);
@@ -135,6 +135,10 @@ const TradeForm = ({
     abi: ArthurPairABI,
     functionName: 'token0',
   });
+
+  const handleViewPoolList = () => {
+    router.push('/pools');
+  };
 
   const toggleOpen = () => setOpen(!isOpen);
   const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
@@ -714,7 +718,7 @@ const TradeForm = ({
         )}
         <div
           className="mx-auto w-fit mt-4 mb-4 hover:underline cursor-pointer flex items-center gap-2 text-[#98A2B3]"
-          onClick={handleClickViewExistingPosition}
+          onClick={handleViewPoolList}
         >
           <BackIcon /> Back to Pool list
         </div>

@@ -13,22 +13,25 @@ import BigNumber from 'bignumber.js';
 import clsx from 'clsx';
 import Search from '@/icons/Search';
 import Bank from '@/icons/Bank';
+import { useRouter } from 'next/router';
 
 interface PoolListProps {
-  setIsAddLiquidity: (val: boolean) => void;
-  isAddLiquidity: boolean;
 }
 
-const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
+const PoolList = ({ }: PoolListProps) => {
   const { address: userAddress } = useAccount();
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const startLoading = () => setLoading(true);
   const stopLoading = () => setLoading(false);
 
   const [allPairsData, setAllPairsData] = useState<any>([]);
 
+  const handleClickAddLiquidity = () => {
+    router.push('/liquidity');
+  }
+
   const getAllPairs = async () => {
-    if (isAddLiquidity) return;
     startLoading();
 
     const nPairs = await factoryContract.allPairsLength();
@@ -103,13 +106,12 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
 
   useEffect(() => {
     getAllPairs();
-  }, [isAddLiquidity]);
+  }, []);
 
   return (
     <div
       className={clsx([
-        'max-w-[1096px] w-full mx-auto my-20 px-2',
-        isAddLiquidity ? ' hidden' : '',
+        'max-w-[1096px] w-full mx-auto my-20 px-2'
       ])}
     >
       <div className="block lg:flex items-center justify-between">
@@ -132,7 +134,7 @@ const PoolList = ({ setIsAddLiquidity, isAddLiquidity }: PoolListProps) => {
         </div>
         <Button
           className="px-2 h-[48px] lg:h-[52px] w-full lg:w-[290px] flex justify-center"
-          onClick={() => setIsAddLiquidity(true)}
+          onClick={handleClickAddLiquidity}
         >
           <AddIcon color="#0C111D" />
           Add Liquidity

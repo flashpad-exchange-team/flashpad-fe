@@ -1,4 +1,4 @@
-const StackNitro = () => {
+const StackMerlin = () => {
   return (
     <svg
       width="32"
@@ -18,4 +18,4 @@ const StackNitro = () => {
   );
 };
 
-export default StackNitro;
+export default StackMerlin;

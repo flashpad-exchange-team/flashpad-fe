@@ -76,7 +76,7 @@ const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
                 Lock
               </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 Name
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
@@ -129,7 +129,7 @@ const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
                   <td
                     className="py-4 text-sm px-4 border-b border-[#344054] text-left relative"
                     onClick={() => {
-                      router.push('/liquidity/pool-detail');
+                      router.push(`/pool-detail/${item.pairAddress}`);
                     }}
                   >
                     <div className="relative">
@@ -158,7 +158,7 @@ const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
                         )}
                       </div>
                     </div>
-                    <div>
+                    <div className="ml-16">
                       {item.token1} - {item.token2}
                     </div>
                   </td>

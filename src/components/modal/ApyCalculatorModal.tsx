@@ -5,19 +5,19 @@ import SwapRightIcon from '@/icons/SwapRight';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 
-export interface LockManageModalProps {
+export interface ApyCalculatorModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-  saveTimeLock: (value: number) => void;
+  // saveTimeLock: (value: number) => void;
 }
 
-const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
+const ApyCalculatorModal = ({ toggleOpen, isOpen }: ApyCalculatorModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
         <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
-          APY Caculator
+          APY Calculator
           <SwapRightIcon />
         </div>
         <div className="cursor-pointer" onClick={toggleOpen}>
@@ -71,8 +71,8 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
       </div>
 
       <div className="p-2 bg-blue-opacity-50 flex justify-between mt-2">
-        <div>Nitro pool</div>
-        <div className="text-secondary">No compatible Nitro</div>
+        <div>Merlin pool</div>
+        <div className="text-secondary">No compatible Merlin</div>
       </div>
 
       <div className="my-2">Estimates</div>
@@ -94,7 +94,7 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
         <div>5.88%</div>
       </div>
       <div className="flex justify-between mb-2">
-        <div>Nitro APR</div>
+        <div>Merlin APR</div>
         <div>5.88%</div>
       </div>
       <div className="flex justify-between mb-2">
@@ -117,4 +117,4 @@ const ApyCaculator = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   );
 };
 
-export default ApyCaculator;
+export default ApyCalculatorModal;
