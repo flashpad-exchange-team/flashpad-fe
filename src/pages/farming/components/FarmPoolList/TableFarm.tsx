@@ -75,7 +75,6 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                     )}
                   </div>
                   <div className="absolute left-[15px]">
-                    {' '}
                     {item?.token2Logo ? (
                       <Image
                         alt="logo"
@@ -93,7 +92,6 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                 </div>
               </td>
               <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
-                {' '}
                 ${item?.tvl}
               </td>
               <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">

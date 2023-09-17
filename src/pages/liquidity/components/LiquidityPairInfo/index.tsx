@@ -148,12 +148,12 @@ const LiquidityPairInfo = ({
         ) : (
           <div>
             <div className="text-sm ">
-              1 {token1Symbol} = <AnimatedNumber value={ratioToken1Token2} />{' '}
-              {token2Symbol}{' '}
+              1 {token1Symbol} = <AnimatedNumber value={ratioToken1Token2} />
+              {token2Symbol}
             </div>
             <div className="text-sm ">
-              1 {token2Symbol} = <AnimatedNumber value={ratioToken2Token1} />{' '}
-              {token1Symbol}{' '}
+              1 {token2Symbol} = <AnimatedNumber value={ratioToken2Token1} />
+              {token1Symbol}
             </div>
           </div>
         )}

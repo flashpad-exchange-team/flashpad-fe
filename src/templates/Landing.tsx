@@ -42,7 +42,7 @@ const Landing = () => {
             innovation. A unified platform merging a Decentralized Exchange and
             Launchpad, Arthur Exchange empowers Linea's community for seamless
             trading and project launches. Join us in shaping the future of
-            decentralized finance.{' '}
+            decentralized finance.
           </div>
           <div
             className="mt-7 mb-7 w-fit z-10 hidden xl:block"
@@ -67,7 +67,7 @@ const Landing = () => {
           </div>
           <div>
             <div className="text-white  text-base xl:text-lg font-semibold ">
-              Arthur Exchange DEX is live on Linea{' '}
+              Arthur Exchange DEX is live on Linea
             </div>
             <div className="text-white  text-base xl:text-lg font-semibold ">
               Join our <span className="text-primary">community</span> to find
