@@ -33,7 +33,6 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
           <ConnectSuccess />
         ) : (
           <>
-            {' '}
             <div className="block mt-4">
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "

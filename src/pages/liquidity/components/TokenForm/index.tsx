@@ -67,7 +67,7 @@ const TokenForm = ({
       </div>
       <div className="flex items-center justify-between w-full text-sm lg:[text-16px]">
         <div className="mt-2 font-semibold">
-          Balance:{' '}
+          Balance:
           {tokenData?.symbol
             ? `${tokenData.balance || 0} ${tokenData.symbol || ''}`
             : 0}

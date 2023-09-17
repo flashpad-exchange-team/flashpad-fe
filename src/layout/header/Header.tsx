@@ -296,7 +296,7 @@ const Header = (props: INavbarProps) => {
                 >
                   <div className=" w-fit ml-auto mr-auto mb-1 smallSVG">
                     {menuItem.icon}
-                  </div>{' '}
+                  </div>
                   {menuItem.name}
                 </div>
               )

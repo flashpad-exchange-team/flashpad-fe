@@ -49,7 +49,7 @@ const FooterMobile = () => {
           onClick={toggleShow2}
         >
           Help <ArrowDown stroke="white" />
-        </div>{' '}
+        </div>
         {show2 && (
           <>
             <div className=" text-base mb-[4px] mt-4">FAQ</div>

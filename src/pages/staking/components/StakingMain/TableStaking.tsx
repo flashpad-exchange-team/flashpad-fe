@@ -64,7 +64,6 @@ const TableStaking: React.FC<TableStakingProps> = ({ data }) => {
                     )}
                   </div>
                   <div className="absolute left-[15px]">
-                    {' '}
                     {item?.token2Logo ? (
                       <Image
                         alt="logo"
@@ -79,10 +78,9 @@ const TableStaking: React.FC<TableStakingProps> = ({ data }) => {
                 </div>
                 <div className="ml-12">
                   {item?.token1} - {item?.token2}
-                </div>{' '}
+                </div>
               </td>
               <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
-                {' '}
                 ${item?.tvl}
               </td>
               <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">

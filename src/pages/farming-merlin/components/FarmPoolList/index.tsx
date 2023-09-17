@@ -109,13 +109,13 @@ const FarmPoolList = () => {
             </div>
           </div>
 
-          <div className="hidden md:block">
-            <Select options={FILTER_FARM} placeHolder="Filter" />
+          <div className="hidden md:block w-[200px]">
+            <Select options={FILTER_FARM} />
           </div>
-          <div className="hidden md:block">
-            <Select options={FILTER_FARM} placeHolder="Sort by TVL" />
+          <div className="hidden md:block w-[200px]">
+            <Select options={FILTER_FARM} placeHolder={'Sort by TVL'} />
           </div>
-          <div className="md:hidden">
+          <div className="md:hidden w-[200px]">
             <Button className="h-[40px] w-[40px] flex justify-center">
               <Menu />
             </Button>

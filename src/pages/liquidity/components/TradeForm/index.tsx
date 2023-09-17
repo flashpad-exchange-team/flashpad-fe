@@ -635,7 +635,7 @@ const TradeForm = ({
           onClick={handleSwitchPair}
         >
           {dividerIcon}
-        </div>{' '}
+        </div>
         <TokenForm
           openModal={() => {
             setTokenBeingSelected(2);

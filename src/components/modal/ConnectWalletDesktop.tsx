@@ -67,7 +67,6 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
           <ConnectSuccess />
         ) : (
           <>
-            {' '}
             <div className="flex flex-wrap gap-2  mt-4">
               <div
                 className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer "

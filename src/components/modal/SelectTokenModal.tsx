@@ -124,7 +124,7 @@ const SelectTokenModal = ({
                   <Image alt="logo" src={item.logoURI} width={25} height={25} />
                 ) : (
                   <BNBICon />
-                )}{' '}
+                )}
                 {item.symbol}
               </div>
             </div>

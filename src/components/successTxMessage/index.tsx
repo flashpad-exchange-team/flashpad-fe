@@ -12,8 +12,7 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
   return {
     mainMessage: (
       <div>
-        {' '}
-        You’ve successfully {action} worth{' '}
+        You’ve successfully {action} worth
         <span className="text-primary">
           {usdValue} of {token1} - {token2} LP
         </span>
@@ -21,16 +20,14 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
     ),
     subMessage: (
       <div>
-        Head to the{' '}
+        Head to the
         <Link href="/" className="text-primary">
-          {' '}
           dashboard page
-        </Link>{' '}
+        </Link>
         or to the
         <Link href="/" className="text-primary">
-          {' '}
           pool page
-        </Link>{' '}
+        </Link>
         to check your position
       </div>
     ),
@@ -45,11 +42,11 @@ export const handleSuccessTxMessageSwap: (params: any) => SuccessTxInfo = (
   return {
     mainMessage: (
       <div>
-        You’ve successfully {action}{' '}
+        You’ve successfully {action}
         <span className="text-primary">
           {token1Amount} of {token1}
-        </span>{' '}
-        to{' '}
+        </span>
+        to
         <span className="text-primary">
           {token2Amount} {token2}
         </span>
