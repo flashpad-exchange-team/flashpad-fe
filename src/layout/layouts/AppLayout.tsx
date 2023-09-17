@@ -9,6 +9,7 @@ import { Meta } from '../Meta';
 import { AppConfig } from '@/utils/AppConfig';
 import { APP_BASED_CHAIN } from '@/utils/constants';
 import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
+import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -39,10 +40,14 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   return isClient ? (
     <>
-      <SwitchNetworkModal
+      <AddLiquidityAndCreatePositionModal
         isOpen={isOpenSwitchNetwork}
         toggleOpen={toggleSwitchNetwork}
       />
+      {/* <SwitchNetworkModal
+        isOpen={isOpenSwitchNetwork}
+        toggleOpen={toggleSwitchNetwork}
+      /> */}
       <div
         style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
         className=" min-h-[104vh] flex flex-col  justify-between "

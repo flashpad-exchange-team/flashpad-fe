@@ -40,7 +40,7 @@ const ApyCalculatorModal = ({ toggleOpen, isOpen }: ApyCalculatorModalProps) => 
         <div className="text-[#E6B300] text-sm">Set max</div>
       </div>
       <div className="flex gap-3">
-        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-2">
+        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2">
           -
         </div>
         <div className="flex items-center bg-blue-opacity-50 w-[40%] justify-end px-6 py-2">

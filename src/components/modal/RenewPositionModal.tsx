@@ -52,7 +52,7 @@ const RenewPositionModal = ({
         <div className="text-[#E6B300] text-sm">Set max</div>
       </div>
       <div className="flex gap-0 md:gap-3">
-        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-0 md:mr-2">
+        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-0">
           -
         </div>
         <div className="flex items-center bg-blue-opacity-50 w-[30%] md:w-[40%] justify-end px-6 py-2">
