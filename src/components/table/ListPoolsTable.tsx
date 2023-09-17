@@ -105,7 +105,7 @@ const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
             </tbody>
           ) : (
             <tbody>
-              {data.map((item, index: number) => (
+              {data?.map((item, index: number) => (
                 <tr key={index} className="hover:bg-darkBlue cursor-pointer">
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                     {item.locked ? (
