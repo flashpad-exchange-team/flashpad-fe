@@ -11,11 +11,7 @@ export interface PoolInfoModalProps {
   isOpen: boolean;
 }
 
-<<<<<<<< HEAD:src/components/modal/PoolInfoModal.tsx
 const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
-========
-const AprCalculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
->>>>>>>> c83de3205224906931ed0dbfb1036afb1d527d3b:src/components/modal/AprCalculatorModal.tsx
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="text-sm">
@@ -210,8 +206,4 @@ const AprCalculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   );
 };
 
-<<<<<<<< HEAD:src/components/modal/PoolInfoModal.tsx
 export default PoolInfoModal;
-========
-export default AprCalculatorModal;
->>>>>>>> c83de3205224906931ed0dbfb1036afb1d527d3b:src/components/modal/AprCalculatorModal.tsx
