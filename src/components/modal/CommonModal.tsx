@@ -22,7 +22,11 @@ const CommonModal: React.FC<ModalProps> = ({
   const modalRef = useRef(null as any);
   const handleClickOutside = (e: any) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
-      onRequestClose();
+      const isDatePicker = e.target.classList.contains('cursor-pointer');
+      const isModalContent = e.target.closest('.modal-content');
+      if (!isDatePicker && !isModalContent) {
+        onRequestClose();
+      }
     }
   };
   useEffect(() => {

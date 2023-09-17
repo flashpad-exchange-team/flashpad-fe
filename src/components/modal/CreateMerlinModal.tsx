@@ -81,6 +81,7 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
           show={show}
           setShow={handleClose}
           options={options}
+          classNames="cursor-pointer"
         />
       </div>
       <div className="flex items-center justify-between my-3">
@@ -90,6 +91,7 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
           show={show}
           setShow={handleClose}
           options={options}
+          classNames="cursor-pointer"
         />
       </div>
       <div className="flex items-center justify-between my-3">
@@ -99,6 +101,7 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
           show={show}
           setShow={handleClose}
           options={options}
+          classNames="cursor-pointer"
         />
       </div>
       <div className="flex items-center justify-between my-3">
@@ -108,6 +111,7 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
           show={show}
           setShow={handleClose}
           options={options}
+          classNames="cursor-pointer"
         />
       </div>
       <div className="text-[15px] my-2">Description (max 255 char)</div>
