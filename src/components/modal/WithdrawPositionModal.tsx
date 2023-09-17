@@ -9,7 +9,10 @@ export interface LockManageModalProps {
   isOpen: boolean;
 }
 
-const WithdrawalModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
+const WithdrawPositionModal = ({
+  toggleOpen,
+  isOpen,
+}: LockManageModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
@@ -95,4 +98,4 @@ const WithdrawalModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   );
 };
 
-export default WithdrawalModal;
+export default WithdrawPositionModal;

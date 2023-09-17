@@ -9,7 +9,6 @@ import Error from '@/icons/Error';
 export interface AddToPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-  saveTimeLock: (value: number) => void;
 }
 
 const AddToPositionModal = ({

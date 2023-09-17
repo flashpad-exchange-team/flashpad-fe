@@ -43,7 +43,6 @@ const PoolDetail = () => {
   const [token2Logo, setToken2Logo] = useState<string>('');
 
   const [userSpNfts, setUserSpNfts] = useState<any>();
-
   const [isOpenApyCalculator, setOpenApyCalculator] = useState(false);
   const toggleOpenApyCalculator = () => {
     setOpenApyCalculator(!isOpenApyCalculator);
@@ -101,6 +100,7 @@ const PoolDetail = () => {
 
   const getUserStakedPositions = async () => {
     if (!userAddress || nftPoolAddress === ADDRESS_ZERO) return;
+
     const spNfts = await nftDataService.getNFTsOwnedByAddress(
       userAddress,
       nftPoolAddress
@@ -108,16 +108,10 @@ const PoolDetail = () => {
     const spNftsWithRewards = [];
     for (const nft of spNfts) {
       const [rwd, stakingPosition] = await Promise.all([
-        nftPoolContract.read(
-          nftPoolAddress,
-          'pendingRewards',
-          [nft.tokenId],
-        ),
-        nftPoolContract.read(
-          nftPoolAddress,
-          'getStakingPosition',
-          [nft.tokenId]
-        ),
+        nftPoolContract.read(nftPoolAddress, 'pendingRewards', [nft.tokenId]),
+        nftPoolContract.read(nftPoolAddress, 'getStakingPosition', [
+          nft.tokenId,
+        ]),
       ]);
       spNftsWithRewards.push({
         ...nft,
@@ -141,13 +135,12 @@ const PoolDetail = () => {
 
   const handleClickBtnContract = () => {
     if (nftPoolAddress !== ADDRESS_ZERO) {
-      window.open(
-        `${CHAIN_EXPLORER_URL}/address/${nftPoolAddress}`
-      );
+      window.open(`${CHAIN_EXPLORER_URL}/address/${nftPoolAddress}`);
     } else {
       customToast({
-        message: 'This liquidity pool has not been initialized with a spNFT contract yet',
-        type: 'info',        
+        message:
+          'This liquidity pool has not been initialized with a spNFT contract yet',
+        type: 'info',
       });
     }
   };
@@ -259,7 +252,7 @@ const PoolDetail = () => {
             toggleOpenCreatePosition={toggleOpenCreatePosition}
           />
         ) : (
-          <NotStaked toggleOpenCreatePosition={toggleOpenCreatePosition}/>
+          <NotStaked toggleOpenCreatePosition={toggleOpenCreatePosition} />
         )}
       </div>
     </>
