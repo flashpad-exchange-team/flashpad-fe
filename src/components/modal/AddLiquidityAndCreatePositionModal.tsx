@@ -1,192 +1,28 @@
-import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { useState } from 'react';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
-import Image from 'next/image';
-import { Address } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
-import { waitForTransaction } from '@wagmi/core';
-import { DEFAULT_TIME_LOCK, MAX_UINT256 } from '@/utils/constants';
-import BigNumber from 'bignumber.js';
-import customToast from '../notification/customToast';
-import * as pairContract from '@/utils/pairContract';
-import * as nftPoolContract from '@/utils/nftPoolContract';
-import { daysToSeconds } from '@/utils/web3Helpers';
-import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
 import DividerDown from '@/icons/DividerDown';
+import BNBICon from '@/icons/BNBIcon';
+import GroupIcon from '@/icons/GroupIcon';
+import ArrowDown from '@/icons/ArrowDown';
 
 export interface AddLiquidityAndCreatePositionModalProps {
   isOpen: boolean;
   toggleOpen: () => void;
-  lpAddress?: Address;
-  nftPoolAddress?: Address;
-  token1Data: {
-    symbol: string;
-    logo: string;
-    [p: string]: any;
-  };
-  token2Data: {
-    symbol: string;
-    logo: string;
-    [p: string]: any;
-  };
-}
-
-enum LockTimeOptions {
-  TWO_WEEKS,
-  ONE_MONTH,
-  THREE_MONTHS,
-  CUSTOM,
 }
 
 const AddLiquidityAndCreatePositionModal = ({
-  toggleOpen,
   isOpen,
-  lpAddress,
-  nftPoolAddress,
-  token1Data,
-  token2Data,
+  toggleOpen,
 }: AddLiquidityAndCreatePositionModalProps) => {
-  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
-
-  const { address: userAddress } = useAccount();
-  const [lockTime, setLockTime] = useState(DEFAULT_TIME_LOCK);
-  const [lockTimeOption, setLockTimeOption] = useState<LockTimeOptions>(
-    LockTimeOptions.TWO_WEEKS
-  );
-  const [stakeAmount, setStakeAmount] = useState('0');
-
-  const is2WeeksSelected = lockTimeOption == LockTimeOptions.TWO_WEEKS;
-  const is1MonthSelected = lockTimeOption == LockTimeOptions.ONE_MONTH;
-  const is3MonthsSelected = lockTimeOption == LockTimeOptions.THREE_MONTHS;
-  const isCustomSelected = lockTimeOption == LockTimeOptions.CUSTOM;
-
-  const { data: balanceLP } = useBalance({
-    address: isOpen ? userAddress : undefined,
-    token: lpAddress,
-    watch: true,
-  });
-
-  const resetInput = () => {
-    setStakeAmount('0');
-    setLockTime('14');
-    setLockTimeOption(LockTimeOptions.TWO_WEEKS);
-  };
-
-  const handleCreatePosition = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (!balanceLP) {
-      customToast({
-        message: 'Could not get LP balance info',
-        type: 'error',
-      });
-      // return;
-    }
-
-    let bnStakeAmount = BigNumber(stakeAmount);
-    const nLockTime = Number(lockTime);
-    if (bnStakeAmount.isGreaterThan(balanceLP?.formatted!)) {
-      customToast({
-        message: 'Not enough LP Balance',
-        type: 'error',
-      });
-      return;
-    }
-    if (
-      bnStakeAmount.isNaN() ||
-      bnStakeAmount.isLessThanOrEqualTo(0) ||
-      Number.isNaN(nLockTime) ||
-      !Number.isInteger(nLockTime) ||
-      nLockTime <= 0
-    ) {
-      customToast({
-        message: 'Please input valid amount and lock time',
-        type: 'error',
-      });
-      return;
-    }
-
-    const bnStakeAmountParsed = bnStakeAmount.times(
-      BigNumber(10).pow(balanceLP?.decimals!)
-    );
-    console.log(1);
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Creating Stake Position ...',
-      message: 'Confirming your transaction. Please wait.',
-    });
-    console.log(2);
-
-    const lpAllowance = (await pairContract.read(lpAddress!, 'allowance', [
-      userAddress,
-      nftPoolAddress,
-    ])) as bigint;
-
-    if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmountParsed)) {
-      const approveRes = await pairContract.write(
-        userAddress!,
-        lpAddress!,
-        'approve',
-        [nftPoolAddress, MAX_UINT256]
-      );
-      if (!approveRes) {
-        stopLoadingTx();
-        return;
-      }
-
-      const approveHash = approveRes.hash;
-      const txReceipt = await waitForTransaction({ hash: approveHash });
-      console.log({ txReceipt });
-    }
-
-    const txResult = await nftPoolContract.write(
-      userAddress,
-      nftPoolAddress!,
-      'createPosition',
-      [bnStakeAmountParsed, daysToSeconds(nLockTime) + '']
-    );
-
-    if (!txResult) {
-      stopLoadingTx();
-      return;
-    }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    resetInput();
-    stopLoadingTx();
-
-    startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
-        action: 'created staking position',
-        token1: token1Data.symbol,
-        token2: token2Data.symbol,
-        txHash: hash,
-        usdValue: bnStakeAmount.toString(),
-      })
-    );
-  };
-
-  console.log({ nftPoolAddress });
-
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
+    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-between w-full">
         <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
           <SwapLeftIcon />
-          Add Liquidity
+          Add V2 liquidity
           <SwapRightIcon />
         </div>
         <div className="cursor-pointer" onClick={toggleOpen}>
@@ -196,127 +32,118 @@ const AddLiquidityAndCreatePositionModal = ({
       <div className="text-[#98A2B3] text-sm mb-2 font-semibold ">
         Deposit assets on Arthur and start earning yield.
       </div>
-      <div className="text-base font-semibold mb-3 flex items-center gap-2 w-fit mx-auto">
-        {token1Data.logo ? (
-          <Image alt="logo" src={token1Data.logo} width={54} height={54} />
-        ) : (
-          <BNBICon size={54} />
-        )}
+      <div className="p-2 flex items-center gap-4 text-[12px]">
         <div>
-          <div className="text-sm">Token</div>
-          <div className="text-[22px] flex items-center gap-2">
-            {token1Data.symbol}
+          <BNBICon size={32} />
+        </div>
+        <div>
+          <div>Token A - Token B</div>
+          <div>100000</div>
+        </div>
+      </div>
+      <div className="m-2">
+        <GroupIcon />
+      </div>
+      <div className="p-2 flex items-center gap-4 text-[12px]">
+        <div>
+          <BNBICon size={32} />
+        </div>
+        <div>
+          <div>Token A - Token B</div>
+          <div>100000</div>
+        </div>
+      </div>
+      <div className="bg-blue-opacity-50 p-2 text-[14px] my-1">
+        <div className="flex justify-between">
+          <div className="flex gap-4">
+            <div>1 ETH = 1.027,6289 TOKEN</div>
+            <div className="text-[#344054]">($1,91)</div>
+          </div>
+          <ArrowDown />
+        </div>
+        <div className="flex gap-4">
+          <div>1 AICODE = 0,001 ETH </div>
+          <div className="text-[#344054]">($1,91)</div>
+        </div>
+      </div>
+      <div className="bg-blue-opacity-50 p-2 text-[16px] my-1">
+        Boost options
+      </div>
+      <div className="flex justify-between mb-2">
+        <div className="">Lock duration</div>
+        <div className="text-[#E6B300] text-sm">Set max</div>
+      </div>
+      <div className="flex gap-2">
+        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2">
+          -
+        </div>
+        <div className="flex items-center bg-blue-opacity-50 w-[50%] justify-end px-6 py-2">
+          <span className="text-[#E6B300] mr-4">0</span> Days
+        </div>
+        <div className="flex items-center bg-blue-opacity-50 w-[40%] justify-end px-6 py-2">
+          <span className="text-[#E6B300] mr-4">0</span> Months
+        </div>
+        <div>
+          <Button className="w-[60px] flex justify-center items-center rounded-[4px]">
+            +
+          </Button>
+        </div>
+      </div>
+      <div className="text-right text-secondary text-sm my-2">
+        4.37% lock bonus (x1.04)
+      </div>
+
+      <div className="p-2 flex justify-between bg-blue-opacity-50">
+        <div>
+          <div className="text-lg">Nitro auto-staking</div>
+          <div className="text-secondary text-sm">
+            Auto unbind your underlying LP tokens
           </div>
         </div>
+        <div className="flex">
+          <Button className="w-[50px] !bg-[#000] text-[#fff] rounded-[2px] !text-[12px] flex justify-center items-center">
+            On
+          </Button>
+          <Button className="w-[50px] rounded-[2px] !text-[12px] flex justify-center items-center">
+            OFF
+          </Button>
+        </div>
+      </div>
 
-        <div className="text-[22px] ml-3 mr-3">-</div>
+      <div className="bg-blue-opacity-50 p-2 text-[16px] my-1">
+        Boost options
+      </div>
+      <div className="flex justify-between my-5">
+        <div>Deposit value</div>
+        <div>$0</div>
+      </div>
+      <div className="flex justify-between mb-5 text-[12px]">
+        <div>Total APR</div>
+        <div className="text-secondary">20.3%</div>
+      </div>
+      <div className="flex justify-between my-3 text-[12px]">
+        <div>Swap fees APR</div>
+        <div>0</div>
+      </div>
+      <div className="flex justify-between my-3 text-[12px]">
+        <div>Farm base APR</div>
+        <div>0</div>
+      </div>
+      <div className="flex justify-between my-3 text-[12px]">
+        <div>Lock bonus APR</div>
+        <div>0</div>
+      </div>
 
-        {token2Data.logo ? (
-          <Image alt="logo" src={token2Data.logo} width={54} height={54} />
-        ) : (
-          <BNBICon size={54} />
-        )}
-        <div>
-          <div className="text-sm">Token</div>
-          <div className="text-[22px] flex items-center gap-2">
-            {token2Data.symbol}
-          </div>
-        </div>
-      </div>
-      <div className="text-[15px]">Amount</div>
-      <div className="relative">
-        <input
-          className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
-          placeholder="Enter value "
-          value={stakeAmount}
-          onChange={(event) => setStakeAmount(event.target.value)}
-        />
-        <div
-          className="text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer absolute top-[20px] right-[20px]"
-          onClick={() => setStakeAmount(balanceLP?.formatted || '0')}
-        >
-          Max
-        </div>
-      </div>
-      <div className=" mb-3 text-[15px]">
-        Balance: {balanceLP?.formatted || '?'} LP tokens
-      </div>
-      <div className="text-[15px]">Lock duration (days)</div>
-      <div className="flex gap-2 items-center my-2">
-        <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is2WeeksSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
-          onClick={() => {
-            setLockTimeOption(LockTimeOptions.TWO_WEEKS);
-            setLockTime('14');
-          }}
-        >
-          2 WEEKS
-        </div>
-        <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is1MonthSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
-          onClick={() => {
-            setLockTimeOption(LockTimeOptions.ONE_MONTH);
-            setLockTime('30');
-          }}
-        >
-          1 MONTH
-        </div>
-        <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is3MonthsSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
-          onClick={() => {
-            setLockTimeOption(LockTimeOptions.THREE_MONTHS);
-            setLockTime('90');
-          }}
-        >
-          3 MONTHS
-        </div>
-        <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            isCustomSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
-          onClick={() => {
-            setLockTimeOption(LockTimeOptions.CUSTOM);
-          }}
-        >
-          CUSTOM
-        </div>
-      </div>
-      <input
-        className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
-        value={lockTime}
-        disabled={!isCustomSelected}
-        onChange={(e) => setLockTime(e.target.value)}
-        placeholder="Enter the number of lock days "
-      />
-      <div className="text-base font-semibold mt-2">Estimates</div>
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="text-sm mt-1 ">Deposit value</div>
-          <div className="text-sm mt-1 ">Total APR</div>
-          <div className="text-sm mt-1 ">Farm base APR</div>
-          <div className="text-sm mt-1 ">Farm bonus APR</div>
-          <div className="text-sm mt-1 ">Earned fees APR</div>
-        </div>
-        <div>
-          <div className="text-sm mt-1 text-right ">0</div>{' '}
-          <div className="text-sm mt-1 text-right text-primary ">0%</div>
-          <div className="text-sm mt-1 text-right ">0%</div>
-          <div className="text-sm mt-1 text-right ">0%</div>
-          <div className="text-sm mt-1 text-right ">0%</div>
-        </div>
-      </div>
       <div className="block lg:flex items-center gap-2">
         <Button
-          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
-          onClick={handleCreatePosition}
+          className="w-full justify-center mt-2 mb-2 px-[42px]"
+          type="secondary"
+          onClick={toggleOpen}
         >
-          Create
+          Cancel
+        </Button>
+        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
+          Create Position
         </Button>
       </div>
       <DividerDown />

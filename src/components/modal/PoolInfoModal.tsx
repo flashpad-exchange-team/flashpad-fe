@@ -6,12 +6,12 @@ import BNBICon from '@/icons/BNBIcon';
 import DownloadIcon from '@/icons/DownloadIcon';
 import Eligibility from '@/icons/Eligibility';
 
-export interface LockManageModalProps {
+export interface PoolInfoModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
 }
 
-const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
+const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="text-sm">
@@ -206,4 +206,4 @@ const AprCaculatorModal = ({ toggleOpen, isOpen }: LockManageModalProps) => {
   );
 };
 
-export default AprCaculatorModal;
+export default PoolInfoModal;
