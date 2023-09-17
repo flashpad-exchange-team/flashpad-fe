@@ -1,4 +1,3 @@
-// useBlockchainData.js
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
@@ -8,29 +7,37 @@ import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 
-const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
+const useAllPairsData = (userAddress: `0x${string}` | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchAllPairs = async (userAddress: `0x${string}` | undefined) => {
     console.log('FETCH', userAddress);
     setIsLoading(true);
 
-    const nPairs = await factoryContract.allPairsLength();
-
     const listPairs = [];
+    const nPairs = await factoryContract.allPairsLength();
     const { timestamp } = await web3Helpers.getBlock();
+
     for (let i = 0; i < nPairs; i++) {
       const pairAddress = await factoryContract.getPairByIndex(i);
-      const timeLock = await pairContract.read(pairAddress, 'timeLock', []);
-      const lpTokenDecimals = await pairContract.read(
-        pairAddress,
-        'decimals',
-        []
-      );
 
-      const token1Address = await pairContract.read(pairAddress, 'token0', []);
-
-      const token2Address = await pairContract.read(pairAddress, 'token1', []);
+      const [
+        timeLock,
+        lpTokenDecimals,
+        userLpBalance,
+        totalSupply,
+        token1Address,
+        token2Address,
+      ] = await Promise.all([
+        pairContract.read(pairAddress, 'timeLock', []),
+        pairContract.read(pairAddress, 'decimals', []),
+        userAddress
+          ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
+          : 0,
+        pairContract.read(pairAddress, 'totalSupply', []),
+        pairContract.read(pairAddress, 'token0', []),
+        pairContract.read(pairAddress, 'token1', []),
+      ]);
 
       const token1Symbol = await erc20Contract.erc20Read(
         token1Address,
@@ -51,15 +58,6 @@ const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
       const token2Logo = CHAINS_TOKENS_LIST.find((e) => {
         return e.symbol === token2Symbol;
       })?.logoURI;
-
-      const userLpBalance = userAddress
-        ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
-        : 0;
-      const totalSupply = await pairContract.read(
-        pairAddress,
-        'totalSupply',
-        []
-      );
 
       const poolShare = BigNumber(userLpBalance)
         .div(totalSupply)
@@ -85,6 +83,7 @@ const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
 
     return listPairs;
   };
+
   const { data, error } = useSWR(userAddress, fetchAllPairs, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
@@ -112,4 +111,4 @@ const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
   };
 };
 
-export default useBlockchainData;
+export default useAllPairsData;
