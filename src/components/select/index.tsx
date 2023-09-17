@@ -6,9 +6,11 @@ interface SelectProps {
   options: any[];
   onSelect?: (selectedOption: string) => void;
   placeHolder?: string;
+  icon?: any;
+  disabled?: boolean;
 }
 
-const Select: React.FC<SelectProps> = ({ options, onSelect, placeHolder }) => {
+const Select: React.FC<SelectProps> = ({ options, placeHolder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSeclectedOption] = useState('');
   const selectRef = useRef<HTMLDivElement>(null);

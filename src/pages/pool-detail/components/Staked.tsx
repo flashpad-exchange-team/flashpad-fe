@@ -28,7 +28,9 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
 }) => {
   const [harvestAllOff, setHarvestAllOff] = useState<boolean>(true);
 
-  const handleHarvestAll = async () => {};
+  const handleHarvestAll = async () => {
+    setHarvestAllOff(true);
+  };
 
   return (
     <>
@@ -40,10 +42,11 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
             onClick={handleHarvestAll}
             disabled={harvestAllOff}
           >
-            <AddIcon color={harvestAllOff ? '#667085': '#0C111D'}/>
+            <AddIcon color={harvestAllOff ? '#667085' : '#0C111D'} />
             Harvest All
           </Button>
-          <Button className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center  text-base"
+          <Button
+            className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center  text-base"
             onClick={toggleOpenCreatePosition}
           >
             <AddIcon color="#0C111D" />
@@ -106,8 +109,12 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                     </div>
                   </div>
                   <div className="ml-12">
-                    <div>{token1Symbol} - {token2Symbol}</div>
-                    <div className="text-secondary text-sm">#ID-{sp.tokenId}</div>
+                    <div>
+                      {token1Symbol} - {token2Symbol}
+                    </div>
+                    <div className="text-secondary text-sm">
+                      #ID-{sp.tokenId}
+                    </div>
                   </div>
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
@@ -126,7 +133,12 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                   <div>&lt;$0.01</div>
-                  <div className="text-secondary text-sm">{BigNumber(sp.pendingRewards).div(BigNumber(10).pow(18)).toString()} LP TOKEN</div>
+                  <div className="text-secondary text-sm">
+                    {BigNumber(sp.pendingRewards)
+                      .div(BigNumber(10).pow(18))
+                      .toString()}{' '}
+                    LP TOKEN
+                  </div>
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                   <div className="flex items-center gap-2 cursor-pointer justify-center">

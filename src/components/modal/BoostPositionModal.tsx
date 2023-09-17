@@ -3,10 +3,6 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
-import CurrencyDollar from '@/icons/CurrencyDollar';
-import SaleIcon from '@/icons/SaleIcon';
-import CalendarIcon from '@/icons/CalendarIcon';
-import UnlockIcon from '@/icons/UnlockIcon';
 
 export interface BoostPositionModalProps {
   toggleOpen: () => void;

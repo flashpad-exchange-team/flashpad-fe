@@ -57,7 +57,7 @@ const CreateMerlinPool = () => {
               >
                 <Select
                   options={CHAINS_TOKENS_LIST}
-                  value={{ value: 'ETH', label: 'ETH' }}
+                  placeHolder="ETH"
                   icon={<BNBICon />}
                   disabled
                 />
@@ -74,7 +74,7 @@ const CreateMerlinPool = () => {
               >
                 <Select
                   options={CHAINS_TOKENS_LIST}
-                  value={{ value: 'ETH', label: 'ETH' }}
+                  placeHolder="ETH"
                   icon={<BNBICon />}
                   disabled
                 />
@@ -87,7 +87,7 @@ const CreateMerlinPool = () => {
             >
               <Select
                 options={CHAINS_TOKENS_LIST}
-                value={{ value: 'ETH', label: 'ETH' }}
+                placeHolder="ETH"
                 icon={<BNBICon />}
                 disabled
               />
