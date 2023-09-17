@@ -1,70 +1,91 @@
-import ArrowDown from '@/icons/ArrowDown';
-import ArrowUp from '@/icons/ArrowUp';
-import React, { useState, useEffect, useRef } from 'react';
+import { ReactNode } from 'react';
+import {
+  ControlProps,
+  IndicatorSeparatorProps,
+  IndicatorsContainerProps,
+  default as SelectComponent,
+  SingleValueProps,
+} from 'react-select';
 
-interface SelectProps {
+export interface SelectProps {
   options: any[];
-  onSelect?: (selectedOption: string) => void;
-  placeHolder?: string;
-  icon?: any;
+  icon?: ReactNode;
+  value?: any;
   disabled?: boolean;
+  placeHolder?: string;
+  onChange?: (value: any) => void;
 }
 
-const Select: React.FC<SelectProps> = ({ options, placeHolder }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSeclectedOption] = useState('');
-  const selectRef = useRef<HTMLDivElement>(null);
+const customStyles: any = {
+  control: (provided: ControlProps) => ({
+    ...provided,
+    border: 'none',
+    boxShadow: 'none',
+    backgroundColor: 'transparent',
+    '&:focus': {
+      boxShadow: 'none',
+    },
+    width: '100%',
+    color: '#fff',
+    '& input ': {
+      display: 'none',
+    },
+    cursor: 'pointer',
+  }),
+  singleValue: (provided: IndicatorsContainerProps) => ({
+    ...provided,
+    color: 'white',
+    fontSize: '14px',
+    fontWeight: '600', // Set the text color to white
+  }),
+  dropdownIndicator: (provided: IndicatorsContainerProps) => ({
+    ...provided,
+    padding: 0,
+    color: 'white',
+    '&:hover': {
+      svg: {
+        fill: 'white', // Set the hover color of the icon
+      },
+    },
+  }),
+  indicatorSeparator: (provided: IndicatorSeparatorProps) => ({
+    ...provided,
+    display: 'none', // Hide the separator between the arrow icon and the value
+  }),
+  input: (provided: IndicatorSeparatorProps) => ({
+    ...provided,
+    display: 'none', // Hide the input element
+  }),
+};
 
-  // Close the dropdown when a click occurs outside the component
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        selectRef.current &&
-        !selectRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleOptionClick = (value: string) => {
-    setSeclectedOption(value);
-    setIsOpen(false);
-  };
-
+const Select = ({
+  options,
+  icon,
+  value,
+  disabled,
+  placeHolder,
+  onChange,
+}: SelectProps) => {
+  const CustomSingleValue: React.FC<SingleValueProps> = ({ children }) => (
+    <div className="flex items-center gap-2">
+      {icon}
+      {children}
+    </div>
+  );
   return (
-    <div className="custom-select relative" ref={selectRef}>
-      <div
-        className={`select-header flex justify-between ${isOpen ? 'open' : ''}`}
-        onClick={toggleDropdown}
-      >
-        <div>{placeHolder ? placeHolder : 'Sort'}</div>
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
-      </div>
-      {isOpen && (
-        <ul className="select-options absolute t-[50px] text-[14px] bg-[#000]">
-          {options.map((option) => (
-            <li
-              className={`cursor-pointer hover:text-[#E6B300] my-3 ${
-                selectedOption === option.value ? 'text-[#E6B300]' : ''
-              }`}
-              key={option}
-              onClick={() => handleOptionClick(option.value)}
-            >
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="w-full">
+      <SelectComponent
+        options={options}
+        styles={customStyles}
+        // defaultValue={options?.length && options[0]}
+        value={value}
+        components={{ SingleValue: CustomSingleValue }}
+        isSearchable={false}
+        isDisabled={disabled}
+        placeholder={placeHolder}
+        onChange={onChange}
+      />
     </div>
   );
 };
-
 export default Select;

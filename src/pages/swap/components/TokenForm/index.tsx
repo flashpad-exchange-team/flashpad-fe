@@ -44,7 +44,7 @@ const TokenForm = ({
                 <BNBICon />
               )
             }
-            placeHolder={tokenData?.symbol}
+            value={{ value: tokenData?.symbol, label: tokenData?.symbol }}
             disabled
           />
         </div>
