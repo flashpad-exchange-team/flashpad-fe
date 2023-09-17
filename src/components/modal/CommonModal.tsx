@@ -39,10 +39,10 @@ const CommonModal: React.FC<ModalProps> = ({
 
   return isOpen ? (
     <>
-      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-[#000000E5]">
+      <div className="justify-center items-center flex overflow-hidden fixed inset-0 z-50 outline-none focus:outline-none bg-[#000000E5]">
         <div
           ref={modalRef}
-          className={`relative w-auto my-6 mx-auto max-w-[90vw] bg-[#0A071E] p-[20px] pb-[30px]`}
+          className={`overflow-auto max-h-[92vh] relative w-auto my-6 mx-auto max-w-[90vw] bg-[#0A071E] p-[20px] pb-[30px]`}
           style={{ width: isSmallScreen ? '90vw' : width }}
         >
           {children}
