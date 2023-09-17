@@ -14,14 +14,15 @@ import clsx from 'clsx';
 import Search from '@/icons/Search';
 import Bank from '@/icons/Bank';
 import { useRouter } from 'next/router';
-import useBlockchainData from '@/hooks/useAllPairsData';
+import useAllPairsData from '@/hooks/useAllPairsData';
+import { mutate } from 'swr';
 
 interface PoolListProps {}
 
 const PoolList = ({}: PoolListProps) => {
   const { address: userAddress } = useAccount();
   const router = useRouter();
-  const { data, isLoading } = useBlockchainData(userAddress);
+  const { data, isLoading } = useAllPairsData(userAddress);
 
   const handleClickAddLiquidity = () => {
     router.push('/liquidity');

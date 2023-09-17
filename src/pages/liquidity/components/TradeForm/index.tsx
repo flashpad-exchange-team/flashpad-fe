@@ -40,6 +40,8 @@ import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import { useRouter } from 'next/router';
+import { v4 as uuidv4 } from 'uuid';
+import { useKeyContext } from '@/context/KeyContext';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -70,6 +72,8 @@ const TradeForm = ({
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
+  const { setKey } = useKeyContext(); // Access the dataKey from the context
+
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [isOpenLockManage, setOpenLockManage] = useState<boolean>(false);
@@ -78,6 +82,7 @@ const TradeForm = ({
   const toggleOpenCreatePosition = () => {
     setOpenCreatePosition(!isOpenCreatePosition);
   };
+
   // const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
   //   useState<boolean>(false);
   // const toggleOpenAddLiquidityCreatePosition = () => {
@@ -584,6 +589,13 @@ const TradeForm = ({
           <SwapLeftIcon />
           {FEATURE_PROPS[feature].label}
           <SwapRightIcon />
+          <Button
+            onClick={() => {
+              setKey(uuidv4());
+            }}
+          >
+            Refetch
+          </Button>
         </div>
         <div className=" flex items-center gap-2 mt-8 justify-between">
           <div className="text-primary font-semibold flex items-center gap-2 text-sm lg:text-base ">

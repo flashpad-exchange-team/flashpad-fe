@@ -1,4 +1,4 @@
-// useBlockchainData.js
+// useAllPairsData.js
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
@@ -7,12 +7,12 @@ import * as factoryContract from '@/utils/factoryContract';
 import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
+import { useKeyContext } from '@/context/KeyContext';
 
-const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
+const useAllPairsData = (userAddress: `0x${string}` | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
-
-  const fetchAllPairs = async (userAddress: `0x${string}` | undefined) => {
-    console.log('FETCH', userAddress);
+  const { dataKey, setKey } = useKeyContext(); // Access the dataKey from the context
+  const fetchAllPairs = async () => {
     setIsLoading(true);
 
     const nPairs = await factoryContract.allPairsLength();
@@ -85,7 +85,7 @@ const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
 
     return listPairs;
   };
-  const { data, error } = useSWR(userAddress, fetchAllPairs, {
+  const { data, error } = useSWR([userAddress, dataKey], fetchAllPairs, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -97,11 +97,8 @@ const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
     }
   }, [data, error]);
 
-  const reloadData = async () => {
-    // You can perform any action or trigger any event here.
-    // For example, you can call this function when a button is clicked.
-    // You can also use revalidate to force a re-fetch of the data.
-    // revalidate();
+  const reloadData = async (key: string) => {
+    setKey(key);
   };
 
   return {
@@ -112,4 +109,4 @@ const useBlockchainData = (userAddress: `0x${string}` | undefined) => {
   };
 };
 
-export default useBlockchainData;
+export default useAllPairsData;
