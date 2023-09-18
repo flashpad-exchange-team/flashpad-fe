@@ -26,7 +26,8 @@ export const write = async (
   account: Address,
   address: Address,
   functionName: string,
-  args: any[]
+  args: any[],
+  value?: string,
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
@@ -35,6 +36,7 @@ export const write = async (
       abi: PositionHelperABI,
       functionName,
       args,
+      value,
     });
     const hash = await walletClient.writeContract(request);
     return { hash, result };

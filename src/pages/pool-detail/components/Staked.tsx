@@ -1,24 +1,24 @@
-import Image from 'next/image';
 import { Button } from '@/components/button/Button';
 import AddIcon from '@/icons/AddIcon';
 import BNBICon from '@/icons/BNBIcon';
 import ClockIcon from '@/icons/ClockIcon';
 import FileIcon from '@/icons/FileIcon';
-import LiquidityLockIcon from '@/icons/LiquidityLockIcon';
-import TokenIcon from '@/icons/TokenIcon';
-import BigNumber from 'bignumber.js';
-import { useState } from 'react';
+import Image from 'next/image';
+// import LiquidityLockIcon from '@/icons/LiquidityLockIcon';
+// import TokenIcon from '@/icons/TokenIcon';
 import AddToPositionModal from '@/components/modal/AddToPositionModal';
-import AddToPositionIcon from '@/icons/StakeIcons/AddToPositionIcon';
-import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
+import BoostPositionModal from '@/components/modal/BoostPositionModal';
+import HarvestModal from '@/components/modal/HarvestModal';
+import LockPositionModal from '@/components/modal/LockPositionModal';
 import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
+import AddToPositionIcon from '@/icons/StakeIcons/AddToPositionIcon';
+import BoostPositionIcon from '@/icons/StakeIcons/BoostPositionIcon';
 import HarvestIcon from '@/icons/StakeIcons/HarvestIcon';
 import LockPositionIcon from '@/icons/StakeIcons/LockPositionIcon';
-import BoostPositionIcon from '@/icons/StakeIcons/BoostPositionIcon';
-import HarvestModal from '@/components/modal/HarvestModal';
-import BoostPositionModal from '@/components/modal/BoostPositionModal';
-import LockPositionModal from '@/components/modal/LockPositionModal';
+import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
+import BigNumber from 'bignumber.js';
 import { differenceInDays } from 'date-fns';
+import { useState } from 'react';
 
 interface PoolDetailStakedProps {
   token1Symbol: string;

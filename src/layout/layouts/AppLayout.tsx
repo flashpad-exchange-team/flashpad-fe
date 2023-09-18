@@ -7,22 +7,21 @@ import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useNetwork } from 'wagmi';
 import { Meta } from '../Meta';
 import { AppConfig } from '@/utils/AppConfig';
-import { APP_BASED_CHAIN } from '@/utils/constants';
-import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
-import RenewPositionModal from '@/components/modal/RenewPositionModal';
+// import { APP_BASED_CHAIN } from '@/utils/constants';
+// import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
 
 interface AppLayoutProps {
   children: ReactNode;
 }
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
-  const { startLoading, stopLoading } = useLoading();
-  const [isOpenSwitchNetwork, setOpenSwitchNetwork] = useState(false);
   const { chain } = useNetwork();
+  const { startLoading, stopLoading } = useLoading();
 
-  const toggleSwitchNetwork = () => {
-    setOpenSwitchNetwork(!isOpenSwitchNetwork);
-  };
+  // const [isOpenSwitchNetwork, setOpenSwitchNetwork] = useState(false);
+  // const toggleSwitchNetwork = () => {
+  //   setOpenSwitchNetwork(!isOpenSwitchNetwork);
+  // };
 
   useEffect(() => {
     setIsClient(true);
@@ -33,17 +32,13 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   }, []);
 
   useEffect(() => {
-    if (chain?.id != APP_BASED_CHAIN.id) {
-      setOpenSwitchNetwork(true);
-    }
+    // if (chain?.id != APP_BASED_CHAIN.id) {
+      // setOpenSwitchNetwork(true);
+    // }
   }, [chain]);
 
   return isClient ? (
     <>
-      <RenewPositionModal
-        isOpen={isOpenSwitchNetwork}
-        toggleOpen={toggleSwitchNetwork}
-      />
       {/* <SwitchNetworkModal
         isOpen={isOpenSwitchNetwork}
         toggleOpen={toggleSwitchNetwork}
