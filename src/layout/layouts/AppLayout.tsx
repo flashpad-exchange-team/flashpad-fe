@@ -9,17 +9,16 @@ import { Meta } from '../Meta';
 import { AppConfig } from '@/utils/AppConfig';
 import { APP_BASED_CHAIN } from '@/utils/constants';
 import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
-import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 
 interface AppLayoutProps {
   children: ReactNode;
 }
 const AppLayout = ({ children }: AppLayoutProps) => {
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
-  const { startLoading, stopLoading } = useLoading();
-  const [isOpenSwitchNetwork, setOpenSwitchNetwork] = useState(false);
   const { chain } = useNetwork();
+  const { startLoading, stopLoading } = useLoading();
 
+  const [isOpenSwitchNetwork, setOpenSwitchNetwork] = useState(false);
   const toggleSwitchNetwork = () => {
     setOpenSwitchNetwork(!isOpenSwitchNetwork);
   };
@@ -40,10 +39,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   return isClient ? (
     <>
-      <AddLiquidityAndCreatePositionModal
-        isOpen={isOpenSwitchNetwork}
-        toggleOpen={toggleSwitchNetwork}
-      />
       {/* <SwitchNetworkModal
         isOpen={isOpenSwitchNetwork}
         toggleOpen={toggleSwitchNetwork}

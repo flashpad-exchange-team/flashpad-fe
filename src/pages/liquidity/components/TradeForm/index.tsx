@@ -1,5 +1,4 @@
 import { Button } from '@/components/button/Button';
-import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import LiquiditySettingModal, {
   ILiquiditySettings,
 } from '@/components/modal/LiquiditySettingModal';
@@ -40,6 +39,8 @@ import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import { useRouter } from 'next/router';
+// import CreatePositionModal from '@/components/modal/CreatePositionModal';
+import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -73,16 +74,16 @@ const TradeForm = ({
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [isOpenLockManage, setOpenLockManage] = useState<boolean>(false);
-  const [isOpenCreatePosition, setOpenCreatePosition] =
-    useState<boolean>(false);
-  const toggleOpenCreatePosition = () => {
-    setOpenCreatePosition(!isOpenCreatePosition);
-  };
-  // const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
+  // const [isOpenCreatePosition, setOpenCreatePosition] =
   //   useState<boolean>(false);
-  // const toggleOpenAddLiquidityCreatePosition = () => {
-  //   setOpenAddLiquidityCreatePosition(!isOpenAddLiquidityCreatePosition);
+  // const toggleOpenCreatePosition = () => {
+  //   setOpenCreatePosition(!isOpenCreatePosition);
   // };
+  const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
+    useState<boolean>(false);
+  const toggleOpenAddLiquidityCreatePosition = () => {
+    setOpenAddLiquidityCreatePosition(!isOpenAddLiquidityCreatePosition);
+  };
 
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>(null);
@@ -97,9 +98,7 @@ const TradeForm = ({
     undefined
   );
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
-  const [isFirstSpMinter, setIsFirstSpMinter] = useState<boolean | undefined>(
-    undefined
-  );
+
   const [successful, setSuccessful] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -181,13 +180,13 @@ const TradeForm = ({
     if (!lpAddress) return;
     const address = await nftPoolFactoryContract.getPool(lpAddress);
     setNftPoolAddress(address);
-    const firstSpNftMinter = !address || address === ADDRESS_ZERO;
-    setIsFirstSpMinter(firstSpNftMinter);
   };
 
   useEffect(() => {
     getPoolAddress();
   }, [token1, token2, successful]);
+
+  const isFirstSpMinter = nftPoolAddress ? nftPoolAddress === ADDRESS_ZERO : undefined;
 
   const onSelectedToken = (token: any) => {
     setIsFirstLP(undefined);
@@ -283,8 +282,8 @@ const TradeForm = ({
     if (
       bnToken1Amount.isNaN() ||
       bnToken2Amount.isNaN() ||
-      bnToken1Amount.isZero() ||
-      bnToken2Amount.isZero()
+      bnToken1Amount.isLessThanOrEqualTo(0) ||
+      bnToken2Amount.isLessThanOrEqualTo(0)
     ) {
       customToast({
         message: 'Please input valid amount! ',
@@ -469,7 +468,7 @@ const TradeForm = ({
       return;
     }
 
-    if (isFirstSpMinter) {
+    if (!nftPoolAddress || nftPoolAddress === ADDRESS_ZERO) {
       startLoadingTx({
         tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
         title: 'Creating spNFT pool ...',
@@ -499,42 +498,7 @@ const TradeForm = ({
       stopLoadingTx();
     }
 
-    // toggleOpenAddLiquidityCreatePosition();
-    toggleOpenCreatePosition();
-
-    // if (pairAddress) {
-    //   spNftPool = await nftPoolFactoryContract.getPool(pairAddress);
-
-    //   if (!spNftPool || spNftPool === ADDRESS_ZERO) {
-    //     startLoadingTx({
-    //       tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-    //       title: 'Creating spNFT pool ...',
-    //       message: 'Confirming your transaction. Please wait.',
-    //     });
-    //     const createPoolRes = await nftPoolFactoryContract.createPool(
-    //       userAddress,
-    //       {
-    //         lpTokenAddress: pairAddress,
-    //       }
-    //     );
-
-    //     if (!createPoolRes) {
-    //       stopLoadingTx();
-    //       setSuccessful(false);
-    //       setFailed(true);
-    //       return;
-    //     }
-
-    //     const hash = createPoolRes.hash;
-    //     spNftPool = createPoolRes.result;
-    //     const txReceipt = await waitForTransaction({ hash });
-    //     console.log({ txReceipt });
-    //     stopLoadingTx();
-    //   }
-
-    //   setNftPoolAddress(spNftPool);
-    //   toggleOpenCreatePosition();
-    // }
+    setOpenAddLiquidityCreatePosition(true);
   };
 
   const handleSwitchPair = () => {
@@ -561,11 +525,30 @@ const TradeForm = ({
         toggleOpen={toggleLockManage}
         saveTimeLock={saveTimeLock}
       />
-      {/* <AddLiquidityCreatePositionModal
+      <AddLiquidityAndCreatePositionModal
         isOpen={isOpenAddLiquidityCreatePosition}
         toggleOpen={toggleOpenAddLiquidityCreatePosition}
-      /> */}
-      <CreatePositionModal
+        reserves={reserves as any[]}
+        pairToken1={pairToken1 as Address}
+        initialToken1Amount={token1Amount}
+        initialToken2Amount={token2Amount}
+        token1Address={token1?.address}
+        token2Address={token2?.address}
+        token1Symbol={token1?.symbol}
+        token2Symbol={token2?.symbol}
+        token1Logo={token1?.logoURI}
+        token2Logo={token2?.logoURI}
+        token1Decimals={balanceToken1?.decimals!}
+        token2Decimals={balanceToken2?.decimals!}
+        balanceToken1={balanceToken1?.formatted!}
+        balanceToken2={balanceToken2?.formatted!}
+        bnBalanceToken1={balanceToken1?.value! + ''}
+        bnBalanceToken2={balanceToken2?.value! + ''}
+        timeLock={timeLock}
+        deadline={deadline}
+        nftPoolAddress={nftPoolAddress!}
+      />
+      {/* <CreatePositionModal
         isOpen={isOpenCreatePosition}
         toggleOpen={toggleOpenCreatePosition}
         lpAddress={pairAddress}
@@ -578,7 +561,7 @@ const TradeForm = ({
           symbol: token2 ? token2.symbol : '',
           logo: token2 ? token2.logoURI : '',
         }}
-      />
+      /> */}
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-2xl font-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />
@@ -728,13 +711,14 @@ const TradeForm = ({
               ? handleAddLiquidity()
               : handleAddLiquidityCreatePosition();
           }}
-          className="w-full justify-center  mb-2 px-[42px]"
+          className="w-full justify-center mb-2 px-[42px]"
           disabled={
             !token1 ||
             !token2 ||
             !userAddress ||
-            (feature != 'INITIALIZE' && !token1Amount) ||
-            !token2Amount
+            (
+              (feature != 'STAKE POSITION' || !isFirstSpMinter) && (!token1Amount || !token2Amount)
+            )
           }
         >
           {feature === 'STAKE POSITION' && isFirstSpMinter

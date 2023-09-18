@@ -9,12 +9,11 @@ import Image from 'next/image';
 import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { waitForTransaction } from '@wagmi/core';
-import { DEFAULT_TIME_LOCK, MAX_UINT256 } from '@/utils/constants';
+import { DEFAULT_TIME_LOCK, MAX_UINT256, daysToSeconds } from '@/utils/constants';
 import BigNumber from 'bignumber.js';
 import customToast from '../notification/customToast';
 import * as pairContract from '@/utils/pairContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
-import { daysToSeconds } from '@/utils/web3Helpers';
 import { useLoading } from '@/context/LoadingContext';
 import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
 import DividerDown from '@/icons/DividerDown';
@@ -120,13 +119,12 @@ const CreatePositionModal = ({
     const bnStakeAmountParsed = bnStakeAmount.times(
       BigNumber(10).pow(balanceLP?.decimals!)
     );
-    console.log(1);
+
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Creating Stake Position ...',
       message: 'Confirming your transaction. Please wait.',
     });
-    console.log(2);
 
     const lpAllowance = (await pairContract.read(lpAddress!, 'allowance', [
       userAddress,

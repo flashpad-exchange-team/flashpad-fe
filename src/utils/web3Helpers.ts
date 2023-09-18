@@ -26,10 +26,6 @@ export const bnQuote = (
   return amountA.times(reserveB).div(reserveA);
 };
 
-export const daysToSeconds = (days: number) => {
-  return BigInt(days * 60 * 60 * 24);
-};
-
 export const nthPowerOf10 = (n: number) => {
   return BigInt('1'.padEnd(n + 1, '0'));
 }
