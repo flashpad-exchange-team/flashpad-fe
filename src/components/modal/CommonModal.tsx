@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import useWindowWidth from '@/hooks/useWindowWith';
+import useWindowWidth from '@/hooks/useWindowWidth';
 
 interface ModalProps {
   isOpen: boolean;

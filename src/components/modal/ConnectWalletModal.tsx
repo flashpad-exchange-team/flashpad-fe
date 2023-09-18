@@ -1,4 +1,4 @@
-import useWindowWidth from '@/hooks/useWindowWith';
+import useWindowWidth from '@/hooks/useWindowWidth';
 import CommonModal from './CommonModal';
 import ConnectWalletDesktop from './ConnectWalletDesktop';
 import ConnectWalletMobile from './ConnectWalletMobile';

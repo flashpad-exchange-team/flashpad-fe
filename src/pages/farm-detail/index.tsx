@@ -1,5 +1,5 @@
 import { Button } from '@/components/button/Button';
-import useWindowWidth from '@/hooks/useWindowWith';
+import useWindowWidth from '@/hooks/useWindowWidth';
 import BNBICon from '@/icons/BNBIcon';
 import DownloadIcon from '@/icons/DownloadIcon';
 import LayerIcon from '@/icons/LayerIcon';

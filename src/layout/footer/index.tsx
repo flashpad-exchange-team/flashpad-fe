@@ -1,4 +1,4 @@
-import useWindowWidth from '@/hooks/useWindowWith';
+import useWindowWidth from '@/hooks/useWindowWidth';
 import FooterDesktop from './FooterDesktop';
 import FooterMobile from './FooterMobile';
 
