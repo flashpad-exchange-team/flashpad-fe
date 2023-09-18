@@ -8,6 +8,17 @@ import LiquidityLockIcon from '@/icons/LiquidityLockIcon';
 import TokenIcon from '@/icons/TokenIcon';
 import BigNumber from 'bignumber.js';
 import { useState } from 'react';
+import AddToPositionModal from '@/components/modal/AddToPositionModal';
+import AddToPositionIcon from '@/icons/StakeIcons/AddToPositionIcon';
+import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
+import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
+import HarvestIcon from '@/icons/StakeIcons/HarvestIcon';
+import LockPositionIcon from '@/icons/StakeIcons/LockPositionIcon';
+import BoostPositionIcon from '@/icons/StakeIcons/BoostPositionIcon';
+import HarvestModal from '@/components/modal/HarvestModal';
+import BoostPositionModal from '@/components/modal/BoostPositionModal';
+import LockPositionModal from '@/components/modal/LockPositionModal';
+import { differenceInDays } from 'date-fns';
 
 interface PoolDetailStakedProps {
   token1Symbol: string;
@@ -26,12 +37,49 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   listSpNfts,
   toggleOpenCreatePosition,
 }) => {
+  console.log({ listSpNfts });
   const [harvestAllOff, setHarvestAllOff] = useState<boolean>(true);
 
-  const handleHarvestAll = async () => {};
+  const [openAddToPosition, setOpenAddToPosition] = useState(false);
+  const [openWithdrawPosition, setOpenWithdrawPosition] = useState(false);
+  const [openHarvestPosition, setOpenHarvestPosition] = useState(false);
+  const [openLockPosition, setOpenLockPosition] = useState(false);
+  const [openBoostPosition, setOpenBoostPosition] = useState(false);
+
+  const toggleAddToPosition = () => setOpenAddToPosition(!openAddToPosition);
+  const toggleWithdrawPosition = () =>
+    setOpenWithdrawPosition(!openWithdrawPosition);
+  const toggleHarvestPosition = () =>
+    setOpenHarvestPosition(!openHarvestPosition);
+  const toggleLockPosition = () => setOpenLockPosition(!openLockPosition);
+  const toggleBoostPosition = () => setOpenBoostPosition(!openBoostPosition);
+
+  const handleHarvestAll = async () => {
+    setHarvestAllOff(true);
+  };
 
   return (
     <>
+      <AddToPositionModal
+        isOpen={openAddToPosition}
+        toggleOpen={toggleAddToPosition}
+      />
+      <WithdrawPositionModal
+        isOpen={openWithdrawPosition}
+        toggleOpen={toggleWithdrawPosition}
+      />
+      <HarvestModal
+        isOpen={openHarvestPosition}
+        toggleOpen={toggleHarvestPosition}
+      />
+      <LockPositionModal
+        isOpen={openLockPosition}
+        toggleOpen={toggleLockPosition}
+      />
+      <BoostPositionModal
+        isOpen={openBoostPosition}
+        toggleOpen={toggleBoostPosition}
+      />
       <div className="flex justify-between mt-5">
         <div className="text-xl font-bold">spNFT Positions</div>
         <div className="flex gap-3 items-center">
@@ -40,10 +88,11 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
             onClick={handleHarvestAll}
             disabled={harvestAllOff}
           >
-            <AddIcon color={harvestAllOff ? '#667085': '#0C111D'}/>
+            <AddIcon color={harvestAllOff ? '#667085' : '#0C111D'} />
             Harvest All
           </Button>
-          <Button className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center  text-base"
+          <Button
+            className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center  text-base"
             onClick={toggleOpenCreatePosition}
           >
             <AddIcon color="#0C111D" />
@@ -106,12 +155,18 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                     </div>
                   </div>
                   <div className="ml-12">
-                    <div>{token1Symbol} - {token2Symbol}</div>
-                    <div className="text-secondary text-sm">#ID-{sp.tokenId}</div>
+                    <div>
+                      {token1Symbol} - {token2Symbol}
+                    </div>
+                    <div className="text-secondary text-sm">
+                      #ID-{sp.tokenId}
+                    </div>
                   </div>
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
-                  0.03
+                  {BigNumber(sp?.stakingPosition?.amount)
+                    ?.div(BigNumber(10).pow(18))
+                    ?.toString()}
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                   1.48%
@@ -119,21 +174,37 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                   <div className="flex items-center gap-2 cursor-pointer justify-center">
                     <ClockIcon />
-                    <TokenIcon />
+                    <LockPositionIcon
+                      remainingDays={differenceInDays(
+                        new Date(),
+                        (+sp?.stakingPosition?.startLockTime.toString() -
+                          +sp?.stakingPosition?.lockDuration.toString()) *
+                          1000
+                      )}
+                    />
                     <FileIcon />
-                    <LiquidityLockIcon />
+                    <BoostPositionIcon
+                      active={sp?.stakingPosition?.boostPoints > 0}
+                    />
                   </div>
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
-                  <div>&lt;$0.01</div>
-                  <div className="text-secondary text-sm">{BigNumber(sp.pendingRewards).div(BigNumber(10).pow(18)).toString()} LP TOKEN</div>
+                  <div>{sp?.pendingRewards}</div>
+
+                  {/* <div className="text-secondary text-sm">
+                    {BigNumber(sp.pendingRewards)
+                      .div(BigNumber(10).pow(18))
+                      .toString()}{' '}
+                    LP TOKEN
+                  </div> */}
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                   <div className="flex items-center gap-2 cursor-pointer justify-center">
-                    <ClockIcon />
-                    <TokenIcon />
-                    <FileIcon />
-                    <LiquidityLockIcon />
+                    <AddToPositionIcon onClick={toggleAddToPosition} />
+                    <WithdrawPositionIcon onClick={toggleWithdrawPosition} />
+                    <HarvestIcon onClick={toggleHarvestPosition} />
+                    <LockPositionIcon onClick={toggleLockPosition} />
+                    <BoostPositionIcon onClick={toggleBoostPosition} />
                   </div>
                 </td>
               </tr>

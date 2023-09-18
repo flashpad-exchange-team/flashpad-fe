@@ -1,5 +1,5 @@
 import { Button } from '@/components/button/Button';
-import Select from '@/components/select';
+import SelectFilter from '@/components/selectFilter';
 import AddIcon from '@/icons/AddIcon';
 import Menu from '@/icons/Menu';
 import Search from '@/icons/Search';
@@ -109,13 +109,13 @@ const FarmPoolList = () => {
             </div>
           </div>
 
-          <div className="hidden md:block">
-            <Select options={FILTER_FARM} placeHolder="Filter" />
+          <div className="hidden md:block w-[200px]">
+            <SelectFilter options={FILTER_FARM} />
           </div>
-          <div className="hidden md:block">
-            <Select options={FILTER_FARM} placeHolder="Sort by TVL" />
+          <div className="hidden md:block w-[200px]">
+            <SelectFilter options={FILTER_FARM} placeHolder={'Sort by TVL'} />
           </div>
-          <div className="md:hidden">
+          <div className="md:hidden w-[200px]">
             <Button className="h-[40px] w-[40px] flex justify-center">
               <Menu />
             </Button>

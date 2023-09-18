@@ -29,7 +29,7 @@ const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
             <td className="py-4 text-sm font-semibold px-4 border-b border-[#344054] text-left w-[150px]">
               <div className=" text-lightGray">APR Range</div>
               <div className="text-secondary flex items-center gap-1">
-                20.3% <ArrowRight /> <span className="text-primary">20.3%</span>{' '}
+                20.3% <ArrowRight /> <span className="text-primary">20.3%</span>
                 <QuestionIcon />
               </div>
             </td>
@@ -58,13 +58,13 @@ const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
               <div className="flex gap-1 items-center justify-start">
                 <div>2X</div>
               </div>
-            </td>{' '}
+            </td>
             <td className="py-4 text-sm font-semibold px-4 border-b border-[#344054] text-left w-[200px]">
               <div className="text-xs text-lightGray">Max Lock </div>
               <div className="flex gap-1 items-center justify-start">
                 <div>183 days</div>
               </div>
-            </td>{' '}
+            </td>
           </tr>
         </tbody>
       </table>

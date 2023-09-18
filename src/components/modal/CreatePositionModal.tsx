@@ -297,7 +297,7 @@ const CreatePositionModal = ({
           <div className="text-sm mt-1 ">Earned fees APR</div>
         </div>
         <div>
-          <div className="text-sm mt-1 text-right ">0</div>{' '}
+          <div className="text-sm mt-1 text-right ">0</div>
           <div className="text-sm mt-1 text-right text-primary ">0%</div>
           <div className="text-sm mt-1 text-right ">0%</div>
           <div className="text-sm mt-1 text-right ">0%</div>

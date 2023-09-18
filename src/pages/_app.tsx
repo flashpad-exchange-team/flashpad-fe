@@ -26,6 +26,7 @@ import SuccessTx from '@/components/loading/SuccessTx';
 import { useRouter } from 'next/router';
 import HomeLayout from '@/layout/layouts/HomeLayout';
 import AppLayout from '@/layout/layouts/AppLayout';
+import { KeyContextProvider } from '@/context/KeyContext';
 
 const { chains, publicClient } = configureChains(
   [lineaTestnet, polygonMumbai],
@@ -77,19 +78,21 @@ const MyApp = ({ Component, pageProps }: any) => {
   const Layout: any = router.pathname === '/' ? HomeLayout : AppLayout;
   return (
     <WagmiConfig config={config}>
-      <ModalProvider>
-        <LoadingProvider>
-          <Layout>
-            <main className={openSans.className}>
-              <ToastContainer />
-              <LoadingIndicator />
-              <LoadingTx />
-              <SuccessTx />
-              <Component {...pageProps} />
-            </main>
-          </Layout>
-        </LoadingProvider>
-      </ModalProvider>
+      <KeyContextProvider>
+        <ModalProvider>
+          <LoadingProvider>
+            <Layout>
+              <main className={openSans.className}>
+                <ToastContainer />
+                <LoadingIndicator />
+                <LoadingTx />
+                <SuccessTx />
+                <Component {...pageProps} />
+              </main>
+            </Layout>
+          </LoadingProvider>
+        </ModalProvider>
+      </KeyContextProvider>
     </WagmiConfig>
   );
 };

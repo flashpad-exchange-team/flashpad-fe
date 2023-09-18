@@ -51,7 +51,6 @@ const CreateMerlinPool = () => {
         <div className="flex gap-4 items-center mt-5">
           {type === 0 ? (
             <>
-              {' '}
               <div
                 className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex items-center gap-2 text-sm lg:text-base "
                 // onClick={handleOpenSelectTokenModal}
@@ -68,7 +67,7 @@ const CreateMerlinPool = () => {
                 // onClick={handleSwitchPair}
               >
                 <LiquidityIcon />
-              </div>{' '}
+              </div>
               <div
                 className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex items-center gap-2 text-sm lg:text-base "
                 // onClick={handleOpenSelectTokenModal}

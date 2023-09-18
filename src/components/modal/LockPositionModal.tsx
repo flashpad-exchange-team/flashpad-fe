@@ -5,16 +5,12 @@ import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
 import ArrowRight from '@/icons/ArrowRight';
 
-export interface RenewPositionModalProps {
+export interface LockPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
-  saveTimeLock: (value: number) => void;
 }
 
-const RenewPositionModal = ({
-  toggleOpen,
-  isOpen,
-}: RenewPositionModalProps) => {
+const LockPositionModal = ({ toggleOpen, isOpen }: LockPositionModalProps) => {
   const handleStake = () => {};
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
@@ -55,12 +51,11 @@ const RenewPositionModal = ({
         <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-0">
           -
         </div>
-        <input
-          className="w-full bg-blue-opacity-50 h-[52px] pl-8 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
-          placeholder="0"
-        />
-        <div className="flex items-center bg-blue-opacity-50 w-[50%] justify-end px-6 py-2">
-          <div>Days</div>
+        <div className="flex items-center bg-blue-opacity-50 w-[30%] md:w-[40%] justify-end px-6 py-2">
+          <span className="text-[#E6B300] mr-4">0</span> Days
+        </div>
+        <div className="flex items-center bg-blue-opacity-50 w-[35%] md:w-[40%] justify-end px-6 py-2">
+          <span className="text-[#E6B300] mr-4">0</span> Months
         </div>
         <div>
           <Button className="w-[60px] rounded-none flex justify-center items-center rounded-[4px]">
@@ -124,4 +119,4 @@ const RenewPositionModal = ({
   );
 };
 
-export default RenewPositionModal;
+export default LockPositionModal;

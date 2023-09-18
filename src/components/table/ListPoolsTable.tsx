@@ -56,7 +56,6 @@ const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
     setLPTokenDecimals(lpTkDecimals);
     toggleOpen();
   };
-  console.log({ data });
   return (
     <>
       <RemoveLiquidityModal

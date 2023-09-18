@@ -41,6 +41,8 @@ import TokenForm from '../TokenForm';
 import { useRouter } from 'next/router';
 // import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
+import { v4 as uuidv4 } from 'uuid';
+import { useKeyContext } from '@/context/KeyContext';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -71,14 +73,18 @@ const TradeForm = ({
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
+  const { setKey } = useKeyContext(); // Access the dataKey from the context
+
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [isOpenLockManage, setOpenLockManage] = useState<boolean>(false);
+  
   // const [isOpenCreatePosition, setOpenCreatePosition] =
   //   useState<boolean>(false);
   // const toggleOpenCreatePosition = () => {
   //   setOpenCreatePosition(!isOpenCreatePosition);
   // };
+
   const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
     useState<boolean>(false);
   const toggleOpenAddLiquidityCreatePosition = () => {
@@ -448,7 +454,7 @@ const TradeForm = ({
       message: 'Added liquidity successfully',
       type: 'success',
     });
-
+    setKey(uuidv4());
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
         action: 'provided liquidity',
@@ -618,7 +624,7 @@ const TradeForm = ({
           onClick={handleSwitchPair}
         >
           {dividerIcon}
-        </div>{' '}
+        </div>
         <TokenForm
           openModal={() => {
             setTokenBeingSelected(2);
