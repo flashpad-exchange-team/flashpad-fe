@@ -16,7 +16,6 @@ interface IPairTokenInfo {
   symbol?: string;
   address?: Address;
   decimals?: number;
-  amountIn: string;
 }
 
 interface LiquidityPairInfoProps {

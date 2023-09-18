@@ -651,13 +651,11 @@ const TradeForm = ({
             token1Data={{
               address: token1?.address,
               symbol: token1?.symbol,
-              amountIn: token1Amount,
               decimals: balanceToken1?.decimals,
             }}
             token2Data={{
               address: token2?.address,
               symbol: token2?.symbol,
-              amountIn: token2Amount,
               decimals: balanceToken2?.decimals,
             }}
           />
