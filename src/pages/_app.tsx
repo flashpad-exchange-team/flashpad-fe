@@ -19,7 +19,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from '@wagmi/core/providers/alchemy';
 import { infuraProvider } from '@wagmi/core/providers/infura';
-import { ALCHEMY_MUMBAI_API_KEY, INFURA_API_KEY } from '@/utils/constants';
+import { ALCHEMY_MUMBAI_API_KEY, INFURA_API_KEY, APP_BASED_CHAIN } from '@/utils/constants';
 import { Open_Sans } from 'next/font/google';
 import LoadingTx from '@/components/loading/LoadingTx';
 import SuccessTx from '@/components/loading/SuccessTx';
@@ -66,7 +66,7 @@ const config = createConfig({
       },
     }),
   ],
-  publicClient,
+  publicClient: publicClient({ chainId: APP_BASED_CHAIN.id }),
 });
 
 const openSans = Open_Sans({

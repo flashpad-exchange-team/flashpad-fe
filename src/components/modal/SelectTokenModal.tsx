@@ -41,26 +41,39 @@ const SelectTokenModal = ({
 
   const fetchTokenBalances = async () => {
     if (!userAddress || !isOpen) return;
-    const tokensListWithBalances = [];
-    for (const token of tokensList) {
-      const decimals: any = await erc20TokenContract.erc20Read(
-        token.address,
-        'decimals',
-        []
-      );
-      const balance: any =
-        token.symbol === 'ETH'
-          ? await getBalance({ address: userAddress, blockTag: 'latest' })
-          : await erc20TokenContract.erc20Read(token.address, 'balanceOf', [
-              userAddress,
+
+    const tokensListWithBalances: any[] = await Promise.all(
+      tokensList.map((token) => {
+        return new Promise(async (resolve) => {
+          try {
+            const [decimals, balance] = await Promise.all([
+              erc20TokenContract.erc20Read(token.address, 'decimals', []),
+              token.symbol === 'ETH'
+                ? await getBalance({ address: userAddress, blockTag: 'latest' })
+                : await erc20TokenContract.erc20Read(
+                    token.address,
+                    'balanceOf',
+                    [userAddress]
+                  ),
             ]);
-      tokensListWithBalances.push({
-        ...token,
-        curBalance: BigNumber(balance || '0')
-          .div(BigNumber(10).pow(decimals))
-          .toFixed(2),
-      });
-    }
+
+            resolve({
+              ...token,
+              curBalance: BigNumber(balance || '0')
+                .div(BigNumber(10).pow(decimals))
+                .toFixed(2),
+            });
+          } catch (error) {
+            console.error(error);
+            resolve({
+              ...token,
+              curBalance: '0',
+            });
+          }
+        });
+      })
+    );
+
     setTokensList(tokensListWithBalances);
     setTokensListFiltered(tokensListWithBalances);
   };
