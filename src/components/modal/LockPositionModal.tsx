@@ -1,17 +1,105 @@
-import DividerDown from '@/icons/DividerDown';
+import ArrowRight from '@/icons/ArrowRight';
+import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
+import { Address } from 'viem';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
-import BNBICon from '@/icons/BNBIcon';
-import ArrowRight from '@/icons/ArrowRight';
 
+import { useLoading } from '@/context/LoadingContext';
+import * as nftPoolContract from '@/utils/nftPoolContract';
+import { waitForTransaction } from '@wagmi/core';
+import { useAccount, useBalance } from 'wagmi';
+import customToast from '../notification/customToast';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
 export interface LockPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
+  lpAddress?: Address;
+  nftPoolAddress?: Address;
+  token1Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  token2Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  refetchData: () => void;
+  spNFTTokenId: string | null;
+  listSpNfts: any[];
 }
 
-const LockPositionModal = ({ toggleOpen, isOpen }: LockPositionModalProps) => {
-  const handleStake = () => {};
+const LockPositionModal = ({
+  toggleOpen,
+  isOpen,
+  lpAddress,
+  nftPoolAddress,
+  token1Data,
+  token2Data,
+  refetchData,
+  spNFTTokenId,
+}: LockPositionModalProps) => {
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  const { address: userAddress } = useAccount();
+  const { data: balanceLP } = useBalance({
+    address: isOpen ? userAddress : undefined,
+    token: lpAddress,
+    watch: true,
+  });
+  const handleRenewLock = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!balanceLP) {
+      customToast({
+        message: 'Could not get LP balance info',
+        type: 'error',
+      });
+      // return;
+    }
+
+    startLoadingTx({
+      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+      title: 'Renewing the lock of your stake position ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
+    const txResult = await nftPoolContract.write(
+      userAddress,
+      nftPoolAddress!,
+      'renewLockPosition',
+      [spNFTTokenId]
+    );
+
+    if (!txResult) {
+      stopLoadingTx();
+      return;
+    }
+
+    const hash = txResult.hash;
+    const txReceipt = await waitForTransaction({ hash });
+    console.log({ txReceipt });
+    refetchData();
+    stopLoadingTx();
+
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: 'renew your lock',
+        token1: token1Data.symbol,
+        token2: token2Data.symbol,
+        txHash: hash,
+      })
+    );
+  };
+
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
@@ -25,8 +113,11 @@ const LockPositionModal = ({ toggleOpen, isOpen }: LockPositionModalProps) => {
             </div>
           </div>
           <div className="ml-[70px]">
-            <div className="text-bold">Token A - Token B</div>
-            <div className="text-xs font-normal">#ID-1644</div>
+            <div className="text-bold">
+              {' '}
+              {token1Data.symbol} - {token2Data.symbol}
+            </div>
+            <div className="text-xs font-normal">#ID-{spNFTTokenId}</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
@@ -40,40 +131,21 @@ const LockPositionModal = ({ toggleOpen, isOpen }: LockPositionModalProps) => {
       <div className="text-center text-secondary mb-5 text-sm">
         Provide long-tern liquidity to increase your yield
       </div>
-      <div className="p-2 bg-blue-opacity-50 text-sm">
+      {/* <div className="p-2 bg-blue-opacity-50 text-sm">
         <div className="text-[#fff]">Settings</div>
-      </div>
-      <div className="flex justify-between mt-3">
-        <div className="">Lock duration</div>
-        <div className="text-[#E6B300] text-sm">Set max</div>
-      </div>
-      <div className="flex gap-0 md:gap-3">
-        <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-0">
-          -
-        </div>
-        <div className="flex items-center bg-blue-opacity-50 w-[30%] md:w-[40%] justify-end px-6 py-2">
-          <span className="text-[#E6B300] mr-4">0</span> Days
-        </div>
-        <div className="flex items-center bg-blue-opacity-50 w-[35%] md:w-[40%] justify-end px-6 py-2">
-          <span className="text-[#E6B300] mr-4">0</span> Months
-        </div>
-        <div>
-          <Button className="w-[60px] rounded-none flex justify-center items-center rounded-[4px]">
-            +
-          </Button>
-        </div>
-      </div>
+      </div> */}
+
       <div className="text-right text-secondary text-sm">
         4.37% lock bonus (x1.04)
       </div>
-      <div className="p-2 bg-blue-opacity-50 my-4">
+      <div className="px-2 py-3 bg-blue-opacity-50 my-4 rounded-md text-sm">
         <div className="text-[#fff]">Estimates</div>
       </div>
-      <div className="flex justify-between my-5">
+      <div className="flex justify-between my-5 text-sm">
         <div>Deposit value</div>
         <div>$0</div>
       </div>
-      <div className="flex justify-between mb-5">
+      <div className="flex justify-between mb-5 text-sm">
         <div>Total APR</div>
         <div className="flex items-center">
           <div className="text-secondary">20.3%</div>
@@ -81,15 +153,15 @@ const LockPositionModal = ({ toggleOpen, isOpen }: LockPositionModalProps) => {
           <div className="text-primary">20.3%</div>
         </div>
       </div>
-      <div className="flex justify-between my-3">
+      <div className="flex justify-between my-3 text-sm">
         <div>Swap fees APR</div>
         <div>10.11%</div>
       </div>
-      <div className="flex justify-between my-3">
+      <div className="flex justify-between my-3 text-sm">
         <div>Farm base APR</div>
         <div>23.55%</div>
       </div>
-      <div className="flex justify-between my-3">
+      <div className="flex justify-between my-3 text-sm">
         <div>Lock bonus APR</div>
         <div className="flex items-center">
           <div className="text-secondary">20.3%</div>
@@ -107,10 +179,10 @@ const LockPositionModal = ({ toggleOpen, isOpen }: LockPositionModalProps) => {
           Cancel
         </Button>
         <Button
-          onClick={handleStake}
+          onClick={handleRenewLock}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
-          Create
+          Renew
         </Button>
       </div>
 

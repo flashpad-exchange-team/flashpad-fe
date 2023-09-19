@@ -26,6 +26,11 @@ import { Address } from 'viem';
 import { useAccount } from 'wagmi';
 import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import customToast from '@/components/notification/customToast';
+import AddToPositionModal from '@/components/modal/AddToPositionModal';
+import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
+import HarvestModal from '@/components/modal/HarvestModal';
+import LockPositionModal from '@/components/modal/LockPositionModal';
+import BoostPositionModal from '@/components/modal/BoostPositionModal';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -43,13 +48,29 @@ const PoolDetail = () => {
   const [token2Logo, setToken2Logo] = useState<string>('');
 
   const [userSpNfts, setUserSpNfts] = useState<any>();
-  const [isOpenApyCalculator, setOpenApyCalculator] = useState(false);
+  const [spNFTTokenId, setSpNFTTokenId] = useState<string | null>(null);
+  const [isOpenApyCalculator, setOpenApyCalculator] = useState<boolean>(false);
+  const [openAddToPosition, setOpenAddToPosition] = useState<boolean>(false);
+  const [openWithdrawPosition, setOpenWithdrawPosition] =
+    useState<boolean>(false);
+  const [openHarvestPosition, setOpenHarvestPosition] =
+    useState<boolean>(false);
+  const [openLockPosition, setOpenLockPosition] = useState<boolean>(false);
+  const [openBoostPosition, setOpenBoostPosition] = useState<boolean>(false);
+  const [isOpenCreatePosition, setOpenCreatePosition] =
+    useState<boolean>(false);
+  const toggleAddToPosition = () => setOpenAddToPosition(!openAddToPosition);
+  const toggleWithdrawPosition = () =>
+    setOpenWithdrawPosition(!openWithdrawPosition);
+  const toggleHarvestPosition = () =>
+    setOpenHarvestPosition(!openHarvestPosition);
+  const toggleLockPosition = () => setOpenLockPosition(!openLockPosition);
+  const toggleBoostPosition = () => setOpenBoostPosition(!openBoostPosition);
+
   const toggleOpenApyCalculator = () => {
     setOpenApyCalculator(!isOpenApyCalculator);
   };
 
-  const [isOpenCreatePosition, setOpenCreatePosition] =
-    useState<boolean>(false);
   const toggleOpenCreatePosition = () => {
     setOpenCreatePosition(!isOpenCreatePosition);
   };
@@ -105,7 +126,7 @@ const PoolDetail = () => {
       userAddress,
       nftPoolAddress
     );
-    const spNftsWithRewards = [];
+    let spNftsWithRewards = [];
     for (const nft of spNfts) {
       const [rwd, stakingPosition] = await Promise.all([
         nftPoolContract.read(nftPoolAddress, 'pendingRewards', [nft.tokenId]),
@@ -119,8 +140,10 @@ const PoolDetail = () => {
         stakingPosition,
       });
     }
+    spNftsWithRewards = spNftsWithRewards.filter(
+      (item: any) => item.stakingPosition.amount != 0
+    );
     setUserSpNfts(spNftsWithRewards);
-    console.log({ spNftsWithRewards });
   };
 
   useEffect(() => {
@@ -149,6 +172,77 @@ const PoolDetail = () => {
 
   return (
     <>
+      <AddToPositionModal
+        isOpen={openAddToPosition}
+        toggleOpen={toggleAddToPosition}
+        lpAddress={pairAddress as Address}
+        nftPoolAddress={nftPoolAddress}
+        token1Data={{
+          symbol: token1Symbol,
+          logo: token1Logo,
+        }}
+        token2Data={{
+          symbol: token2Symbol,
+          logo: token2Logo,
+        }}
+        refetchData={getUserStakedPositions}
+        spNFTTokenId={spNFTTokenId}
+        listSpNfts={userSpNfts}
+      />
+      <WithdrawPositionModal
+        isOpen={openWithdrawPosition}
+        toggleOpen={toggleWithdrawPosition}
+        lpAddress={pairAddress as Address}
+        nftPoolAddress={nftPoolAddress}
+        token1Data={{
+          symbol: token1Symbol,
+          logo: token1Logo,
+        }}
+        token2Data={{
+          symbol: token2Symbol,
+          logo: token2Logo,
+        }}
+        refetchData={getUserStakedPositions}
+        spNFTTokenId={spNFTTokenId}
+        listSpNfts={userSpNfts}
+      />
+      <HarvestModal
+        isOpen={openHarvestPosition}
+        toggleOpen={toggleHarvestPosition}
+        lpAddress={pairAddress as Address}
+        nftPoolAddress={nftPoolAddress}
+        token1Data={{
+          symbol: token1Symbol,
+          logo: token1Logo,
+        }}
+        token2Data={{
+          symbol: token2Symbol,
+          logo: token2Logo,
+        }}
+        refetchData={getUserStakedPositions}
+        spNFTTokenId={spNFTTokenId}
+      />
+      <LockPositionModal
+        isOpen={openLockPosition}
+        toggleOpen={toggleLockPosition}
+        lpAddress={pairAddress as Address}
+        nftPoolAddress={nftPoolAddress}
+        token1Data={{
+          symbol: token1Symbol,
+          logo: token1Logo,
+        }}
+        token2Data={{
+          symbol: token2Symbol,
+          logo: token2Logo,
+        }}
+        refetchData={getUserStakedPositions}
+        spNFTTokenId={spNFTTokenId}
+        listSpNfts={userSpNfts}
+      />
+      <BoostPositionModal
+        isOpen={openBoostPosition}
+        toggleOpen={toggleBoostPosition}
+      />
       <CreatePositionModal
         isOpen={isOpenCreatePosition}
         toggleOpen={toggleOpenCreatePosition}
@@ -162,6 +256,7 @@ const PoolDetail = () => {
           symbol: token2Symbol,
           logo: token2Logo,
         }}
+        refetchData={getUserStakedPositions}
       />
       <ApyCalculatorModal
         isOpen={isOpenApyCalculator}
@@ -250,6 +345,12 @@ const PoolDetail = () => {
             token2Logo={token2Logo}
             listSpNfts={userSpNfts}
             toggleOpenCreatePosition={toggleOpenCreatePosition}
+            toggleAddToPosition={toggleAddToPosition}
+            toggleHarvestPosition={toggleHarvestPosition}
+            toggleWithdrawPosition={toggleWithdrawPosition}
+            toggleLockPosition={toggleLockPosition}
+            toggleBoostPosition={toggleBoostPosition}
+            setSpNFTTokenId={setSpNFTTokenId}
           />
         ) : (
           <NotStaked toggleOpenCreatePosition={toggleOpenCreatePosition} />

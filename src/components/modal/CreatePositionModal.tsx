@@ -9,7 +9,11 @@ import Image from 'next/image';
 import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { waitForTransaction } from '@wagmi/core';
-import { DEFAULT_TIME_LOCK, MAX_UINT256, daysToSeconds } from '@/utils/constants';
+import {
+  DEFAULT_TIME_LOCK,
+  MAX_UINT256,
+  // daysToSeconds,
+} from '@/utils/constants';
 import BigNumber from 'bignumber.js';
 import customToast from '../notification/customToast';
 import * as pairContract from '@/utils/pairContract';
@@ -33,6 +37,7 @@ export interface CreatePositionModalProps {
     logo: string;
     [p: string]: any;
   };
+  refetchData: () => void;
 }
 
 enum LockTimeOptions {
@@ -49,6 +54,7 @@ const CreatePositionModal = ({
   nftPoolAddress,
   token1Data,
   token2Data,
+  refetchData,
 }: CreatePositionModalProps) => {
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
@@ -152,7 +158,7 @@ const CreatePositionModal = ({
       userAddress,
       nftPoolAddress!,
       'createPosition',
-      [bnStakeAmountParsed, daysToSeconds(nLockTime) + '']
+      [bnStakeAmountParsed, '30']
     );
 
     if (!txResult) {
@@ -163,6 +169,7 @@ const CreatePositionModal = ({
     const hash = txResult.hash;
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
+    refetchData();
     resetInput();
     stopLoadingTx();
 
@@ -172,7 +179,7 @@ const CreatePositionModal = ({
         token1: token1Data.symbol,
         token2: token2Data.symbol,
         txHash: hash,
-        usdValue: bnStakeAmount.toString(),
+        usdValue: bnStakeAmount.toString(10),
       })
     );
   };

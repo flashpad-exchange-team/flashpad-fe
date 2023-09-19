@@ -3,16 +3,117 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
+import { Address } from 'viem';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { waitForTransaction } from '@wagmi/core';
+import customToast from '../notification/customToast';
+import { useAccount, useBalance } from 'wagmi';
+import { useLoading } from '@/context/LoadingContext';
+import * as nftPoolContract from '@/utils/nftPoolContract';
+import { useState } from 'react';
+import BigNumber from 'bignumber.js';
 
-export interface LockManageModalProps {
+export interface WithdrawPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
+  lpAddress?: Address;
+  nftPoolAddress?: Address;
+  token1Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  token2Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  refetchData: () => void;
+  spNFTTokenId: string | null;
+  listSpNfts: any[];
 }
 
 const WithdrawPositionModal = ({
   toggleOpen,
   isOpen,
-}: LockManageModalProps) => {
+  lpAddress,
+  nftPoolAddress,
+  token1Data,
+  token2Data,
+  refetchData,
+  spNFTTokenId,
+  listSpNfts,
+}: WithdrawPositionModalProps) => {
+  const [withdrawAmount, setWithdrawAmount] = useState('0');
+
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  const { address: userAddress } = useAccount();
+  const { data: balanceLP } = useBalance({
+    address: isOpen ? userAddress : undefined,
+    token: lpAddress,
+    watch: true,
+  });
+  const handleWithdrawPosition = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!balanceLP) {
+      customToast({
+        message: 'Could not get LP balance info',
+        type: 'error',
+      });
+      // return;
+    }
+
+    startLoadingTx({
+      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+      title: 'Withdrawing your stake position ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
+    const withdrawAmountParse = BigNumber(withdrawAmount).times(
+      BigNumber(10).pow(balanceLP?.decimals!)
+    );
+
+    const txResult = await nftPoolContract.write(
+      userAddress,
+      nftPoolAddress!,
+      'withdrawFromPosition',
+      [spNFTTokenId, withdrawAmountParse]
+    );
+
+    if (!txResult) {
+      stopLoadingTx();
+      return;
+    }
+
+    const hash = txResult.hash;
+    const txReceipt = await waitForTransaction({ hash });
+    console.log({ txReceipt });
+    refetchData();
+    stopLoadingTx();
+
+    const usdValue = withdrawAmount;
+
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: 'withdraw position',
+        token1: token1Data.symbol,
+        token2: token2Data.symbol,
+        txHash: hash,
+        usdValue,
+      })
+    );
+    setWithdrawAmount('0');
+  };
+  const currentSPNFT = listSpNfts?.find(
+    (item: any) => item.tokenId === spNFTTokenId
+  );
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="flex items-center justify-center w-full">
@@ -26,8 +127,11 @@ const WithdrawPositionModal = ({
             </div>
           </div>
           <div className="ml-[70px]">
-            <div className="text-bold">Token A - Token B</div>
-            <div className="text-xs font-normal">#ID-1644</div>
+            <div className="text-bold">
+              {' '}
+              {token1Data.symbol} - {token2Data.symbol}
+            </div>
+            <div className="text-xs font-normal">#ID-{spNFTTokenId}</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
@@ -40,18 +144,40 @@ const WithdrawPositionModal = ({
       <div className="text-center text-secondary mb-5">
         Recover underlying tokens from a spNFT
       </div>
-      <div className="p-2 bg-blue-opacity-50 flex justify-between">
-        <div className="text-[#98A2B3]">Amount</div>
-        <div>0.0000000004564</div>
-      </div>
-      <div className="px-2 bg-blue-opacity-50 flex justify-between">
-        <div className="text-[#fff]">Balance: 0.0000000000 Name - Name</div>
-        <Button className="w-[50px] h-[10px] rounded-none flex justify-center items-center">
-          Max
-        </Button>
+      <div className="p-2 bg-blue-opacity-50  rounded-md text-sm">
+        <div className="flex justify-between items-center">
+          <div className="text-[#98A2B3] ">Amount</div>
+          <input
+            className="w-full bg-transparent border-none h-[auto] pl-3 text-sm  mb-2 mt-2 focus:outline-none placeholder-[#667085] text-right"
+            placeholder="Enter value "
+            value={withdrawAmount}
+            onChange={(event) => setWithdrawAmount(event.target.value)}
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="text-[#fff]">
+            Balance:{' '}
+            {new BigNumber(currentSPNFT?.stakingPosition?.amount || 0)
+              .div(new BigNumber(10).pow(18))
+              .toFixed()}{' '}
+            {token1Data.symbol} - {token2Data.symbol}
+          </div>
+          <Button
+            className="w-[50px] h-[10px] rounded-none flex justify-center items-center text-xs"
+            onClick={() =>
+              setWithdrawAmount(
+                new BigNumber(currentSPNFT?.stakingPosition?.amount || 0)
+                  .div(new BigNumber(10).pow(18))
+                  .toString(10)
+              )
+            }
+          >
+            Max
+          </Button>
+        </div>
       </div>
 
-      <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Options</div>
+      {/* <div className="p-2 my-4 mb-5 bg-blue-opacity-50">Options</div>
       <div className="p-2 flex justify-between">
         <div>
           <div className="text-lg">LP auto-unbind</div>
@@ -60,24 +186,39 @@ const WithdrawPositionModal = ({
           </div>
         </div>
         <div className="flex">
-          <Button className="w-[50px] bg-[#000] text-[#fff] rounded-none flex justify-center items-center">
+          <Button
+            className={`w-[50px]  rounded-none flex justify-center items-center ${
+              isAutoUnBind && '!bg-[#000] !text-[#fff]'
+            }`}
+            onClick={toggleAutoUnBind}
+          >
             On
           </Button>
-          <Button className="w-[50px] rounded-none flex justify-center items-center">
+          <Button
+            className={`w-[50px]  rounded-none flex justify-center items-center ${
+              isAutoUnBind || '!bg-[#000] !text-[#fff]'
+            }`}
+            onClick={toggleAutoUnBind}
+          >
             OFF
           </Button>
         </div>
       </div>
-      <div className="p-2 my-4 mb-5 bg-blue-opacity-50 text-xl">Estimates</div>
+      <div className="p-2 my-4 mb-5 bg-blue-opacity-50 text-xl">Estimates</div> */}
 
-      <div className="p-2 flex justify-between">
+      <div className="p-2 flex justify-between text-sm">
         <div>Withdrawal amount</div>
-        <div>$0.42</div>
+        <div>{withdrawAmount}</div>
       </div>
 
-      <div className="p-2 flex justify-between">
+      <div className="p-2 flex justify-between text-sm">
         <div>Remaining amount</div>
-        <div>$0.42</div>
+        <div>
+          {new BigNumber(currentSPNFT?.stakingPosition?.amount || 0)
+            .div(new BigNumber(10).pow(18))
+            .minus(new BigNumber(withdrawAmount))
+            ?.toFixed()}
+        </div>
       </div>
 
       <div className="block lg:flex items-center gap-2">
@@ -88,7 +229,10 @@ const WithdrawPositionModal = ({
         >
           Cancel
         </Button>
-        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
+        <Button
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
+          onClick={handleWithdrawPosition}
+        >
           Withdraw
         </Button>
       </div>
