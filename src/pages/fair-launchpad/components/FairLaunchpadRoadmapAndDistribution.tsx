@@ -1,10 +1,7 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-export const FairLaunchpadRoadmapAndDistribution = ({
-  values,
-  handleChange,
-}: any) => {
+const FairLaunchpadRoadmapAndDistribution = ({ values, handleChange }: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">
@@ -65,3 +62,4 @@ export const FairLaunchpadRoadmapAndDistribution = ({
     </>
   );
 };
+export default FairLaunchpadRoadmapAndDistribution;

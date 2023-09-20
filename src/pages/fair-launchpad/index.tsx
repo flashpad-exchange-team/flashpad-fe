@@ -4,13 +4,13 @@ import BackIcon from '@/icons/BackIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import { useMemo, useState } from 'react';
-import { FairLaunchpadProjectDetail } from './components/FairLaunchpadProjectDetail';
-import { FairLaunchpadProjectDocuments } from './components/FairLaunchpadProjectDocuments';
-import { FairLaunchpadProjectProposition } from './components/FairLaunchpadProjectProposition';
-import { FairLaunchpadProjectSocialMedia } from './components/FairLaunchpadProjectSocialMedia';
-import { FairLaunchpadProjectTeamInformation } from './components/FairLaunchpadProjectTeamInformation';
-import { FairLaunchpadProjectTokenInformation } from './components/FairLaunchpadProjectTokenInformation';
-import { FairLaunchpadRoadmapAndDistribution } from './components/FairLaunchpadRoadmapAndDistribution';
+import FairLaunchpadProjectDetail from './components/FairLaunchpadProjectDetail';
+import FairLaunchpadProjectDocuments from './components/FairLaunchpadProjectDocuments';
+import FairLaunchpadProjectProposition from './components/FairLaunchpadProjectProposition';
+import FairLaunchpadProjectSocialMedia from './components/FairLaunchpadProjectSocialMedia';
+import FairLaunchpadProjectTeamInformation from './components/FairLaunchpadProjectTeamInformation';
+import FairLaunchpadProjectTokenInformation from './components/FairLaunchpadProjectTokenInformation';
+import FairLaunchpadRoadmapAndDistribution from './components/FairLaunchpadRoadmapAndDistribution';
 
 const Launchpad = () => {
   const [step, setStep] = useState(1);
