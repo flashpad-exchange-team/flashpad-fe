@@ -3,17 +3,194 @@ import CloseIcon from '@/icons/CloseIcon';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
+import {
+  X_ARTHUR_TOKEN_ADDRESS,
+  YIELD_BOOSTER_ADDRESS,
+} from '@/utils/constants';
+import { Address } from 'viem';
+import { useLoading } from '@/context/LoadingContext';
+import { useAccount, useBalance } from 'wagmi';
+import customToast from '../notification/customToast';
+import * as xARTContract from '@/utils/xARTContract';
+import { waitForTransaction } from '@wagmi/core';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { encodeAbiParameters } from 'viem';
 
 export interface BoostPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
+  lpAddress?: Address;
+  nftPoolAddress?: Address;
+  token1Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  token2Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  refetchData: () => void;
+  spNFTTokenId: string | null;
 }
 
 const BoostPositionModal = ({
   toggleOpen,
   isOpen,
+  nftPoolAddress,
+  token1Data,
+  token2Data,
+  refetchData,
+  spNFTTokenId,
 }: BoostPositionModalProps) => {
-  const handleStake = () => {};
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  const { address: userAddress } = useAccount();
+  const [amount, setAmount] = useState('0');
+
+  const { data: balanceXART } = useBalance({
+    address: isOpen ? userAddress : undefined,
+    token: X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+    watch: true,
+  });
+
+  const handleBoost = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!balanceXART) {
+      customToast({
+        message: 'Could not get LP balance info',
+        type: 'error',
+      });
+    }
+
+    startLoadingTx({
+      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+      title: 'Boosting your stake position ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
+    const usageAddress = YIELD_BOOSTER_ADDRESS;
+    const amountParsed = BigNumber(amount).times(
+      BigNumber(10).pow((balanceXART as any)?.decimals!)
+    );
+    const txResult = await xARTContract.write(
+      userAddress,
+      X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+      'allocate',
+      [
+        usageAddress,
+        amountParsed.toString(),
+        encodeAbiParameters(
+          [
+            { name: 'poolAddress', type: 'address' },
+            { name: 'tokenId', type: 'uint256' },
+          ],
+          [nftPoolAddress as any, spNFTTokenId as any]
+        ),
+      ]
+    );
+
+    if (!txResult) {
+      stopLoadingTx();
+      return;
+    }
+
+    const hash = txResult.hash;
+    const txReceipt = await waitForTransaction({ hash });
+    console.log({ txReceipt });
+    refetchData();
+    stopLoadingTx();
+
+    const usdValue = amount;
+
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: 'boost to position',
+        token1: token1Data.symbol,
+        token2: token2Data.symbol,
+        txHash: hash,
+        usdValue,
+      })
+    );
+    setAmount('0');
+  };
+
+  const handleUnBoost = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!balanceXART) {
+      customToast({
+        message: 'Could not get LP balance info',
+        type: 'error',
+      });
+    }
+
+    startLoadingTx({
+      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+      title: 'UnBoosting your stake position ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
+    const usageAddress = YIELD_BOOSTER_ADDRESS;
+    const amountParsed = BigNumber(amount).times(
+      BigNumber(10).pow((balanceXART as any)?.decimals!)
+    );
+    const txResult = await xARTContract.write(
+      userAddress,
+      X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+      'deallocate',
+      [
+        usageAddress,
+        amountParsed.toString(),
+        encodeAbiParameters(
+          [
+            { name: 'poolAddress', type: 'address' },
+            { name: 'tokenId', type: 'uint256' },
+          ],
+          [nftPoolAddress as any, spNFTTokenId as any]
+        ),
+      ]
+    );
+
+    if (!txResult) {
+      stopLoadingTx();
+      return;
+    }
+
+    const hash = txResult.hash;
+    const txReceipt = await waitForTransaction({ hash });
+    console.log({ txReceipt });
+    refetchData();
+    stopLoadingTx();
+
+    const usdValue = amount;
+
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: 'unboost from position',
+        token1: token1Data.symbol,
+        token2: token2Data.symbol,
+        txHash: hash,
+        usdValue,
+      })
+    );
+    setAmount('0');
+  };
 
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
@@ -28,8 +205,10 @@ const BoostPositionModal = ({
             </div>
           </div>
           <div className="ml-[70px]">
-            <div className="text-bold">Token A - Token B</div>
-            <div className="text-xs font-normal">#ID-1644</div>
+            <div className="text-bold">
+              {token1Data.symbol} - {token2Data.symbol}
+            </div>
+            <div className="text-xs font-normal">#ID-{spNFTTokenId}</div>
           </div>
         </div>
         <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
@@ -40,11 +219,11 @@ const BoostPositionModal = ({
         <span className="text-[#E6B300] font-bold">Boost</span> your position
       </div>
       <div className="text-center text-secondary mb-5 text-[12px]">
-        Allocate TOKENS to your spNFT for more yield
+        Allocate xART to your spNFT for more yield
       </div>
       <div className="block lg:flex items-center gap-2">
         <Button
-          onClick={handleStake}
+          onClick={handleBoost}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Boost
@@ -52,23 +231,35 @@ const BoostPositionModal = ({
         <Button
           className="w-full justify-center mt-2 mb-2 px-[42px]"
           type="secondary"
-          onClick={toggleOpen}
+          onClick={handleUnBoost}
         >
           Unboost
         </Button>
       </div>
-      <div className="p-2 my-4 mb-5 bg-blue-opacity-50 text-center text-[#E6B300]">
+      {/* <div className="p-2 my-4 mb-5 bg-blue-opacity-50 text-center text-[#E6B300]">
         Get max bonus
-      </div>
-      <div className="px-2 pt-4 bg-blue-opacity-50 flex justify-between mt-2">
-        <div className="text-[#98A2B3]">Amount</div>
-        <div>0</div>
-      </div>
-      <div className="px-2 pb-4 bg-blue-opacity-50 flex justify-between mb-2">
-        <div className="text-[#fff]">Balance: 0</div>
-        <Button className="w-[50px] h-[10px] rounded-none flex justify-center items-center">
-          Max
-        </Button>
+      </div> */}
+      <div className="p-2 bg-blue-opacity-50  rounded-md text-sm">
+        <div className="flex justify-between items-center">
+          <div className="text-[#98A2B3] ">Amount</div>
+          <input
+            className="w-full bg-transparent border-none h-[auto] pl-3 text-sm  mb-2 mt-2 focus:outline-none placeholder-[#667085] text-right"
+            placeholder="Enter value "
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="text-[#fff]">
+            Balance: {balanceXART?.formatted} xART
+          </div>
+          <Button
+            className="w-[50px] h-[10px] rounded-none flex justify-center items-center text-xs"
+            onClick={() => setAmount(balanceXART?.formatted || '0')}
+          >
+            Max
+          </Button>
+        </div>
       </div>
       <div className="block lg:flex items-center gap-2">
         <Button
@@ -79,10 +270,10 @@ const BoostPositionModal = ({
           Cancel
         </Button>
         <Button
-          onClick={handleStake}
+          onClick={handleBoost}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
-          Approve
+          Submit
         </Button>
       </div>
 

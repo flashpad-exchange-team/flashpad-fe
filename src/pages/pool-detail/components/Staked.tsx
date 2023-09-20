@@ -156,6 +156,11 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                     <FileIcon />
                     <BoostPositionIcon
                       active={sp?.stakingPosition?.boostPoints > 0}
+                      amount={new BigNumber(
+                        sp?.stakingPosition?.boostPoints || 0
+                      )
+                        .div(new BigNumber(10).pow(18))
+                        .toString(10)}
                     />
                   </div>
                 </td>
@@ -172,18 +177,21 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                   <div className="flex items-center gap-2 cursor-pointer justify-center">
                     <AddToPositionIcon
+                      message="Add to position"
                       onClick={() => {
                         setSpNFTTokenId(sp?.tokenId);
                         toggleAddToPosition();
                       }}
                     />
                     <WithdrawPositionIcon
+                      message="Withdraw position"
                       onClick={() => {
                         setSpNFTTokenId(sp?.tokenId);
                         toggleWithdrawPosition();
                       }}
                     />
                     <HarvestIcon
+                      message="Harvest position"
                       onClick={() => {
                         setSpNFTTokenId(sp?.tokenId);
                         toggleHarvestPosition();
@@ -196,6 +204,12 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                       }}
                     />
                     <BoostPositionIcon
+                      active={sp?.stakingPosition?.boostPoints > 0}
+                      amount={new BigNumber(
+                        sp?.stakingPosition?.boostPoints || 0
+                      )
+                        .div(new BigNumber(10).pow(18))
+                        .toString(10)}
                       onClick={() => {
                         setSpNFTTokenId(sp?.tokenId);
                         toggleBoostPosition();

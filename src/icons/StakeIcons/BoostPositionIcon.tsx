@@ -1,8 +1,14 @@
 import { Tooltip } from 'react-tooltip';
 
-const BoostPositionIcon = ({ onClick, active }: any) => {
+const BoostPositionIcon = ({ onClick, active, amount }: any) => {
+  console.log({ amount, active });
   return (
-    <div data-tooltip-id="my-tooltip" data-tooltip-content={`No active boost`}>
+    <div
+      data-tooltip-id="my-tooltip"
+      data-tooltip-content={
+        active ? `Boosted ${amount} xART` : `No active boost`
+      }
+    >
       <svg
         onClick={onClick}
         width="20"

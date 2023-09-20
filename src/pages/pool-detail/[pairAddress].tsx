@@ -242,6 +242,18 @@ const PoolDetail = () => {
       <BoostPositionModal
         isOpen={openBoostPosition}
         toggleOpen={toggleBoostPosition}
+        lpAddress={pairAddress as Address}
+        nftPoolAddress={nftPoolAddress}
+        token1Data={{
+          symbol: token1Symbol,
+          logo: token1Logo,
+        }}
+        token2Data={{
+          symbol: token2Symbol,
+          logo: token2Logo,
+        }}
+        refetchData={getUserStakedPositions}
+        spNFTTokenId={spNFTTokenId}
       />
       <CreatePositionModal
         isOpen={isOpenCreatePosition}
