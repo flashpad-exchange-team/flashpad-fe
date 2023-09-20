@@ -93,7 +93,7 @@ const MENU_ITEMS = [
     icon: <AnalyticsIcon />,
     iconActive: <AnalyticsIcon active />,
     name: 'Analytics',
-    path: '/',
+    path: '/analytics',
   },
   {
     icon: <AddIcon />,
