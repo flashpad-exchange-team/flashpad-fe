@@ -3,7 +3,7 @@ import useWindowWidth from '@/hooks/useWindowWidth';
 
 interface ModalProps {
   isOpen: boolean;
-  onRequestClose: () => void;
+  onRequestClose?: () => void;
   children: any;
   height?: string;
   className?: string;
@@ -13,33 +13,33 @@ interface ModalProps {
 
 const CommonModal: React.FC<ModalProps> = ({
   isOpen,
-  onRequestClose,
+  //   onRequestClose,
   children,
   width,
 }) => {
   const windowWidth = useWindowWidth();
   const isSmallScreen = windowWidth < 768;
   const modalRef = useRef(null as any);
-  const handleClickOutside = (e: any) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      const isDatePicker = e.target.classList.contains('cursor-pointer');
-      const isModalContent = e.target.closest('.modal-content');
-      if (!isDatePicker && !isModalContent) {
-        onRequestClose();
-      }
-    }
-  };
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+  //   const handleClickOutside = (e: any) => {
+  //     if (modalRef.current && !modalRef.current.contains(e.target)) {
+  //       const isDatePicker = e.target.classList.contains('cursor-pointer');
+  //       const isModalContent = e.target.closest('.modal-content');
+  //       if (!isDatePicker && !isModalContent) {
+  //         onRequestClose();
+  //       }
+  //     }
+  //   };
+  //   useEffect(() => {
+  //     if (isOpen) {
+  //       document.addEventListener('mousedown', handleClickOutside);
+  //     } else {
+  //       document.removeEventListener('mousedown', handleClickOutside);
+  //     }
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
+  //     return () => {
+  //       document.removeEventListener('mousedown', handleClickOutside);
+  //     };
+  //   }, [isOpen]);
 
   return isOpen ? (
     <>

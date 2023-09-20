@@ -33,7 +33,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   useEffect(() => {
     // if (chain?.id != APP_BASED_CHAIN.id) {
-      // setOpenSwitchNetwork(true);
+    // setOpenSwitchNetwork(true);
     // }
   }, [chain]);
 
