@@ -21,7 +21,6 @@ export interface CreateMerlinModalProps {
 }
 
 const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [isDepositEndTime, setDepositEndTime] = useState(false);
 
   const toggleIsDepositEndTime = () => setDepositEndTime(!isDepositEndTime);

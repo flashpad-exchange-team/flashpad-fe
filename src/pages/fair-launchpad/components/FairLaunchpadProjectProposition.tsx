@@ -36,3 +36,5 @@ export const FairLaunchpadProjectProposition = ({
     </>
   );
 };
+
+export default FairLaunchpadProjectProposition;

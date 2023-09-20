@@ -62,3 +62,5 @@ export const FairLaunchpadProjectTeamInformation = ({
     </>
   );
 };
+
+export default FairLaunchpadProjectTeamInformation;

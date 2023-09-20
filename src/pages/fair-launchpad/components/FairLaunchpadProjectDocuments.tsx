@@ -79,3 +79,4 @@ export const FairLaunchpadProjectDocuments = ({
     </>
   );
 };
+export default FairLaunchpadProjectDocuments;

@@ -3,7 +3,7 @@ import Coin from '@/icons/Coin';
 import PieChart from '@/icons/PieChart';
 import React from 'react';
 
-export const NavAnalytics = () => {
+const NavAnalytics = () => {
   return (
     <div className="">
       <div>
@@ -31,3 +31,4 @@ export const NavAnalytics = () => {
     </div>
   );
 };
+export default NavAnalytics;

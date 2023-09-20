@@ -1,4 +1,4 @@
-import { NavAnalytics } from './components/NavAnalytics';
+import NavAnalytics from './components/NavAnalytics';
 import TableAnalyticsOverview from './components/TableAnalyticsOverView';
 
 const Analytics = () => {

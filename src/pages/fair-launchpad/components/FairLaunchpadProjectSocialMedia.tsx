@@ -75,3 +75,5 @@ export const FairLaunchpadProjectSocialMedia = ({
     </>
   );
 };
+
+export default FairLaunchpadProjectSocialMedia;

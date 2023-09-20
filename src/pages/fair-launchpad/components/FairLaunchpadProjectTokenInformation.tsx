@@ -77,3 +77,4 @@ export const FairLaunchpadProjectTokenInformation = ({
     </>
   );
 };
+export default FairLaunchpadProjectTokenInformation;
