@@ -130,7 +130,7 @@ const LiquidityPairInfo = ({
 
   useEffect(() => {
     getLPInfo();
-  }, [token1Address, token2Address, isFirstLP]);
+  }, [token1Address, token2Address, isFirstLP, userAddress]);
 
   return (
     <div

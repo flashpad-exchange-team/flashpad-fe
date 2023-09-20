@@ -60,8 +60,8 @@ const MENU_ITEMS = [
         icon: <Liquidity width="18px" />,
       },
       {
-        name: 'Staking',
-        path: '/staking',
+        name: 'Staking Pools',
+        path: '/pools',
         icon: <Swap width="18px" />,
       },
     ],

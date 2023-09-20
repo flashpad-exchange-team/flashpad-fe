@@ -1,12 +1,11 @@
 import { Button } from '@/components/button/Button';
-import LiquiditySettingModal from '@/components/modal/LiquiditySettingModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import customToast from '@/components/notification/customToast';
+import { handleSuccessTxMessageSwap } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
 import DividerDown from '@/icons/DividerDown';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
-import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
@@ -26,7 +25,6 @@ import { Address } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import { handleSuccessTxMessageSwap } from '@/components/successTxMessage';
 
 interface TradeFormProps {
   title: string;
@@ -47,7 +45,6 @@ const TradeForm = ({
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>();
   const [token2, setToken2] = useState<any>();
@@ -64,7 +61,7 @@ const TradeForm = ({
 
   useEffect(() => {
     getLPInfo();
-  }, [token1, token2]);
+  }, [token1, token2, userAddress]);
 
   const resetInput = (isReload?: boolean) => {
     if (isReload) {
@@ -95,7 +92,6 @@ const TradeForm = ({
   });
 
   const toggleOpen = () => setOpen(!isOpen);
-  const toggleOpenSetting = () => setOpenSetting(!isOpenSetting);
 
   const onSelectedToken = (token: any) => {
     if (tokenBeingSelected === 1) {
@@ -300,10 +296,6 @@ const TradeForm = ({
         toggleOpen={toggleOpen}
         selectValue={onSelectedToken}
       />
-      <LiquiditySettingModal
-        isOpen={isOpenSetting}
-        toggleOpen={toggleOpenSetting}
-      />
 
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto  my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-2xl font-bold mx-auto  w-fit flex items-center gap-3">
@@ -319,7 +311,6 @@ const TradeForm = ({
 
           <div className="flex items-center gap-6 cursor-pointer">
             <ReloadIcon onClick={() => resetInput(true)} />
-            <SettingIcon onClick={toggleOpenSetting} />
           </div>
         </div>
         <TokenForm

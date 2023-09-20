@@ -42,11 +42,11 @@ export const handleSuccessTxMessageSwap: (params: any) => SuccessTxInfo = (
   return {
     mainMessage: (
       <div>
-        You’ve successfully {action}
+        You’ve successfully {action}{' '}
         <span className="text-primary">
           {token1Amount} of {token1}
-        </span>
-        to
+        </span>{' '}
+        to{' '}
         <span className="text-primary">
           {token2Amount} {token2}
         </span>

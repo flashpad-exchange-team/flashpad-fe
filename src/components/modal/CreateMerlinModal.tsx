@@ -4,31 +4,11 @@ import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import { useState } from 'react';
-import DatePicker from 'tailwind-datepicker-react';
 import { Button } from '../button/Button';
 import Switch from '../switch/Switch';
 import CommonModal from './CommonModal';
+import Datepicker from 'react-tailwindcss-datepicker';
 
-const options = {
-  autoHide: true,
-  todayBtn: false,
-  clearBtn: true,
-  theme: {
-    background: 'dark:bg-gray-800',
-    todayBtn: '',
-    clearBtn: '',
-    icons: '',
-    text: '',
-    disabledText: '',
-    input:
-      ' dark:bg-darkBlue dark:h-[44px] dark:rounded-md focus:outline-none border-none',
-    inputIcon: '',
-    selected: '',
-  },
-  datepickerClassNames: 'top-12',
-  defaultDate: undefined,
-  language: 'en',
-};
 export interface ICreateMerlins {
   slippage: number;
   deadline: number;
@@ -45,26 +25,7 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
   const [isDepositEndTime, setDepositEndTime] = useState(false);
 
   const toggleIsDepositEndTime = () => setDepositEndTime(!isDepositEndTime);
-
-  const handleChangeStartTime = (selectedDate: Date) => {
-    console.log(selectedDate);
-  };
-
-  const handleChangeEndTime = (selectedDate: Date) => {
-    console.log(selectedDate);
-  };
-
-  const handleChangeHarvestStartTime = (selectedDate: Date) => {
-    console.log(selectedDate);
-  };
-
-  const handleChangeHarvestEndTime = (selectedDate: Date) => {
-    console.log(selectedDate);
-  };
-
-  const handleCloseDatePicker = (state: boolean) => {
-    setShowDatePicker(state);
-  };
+  const [value, setValue] = useState(null);
 
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
@@ -91,42 +52,34 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
       </div>
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">Start time</div>
-        <DatePicker
-          onChange={handleChangeStartTime}
-          show={showDatePicker}
-          setShow={handleCloseDatePicker}
-          options={options}
-          classNames="cursor-pointer"
+        <Datepicker
+          asSingle={true}
+          value={value}
+          onChange={(newVal: any) => setValue(newVal)}
         />
       </div>
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">End time</div>
-        <DatePicker
-          onChange={handleChangeEndTime}
-          show={showDatePicker}
-          setShow={handleCloseDatePicker}
-          options={options}
-          classNames="cursor-pointer"
+        <Datepicker
+          asSingle={true}
+          value={value}
+          onChange={(newVal: any) => setValue(newVal)}
         />
       </div>
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">Harvest start time</div>
-        <DatePicker
-          onChange={handleChangeHarvestStartTime}
-          show={showDatePicker}
-          setShow={handleCloseDatePicker}
-          options={options}
-          classNames="cursor-pointer"
+        <Datepicker
+          asSingle={true}
+          value={value}
+          onChange={(newVal: any) => setValue(newVal)}
         />
       </div>
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">Harvest end time</div>
-        <DatePicker
-          onChange={handleChangeHarvestEndTime}
-          show={showDatePicker}
-          setShow={handleCloseDatePicker}
-          options={options}
-          classNames="cursor-pointer"
+        <Datepicker
+          asSingle={true}
+          value={value}
+          onChange={(newVal: any) => setValue(newVal)}
         />
       </div>
       <div className="text-[15px] my-2">Description (max 255 char)</div>
@@ -142,29 +95,28 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
             <div className="text-[#E6B300] text-sm">Set max</div>
           </div>
           <div className="flex gap-3">
-            <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-2">
+            <div className="flex items-center rounded-md bg-blue-opacity-50 justify-center px-6 py-2 w-[52px] cursor-pointer">
               -
             </div>
             <input
-              className="w-full bg-blue-opacity-50 h-[52px] pl-8 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
+              className="w-full bg-blue-opacity-50  rounded-md  h-[52px] pl-8 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
               placeholder="0"
             />
-            <div className="flex items-center bg-blue-opacity-50 w-[50%] justify-end px-6 py-2">
+            <div className="flex items-center  rounded-md  bg-blue-opacity-50 w-[50%] justify-end px-6 py-2">
               <div>Days</div>
             </div>
             <div>
-              <Button className="w-[60px] rounded-none flex justify-center items-center rounded-[4px]">
+              <Button className="rounded-md  flex justify-center items-center rounded-[4px]  w-[52px]">
                 +
               </Button>
             </div>
           </div>
           <div className="flex items-center justify-between my-3">
             <div className="text-[15px] w-[180px]">Min lock endtime</div>
-            <DatePicker
-              onChange={handleChangeStartTime}
-              show={showDatePicker}
-              setShow={handleCloseDatePicker}
-              options={options}
+            <Datepicker
+              asSingle={true}
+              value={value}
+              onChange={(newVal: any) => setValue(newVal)}
             />
           </div>
           <div className="flex items-center justify-between my-3">
