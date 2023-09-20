@@ -138,7 +138,7 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
         >
           Reset to default
         </Button>
-        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
+        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px] ">
           Save settings
         </Button>
       </div>
