@@ -12,7 +12,7 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
   return {
     mainMessage: (
       <div>
-        You’ve successfully {action} worth
+        You’ve successfully {action} worth{' '}
         <span className="text-primary">
           {usdValue} of {token1} - {token2} LP
         </span>
@@ -20,13 +20,13 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
     ),
     subMessage: (
       <div>
-        Head to the
+        Head to the{' '}
         <Link href="/" className="text-primary">
-          dashboard page
+          dashboard page{' '}
         </Link>
-        or to the
+        or to the{' '}
         <Link href="/" className="text-primary">
-          pool page
+          pool page{' '}
         </Link>
         to check your position
       </div>

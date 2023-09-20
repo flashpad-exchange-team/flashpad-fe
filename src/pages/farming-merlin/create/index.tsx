@@ -11,6 +11,7 @@ import SwapRightIcon from '@/icons/SwapRight';
 import Image from 'next/image';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useState } from 'react';
+import { useAccount } from 'wagmi';
 
 enum MerlinPoolTypes {
   LP_V2 = 0,
@@ -18,12 +19,15 @@ enum MerlinPoolTypes {
 }
 
 const CreateMerlinPool = () => {
+  const { address: userAddress } = useAccount();
   const [type, setType] = useState<MerlinPoolTypes>(MerlinPoolTypes.LP_V2);
-  const [open, setOpen] = useState(false);
-  const toggleOpen = () => setOpen(!open);
+  const [openCreateMerlinModal, setOpenCreateMerlinModal] = useState(false);
+  const toggleOpenCreateMerlinModal = () =>
+    setOpenCreateMerlinModal(!openCreateMerlinModal);
 
   const [isOpenSelectTokenModal, setOpenSelectTokenModal] = useState(false);
-  const toggleOpenSelectTokenModal = () => setOpenSelectTokenModal(!isOpenSelectTokenModal);
+  const toggleOpenSelectTokenModal = () =>
+    setOpenSelectTokenModal(!isOpenSelectTokenModal);
 
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>(null);
@@ -49,7 +53,10 @@ const CreateMerlinPool = () => {
 
   return (
     <>
-      <CreateMerlinModal isOpen={open} toggleOpen={toggleOpen} />
+      <CreateMerlinModal
+        isOpen={openCreateMerlinModal}
+        toggleOpen={toggleOpenCreateMerlinModal}
+      />
       <SelectTokenModal
         isOpen={isOpenSelectTokenModal}
         toggleOpen={toggleOpenSelectTokenModal}
@@ -99,16 +106,18 @@ const CreateMerlinPool = () => {
                 <Select
                   options={CHAINS_TOKENS_LIST}
                   value={{ value: token1?.address, label: token1?.symbol }}
-                  icon={token1?.logoURI ? (
-                    <Image
-                      alt="logo"
-                      src={token1?.logoURI}
-                      width={24}
-                      height={24}
-                    />
-                  ) : (
-                    <BNBICon />
-                  )}
+                  icon={
+                    token1?.logoURI ? (
+                      <Image
+                        alt="logo"
+                        src={token1?.logoURI}
+                        width={24}
+                        height={24}
+                      />
+                    ) : (
+                      <BNBICon />
+                    )
+                  }
                   disabled
                 />
               </div>
@@ -128,7 +137,8 @@ const CreateMerlinPool = () => {
                 <Select
                   options={CHAINS_TOKENS_LIST}
                   value={{ value: token2?.address, label: token2?.symbol }}
-                  icon={token2?.logoURI ? (
+                  icon={
+                    token2?.logoURI ? (
                       <Image
                         alt="logo"
                         src={token2?.logoURI}
@@ -137,7 +147,8 @@ const CreateMerlinPool = () => {
                       />
                     ) : (
                       <BNBICon />
-                    )}
+                    )
+                  }
                   disabled
                 />
               </div>
@@ -152,17 +163,19 @@ const CreateMerlinPool = () => {
             >
               <Select
                 options={CHAINS_TOKENS_LIST}
-                value={{ value: token1.address, label: token1.symbol }}
-                icon={token1?.logoURI ? (
-                  <Image
-                    alt="logo"
-                    src={token1?.logoURI}
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <BNBICon />
-                )}
+                value={{ value: token1?.address, label: token1?.symbol }}
+                icon={
+                  token1?.logoURI ? (
+                    <Image
+                      alt="logo"
+                      src={token1?.logoURI}
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <BNBICon />
+                  )
+                }
                 disabled
               />
             </div>
@@ -175,13 +188,13 @@ const CreateMerlinPool = () => {
           className="mt-3 mb-6"
         />
         <Button
-          onClick={() => {
-            toggleOpen();
-          }}
+          onClick={toggleOpenCreateMerlinModal}
           className="w-full justify-center  mb-2 px-[42px]"
-          // disabled={
-          //   !token1 || !token2 || !userAddress || !token1Amount || !token2Amount
-          // }
+          disabled={
+            !userAddress || (type === MerlinPoolTypes.LP_V2)
+              ? !token1 || !token2
+              : !token1
+          }
         >
           Create Merlin
         </Button>

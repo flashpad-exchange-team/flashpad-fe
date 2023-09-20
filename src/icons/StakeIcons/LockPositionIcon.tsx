@@ -1,11 +1,14 @@
 import { Tooltip } from 'react-tooltip';
 
 const LockPositionIcon = ({ onClick, remainingDays }: any) => {
+  console.log({ remainingDays });
   return (
     <div
       data-tooltip-id="my-tooltip"
       data-tooltip-content={
-        remainingDays ? `Active lock until ${remainingDays} days` : null
+        remainingDays && remainingDays > 0
+          ? `Active lock until ${remainingDays} days`
+          : null
       }
     >
       <svg

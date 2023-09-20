@@ -8,6 +8,7 @@ import DatePicker from 'tailwind-datepicker-react';
 import { Button } from '../button/Button';
 import Switch from '../switch/Switch';
 import CommonModal from './CommonModal';
+
 const options = {
   autoHide: true,
   todayBtn: false,
@@ -40,17 +41,31 @@ export interface CreateMerlinModalProps {
 }
 
 const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
-  const [show, setShow] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [isDepositEndTime, setDepositEndTime] = useState(false);
 
   const toggleIsDepositEndTime = () => setDepositEndTime(!isDepositEndTime);
 
-  const handleChange = (selectedDate: Date) => {
+  const handleChangeStartTime = (selectedDate: Date) => {
     console.log(selectedDate);
   };
-  const handleClose = (state: boolean) => {
-    setShow(state);
+
+  const handleChangeEndTime = (selectedDate: Date) => {
+    console.log(selectedDate);
   };
+
+  const handleChangeHarvestStartTime = (selectedDate: Date) => {
+    console.log(selectedDate);
+  };
+
+  const handleChangeHarvestEndTime = (selectedDate: Date) => {
+    console.log(selectedDate);
+  };
+
+  const handleCloseDatePicker = (state: boolean) => {
+    setShowDatePicker(state);
+  };
+
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
       <div className="flex items-center justify-between w-full">
@@ -77,9 +92,9 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">Start time</div>
         <DatePicker
-          onChange={handleChange}
-          show={show}
-          setShow={handleClose}
+          onChange={handleChangeStartTime}
+          show={showDatePicker}
+          setShow={handleCloseDatePicker}
           options={options}
           classNames="cursor-pointer"
         />
@@ -87,9 +102,9 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">End time</div>
         <DatePicker
-          onChange={handleChange}
-          show={show}
-          setShow={handleClose}
+          onChange={handleChangeEndTime}
+          show={showDatePicker}
+          setShow={handleCloseDatePicker}
           options={options}
           classNames="cursor-pointer"
         />
@@ -97,9 +112,9 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">Harvest start time</div>
         <DatePicker
-          onChange={handleChange}
-          show={show}
-          setShow={handleClose}
+          onChange={handleChangeHarvestStartTime}
+          show={showDatePicker}
+          setShow={handleCloseDatePicker}
           options={options}
           classNames="cursor-pointer"
         />
@@ -107,9 +122,9 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
       <div className="flex items-center justify-between my-3">
         <div className="text-[15px] w-[180px]">Harvest end time</div>
         <DatePicker
-          onChange={handleChange}
-          show={show}
-          setShow={handleClose}
+          onChange={handleChangeHarvestEndTime}
+          show={showDatePicker}
+          setShow={handleCloseDatePicker}
           options={options}
           classNames="cursor-pointer"
         />
@@ -146,9 +161,9 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
           <div className="flex items-center justify-between my-3">
             <div className="text-[15px] w-[180px]">Min lock endtime</div>
             <DatePicker
-              onChange={handleChange}
-              show={show}
-              setShow={handleClose}
+              onChange={handleChangeStartTime}
+              show={showDatePicker}
+              setShow={handleCloseDatePicker}
               options={options}
             />
           </div>
