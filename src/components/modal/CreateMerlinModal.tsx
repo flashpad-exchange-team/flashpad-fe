@@ -95,18 +95,18 @@ const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
             <div className="text-[#E6B300] text-sm">Set max</div>
           </div>
           <div className="flex gap-3">
-            <div className="flex items-center bg-blue-opacity-50 justify-center px-6 py-2 mr-2">
+            <div className="flex items-center rounded-md bg-blue-opacity-50 justify-center px-6 py-2 w-[52px] cursor-pointer">
               -
             </div>
             <input
-              className="w-full bg-blue-opacity-50 h-[52px] pl-8 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
+              className="w-full bg-blue-opacity-50  rounded-md  h-[52px] pl-8 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
               placeholder="0"
             />
-            <div className="flex items-center bg-blue-opacity-50 w-[50%] justify-end px-6 py-2">
+            <div className="flex items-center  rounded-md  bg-blue-opacity-50 w-[50%] justify-end px-6 py-2">
               <div>Days</div>
             </div>
             <div>
-              <Button className="w-[60px] rounded-none flex justify-center items-center rounded-[4px]">
+              <Button className="rounded-md  flex justify-center items-center rounded-[4px]  w-[52px]">
                 +
               </Button>
             </div>
