@@ -9,9 +9,15 @@ import LiquidityIcon from '@/icons/LiquidityIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import Image from 'next/image';
-import { CHAINS_TOKENS_LIST } from '@/utils/constants';
-import { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { ADDRESS_ZERO, CHAINS_TOKENS_LIST } from '@/utils/constants';
+import { useEffect, useState } from 'react';
+import { Address, useAccount } from 'wagmi';
+import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as routerContract from '@/utils/routerContract';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
+import customToast from '@/components/notification/customToast';
+import { useLoading } from '@/context/LoadingContext';
+import { waitForTransaction } from '@wagmi/core';
 
 enum MerlinPoolTypes {
   LP_V2 = 0,
@@ -20,6 +26,7 @@ enum MerlinPoolTypes {
 
 const CreateMerlinPool = () => {
   const { address: userAddress } = useAccount();
+  const { startLoadingTx, stopLoadingTx } = useLoading();
   const [type, setType] = useState<MerlinPoolTypes>(MerlinPoolTypes.LP_V2);
   const [openCreateMerlinModal, setOpenCreateMerlinModal] = useState(false);
   const toggleOpenCreateMerlinModal = () =>
@@ -33,9 +40,39 @@ const CreateMerlinPool = () => {
   const [token1, setToken1] = useState<any>(null);
   const [token2, setToken2] = useState<any>(null);
 
-  // const handleOpenSelectTokenModal = () => {
-  //   openModal ? openModal() : void 0;
-  // };
+  const [successful, setSuccessful] = useState(false);
+
+  const [lpAddress, setLpAddress] = useState<Address | undefined>(undefined);
+  const [lpTokenDecimals, setLpTokenDecimals] = useState(18);
+  const [nftPoolAddress, setNftPoolAddress] = useState<Address | undefined>(
+    undefined
+  );
+
+  const getPoolAddress = async () => {
+    let lpAddress;
+    if (type === MerlinPoolTypes.LP_V2) {
+      if (!token1 || !token2) return;
+      lpAddress = await routerContract.getPair(token1.address, token2.address);
+      if (!lpAddress) return;
+    } else {
+      if (!token1) return;
+      lpAddress = token1.address;
+    }
+    console.log({ lpAddress });
+    setLpAddress(lpAddress);
+    const decimals = await erc20TokenContract.erc20Read(
+      lpAddress,
+      'decimals',
+      []
+    );
+    setLpTokenDecimals(Number(decimals));
+    const address = await nftPoolFactoryContract.getPool(lpAddress);
+    setNftPoolAddress(address);
+  };
+
+  useEffect(() => {
+    getPoolAddress();
+  }, [type, token1, token2, successful]);
 
   const onSelectedToken = (token: any) => {
     if (tokenBeingSelected === 1) {
@@ -51,11 +88,72 @@ const CreateMerlinPool = () => {
     }
   };
 
+  const handleCreateMerlinPool = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!lpAddress) {
+      customToast({
+        message: 'Staking token address is undefined',
+        type: 'error',
+      });
+      return;
+    }
+
+    console.log({ nftPoolAddress });
+
+    if (!nftPoolAddress || nftPoolAddress === ADDRESS_ZERO) {
+      startLoadingTx({
+        tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+        title: 'Creating spNFT pool ...',
+        message: 'Confirming your transaction. Please wait.',
+      });
+
+      // const lpAddress = await routerContract.getPair(
+      //   token1.address,
+      //   token2.address
+      // );
+      const createPoolRes = await nftPoolFactoryContract.createPool(
+        userAddress,
+        {
+          lpTokenAddress: lpAddress!,
+        }
+      );
+
+      if (!createPoolRes) {
+        stopLoadingTx();
+        setSuccessful(false);
+        return;
+      }
+
+      const hash = createPoolRes.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      stopLoadingTx();
+      setSuccessful(true);
+    }
+
+    setOpenCreateMerlinModal(true);
+  };
+
+  const isFirstSpMinter = nftPoolAddress
+    ? nftPoolAddress === ADDRESS_ZERO
+    : undefined;
+
   return (
     <>
       <CreateMerlinModal
         isOpen={openCreateMerlinModal}
         toggleOpen={toggleOpenCreateMerlinModal}
+        nftPoolAddress={nftPoolAddress}
+        token1Address={token1?.address}
+        token2Address={token2?.address}
+        lpTokenDecimals={lpTokenDecimals}
       />
       <SelectTokenModal
         isOpen={isOpenSelectTokenModal}
@@ -110,7 +208,7 @@ const CreateMerlinPool = () => {
                     token1?.logoURI ? (
                       <Image
                         alt="logo"
-                        src={token1?.logoURI}
+                        src={token1.logoURI}
                         width={24}
                         height={24}
                       />
@@ -141,7 +239,7 @@ const CreateMerlinPool = () => {
                     token2?.logoURI ? (
                       <Image
                         alt="logo"
-                        src={token2?.logoURI}
+                        src={token2.logoURI}
                         width={24}
                         height={24}
                       />
@@ -168,7 +266,7 @@ const CreateMerlinPool = () => {
                   token1?.logoURI ? (
                     <Image
                       alt="logo"
-                      src={token1?.logoURI}
+                      src={token1.logoURI}
                       width={24}
                       height={24}
                     />
@@ -181,17 +279,18 @@ const CreateMerlinPool = () => {
             </div>
           )}
         </div>
-
-        <Notification
-          message="The spNFT for this asset has not been created yet! You will need to initialize the spNFT contact first."
-          type="info"
-          className="mt-3 mb-6"
-        />
+        {isFirstSpMinter && (
+          <Notification
+            message="The spNFT for this asset has not been created yet! You will need to initialize the spNFT contract first."
+            type="info"
+            className="mt-3 mb-6"
+          />
+        )}
         <Button
-          onClick={toggleOpenCreateMerlinModal}
-          className="w-full justify-center  mb-2 px-[42px]"
+          onClick={handleCreateMerlinPool}
+          className="w-full justify-center mt-4 mb-2 px-[42px]"
           disabled={
-            !userAddress || (type === MerlinPoolTypes.LP_V2)
+            !userAddress || type === MerlinPoolTypes.LP_V2
               ? !token1 || !token2
               : !token1
           }

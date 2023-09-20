@@ -4,7 +4,7 @@ import ReloadIcon from '@/icons/ReloadIcon';
 import styles from './loading.module.css';
 const LoadingTx = () => {
   const { isLoadingTx, loadingTxInfo } = useLoading();
-  console.log({ isLoadingTx });
+
   if (!isLoadingTx) return null;
 
   return (

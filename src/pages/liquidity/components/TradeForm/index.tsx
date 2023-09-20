@@ -78,7 +78,7 @@ const TradeForm = ({
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [isOpenLockManage, setOpenLockManage] = useState<boolean>(false);
-  
+
   // const [isOpenCreatePosition, setOpenCreatePosition] =
   //   useState<boolean>(false);
   // const toggleOpenCreatePosition = () => {
@@ -192,7 +192,9 @@ const TradeForm = ({
     getPoolAddress();
   }, [token1, token2, successful]);
 
-  const isFirstSpMinter = nftPoolAddress ? nftPoolAddress === ADDRESS_ZERO : undefined;
+  const isFirstSpMinter = nftPoolAddress
+    ? nftPoolAddress === ADDRESS_ZERO
+    : undefined;
 
   const onSelectedToken = (token: any) => {
     setIsFirstLP(undefined);
@@ -502,6 +504,8 @@ const TradeForm = ({
       const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
       stopLoadingTx();
+      setSuccessful(true);
+      setFailed(false);
     }
 
     setOpenAddLiquidityCreatePosition(true);
@@ -668,13 +672,21 @@ const TradeForm = ({
         )} */}
         {successful && (
           <Notification
-            message={`${FEATURE_PROPS[feature].buttonName} successfully`}
+            message={`${
+              feature === 'STAKE POSITION' && isFirstSpMinter
+                ? 'Initialized'
+                : FEATURE_PROPS[feature].buttonName
+            } successfully`}
             type="success"
           />
         )}
         {failed && (
           <Notification
-            message={`${FEATURE_PROPS[feature].buttonName} failed`}
+            message={`${
+              feature === 'STAKE POSITION' && isFirstSpMinter
+                ? 'Initialized'
+                : FEATURE_PROPS[feature].buttonName
+            } failed`}
             type="error"
           />
         )}
@@ -720,9 +732,8 @@ const TradeForm = ({
             !token1 ||
             !token2 ||
             !userAddress ||
-            (
-              (feature != 'STAKE POSITION' || !isFirstSpMinter) && (!token1Amount || !token2Amount)
-            )
+            ((feature != 'STAKE POSITION' || !isFirstSpMinter) &&
+              (!token1Amount || !token2Amount))
           }
         >
           {feature === 'STAKE POSITION' && isFirstSpMinter

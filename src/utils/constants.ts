@@ -356,6 +356,18 @@ export const MUMBAI_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     address: '0x3e050b8990dee1f11da42dafafaf61237f33c676',
     decimals: 8,
   },
+  {
+    symbol: 'ART',
+    name: 'Arthur Token',
+    address: '0x9F423958b0e02d6C60D1714a37bc627C23C7d048',
+    decimals: 18,
+  },
+  {
+    symbol: 'XART',
+    name: 'XArthur Token',
+    address: '0xB0B291F942C0f71F6E9b02fd038BC4e8cEac3965',
+    decimals: 18,
+  }
 ];
 
 export const CHAINS_TOKENS_LIST = IS_LINEA

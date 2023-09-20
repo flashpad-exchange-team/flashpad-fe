@@ -8,144 +8,279 @@ import { Button } from '../button/Button';
 import Switch from '../switch/Switch';
 import CommonModal from './CommonModal';
 import Datepicker from 'react-tailwindcss-datepicker';
-
-export interface ICreateMerlins {
-  slippage: number;
-  deadline: number;
-  maxHops: number;
-}
+import { Address } from 'viem';
+import Image from 'next/image';
+import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
+import SelectTokenModal from './SelectTokenModal';
+import Select from '../select';
+import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 
 export interface CreateMerlinModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
+  nftPoolAddress?: Address;
+  token1Address: Address;
+  token2Address: Address;
+  lpTokenDecimals: number;
 }
 
-const CreateMerlinModal = ({ toggleOpen, isOpen }: CreateMerlinModalProps) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [isDepositEndTime, setDepositEndTime] = useState(false);
+const CreateMerlinModal = ({
+  toggleOpen,
+  isOpen,
+  nftPoolAddress,
+  token1Address,
+  token2Address,
+  lpTokenDecimals,
+}: CreateMerlinModalProps) => {
+  const [showOptionalRequirements, setShowOptionalRequirements] =
+    useState(false);
+  const toggleShowOptionalRequirements = () =>
+    setShowOptionalRequirements(!showOptionalRequirements);
+  
+  const [showThisModal, setShowThisModal] = useState(true);
+  const [isOpenSelectTokenModal, setOpenSelectTokenModal] = useState(false);
 
-  const toggleIsDepositEndTime = () => setDepositEndTime(!isDepositEndTime);
-  const [value, setValue] = useState(null);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [harvestStartTime, setHarvestStartTime] = useState(null);
+  const [depositEndTime, setDepositEndTime] = useState(null);
+  const [description, setDescription] = useState('');
+  const [minLockDuration, setMinLockDuration] = useState('0');
+  const [minLockEndTime, setMinLockEndTime] = useState(null);
+  const [minDepositAmount, setMinDepositAmount] = useState('0');
+  const [isWhitelist, setWhitelist] = useState(false);
+
+  const handleOpenSelectToken = () => {
+    setOpenSelectTokenModal(!isOpenSelectTokenModal);
+    setShowThisModal(!showThisModal);
+  };
+
+  const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
+  const [token1, setToken1] = useState<any>(null);
+  const [token2, setToken2] = useState<any>(null);
+
+  const onSelectedToken = (token: any) => {
+    if (tokenBeingSelected === 1) {
+      if (token2?.address === token?.address) {
+        setToken2(token1);
+      }
+      setToken1(token);
+    } else if (tokenBeingSelected === 2) {
+      if (token1?.address === token?.address) {
+        setToken2(null);
+        return;
+      }
+      setToken2(token);
+    }
+  };
 
   return (
-    <CommonModal isOpen={isOpen} onRequestClose={toggleOpen}>
-      <div className="flex items-center justify-between w-full">
-        <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
-          <SwapLeftIcon />
-          Create Merlin Pool
-          <SwapRightIcon />
-        </div>
-        <div className="cursor-pointer" onClick={toggleOpen}>
-          <CloseIcon />
-        </div>
-      </div>
-      <div className="text-[15px]">General settings</div>
-      <div className="flex gap-10 justify-center mt-2 mb-4">
-        <div className="flex items-center gap-2">
-          <BNBICon size="36" />
-          Token 1
-        </div>
-        <div className="flex items-center gap-2">
-          <BNBICon size="36" />
-          Token 2
-        </div>
-      </div>
-      <div className="flex items-center justify-between my-3">
-        <div className="text-[15px] w-[180px]">Start time</div>
-        <Datepicker
-          asSingle={true}
-          value={value}
-          onChange={(newVal: any) => setValue(newVal)}
-        />
-      </div>
-      <div className="flex items-center justify-between my-3">
-        <div className="text-[15px] w-[180px]">End time</div>
-        <Datepicker
-          asSingle={true}
-          value={value}
-          onChange={(newVal: any) => setValue(newVal)}
-        />
-      </div>
-      <div className="flex items-center justify-between my-3">
-        <div className="text-[15px] w-[180px]">Harvest start time</div>
-        <Datepicker
-          asSingle={true}
-          value={value}
-          onChange={(newVal: any) => setValue(newVal)}
-        />
-      </div>
-      <div className="flex items-center justify-between my-3">
-        <div className="text-[15px] w-[180px]">Harvest end time</div>
-        <Datepicker
-          asSingle={true}
-          value={value}
-          onChange={(newVal: any) => setValue(newVal)}
-        />
-      </div>
-      <div className="text-[15px] my-2">Description (max 255 char)</div>
-      <textarea className="w-full rounded-md min-h-[100px] bg-darkBlue text-sm p-3" />
-      <div className="flex items-center justify-between my-2">
-        <div className="text-[15px] ">Deposit end time</div>
-        <Switch toggle={toggleIsDepositEndTime} open={isDepositEndTime} />
-      </div>
-      {isDepositEndTime && (
-        <>
-          <div className="flex justify-between mb-2">
-            <div className="text-[15px]">Lock duration</div>
-            <div className="text-[#E6B300] text-sm">Set max</div>
+    <>
+      <SelectTokenModal
+        isOpen={isOpenSelectTokenModal}
+        toggleOpen={handleOpenSelectToken}
+        selectValue={onSelectedToken}
+      />
+      <CommonModal isOpen={isOpen && showThisModal} onRequestClose={toggleOpen}>
+        <div className="flex items-center justify-between w-full">
+          <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
+            <SwapLeftIcon />
+            Create Merlin Pool
+            <SwapRightIcon />
           </div>
-          <div className="flex gap-3">
-            <div className="flex items-center rounded-md bg-blue-opacity-50 justify-center px-6 py-2 w-[52px] cursor-pointer">
-              -
-            </div>
-            <input
-              className="w-full bg-blue-opacity-50  rounded-md  h-[52px] pl-8 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
-              placeholder="0"
-            />
-            <div className="flex items-center  rounded-md  bg-blue-opacity-50 w-[50%] justify-end px-6 py-2">
-              <div>Days</div>
-            </div>
-            <div>
-              <Button className="rounded-md  flex justify-center items-center rounded-[4px]  w-[52px]">
-                +
-              </Button>
-            </div>
+          <div className="cursor-pointer" onClick={toggleOpen}>
+            <CloseIcon />
           </div>
-          <div className="flex items-center justify-between my-3">
-            <div className="text-[15px] w-[180px]">Min lock endtime</div>
-            <Datepicker
-              asSingle={true}
-              value={value}
-              onChange={(newVal: any) => setValue(newVal)}
+        </div>
+        <div className="text-[16px] font-bold">General settings</div>
+        <div className="flex gap-10 justify-center mt-2 mb-4">
+          <div
+            className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex-col items-center gap-2 text-sm lg:text-base "
+            onClick={() => {
+              setTokenBeingSelected(1);
+              handleOpenSelectToken();
+            }}
+          >
+            <div className="mb-2 pl-1">Incentive token #1</div>
+            <Select
+              options={CHAINS_TOKENS_LIST}
+              value={{ value: token1?.address, label: token1?.symbol }}
+              icon={
+                token1?.logoURI ? (
+                  <Image
+                    alt="logo"
+                    src={token1.logoURI}
+                    width={36}
+                    height={36}
+                  />
+                ) : (
+                  <BNBICon size="36" />
+                )
+              }
+              disabled
             />
           </div>
-          <div className="flex items-center justify-between my-3">
-            <div className="text-[15px] w-[180px]">Min lock deposit amount</div>
-            <input
-              className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
-              placeholder="Enter value "
+          <div className="flex items-center">-</div>
+          <div
+            className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex-col items-center gap-2 text-sm lg:text-base "
+            onClick={() => {
+              setTokenBeingSelected(2);
+              handleOpenSelectToken();
+            }}
+          >
+            <div className="mb-2 pl-1">Incentive token #2</div>
+            <Select
+              options={CHAINS_TOKENS_LIST}
+              value={{ value: token2?.address, label: token2?.symbol }}
+              icon={
+                token2?.logoURI ? (
+                  <Image
+                    alt="logo"
+                    src={token2.logoURI}
+                    width={36}
+                    height={36}
+                  />
+                ) : (
+                  <BNBICon size="36" />
+                )
+              }
+              disabled
             />
           </div>
-          <div className="flex items-center justify-between my-2">
-            <div className="text-[15px] ">Whitelist only</div>
-            <Switch toggle={toggleIsDepositEndTime} open={isDepositEndTime} />
-          </div>
-        </>
-      )}
-      <div className="block lg:flex items-center gap-2">
-        <Button
-          className="w-full justify-center mt-2 mb-2 px-[42px]"
-          type="secondary"
-        >
-          Reset to default
-        </Button>
-        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
-          Save settings
-        </Button>
-      </div>
+        </div>
+        <div className="flex items-center justify-between my-3">
+          <div className="text-[15px] w-[180px]">Start time</div>
+          <Datepicker
+            useRange={false}
+            asSingle={true}
+            value={startTime}
+            onChange={(newVal: any) => {
+              console.log({newVal});
+              setStartTime(newVal);
+            }}
+          />
+        </div>
+        <div className="flex items-center justify-between my-3">
+          <div className="text-[15px] w-[180px]">End time</div>
+          <Datepicker
+            useRange={false}
+            asSingle={true}
+            value={endTime}
+            onChange={(newVal: any) => {
+              console.log({newVal});
+              setEndTime(newVal);
+            }}
+          />
+        </div>
+        <div className="flex items-center justify-between my-3">
+          <div className="text-[15px] w-[180px]">Harvest start time</div>
+          <Datepicker
+            useRange={false}
+            asSingle={true}
+            value={harvestStartTime}
+            onChange={(newVal: any) => setHarvestStartTime(newVal)}
+          />
+        </div>
+        <div className="flex items-center justify-between my-3">
+          <div className="text-[15px] w-[180px]">Deposit end time</div>
+          <Datepicker
+            useRange={false}
+            asSingle={true}
+            value={depositEndTime}
+            onChange={(newVal: any) => setDepositEndTime(newVal)}
+          />
+        </div>
+        <div className="text-[15px] my-2">Description (max 255 char)</div>
+        <textarea
+          className="w-full rounded-md min-h-[100px] bg-darkBlue text-sm p-3"
+          value={description}
+          onChange={(ev) => setDescription(ev.target.value)}
+        />
+        <div className="flex items-center justify-between my-2">
+          <div className="text-[16px] font-bold">Requirements</div>
+          <Switch
+            toggle={toggleShowOptionalRequirements}
+            enabled={showOptionalRequirements}
+          />
+        </div>
+        {showOptionalRequirements && (
+          <>
+            <div className="flex justify-between mb-2">
+              <div className="flex text-[15px] items-center">
+                Min lock duration
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px]"
+                  onClick={() => {
+                    if (minLockDuration > '0') {
+                      setMinLockDuration(Number(minLockDuration) - 1 + '');
+                    }
+                  }}
+                >
+                  -
+                </Button>
+                <input
+                  className="w-[100px] bg-blue-opacity-50 rounded-mdh-[52px] pl-4 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
+                  placeholder="0"
+                  onChange={(ev) => setMinLockDuration(ev.target.value)}
+                />
+                <div className="flex items-center rounded-md bg-blue-opacity-50 w-[80px] justify-end px-6 py-2">
+                  <div>Days</div>
+                </div>
+                <Button
+                  className="rounded-md flex justify-center items-center rounded-[4px] w-[52px]"
+                  onClick={() => {
+                    setMinLockDuration(Number(minLockDuration) + 1 + '');
+                  }}
+                >
+                  +
+                </Button>
+              </div>
+            </div>
+            <div className="flex items-center justify-between my-3">
+              <div className="text-[15px] w-[180px]">Min lock endtime</div>
+              <Datepicker
+                useRange={false}
+                asSingle={true}
+                value={minLockEndTime}
+                onChange={(newVal: any) => setMinLockEndTime(newVal)}
+              />
+            </div>
+            <div className="flex items-center justify-between my-3">
+              <div className="text-[15px] w-[180px]">Min deposit amount</div>
+              <input
+                className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+                placeholder="Enter value"
+                value={minDepositAmount}
+                onChange={(ev) => setMinDepositAmount(ev.target.value)}
+              />
+            </div>
+            <div className="flex items-center justify-between my-2">
+              <div className="text-[15px] ">Whitelist only</div>
+              <Switch
+                toggle={() => setWhitelist(!isWhitelist)}
+                enabled={isWhitelist}
+              />
+            </div>
+          </>
+        )}
+        <div className="block lg:flex items-center gap-2">
+          <Button
+            className="w-full justify-center mt-2 mb-2 px-[42px]"
+            type="secondary"
+            onClick={toggleOpen}
+          >
+            Cancel
+          </Button>
+          <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
+            Create
+          </Button>
+        </div>
 
-      <DividerDown />
-    </CommonModal>
+        <DividerDown />
+      </CommonModal>
+    </>
   );
 };
 
