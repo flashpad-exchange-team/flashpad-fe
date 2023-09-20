@@ -1,7 +1,5 @@
 import { Button } from '@/components/button/Button';
 import ArrowLeft from '@/icons/ArrowLeft';
-import ArrowRight from '@/icons/ArrowRight';
-import BNBICon from '@/icons/BNBIcon';
 import Bank from '@/icons/Bank';
 import ChartLine from '@/icons/ChartLine';
 import Coin from '@/icons/Coin';
@@ -11,6 +9,8 @@ import TokenMinter from '@/icons/TokenMinter';
 import Wallet from '@/icons/Wallet';
 import Image from 'next/image';
 import launchpadlanding from 'public/assets/images/launchpadlanding.png';
+import CopyIcon from '@/icons/CopyIcon';
+import LaunchpadChart from 'public/assets/images/launchpadChart.png';
 
 const Launchpad = () => {
   return (
@@ -77,85 +77,112 @@ const Launchpad = () => {
         </div>
       </div>
 
-      <div className="w-full bg-darkBlue my-4 p-6">
-        <div className="flex justify-around">
-          <div>Whitelist stage</div>
-          <div>
-            <ArrowRight />
+      <div className="w-full bg-darkBlue my-4 p-4 flex justify-between">
+        <div className="flex gap-2 items-center">
+          <Bank />
+          <div className="">
+            <div className="text-[#98A2B3] text-sm">Total raised / Hardcap</div>
+            <div className="text-sm">1.061.115,56 / 1.200.000 USDC</div>
+            <div className="text-[#98A2B3] text-sm">Total raised / Hardcap</div>
           </div>
-          <div>Public stage</div>
-          <div>
-            <ArrowRight />
-          </div>
-          <div>End</div>
-          <div>
-            <ArrowRight />
-          </div>
-          <div className="text-primary">Claims</div>
         </div>
-        <div className="text-xs my-4 px-4 border-b border-[#344054] text-left"></div>
-        <div className="text-primary font-bold center flex justify-center">
-          Public sale has ended - Contributions are now claimable
+        <div className="flex gap-2 items-center">
+          <Bank />
+          <div className="">
+            <div className="text-[#98A2B3] text-sm">Token B price</div>
+            <div className="text-sm">$0,088</div>
+            <div className="text-[#98A2B3] text-sm">Token B price</div>
+          </div>
+        </div>
+        <div className="flex gap-2 items-center">
+          <TokenMinter />
+          <div className="">
+            <div className="text-[#98A2B3] text-sm">Circ. marketcap</div>
+            <div className="text-sm">FDV</div>
+          </div>
+        </div>
+        <div className="flex gap-2 items-center">
+          <Safe />
+          <div className="">
+            <div className="text-[#98A2B3] text-sm">FDV</div>
+            <div className="text-sm">$8,84M</div>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="w-full bg-darkBlue my-4 px-2 py-6">
-          <div className="text-primary">Claims</div>
-          <div className="text-xs my-4 px-4 border-b border-[#344054] text-left"></div>
-          <div className="flex text-sm font-bold gap-4 justify-center">
-            <BNBICon size={40} />
-            <div>
-              <div className="">Token A - Token B</div>
-              <div className="text-[#98A2B3]">Rising Token B</div>
-            </div>
-          </div>
+      <div className="w-full my-4 flex justify-between">
+        <div className="w-[50%] p-2 bg-darkBlue ">
           <div className="flex justify-between">
-            <div>Contribution</div>
-            <div>0 Token A</div>
+            <div className="text-[24px] font-bold">Buy</div>
+            <div className="flex gap-2 items-center text-[#E6B300]">
+              <CopyIcon stroke="#E6B300" />
+              <div>Refferal Link</div>
+            </div>
           </div>
-          <Button
-            className="justify-center h-[52px] mt-4 w-full text-base px-[42px]"
-            disabled
-          >
-            Claim
-          </Button>
+          <div className="p-4 bg-blue-opacity-50 flex justify-between mt-2 rounded-sm">
+            <div className="text-[#98A2B3] text-[12px]">Amount</div>
+            <div className="text-[20px]">0.0025545554645465444665</div>
+          </div>
+          <div className="px-4 pb-4 bg-blue-opacity-50 flex justify-between mb-2">
+            <div className="text-[#fff] text-[14px]">Balance: 0</div>
+            <Button className="w-[50px] h-[10px] rounded-none flex justify-center items-center text-[12px]">
+              Max
+            </Button>
+          </div>
+          <div className="text-[14px] flex justify-between px-4 py-2">
+            <div>Spent</div>
+            <div className="flex gap-4">
+              <div>0.000001</div>
+              <div>TOKEN</div>
+            </div>
+          </div>
+          <div className="text-[14px] flex justify-between px-4 py-2">
+            <div>Wallet cap</div>
+            <div className="flex gap-4">
+              <div>0.000001</div>
+              <div>TOKEN</div>
+            </div>
+          </div>
+          <div className="text-[14px] flex justify-between px-4 py-2">
+            <div>Your referral earning</div>
+            <div className="flex gap-4">
+              <div>0.000001</div>
+              <div>TOKEN</div>
+            </div>
+          </div>
+          <div className="text-[14px] flex justify-between px-4 py-2">
+            <div>Pending referal earning</div>
+            <div className="flex gap-4">
+              <div>0.000001</div>
+              <div>TOKEN</div>
+            </div>
+          </div>
+          <div className="block lg:flex items-center gap-2">
+            <Button
+              className="w-full justify-center mt-2 mb-2 px-[42px]"
+              type="secondary"
+            >
+              Approve
+            </Button>
+          </div>
+
+          <div className="block lg:flex items-center gap-2">
+            <Button
+              className="w-full justify-center mt-2 mb-2 px-[42px]"
+              type="secondary"
+            >
+              Claim
+            </Button>
+          </div>
         </div>
-        <div className="w-full bg-darkBlue my-4 px-2 py-6">
-          <div className="text-primary">Summary</div>
-          <div className="text-xs my-4 px-4 border-b border-[#344054] text-left"></div>
-          <div className="mt-2 flex flex-wrap gap-12">
-            <div className="flex w-full md:w-[250px]">
-              <Bank />
-              <div className="ml-2">
-                <div className="text-[#98A2B3] text-sm">
-                  Total raised / Hardcap
-                </div>
-                <div className="text-sm">1.061.115,56 / 1.200.000 USDC</div>
-              </div>
-            </div>
-            <div className="flex w-full md:w-[200px]">
-              <Bank />
-              <div className="ml-2">
-                <div className="text-[#98A2B3] text-sm">Token B price</div>
-                <div className="text-sm">$0,088</div>
-              </div>
-            </div>
-            <div className="flex w-full md:w-[250px]">
-              <TokenMinter />
-              <div className="ml-2">
-                <div className="text-[#98A2B3] text-sm">Circ. marketcap</div>
-                <div className="text-sm">FDV</div>
-              </div>
-            </div>
-            <div className="flex w-full md:w-[200px]">
-              <Safe />
-              <div className="ml-2">
-                <div className="text-[#98A2B3] text-sm">FDV</div>
-                <div className="text-sm">$8,84M</div>
-              </div>
-            </div>
-          </div>
+        <div className="w-[50%] ml-4">
+          <Image
+            className="h-[100%]"
+            alt="logo"
+            src={LaunchpadChart.src}
+            width={700}
+            height={700}
+          />
         </div>
       </div>
 
