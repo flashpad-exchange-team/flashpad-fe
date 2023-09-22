@@ -7,7 +7,6 @@ import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useNetwork } from 'wagmi';
 import { Meta } from '../Meta';
 import { AppConfig } from '@/utils/AppConfig';
-import PoolInfoModal from '@/components/modal/PoolInfoModal';
 // import { APP_BASED_CHAIN } from '@/utils/constants';
 // import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
 
@@ -44,7 +43,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         isOpen={isOpenSwitchNetwork}
         toggleOpen={toggleSwitchNetwork}
       /> */}
-      <PoolInfoModal isOpen={true} toggleOpen={() => {}} />
       <div
         style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
         className=" min-h-[104vh] flex flex-col  justify-between "
