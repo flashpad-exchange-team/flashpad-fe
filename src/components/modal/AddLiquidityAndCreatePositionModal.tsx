@@ -146,7 +146,7 @@ const AddLiquidityAndCreatePositionModal = ({
     let reserve1, reserve2;
     const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
     const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
-    if ((pairToken1 as string).toLowerCase() === token1Address.toLowerCase()) {
+    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1Address.toLowerCase()) {
       reserve1 = reserveA;
       reserve2 = reserveB;
     } else {
@@ -313,7 +313,7 @@ const AddLiquidityAndCreatePositionModal = ({
       .pow(token1Decimals)
       .times(BigNumber(token1Amount));
     let adjustedToken2Amount;
-    if (pairToken1.toLowerCase() === token1Address.toLowerCase()) {
+    if (!pairToken1 || pairToken1.toLowerCase() === token1Address.toLowerCase()) {
       adjustedToken2Amount = web3Helpers.bnQuote(
         bnToken1Amount,
         reserve1,
@@ -339,7 +339,7 @@ const AddLiquidityAndCreatePositionModal = ({
       .pow(token2Decimals)
       .times(BigNumber(token2Amount));
     let adjustedToken1Amount;
-    if ((pairToken1 as string).toLowerCase() === token1Address.toLowerCase()) {
+    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1Address.toLowerCase()) {
       adjustedToken1Amount = web3Helpers.bnQuote(
         bnToken2Amount,
         reserve2,

@@ -105,8 +105,8 @@ const TradeForm = ({
   );
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
 
-  const [successful, setSuccessful] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [successful, setSuccessful] = useState<boolean | undefined>(false);
+  const [failed, setFailed] = useState<boolean | undefined>(false);
 
   const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
@@ -221,7 +221,7 @@ const TradeForm = ({
       .pow(balanceToken1?.decimals!)
       .times(BigNumber(token1Amount));
     let adjustedToken2Amount;
-    if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
       // adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
       adjustedToken2Amount = web3Helpers.bnQuote(
         bnToken1Amount,
@@ -251,7 +251,7 @@ const TradeForm = ({
       .pow(balanceToken2?.decimals!)
       .times(BigNumber(token2Amount));
     let adjustedToken1Amount;
-    if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
       // adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
       adjustedToken1Amount = web3Helpers.bnQuote(
         bnToken2Amount,
@@ -278,7 +278,7 @@ const TradeForm = ({
   };
 
   const handleAddLiquidity = async () => {
-    setSuccessful(false);
+    setSuccessful(undefined);
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
       .times(BigNumber(token1Amount));
@@ -324,7 +324,7 @@ const TradeForm = ({
     let reserve1, reserve2;
     const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
     const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
-    if ((pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
       reserve1 = reserveA;
       reserve2 = reserveB;
     } else {
@@ -448,6 +448,8 @@ const TradeForm = ({
     const hash = txResult.hash;
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
+    const result = txResult.result;
+
     resetInput();
     stopLoadingTx();
     setSuccessful(true);
@@ -463,11 +465,13 @@ const TradeForm = ({
         token1: token1.symbol,
         token2: token2.symbol,
         txHash: hash,
+        usdValue: result ? result[2] + '' : '',
       })
     );
   };
 
   const handleAddLiquidityCreatePosition = async () => {
+    setSuccessful(undefined);
     if (!userAddress) {
       customToast({
         message: 'A wallet is not yet connected',
@@ -504,6 +508,10 @@ const TradeForm = ({
       const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
       stopLoadingTx();
+      customToast({
+        message: 'Initialized spNFT pool successfully',
+        type: 'success',
+      });
       setSuccessful(true);
       setFailed(false);
     }
