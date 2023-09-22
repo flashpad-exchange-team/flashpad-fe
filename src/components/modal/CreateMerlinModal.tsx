@@ -10,7 +10,7 @@ import CommonModal from './CommonModal';
 import Datepicker from 'react-tailwindcss-datepicker';
 import { Address } from 'viem';
 import Image from 'next/image';
-import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
+// import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
 import SelectTokenModal from './SelectTokenModal';
 import Select from '../select';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
@@ -27,10 +27,10 @@ export interface CreateMerlinModalProps {
 const CreateMerlinModal = ({
   toggleOpen,
   isOpen,
-  nftPoolAddress,
-  token1Address,
-  token2Address,
-  lpTokenDecimals,
+  // nftPoolAddress,
+  // token1Address,
+  // token2Address,
+  // lpTokenDecimals,
 }: CreateMerlinModalProps) => {
   const [showOptionalRequirements, setShowOptionalRequirements] =
     useState(false);
