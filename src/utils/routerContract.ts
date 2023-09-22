@@ -12,16 +12,6 @@ const routerContract: any = getContract({
   walletClient,
 });
 
-// const LINEA_TESTNET_TOKENS = {
-//   ERC20: '0x49084243271e63D087FDfEF94338F070102C940C',
-//   WETH: '0x451a32Fe376a699Ea25b6Cafc00E446ECC8452A9',
-// };
-
-// const SEPOLIA_TOKENS = {
-//   WETH: '0xc82f14458f68f076A4f2E756dB24B56A3C670bB4',
-//   ERC20: '0x764EcF27DF3df771D1c79f48A05aB18d2b6BBa10',
-// };
-
 export interface IAddLiquidityParams {
   tokenA: string;
   tokenB: string;
