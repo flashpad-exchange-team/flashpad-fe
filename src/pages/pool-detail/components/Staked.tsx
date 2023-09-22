@@ -130,7 +130,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                       {token1Symbol} - {token2Symbol}
                     </div>
                     <div className="text-secondary text-sm">
-                      #ID-{sp.tokenId}
+                      #ID-{sp?.tokenId + ''}
                     </div>
                   </div>
                 </td>

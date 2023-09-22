@@ -21,7 +21,8 @@ import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
-import * as nftDataService from '@/services/nftData.service';
+// import * as nftDataService from '@/services/nftData.service';
+import * as covalentApiService from '@/services/covalentApi.service';
 import { Address } from 'viem';
 import { useAccount } from 'wagmi';
 import CreatePositionModal from '@/components/modal/CreatePositionModal';
@@ -122,12 +123,17 @@ const PoolDetail = () => {
   const getUserStakedPositions = async () => {
     if (!userAddress || nftPoolAddress === ADDRESS_ZERO) return;
 
-    const spNfts = await nftDataService.getNFTsOwnedByAddress(
+    // const spNfts = await nftDataService.getNFTsOwnedByAddress(
+    //   userAddress,
+    //   nftPoolAddress,
+    // );
+    const spNfts = await covalentApiService.getNFTsOwnedByAddress(
       userAddress,
-      nftPoolAddress
+      nftPoolAddress,
     );
     let spNftsWithRewards = [];
-    for (const nft of spNfts) {
+    for (const spNft of spNfts) {
+      const nft: any = { ...spNft, tokenId: spNft.token_id };
       const [rwd, stakingPosition] = await Promise.all([
         nftPoolContract.read(nftPoolAddress, 'pendingRewards', [nft.tokenId]),
         nftPoolContract.read(nftPoolAddress, 'getStakingPosition', [
