@@ -64,7 +64,7 @@ const CreateMerlinPool = () => {
       erc20TokenContract.erc20Read(lpAddress, 'decimals', []),
       nftPoolFactoryContract.getPool(lpAddress),
     ]);
-    setLpTokenDecimals(Number(decimals));
+    setLpTokenDecimals(decimals || 18);
     setNftPoolAddress(address);
   };
 
@@ -97,7 +97,7 @@ const CreateMerlinPool = () => {
 
     if (!lpAddress) {
       customToast({
-        message: 'Staking token address is undefined',
+        message: 'Staking token address for spNFT pool is undefined',
         type: 'error',
       });
       return;
@@ -136,6 +136,10 @@ const CreateMerlinPool = () => {
       console.log({ txReceipt });
       stopLoadingTx();
       setSuccessful(true);
+      customToast({
+        message: 'Initialized spNFT pool successfully',
+        type: 'success',
+      })
     }
 
     setOpenCreateMerlinModal(true);
