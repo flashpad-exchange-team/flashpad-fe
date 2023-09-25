@@ -117,7 +117,6 @@ const Header = (props: INavbarProps) => {
     }
     disconnect();
   };
-
   const currentPath = router.pathname;
   return (
     <>
@@ -144,7 +143,7 @@ const Header = (props: INavbarProps) => {
                     menuButton={
                       <div
                         className={clsx([
-                          ' text-lg gap-1 items-center cursor-pointer hover:text-primary hoverItem hidden lg:flex',
+                          ' text-lg gap-1 items-center cursor-pointer hover:text-primary hoverItem hidden lg:!flex',
                           menuItem.path === currentPath ||
                           menuItem?.subMenu?.some(
                             (subMenu: any) => subMenu.path === currentPath
@@ -192,7 +191,7 @@ const Header = (props: INavbarProps) => {
                 ) : (
                   <div
                     className={clsx([
-                      'flex text-lg gap-1 items-center cursor-pointer hover:text-primary hoverItem hidden lg:flex',
+                      'flex text-lg gap-1 items-center cursor-pointer hover:text-primary hoverItem hidden lg:!flex',
                       menuItem.path === currentPath
                         ? 'text-primary active'
                         : '',
@@ -210,11 +209,11 @@ const Header = (props: INavbarProps) => {
             <ul className="navbar flex items-center text-sm lg:text-xl font-medium text-white">
               {props.mode === 'app' ? (
                 <>
-                  <Linea className="mr-8 hidden lg:block" />
+                  <Linea className="mr-8 hidden lg:!block" />
                   {
                     <Button
                       icon={<WalletIcon />}
-                      className="px-4 "
+                      className="px-4"
                       onClick={handleConnectWallet}
                     >
                       {isConnected && address
@@ -229,7 +228,7 @@ const Header = (props: INavbarProps) => {
                     router.push('/swap');
                   }}
                   icon={<CrossSword />}
-                  className="hidden lg:flex px-[42px]"
+                  className="hidden lg:!flex px-[42px]"
                 >
                   Launch App
                 </Button>
@@ -240,7 +239,7 @@ const Header = (props: INavbarProps) => {
       </div>
       {props.mode === 'app' && (
         <div className="bg-[#0C111D] h-[78px] flex items-center justify-center fixed left-0 bottom-0 w-full lg:hidden">
-          <div className="flex gap-6 ">
+          <div className="flex gap-6">
             {MENU_ITEMS.map((menuItem: any) =>
               menuItem.subMenu ? (
                 <Menu
