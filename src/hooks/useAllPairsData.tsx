@@ -7,10 +7,11 @@ import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
 import { CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useKeyContext } from '@/context/KeyContext';
+import { Address } from 'viem';
 
-const useAllPairsData = (userAddress: `0x${string}` | undefined) => {
+const useAllPairsData = (userAddress: Address | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
-  const { dataKey, setKey } = useKeyContext(); // Access the dataKey from the context
+  const { setKey } = useKeyContext(); // Access the dataKey from the context
   const fetchAllPairs = async () => {
     setIsLoading(true);
 
@@ -39,17 +40,21 @@ const useAllPairsData = (userAddress: `0x${string}` | undefined) => {
         pairContract.read(pairAddress, 'token1', []),
       ]);
 
-      const token1Symbol = await erc20Contract.erc20Read(
-        token1Address,
-        'symbol',
-        []
-      );
+      let [token1Symbol, token2Symbol] = await Promise.all([
+        erc20Contract.erc20Read(
+          token1Address,
+          'symbol',
+          []
+        ),
+        erc20Contract.erc20Read(
+          token2Address,
+          'symbol',
+          []
+        ),
+      ]);
 
-      const token2Symbol = await erc20Contract.erc20Read(
-        token2Address,
-        'symbol',
-        []
-      );
+      token1Symbol = (token1Symbol == 'WFTM') ? 'ETH' : token1Symbol;
+      token2Symbol = (token2Symbol == 'WFTM') ? 'ETH' : token2Symbol;
 
       const token1Logo = CHAINS_TOKENS_LIST.find((e) => {
         return e.symbol === token1Symbol;
@@ -63,7 +68,6 @@ const useAllPairsData = (userAddress: `0x${string}` | undefined) => {
         .div(totalSupply)
         .times(100)
         .toFixed(2);
-      // JavaScript expects milliseconds
 
       listPairs.push({
         timeLock: web3Helpers.getDateFormat(timeLock),
@@ -83,7 +87,8 @@ const useAllPairsData = (userAddress: `0x${string}` | undefined) => {
 
     return listPairs;
   };
-  const { data, error } = useSWR([userAddress, dataKey], fetchAllPairs, {
+
+  const { data, error } = useSWR([userAddress, 'all-lp-pairs'], fetchAllPairs, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

@@ -128,7 +128,7 @@ const CreatePositionModal = ({
 
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Creating Stake Position ...',
+      title: 'Creating Staked Position ...',
       message: 'Confirming your transaction. Please wait.',
     });
 
@@ -175,7 +175,7 @@ const CreatePositionModal = ({
 
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
-        action: 'created staking position',
+        action: 'created staked position',
         token1: token1Data.symbol,
         token2: token2Data.symbol,
         txHash: hash,

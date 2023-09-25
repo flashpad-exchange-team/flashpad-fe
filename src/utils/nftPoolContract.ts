@@ -55,11 +55,23 @@ const getStakingPositionResultKeys = [
   'totalMultiplier',
 ];
 
+const getPoolInfoResultKeys = [
+  'lpToken',
+  'artToken',
+  'xArtToken',
+  'lastRewardTime',
+  'accRewardsPerShare',
+  'lpSupply',
+  'lpSupplyWithMultiplier',
+  'allocPoint',
+];
+
 const functionResultKeysMap: { [k: string]: string[] } = {
   'getStakingPosition': getStakingPositionResultKeys,
+  'getPoolInfo': getPoolInfoResultKeys,
 };
 
-const mapResultArrayToObj = (functionName: string, result: any[]) => {
+const mapResultArrayToObj = (functionName: string, result: any) => {
   const props = functionResultKeysMap[functionName];
   if (!props) return result;
   const resObj: { [k: string]: any } = {};

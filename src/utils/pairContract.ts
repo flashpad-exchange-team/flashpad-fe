@@ -17,8 +17,7 @@ export const read = async (
     });
     return result;
   } catch (err: any) {
-    handleError(err);
-
+    console.log(err);
     return undefined;
   }
 };

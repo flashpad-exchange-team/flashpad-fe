@@ -727,7 +727,7 @@ const TradeForm = ({
           className="mx-auto w-fit mt-4 mb-4 hover:underline cursor-pointer flex items-center gap-2 text-[#98A2B3]"
           onClick={handleViewPoolList}
         >
-          <BackIcon /> Back to Pool list
+          <BackIcon /> View Pool list
         </div>
         <Button
           onClick={() => {

@@ -12,6 +12,28 @@ const nftPoolFactoryContract: any = getContract({
   publicClient,
 });
 
+export const poolsLength = async () => {
+  try {
+    const poolsLength = await nftPoolFactoryContract.read.poolsLength!([]);
+
+    return Number(poolsLength);
+  } catch (err: any) {
+    console.log(err);
+    return 0;
+  }
+};
+
+export const getPoolByIndex = async (index: number) => {
+  try {
+    const poolAddress = await nftPoolFactoryContract.read.pools!([index]);
+
+    return poolAddress as Address;
+  } catch (err: any) {
+    console.log('getPoolByIndex err:', err);
+    return undefined;
+  }
+};
+
 export const getPool = async (lpTokenAddress: string) => {
   try {
     const poolAddress = await nftPoolFactoryContract.read.getPool!([

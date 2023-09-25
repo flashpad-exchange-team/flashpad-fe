@@ -7,7 +7,7 @@ import InlineLoading from '../loading/InlineLoading';
 import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
 import { useRouter } from 'next/router';
 
-interface ListPoolsTableProps {
+interface ListLPv2PoolsTableProps {
   data: {
     locked: boolean;
     token1: string;
@@ -28,7 +28,10 @@ interface ListPoolsTableProps {
   loading: boolean;
 }
 
-const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
+const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
+  data,
+  loading,
+}) => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
   const [selectedPool, setSelectedPool] = useState<string>('');
@@ -209,4 +212,4 @@ const ListPoolsTable: React.FC<ListPoolsTableProps> = ({ data, loading }) => {
   );
 };
 
-export default ListPoolsTable;
+export default ListLPv2PoolsTable;

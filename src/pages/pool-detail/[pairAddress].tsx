@@ -21,7 +21,6 @@ import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
-// import * as nftDataService from '@/services/nftData.service';
 import * as covalentApiService from '@/services/covalentApi.service';
 import { Address } from 'viem';
 import { useAccount } from 'wagmi';
@@ -83,29 +82,37 @@ const PoolDetail = () => {
       setNftPoolAddress(poolAddress);
     }
 
-    const [token1Address, token2Address] = await Promise.all([
-      pairContract.read(pairAddress, 'token0', []),
-      pairContract.read(pairAddress, 'token1', []),
-    ]);
+    let token1Symbol = 'TOKEN1', token2Symbol = 'TOKEN2';
+    if (pairAddress.toLowerCase() === '0xb1f8a7c4fdaA4b79ad2052e09D8BBA5296e42090'.toLowerCase()) {
+      token1Symbol = await erc20Contract.erc20Read(pairAddress, 'symbol', []);
+      token2Symbol = token1Symbol;
+    } else {
+      const [token1Address, token2Address] = await Promise.all([
+        pairContract.read(pairAddress, 'token0', []),
+        pairContract.read(pairAddress, 'token1', []),
+      ]);
+  
+      if (token1Address) {
+        [token1Symbol, token2Symbol] = await Promise.all([
+        erc20Contract.erc20Read(token1Address, 'symbol', []),
+          erc20Contract.erc20Read(token2Address, 'symbol', []),
+        ]);
+      } else {
+        token1Symbol = await erc20Contract.erc20Read(pairAddress, 'symbol', []);
+        token2Symbol = token1Symbol;
+      }
+    }
 
-    const [token1Symbol, token2Symbol] = await Promise.all([
-      erc20Contract.erc20Read(token1Address, 'symbol', []),
-      erc20Contract.erc20Read(token2Address, 'symbol', []),
-    ]);
+    token1Symbol = (token1Symbol == 'WFTM') ? 'ETH' : token1Symbol;
+    token2Symbol = (token2Symbol == 'WFTM') ? 'ETH' : token2Symbol;
 
     setToken1Symbol(token1Symbol);
     setToken2Symbol(token2Symbol);
 
-    const token1Logo =
-      token1Symbol === 'WFTM'
-        ? CHAINS_TOKENS_LIST.find((e) => e.symbol === 'ETH')?.logoURI
-        : CHAINS_TOKENS_LIST.find((e) => e.symbol === token1Symbol)?.logoURI;
+    const token1Logo = CHAINS_TOKENS_LIST.find((e) => e.symbol === token1Symbol)?.logoURI;
     setToken1Logo(token1Logo || '');
 
-    const token2Logo =
-      token2Symbol === 'WFTM'
-        ? CHAINS_TOKENS_LIST.find((e) => e.symbol === 'ETH')?.logoURI
-        : CHAINS_TOKENS_LIST.find((e) => e.symbol === token2Symbol)?.logoURI;
+    const token2Logo = CHAINS_TOKENS_LIST.find((e) => e.symbol === token2Symbol)?.logoURI;
     setToken2Logo(token2Logo || '');
   };
 
