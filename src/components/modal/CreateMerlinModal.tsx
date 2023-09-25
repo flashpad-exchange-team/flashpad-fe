@@ -10,44 +10,54 @@ import CommonModal from './CommonModal';
 import Datepicker from 'react-tailwindcss-datepicker';
 import { Address } from 'viem';
 import Image from 'next/image';
-// import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
 import SelectTokenModal from './SelectTokenModal';
 import Select from '../select';
-import { CHAINS_TOKENS_LIST } from '@/utils/constants';
+import { ADDRESS_ZERO, CHAINS_TOKENS_LIST, daysToSeconds } from '@/utils/constants';
+import customToast from '../notification/customToast';
+import { useLoading } from '@/context/LoadingContext';
+import moment from 'moment';
+import BigNumber from 'bignumber.js';
+import { useAccount } from 'wagmi';
+import { waitForTransaction } from '@wagmi/core';
+import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
 
 export interface CreateMerlinModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   nftPoolAddress?: Address;
-  token1Address: Address;
-  token2Address: Address;
+  token1Symbol: string;
+  token2Symbol: string;
   lpTokenDecimals: number;
 }
 
 const CreateMerlinModal = ({
   toggleOpen,
   isOpen,
-  // nftPoolAddress,
-  // token1Address,
-  // token2Address,
-  // lpTokenDecimals,
+  nftPoolAddress,
+  token1Symbol,
+  token2Symbol,
+  lpTokenDecimals,
 }: CreateMerlinModalProps) => {
+  const { address: userAddress } = useAccount();
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+
   const [showOptionalRequirements, setShowOptionalRequirements] =
     useState(false);
   const toggleShowOptionalRequirements = () =>
     setShowOptionalRequirements(!showOptionalRequirements);
-  
+
   const [showThisModal, setShowThisModal] = useState(true);
   const [isOpenSelectTokenModal, setOpenSelectTokenModal] = useState(false);
 
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const [harvestStartTime, setHarvestStartTime] = useState(null);
-  const [depositEndTime, setDepositEndTime] = useState(null);
+  const [startTime, setStartTime] = useState<any>(null);
+  const [endTime, setEndTime] = useState<any>(null);
+  const [harvestStartTime, setHarvestStartTime] = useState<any>(null);
+  const [depositEndTime, setDepositEndTime] = useState<any>(null);
   const [description, setDescription] = useState('');
-  const [minLockDuration, setMinLockDuration] = useState('0');
-  const [minLockEndTime, setMinLockEndTime] = useState(null);
-  const [minDepositAmount, setMinDepositAmount] = useState('0');
+  const [minLockDuration, setMinLockDuration] = useState('');
+  const [minLockEndTime, setMinLockEndTime] = useState<any>(null);
+  const [minDepositAmount, setMinDepositAmount] = useState('');
   const [isWhitelist, setWhitelist] = useState(false);
 
   const handleOpenSelectToken = () => {
@@ -74,6 +84,152 @@ const CreateMerlinModal = ({
     }
   };
 
+  const handleClearToken2 = () => {
+    setToken2(null);
+  };
+
+  const resetInput = () => {
+    setToken1(null);
+    setToken2(null);
+    setStartTime(null);
+    setEndTime(null);
+    setHarvestStartTime(null);
+    setDepositEndTime(null);
+    setDescription('');
+    setMinLockDuration('');
+    setMinLockEndTime(null);
+    setMinDepositAmount('');
+    setWhitelist(false);
+  };
+
+  const handleCreateMerlinPool = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (!token1) {
+      customToast({
+        message: 'Please select at least 1 incentive token for Merlin pool',
+        type: 'error'
+      });
+      return;
+    }
+
+    if (!startTime || !endTime) {
+      customToast({
+        message: 'Start time & end time are required!',
+        type: 'error'
+      });
+      return;
+    }
+
+    const rewardsToken1 = token1.address;
+    const rewardsToken2 = token2?.address || ADDRESS_ZERO;
+
+    const mmNow = moment();
+    let mmStartTime = moment(startTime.startDate);
+    if (mmNow.isSameOrAfter(mmStartTime)) {
+      mmStartTime = mmNow.add(10, 'minutes');
+    }
+    const mmEndTime = moment(endTime.startDate);
+
+    const mmHarvestStartTime = harvestStartTime?.startDate
+      ? moment(harvestStartTime.startDate).unix()
+      : 0;
+    const mmDepositEndTime = depositEndTime?.startDate
+      ? moment(depositEndTime.startDate).unix()
+      : 0;
+
+    const settings: merlinPoolFactoryContract.MerlinPoolSettings = {
+      startTime: mmStartTime.unix() + '',
+      endTime: mmEndTime.unix() + '',
+      harvestStartTime: mmHarvestStartTime + '',
+      depositEndTime: mmDepositEndTime + '',
+      description,
+    };
+
+    if (showOptionalRequirements) {
+      const nMinLockDuration = Number(minLockDuration);
+      if (
+        Number.isNaN(nMinLockDuration) ||
+        !Number.isInteger(nMinLockDuration) ||
+        nMinLockDuration <= 0
+      ) {
+        customToast({
+          message: 'Please input valid min lock duration',
+          type: 'error',
+        });
+        return;
+      }
+
+      const nMinDepositAmount = Number(minDepositAmount);
+      if (
+        Number.isNaN(nMinDepositAmount) ||
+        nMinDepositAmount < 0
+      ) {
+        customToast({
+          message: 'Please input valid min deposit amount',
+          type: 'error',
+        });
+        return;
+      }
+
+      const mmMinLockEndTime = minLockEndTime?.startDate
+      ? moment(minLockEndTime.startDate).unix()
+      : 0;
+
+      settings.lockDurationReq = daysToSeconds(nMinLockDuration) + '';
+      settings.lockEndReq = mmMinLockEndTime + '';
+      settings.depositAmountReq = BigNumber(nMinDepositAmount).times(BigNumber(10).pow(lpTokenDecimals)).toString();
+      settings.whitelist = isWhitelist;
+    } else {
+      settings.lockDurationReq = '0';
+      settings.lockEndReq = '0';
+      settings.depositAmountReq = '0';
+      settings.whitelist = false;
+    }
+
+    startLoadingTx({
+      tokenPairs: token1Symbol + ' - ' + token2Symbol,
+      title: 'Creating Merlin Pool ...',
+      message: 'Confirming your transaction. Please wait.'
+    });
+
+    const txResult = await merlinPoolFactoryContract.createMerlinPool(
+      userAddress,
+      {
+        nftPoolAddress: nftPoolAddress!,
+        rewardsToken1: rewardsToken1 as Address,
+        rewardsToken2: rewardsToken2 as Address,
+        settings,
+      }
+    );
+
+    if (!txResult) {
+      stopLoadingTx();
+      return;
+    }
+
+    const hash = txResult.hash;
+    const txReceipt = await waitForTransaction({ hash });
+    console.log({ txReceipt });
+    resetInput();
+    stopLoadingTx();
+
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: 'created a new merlin pool',
+        token1: token1Symbol,
+        token2: token2Symbol,
+        txHash: hash,
+      })
+    );
+  };
+
   return (
     <>
       <SelectTokenModal
@@ -94,80 +250,96 @@ const CreateMerlinModal = ({
         </div>
         <div className="text-[16px] font-bold">General settings</div>
         <div className="flex gap-10 justify-center mt-2 mb-4">
-          <div
-            className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex-col items-center gap-2 text-sm lg:text-base "
-            onClick={() => {
-              setTokenBeingSelected(1);
-              handleOpenSelectToken();
-            }}
-          >
-            <div className="mb-2 pl-1">Incentive token #1</div>
-            <Select
-              options={CHAINS_TOKENS_LIST}
-              value={{ value: token1?.address, label: token1?.symbol }}
-              icon={
-                token1?.logoURI ? (
-                  <Image
-                    alt="logo"
-                    src={token1.logoURI}
-                    width={36}
-                    height={36}
-                  />
-                ) : (
-                  <BNBICon size="36" />
-                )
-              }
-              disabled
-            />
+          <div className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex-col items-center gap-2 text-sm lg:text-base ">
+            <div className="mb-2 pl-1">
+              Incentive token #1 <span className="text-[red]">*</span>
+            </div>
+            <div
+              onClick={() => {
+                setTokenBeingSelected(1);
+                handleOpenSelectToken();
+              }}
+            >
+              <Select
+                options={CHAINS_TOKENS_LIST}
+                value={{ value: token1?.address, label: token1?.symbol }}
+                icon={
+                  token1?.logoURI ? (
+                    <Image
+                      alt="logo"
+                      src={token1.logoURI}
+                      width={36}
+                      height={36}
+                    />
+                  ) : (
+                    <BNBICon size="36" />
+                  )
+                }
+                disabled
+              />
+            </div>
           </div>
           <div className="flex items-center">-</div>
-          <div
-            className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex-col items-center gap-2 text-sm lg:text-base "
-            onClick={() => {
-              setTokenBeingSelected(2);
-              handleOpenSelectToken();
-            }}
-          >
-            <div className="mb-2 pl-1">Incentive token #2</div>
-            <Select
-              options={CHAINS_TOKENS_LIST}
-              value={{ value: token2?.address, label: token2?.symbol }}
-              icon={
-                token2?.logoURI ? (
-                  <Image
-                    alt="logo"
-                    src={token2.logoURI}
-                    width={36}
-                    height={36}
-                  />
-                ) : (
-                  <BNBICon size="36" />
-                )
-              }
-              disabled
-            />
+          <div className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex-col items-center gap-2 text-sm lg:text-base ">
+            <div className="mb-2 pl-1 flex justify-between">
+              Incentive token #2
+              <span
+                className="text-[#FFAF1D] hover:underline cursor-pointer"
+                onClick={handleClearToken2}
+              >
+                Clear
+              </span>
+            </div>
+            <div
+              onClick={() => {
+                setTokenBeingSelected(2);
+                handleOpenSelectToken();
+              }}
+            >
+              <Select
+                options={CHAINS_TOKENS_LIST}
+                value={{ value: token2?.address, label: token2?.symbol }}
+                icon={
+                  token2?.logoURI ? (
+                    <Image
+                      alt="logo"
+                      src={token2.logoURI}
+                      width={36}
+                      height={36}
+                    />
+                  ) : (
+                    <BNBICon size="36" />
+                  )
+                }
+                disabled
+              />
+            </div>
           </div>
         </div>
         <div className="flex items-center justify-between my-3">
-          <div className="text-[15px] w-[180px]">Start time</div>
+          <div className="text-[15px] w-[180px]">
+            Start time<span className="text-[red]">*</span>
+          </div>
           <Datepicker
             useRange={false}
             asSingle={true}
             value={startTime}
+            minDate={new Date()}
             onChange={(newVal: any) => {
-              console.log({newVal});
               setStartTime(newVal);
             }}
           />
         </div>
         <div className="flex items-center justify-between my-3">
-          <div className="text-[15px] w-[180px]">End time</div>
+          <div className="text-[15px] w-[180px]">
+            End time<span className="text-[red]">*</span>
+          </div>
           <Datepicker
             useRange={false}
             asSingle={true}
             value={endTime}
+            minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
             onChange={(newVal: any) => {
-              console.log({newVal});
               setEndTime(newVal);
             }}
           />
@@ -178,6 +350,7 @@ const CreateMerlinModal = ({
             useRange={false}
             asSingle={true}
             value={harvestStartTime}
+            minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
             onChange={(newVal: any) => setHarvestStartTime(newVal)}
           />
         </div>
@@ -187,6 +360,7 @@ const CreateMerlinModal = ({
             useRange={false}
             asSingle={true}
             value={depositEndTime}
+            minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
             onChange={(newVal: any) => setDepositEndTime(newVal)}
           />
         </div>
@@ -221,8 +395,8 @@ const CreateMerlinModal = ({
                   -
                 </Button>
                 <input
-                  className="w-[100px] bg-blue-opacity-50 rounded-mdh-[52px] pl-4 text-[15px] font-semibold py-2 focus:outline-none placeholder-[#667085]"
-                  placeholder="0"
+                  className="w-[100px] bg-blue-opacity-50 rounded-mdh-[52px] pl-4 text-[15px] text-[#FFAF1D] font-semibold py-2 focus:outline-none placeholder-[#667085]"
+                  placeholder="0" value={minLockDuration}
                   onChange={(ev) => setMinLockDuration(ev.target.value)}
                 />
                 <div className="flex items-center rounded-md bg-blue-opacity-50 w-[80px] justify-end px-6 py-2">
@@ -244,6 +418,7 @@ const CreateMerlinModal = ({
                 useRange={false}
                 asSingle={true}
                 value={minLockEndTime}
+                minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
                 onChange={(newVal: any) => setMinLockEndTime(newVal)}
               />
             </div>
@@ -273,7 +448,15 @@ const CreateMerlinModal = ({
           >
             Cancel
           </Button>
-          <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]">
+          <Button
+            className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
+            onClick={handleCreateMerlinPool}
+            disabled={
+              !userAddress ||
+              !token1 ||
+              !startTime || !endTime
+            }
+          >
             Create
           </Button>
         </div>

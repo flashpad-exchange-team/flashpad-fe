@@ -7,12 +7,12 @@ import { MERLIN_POOL_FACTORY_ADDRESS } from './constants';
 export interface MerlinPoolSettings {
   startTime: string;
   endTime: string;
-  harvestStartTime: string;
-  depositEndTime: string;
-  lockDurationReq: string;
-  lockEndReq: string;
-  depositAmountReq: string;
-  whitelist: boolean;
+  harvestStartTime?: string;
+  depositEndTime?: string;
+  lockDurationReq?: string;
+  lockEndReq?: string;
+  depositAmountReq?: string;
+  whitelist?: boolean;
   description: string;
 }
 
@@ -70,6 +70,7 @@ export const createMerlinPool = async (
   account: Address,
   params: ICreateMerlinPoolParams,
 ) => {
+  console.log({params})
   const { nftPoolAddress, rewardsToken1, rewardsToken2, settings } = params;
   try {
     const { request, result } = await publicClient.simulateContract({
@@ -80,7 +81,7 @@ export const createMerlinPool = async (
         nftPoolAddress,
         rewardsToken1,
         rewardsToken2,
-        Object.values(settings),
+        settings,
       ],
       account,
     });

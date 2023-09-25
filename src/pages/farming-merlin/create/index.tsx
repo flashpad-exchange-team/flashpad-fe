@@ -60,13 +60,11 @@ const CreateMerlinPool = () => {
     }
     console.log({ lpAddress });
     setLpAddress(lpAddress);
-    const decimals = await erc20TokenContract.erc20Read(
-      lpAddress,
-      'decimals',
-      []
-    );
+    const [decimals, address] = await Promise.all([
+      erc20TokenContract.erc20Read(lpAddress, 'decimals', []),
+      nftPoolFactoryContract.getPool(lpAddress),
+    ]);
     setLpTokenDecimals(Number(decimals));
-    const address = await nftPoolFactoryContract.getPool(lpAddress);
     setNftPoolAddress(address);
   };
 
@@ -105,19 +103,21 @@ const CreateMerlinPool = () => {
       return;
     }
 
-    console.log({ nftPoolAddress });
+    const nftPoolAddressOnFactory = await nftPoolFactoryContract.getPool(
+      lpAddress
+    );
+    console.log({nftPoolAddressOnFactory})
 
-    if (!nftPoolAddress || nftPoolAddress === ADDRESS_ZERO) {
+    if (
+      nftPoolAddressOnFactory
+      && nftPoolAddressOnFactory === ADDRESS_ZERO
+    ) {
       startLoadingTx({
         tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
         title: 'Creating spNFT pool ...',
         message: 'Confirming your transaction. Please wait.',
       });
 
-      // const lpAddress = await routerContract.getPair(
-      //   token1.address,
-      //   token2.address
-      // );
       const createPoolRes = await nftPoolFactoryContract.createPool(
         userAddress,
         {
@@ -151,8 +151,8 @@ const CreateMerlinPool = () => {
         isOpen={openCreateMerlinModal}
         toggleOpen={toggleOpenCreateMerlinModal}
         nftPoolAddress={nftPoolAddress}
-        token1Address={token1?.address}
-        token2Address={token2?.address}
+        token1Symbol={token1?.symbol}
+        token2Symbol={token2?.symbol}
         lpTokenDecimals={lpTokenDecimals}
       />
       <SelectTokenModal
@@ -290,12 +290,13 @@ const CreateMerlinPool = () => {
           onClick={handleCreateMerlinPool}
           className="w-full justify-center mt-4 mb-2 px-[42px]"
           disabled={
-            !userAddress || type === MerlinPoolTypes.LP_V2
-              ? !token1 || !token2
-              : !token1
+            !userAddress ||
+            (type === MerlinPoolTypes.LP_V2
+              ? (!token1 || !token2)
+              : !token1)
           }
         >
-          Create Merlin
+          {isFirstSpMinter ? 'Initialize' : 'Create Merlin'}
         </Button>
         <DividerDown />
       </div>

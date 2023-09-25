@@ -12,7 +12,11 @@ export const getNFTsOwnedByAddress = async (
     const response = await covalentClient.NftService.getNftsForAddress(
       chain,
       address,
-      { withUncached: true }
+      {
+        noNftAssetMetadata: false,
+        noSpam: false,
+        withUncached: true
+      }
     );
     const nftContractBalance = response.data?.items?.find((it) =>
       it.contract_address.toLowerCase() === erc721Contract.toLowerCase()

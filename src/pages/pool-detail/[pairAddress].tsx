@@ -83,17 +83,6 @@ const PoolDetail = () => {
       setNftPoolAddress(poolAddress);
     }
 
-    // const lpTokenDecimals = await pairContract.read(
-    //   pairAddress,
-    //   'decimals',
-    //   []
-    // );
-
-    // const userLpBalance = userAddress
-    //   ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
-    //   : 0;
-    // const totalSupply = await pairContract.read(pairAddress, 'totalSupply', []);
-
     const [token1Address, token2Address] = await Promise.all([
       pairContract.read(pairAddress, 'token0', []),
       pairContract.read(pairAddress, 'token1', []),
@@ -123,10 +112,6 @@ const PoolDetail = () => {
   const getUserStakedPositions = async () => {
     if (!userAddress || nftPoolAddress === ADDRESS_ZERO) return;
 
-    // const spNfts = await nftDataService.getNFTsOwnedByAddress(
-    //   userAddress,
-    //   nftPoolAddress,
-    // );
     const spNfts = await covalentApiService.getNFTsOwnedByAddress(
       userAddress,
       nftPoolAddress,
