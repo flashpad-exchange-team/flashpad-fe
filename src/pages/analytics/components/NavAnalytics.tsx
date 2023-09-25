@@ -3,30 +3,45 @@ import Coin from '@/icons/Coin';
 import PieChart from '@/icons/PieChart';
 import React from 'react';
 
-const NavAnalytics = () => {
+const NavAnalytics = ({ tab, setTab }: any) => {
   return (
-    <div className="">
+    <div className="flex flex-col">
       <div>
-        <div className="flex gap-8 items-center my-4 cursor-pointer">
-          <BarLineChart />
-          <div>Overview</div>
+        <div
+          className="flex gap-4 items-center my-4 cursor-pointer"
+          onClick={() => setTab('overview')}
+        >
+          <BarLineChart stroke={tab === 'overview' ? '#FFAF1D' : ''} />
+          <div className={tab === 'overview' ? 'text-[#FFAF1D]' : ''}>
+            Overview
+          </div>
         </div>
-        <div className="flex gap-8 items-center my-4 cursor-pointer">
-          <Coin />
-          <div className="-ml-[8px]">Tokens</div>
+        <div
+          className="flex gap-4 items-center my-4 cursor-pointer"
+          onClick={() => setTab('tokens')}
+        >
+          <Coin stroke={tab === 'tokens' ? '#FFAF1D' : ''} />
+          <div
+            className={`-ml-[8px] ${tab === 'tokens' ? 'text-[#FFAF1D]' : ''}`}
+          >
+            Tokens
+          </div>
         </div>
-        <div className="flex gap-8 items-center my-4 cursor-pointer">
-          <PieChart />
-          <div>Pairs</div>
+        <div
+          className="flex gap-4 items-center my-4 cursor-pointer"
+          onClick={() => setTab('pairs')}
+        >
+          <PieChart stroke={tab === 'pairs' ? '#FFAF1D' : ''} />
+          <div className={tab === 'pairs' ? 'text-[#FFAF1D]' : ''}>Pairs</div>
         </div>
       </div>
-      <div>
-        <div>App</div>
-        <div>Github</div>
-        <div>Docs</div>
-        <div>Discord</div>
-        <div>Telegram</div>
-        <div>Twitter</div>
+      <div className="flex flex-col mt-[200px]">
+        <a className="cursor-pointer">App</a>
+        <a className="cursor-pointer">Github</a>
+        <a className="cursor-pointer">Docs</a>
+        <a className="cursor-pointer">Discord</a>
+        <a className="cursor-pointer">Telegram</a>
+        <a className="cursor-pointer">Twitter</a>
       </div>
     </div>
   );

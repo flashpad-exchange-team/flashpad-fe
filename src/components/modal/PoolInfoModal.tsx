@@ -5,6 +5,15 @@ import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
 import DownloadIcon from '@/icons/DownloadIcon';
 import Eligibility from '@/icons/Eligibility';
+import Withdrawal from '@/icons/Withdrawal';
+import Lock from '@/icons/Lock';
+import LaunchPadIcon from '@/icons/LaunchpadIcon';
+import ChartBreakoutIcon from '@/icons/ChartBreakoutIcon';
+import CreditCardMerge from '@/icons/CreditCardMerge';
+import CreditCardSplit from '@/icons/CreditCardSplit';
+import ArrowDown from '@/icons/ArrowDown';
+import ArrowUp from '@/icons/ArrowUp';
+import { useState } from 'react';
 
 export interface PoolInfoModalProps {
   toggleOpen: () => void;
@@ -12,6 +21,10 @@ export interface PoolInfoModalProps {
 }
 
 const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
+  const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
+  const [isOpenValue, setIsOpenValue] = useState(true);
+  const [isOpenApr, setIsOpenApr] = useState(true);
+  const [isOpenRewards, setIsOpenRewards] = useState(true);
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="text-sm">
@@ -35,41 +48,53 @@ const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
           </div>
         </div>
 
-        <div className="text-[15px] text-center text-2xl">
+        <div className="text-[24px] text-center text-2xl mb-2">
           $0.3 - <span className="text-[#E6B300]">1.43%</span> APR
         </div>
-        <div className="text-center">
+        <div className="text-center mb-2">
           This position has 0% pending farming rewards
         </div>
         <div className="flex px-10 py-2 justify-around">
-          <div className="p-4 flex justify-center bg-blue-opacity-50">
+          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
             <DownloadIcon stroke={'#FFAF1D'} />
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50">
-            <DownloadIcon stroke={'#FFAF1D'} />
+          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
+            <Withdrawal />
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50">
-            <DownloadIcon stroke={'#FFAF1D'} />
+          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
+            <Lock />
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50">
-            <DownloadIcon stroke={'#FFAF1D'} />
+          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
+            <LaunchPadIcon active={true} />
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50">
-            <DownloadIcon stroke={'#FFAF1D'} />
-          </div>
-        </div>
-        <div className="text-center">More action</div>
-        <div className="flex px-20 py-2 justify-around">
-          <div className="p-4 ml-15 flex justify-center bg-blue-opacity-50">
-            <DownloadIcon stroke={'#FFAF1D'} />
-          </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50">
-            <DownloadIcon stroke={'#FFAF1D'} />
-          </div>
-          <div className="p-4 mr-15 flex justify-center bg-blue-opacity-50">
-            <DownloadIcon stroke={'#FFAF1D'} />
+          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
+            <ChartBreakoutIcon stroke="#FFAF1D" />
           </div>
         </div>
+        <div
+          className="flex justify-center gap-2 mb-2 cursor-pointer"
+          onClick={() => setIsOpenMoreAction(!isOpenMoreAction)}
+        >
+          <div>More action</div>
+          {isOpenMoreAction ? (
+            <ArrowDown stroke="#fff" />
+          ) : (
+            <ArrowUp stroke="#fff" />
+          )}
+        </div>
+        {isOpenMoreAction && (
+          <div className="flex px-20 py-2 justify-around mb-2">
+            <div className="p-4 ml-15 flex justify-center bg-blue-opacity-50">
+              <CreditCardMerge />
+            </div>
+            <div className="p-4 flex justify-center bg-blue-opacity-50">
+              <CreditCardSplit />
+            </div>
+            <div className="p-4 mr-15 flex justify-center bg-blue-opacity-50">
+              <CreditCardMerge />
+            </div>
+          </div>
+        )}
         <div className="p-2 bg-blue-opacity-50 ">
           <div className="text-[#fff]">Properties</div>
         </div>
@@ -110,78 +135,120 @@ const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
         <div className="p-2 bg-blue-opacity-50 ">
           <div className="text-[#fff]">Data breakdown</div>
         </div>
-        <div className="flex justify-between mt-2 items-center">
-          <div className="pl-2">Value</div>
+        <div
+          className="flex justify-between mt-2 items-center cursor-pointer"
+          onClick={() => setIsOpenValue(!isOpenValue)}
+        >
+          <div className="pl-2 flex">
+            <div>Value</div>
+            {isOpenValue ? (
+              <ArrowDown stroke="#fff" />
+            ) : (
+              <ArrowUp stroke="#fff" />
+            )}
+          </div>
           <div>-</div>
         </div>
-        {/* <div className="flex justify-between items-center mt-2 bg-blue-opacity-50">
-        <div className="pl-2">Name</div>
-        <div className="flex items-center ">
-          <div className="pl-1">($0.1)</div>
-          <div className="pl-1">0.1</div>
-          <div className="pl-1">
-            <BNBICon />
+        {isOpenValue && (
+          <>
+            <div className="flex justify-between items-center mt-2 bg-blue-opacity-50">
+              <div className="pl-2">Name</div>
+              <div className="flex items-center ">
+                <div className="pl-1">($0.1)</div>
+                <div className="pl-1">0.1</div>
+                <div className="pl-1">
+                  <BNBICon />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between items-center bg-blue-opacity-50">
+              <div className="pl-2">Name</div>
+              <div className="flex items-center ">
+                <div className="pl-1">($0.1)</div>
+                <div className="pl-1">0.1</div>
+                <div className="pl-1">
+                  <BNBICon />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        <div
+          className="flex justify-between mt-2 items-center cursor-pointer"
+          onClick={() => setIsOpenApr(!isOpenApr)}
+        >
+          <div className="pl-2 flex">
+            <div>APR</div>
+            {isOpenApr ? (
+              <ArrowDown stroke="#fff" />
+            ) : (
+              <ArrowUp stroke="#fff" />
+            )}
           </div>
-        </div>
-      </div>
-      <div className="flex justify-between items-center bg-blue-opacity-50">
-        <div className="pl-2">Name</div>
-        <div className="flex items-center ">
-          <div className="pl-1">($0.1)</div>
-          <div className="pl-1">0.1</div>
-          <div className="pl-1">
-            <BNBICon />
-          </div>
-        </div>
-      </div> */}
-        <div className="flex justify-between mt-2 items-center">
-          <div className="pl-2">APR</div>
           <div>-</div>
         </div>
-        {/* <div className="flex justify-between items-center bg-blue-opacity-50">
-        <div className="pl-2">Name</div>
-        <div className="flex items-center ">
-          <div className="pl-1">($0.1)</div>
-          <div className="pl-1">0.1</div>
-          <div className="pl-1">
-            <BNBICon />
+        {isOpenApr && (
+          <>
+            <div className="flex justify-between items-center bg-blue-opacity-50">
+              <div className="pl-2">Name</div>
+              <div className="flex items-center ">
+                <div className="pl-1">($0.1)</div>
+                <div className="pl-1">0.1</div>
+                <div className="pl-1">
+                  <BNBICon />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between items-center bg-blue-opacity-50">
+              <div className="pl-2">Name</div>
+              <div className="flex items-center ">
+                <div className="pl-1">($0.1)</div>
+                <div className="pl-1">0.1</div>
+                <div className="pl-1">
+                  <BNBICon />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        <div
+          className="flex justify-between mt-2 items-center cursor-pointer"
+          onClick={() => setIsOpenRewards(!isOpenRewards)}
+        >
+          <div className="pl-2 flex">
+            <div>Pending rewards</div>
+            {isOpenRewards ? (
+              <ArrowDown stroke="#fff" />
+            ) : (
+              <ArrowUp stroke="#fff" />
+            )}
           </div>
-        </div>
-      </div>
-      <div className="flex justify-between items-center bg-blue-opacity-50">
-        <div className="pl-2">Name</div>
-        <div className="flex items-center ">
-          <div className="pl-1">($0.1)</div>
-          <div className="pl-1">0.1</div>
-          <div className="pl-1">
-            <BNBICon />
-          </div>
-        </div>
-      </div> */}
-        <div className="flex justify-between mt-2 items-center">
-          <div className="pl-2">Pending rewards</div>
           <div>-</div>
         </div>
-        {/* <div className="flex justify-between items-center bg-blue-opacity-50">
-        <div className="pl-2">Name</div>
-        <div className="flex items-center ">
-          <div className="pl-1">($0.1)</div>
-          <div className="pl-1">0.1</div>
-          <div className="pl-1">
-            <BNBICon />
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-between items-center bg-blue-opacity-50">
-        <div className="pl-2">Name</div>
-        <div className="flex items-center ">
-          <div className="pl-1">($0.1)</div>
-          <div className="pl-1">0.1</div>
-          <div className="pl-1">
-            <BNBICon />
-          </div>
-        </div>
-      </div> */}
+        {isOpenRewards && (
+          <>
+            <div className="flex justify-between items-center bg-blue-opacity-50">
+              <div className="pl-2">Name</div>
+              <div className="flex items-center ">
+                <div className="pl-1">($0.1)</div>
+                <div className="pl-1">0.1</div>
+                <div className="pl-1">
+                  <BNBICon />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between items-center bg-blue-opacity-50">
+              <div className="pl-2">Name</div>
+              <div className="flex items-center ">
+                <div className="pl-1">($0.1)</div>
+                <div className="pl-1">0.1</div>
+                <div className="pl-1">
+                  <BNBICon />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
         <div className="flex justify-between mt-2 items-center bg-blue-opacity-50">
           <div className="pl-2">Farm rewards</div>
           <div>-</div>
