@@ -12,7 +12,12 @@ import * as web3Helpers from '@/utils/web3Helpers';
 import { useEffect, useState } from 'react';
 import customToast from '../notification/customToast';
 import { useAccount } from 'wagmi';
-import { MAX_UINT256, POSITION_HELPER_ADDRESS, daysToSeconds, minutesToSeconds } from '@/utils/constants';
+import {
+  MAX_UINT256,
+  POSITION_HELPER_ADDRESS,
+  daysToSeconds,
+  minutesToSeconds,
+} from '@/utils/constants';
 import { useLoading } from '@/context/LoadingContext';
 import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
 import { Address } from 'viem';
@@ -89,7 +94,7 @@ const AddLiquidityAndCreatePositionModal = ({
   useEffect(() => {
     setToken1Amount(initialToken1Amount);
     setToken2Amount(initialToken2Amount);
-  }, [initialToken1Amount, initialToken2Amount])
+  }, [initialToken1Amount, initialToken2Amount]);
 
   const handleAddLiquidityAndCreatePosition = async () => {
     const nLockDuration = Number(lockDuration);
@@ -139,14 +144,17 @@ const AddLiquidityAndCreatePositionModal = ({
 
     startLoadingTx({
       tokenPairs: token1Symbol + ' - ' + token2Symbol,
-      title: 'Adding Liquidity ...',
+      title: 'Adding liquidity and creating position...',
       message: 'Confirming your transaction. Please wait.',
     });
 
     let reserve1, reserve2;
     const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
     const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
-    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1Address.toLowerCase()) {
+    if (
+      !pairToken1 ||
+      (pairToken1 as string).toLowerCase() === token1Address.toLowerCase()
+    ) {
       reserve1 = reserveA;
       reserve2 = reserveB;
     } else {
@@ -238,7 +246,7 @@ const AddLiquidityAndCreatePositionModal = ({
           nftPoolAddress,
           nLockDuration,
         ],
-        token1AmountIn,
+        token1AmountIn
       );
     } else if (token2Symbol == 'ETH') {
       txResult = await positionHelperContract.write(
@@ -258,8 +266,7 @@ const AddLiquidityAndCreatePositionModal = ({
         ],
         token2AmountIn
       );
-    }
-    else {
+    } else {
       txResult = await positionHelperContract.write(
         userAddress!,
         POSITION_HELPER_ADDRESS as Address,
@@ -301,9 +308,11 @@ const AddLiquidityAndCreatePositionModal = ({
         token1: token1Symbol,
         token2: token2Symbol,
         txHash: hash,
+        usdValue: ` ${token1Amount} - ${token2Amount}`,
       })
     );
-  }
+    toggleOpen();
+  };
 
   const autoAdjustToken2Amount = async (token1Amount: any) => {
     const reserve1 = BigNumber(reserves ? (reserves as any)[0] : 0);
@@ -313,7 +322,10 @@ const AddLiquidityAndCreatePositionModal = ({
       .pow(token1Decimals)
       .times(BigNumber(token1Amount));
     let adjustedToken2Amount;
-    if (!pairToken1 || pairToken1.toLowerCase() === token1Address.toLowerCase()) {
+    if (
+      !pairToken1 ||
+      pairToken1.toLowerCase() === token1Address.toLowerCase()
+    ) {
       adjustedToken2Amount = web3Helpers.bnQuote(
         bnToken1Amount,
         reserve1,
@@ -339,7 +351,10 @@ const AddLiquidityAndCreatePositionModal = ({
       .pow(token2Decimals)
       .times(BigNumber(token2Amount));
     let adjustedToken1Amount;
-    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1Address.toLowerCase()) {
+    if (
+      !pairToken1 ||
+      (pairToken1 as string).toLowerCase() === token1Address.toLowerCase()
+    ) {
       adjustedToken1Amount = web3Helpers.bnQuote(
         bnToken2Amount,
         reserve2,
@@ -482,7 +497,8 @@ const AddLiquidityAndCreatePositionModal = ({
             />
             <div>Days</div>
           </div>
-          <Button className="w-[60px] flex justify-center items-center rounded-[4px]"
+          <Button
+            className="w-[60px] flex justify-center items-center rounded-[4px]"
             onClick={() => setLockDuration(Number(lockDuration) + 1 + '')}
           >
             +
@@ -559,8 +575,10 @@ const AddLiquidityAndCreatePositionModal = ({
         >
           Cancel
         </Button>
-        <Button className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
-          onClick={handleAddLiquidityAndCreatePosition}>
+        <Button
+          className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
+          onClick={handleAddLiquidityAndCreatePosition}
+        >
           Create Position
         </Button>
       </div>
