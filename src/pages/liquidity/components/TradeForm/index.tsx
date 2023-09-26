@@ -40,8 +40,9 @@ import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import { useRouter } from 'next/router';
 import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
-import { v4 as uuidv4 } from 'uuid';
-import { useKeyContext } from '@/context/KeyContext';
+import { useSWRConfig } from 'swr';
+import { allPairsKey } from '@/hooks/useAllPairsData';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -72,7 +73,7 @@ const TradeForm = ({
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
-  const { setAllPairsKey } = useKeyContext(); // Access the dataKey from the context
+  const { mutate } = useSWRConfig()
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -452,7 +453,7 @@ const TradeForm = ({
       type: 'success',
     });
 
-    setAllPairsKey(uuidv4());
+    mutate(allPairsKey);
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
         action: 'provided liquidity',
@@ -501,7 +502,9 @@ const TradeForm = ({
       const hash = createPoolRes.hash;
       const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
+
       stopLoadingTx();
+      mutate(allNftPoolsKey);
       customToast({
         message: 'Initialized spNFT pool successfully',
         type: 'success',

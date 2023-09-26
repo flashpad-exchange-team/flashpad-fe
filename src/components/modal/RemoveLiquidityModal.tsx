@@ -20,8 +20,9 @@ import { Address, useAccount } from 'wagmi';
 import { Button } from '../button/Button';
 import customToast from '../notification/customToast';
 import CommonModal from './CommonModal';
-import { v4 as uuidv4 } from 'uuid';
-import { useKeyContext } from '@/context/KeyContext';
+import { useSWRConfig } from 'swr';
+import { allPairsKey } from '@/hooks/useAllPairsData';
+
 export interface RemoveLiquidityModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
@@ -45,12 +46,12 @@ const RemoveLiquidityModal = ({
 }: RemoveLiquidityModalProps) => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { mutate } = useSWRConfig();
 
   const [amountToRemove, setAmountToRemove] = useState<string>('0');
   const [deadline, setDeadline] = useState<string>(DEFAULT_DEADLINE);
   const [totalLiquidity, setTotalLiquidity] = useState<string>('?');
   const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
-  const { setKey } = useKeyContext(); // Access the dataKey from the context
 
   const fetchTotalLiquidityHeld = async () => {
     if (!isOpen || !userAddress) return;
@@ -211,8 +212,8 @@ const RemoveLiquidityModal = ({
     const hash = txResult.hash;
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
-    setKey(uuidv4());
 
+    mutate(allPairsKey);
     setSuccessful(true);
     stopLoadingTx();
     resetToDefault();
