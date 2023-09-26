@@ -10,7 +10,7 @@ import Wallet from '@/icons/Wallet';
 import Image from 'next/image';
 import launchpadlanding from 'public/assets/images/launchpadlanding.png';
 import CopyIcon from '@/icons/CopyIcon';
-import LaunchpadChart from 'public/assets/images/launchpadChart.png';
+import LaunchpadChart from 'public/assets/images/LaunchpadChart.png';
 
 const Launchpad = () => {
   return (
