@@ -19,6 +19,7 @@ interface PoolDetailStakedProps {
   token1Logo: string;
   token2Logo: string;
   listSpNfts: any[];
+  isFirstSpMinter: boolean;
   toggleOpenCreatePosition: () => void;
   toggleAddToPosition: () => void;
   toggleHarvestPosition: () => void;
@@ -35,6 +36,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   token1Logo,
   token2Logo,
   listSpNfts,
+  isFirstSpMinter,
   toggleOpenCreatePosition,
   toggleAddToPosition,
   toggleHarvestPosition,
@@ -69,7 +71,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
             onClick={toggleOpenCreatePosition}
           >
             <AddIcon color="#0C111D" />
-            New Position
+            {isFirstSpMinter ? 'Initialize' : 'New Position'}
           </Button>
         </div>
       </div>

@@ -110,12 +110,9 @@ const CreateMerlinPool = () => {
     const nftPoolAddressOnFactory = await nftPoolFactoryContract.getPool(
       lpAddress
     );
-    console.log({nftPoolAddressOnFactory})
+    console.log({ nftPoolAddressOnFactory });
 
-    if (
-      nftPoolAddressOnFactory
-      && nftPoolAddressOnFactory === ADDRESS_ZERO
-    ) {
+    if (nftPoolAddressOnFactory && nftPoolAddressOnFactory === ADDRESS_ZERO) {
       startLoadingTx({
         tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
         title: 'Creating spNFT pool ...',
@@ -145,7 +142,7 @@ const CreateMerlinPool = () => {
       customToast({
         message: 'Initialized spNFT pool successfully',
         type: 'success',
-      })
+      });
     }
 
     setOpenCreateMerlinModal(true);
