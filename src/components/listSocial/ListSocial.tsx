@@ -6,7 +6,10 @@ import TwitterIcon from '@/icons/TwitterIcon';
 
 const ListSocial = () => {
   return (
-    <div className="flex items-center gap-3 mt-2 lg:mt-0 mx-auto lg:mx-0 w-[171px] ">
+    <div className="flex items-center gap-3 mt-2 lg:mt-0 mx-auto lg:mx-0 w-[210px] ">
+      <a href="https://docs.arthur.exchange/" target="_blank">
+        <DocsIcon />
+      </a>
       <a href="https://discord.gg/yaenZHbd" target="_blank">
         <DiscordIcon />
       </a>
@@ -17,7 +20,6 @@ const ListSocial = () => {
         <TelegramIcon />
       </a>
       <MediumIcon />
-      <DocsIcon />
     </div>
   );
 };

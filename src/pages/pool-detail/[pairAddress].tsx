@@ -31,6 +31,7 @@ import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
 import HarvestModal from '@/components/modal/HarvestModal';
 import LockPositionModal from '@/components/modal/LockPositionModal';
 import BoostPositionModal from '@/components/modal/BoostPositionModal';
+import PoolInfoModal from '@/components/modal/PoolInfoModal';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -59,6 +60,9 @@ const PoolDetail = () => {
   const [openBoostPosition, setOpenBoostPosition] = useState<boolean>(false);
   const [isOpenCreatePosition, setOpenCreatePosition] =
     useState<boolean>(false);
+  const [openPoolInfo, setOpenPoolInfo] = useState<boolean>(false);
+  const togglePoolInfo = () => setOpenPoolInfo(!openPoolInfo);
+
   const toggleAddToPosition = () => setOpenAddToPosition(!openAddToPosition);
   const toggleWithdrawPosition = () =>
     setOpenWithdrawPosition(!openWithdrawPosition);
@@ -75,15 +79,22 @@ const PoolDetail = () => {
     setOpenCreatePosition(!isOpenCreatePosition);
   };
 
+  console.log({ nftPoolAddress });
+
   const getPoolInfo = async (pairAddress: Address) => {
+    console.log({ pairAddress });
     const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
     console.log({ poolAddress });
     if (poolAddress) {
       setNftPoolAddress(poolAddress);
     }
 
-    let token1Symbol = 'TOKEN1', token2Symbol = 'TOKEN2';
-    if (pairAddress.toLowerCase() === '0xb1f8a7c4fdaA4b79ad2052e09D8BBA5296e42090'.toLowerCase()) {
+    let token1Symbol = 'TOKEN1',
+      token2Symbol = 'TOKEN2';
+    if (
+      pairAddress.toLowerCase() ===
+      '0xb1f8a7c4fdaA4b79ad2052e09D8BBA5296e42090'.toLowerCase()
+    ) {
       token1Symbol = await erc20Contract.erc20Read(pairAddress, 'symbol', []);
       token2Symbol = token1Symbol;
     } else {
@@ -91,10 +102,10 @@ const PoolDetail = () => {
         pairContract.read(pairAddress, 'token0', []),
         pairContract.read(pairAddress, 'token1', []),
       ]);
-  
+
       if (token1Address) {
         [token1Symbol, token2Symbol] = await Promise.all([
-        erc20Contract.erc20Read(token1Address, 'symbol', []),
+          erc20Contract.erc20Read(token1Address, 'symbol', []),
           erc20Contract.erc20Read(token2Address, 'symbol', []),
         ]);
       } else {
@@ -103,16 +114,20 @@ const PoolDetail = () => {
       }
     }
 
-    token1Symbol = (token1Symbol == 'WFTM') ? 'ETH' : token1Symbol;
-    token2Symbol = (token2Symbol == 'WFTM') ? 'ETH' : token2Symbol;
+    token1Symbol = token1Symbol == 'WFTM' ? 'ETH' : token1Symbol;
+    token2Symbol = token2Symbol == 'WFTM' ? 'ETH' : token2Symbol;
 
     setToken1Symbol(token1Symbol);
     setToken2Symbol(token2Symbol);
 
-    const token1Logo = CHAINS_TOKENS_LIST.find((e) => e.symbol === token1Symbol)?.logoURI;
+    const token1Logo = CHAINS_TOKENS_LIST.find(
+      (e) => e.symbol === token1Symbol
+    )?.logoURI;
     setToken1Logo(token1Logo || '');
 
-    const token2Logo = CHAINS_TOKENS_LIST.find((e) => e.symbol === token2Symbol)?.logoURI;
+    const token2Logo = CHAINS_TOKENS_LIST.find(
+      (e) => e.symbol === token2Symbol
+    )?.logoURI;
     setToken2Logo(token2Logo || '');
   };
 
@@ -121,7 +136,7 @@ const PoolDetail = () => {
 
     const spNfts = await covalentApiService.getNFTsOwnedByAddress(
       userAddress,
-      nftPoolAddress,
+      nftPoolAddress
     );
     let spNftsWithRewards = [];
     for (const spNft of spNfts) {
@@ -170,6 +185,23 @@ const PoolDetail = () => {
 
   return (
     <>
+      <PoolInfoModal
+        isOpen={openPoolInfo}
+        toggleOpen={togglePoolInfo}
+        lpAddress={pairAddress as Address}
+        nftPoolAddress={nftPoolAddress}
+        token1Data={{
+          symbol: token1Symbol,
+          logo: token1Logo,
+        }}
+        token2Data={{
+          symbol: token2Symbol,
+          logo: token2Logo,
+        }}
+        refetchData={getUserStakedPositions}
+        spNFTTokenId={spNFTTokenId}
+        listSpNfts={userSpNfts}
+      />
       <AddToPositionModal
         isOpen={openAddToPosition}
         toggleOpen={toggleAddToPosition}
@@ -360,6 +392,7 @@ const PoolDetail = () => {
             toggleWithdrawPosition={toggleWithdrawPosition}
             toggleLockPosition={toggleLockPosition}
             toggleBoostPosition={toggleBoostPosition}
+            togglePoolInfo={togglePoolInfo}
             setSpNFTTokenId={setSpNFTTokenId}
           />
         ) : (

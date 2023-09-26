@@ -14,13 +14,48 @@ import CreditCardSplit from '@/icons/CreditCardSplit';
 import ArrowDown from '@/icons/ArrowDown';
 import ArrowUp from '@/icons/ArrowUp';
 import { useState } from 'react';
+import { Address } from 'viem';
 
 export interface PoolInfoModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
+  lpAddress?: Address;
+  nftPoolAddress?: Address;
+  token1Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  token2Data: {
+    symbol: string;
+    logo: string;
+    [p: string]: any;
+  };
+  refetchData: () => void;
+  spNFTTokenId: string | null;
+  listSpNfts: any[];
 }
 
-const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
+const PoolInfoModal = ({
+  toggleOpen,
+  isOpen,
+  lpAddress,
+  nftPoolAddress,
+  token1Data,
+  token2Data,
+  refetchData,
+  spNFTTokenId,
+  listSpNfts,
+}: PoolInfoModalProps) => {
+  console.log({
+    lpAddress,
+    nftPoolAddress,
+    token1Data,
+    token2Data,
+    refetchData,
+    spNFTTokenId,
+    listSpNfts,
+  });
   const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
   const [isOpenValue, setIsOpenValue] = useState(true);
   const [isOpenApr, setIsOpenApr] = useState(true);
@@ -39,8 +74,10 @@ const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
               </div>
             </div>
             <div className="ml-[70px]">
-              <div className="text-bold">Token A - Token B</div>
-              <div className="text-xs font-normal">#ID-1644</div>
+              <div className="text-bold">
+                {token1Data.symbol} - {token2Data.symbol}
+              </div>
+              <div className="text-xs font-normal">#ID-{spNFTTokenId}</div>
             </div>
           </div>
           <div className="cursor-pointer pb-[20px]" onClick={toggleOpen}>
@@ -48,10 +85,10 @@ const PoolInfoModal = ({ toggleOpen, isOpen }: PoolInfoModalProps) => {
           </div>
         </div>
 
-        <div className="text-[24px] text-center text-2xl mb-2">
+        {/* <div className="text-[24px] text-center text-2xl mb-2">
           $0.3 - <span className="text-[#E6B300]">1.43%</span> APR
-        </div>
-        <div className="text-center mb-2">
+        </div> */}
+        <div className="text-center mb-2 mt-2">
           This position has 0% pending farming rewards
         </div>
         <div className="flex px-10 py-2 justify-around">

@@ -25,6 +25,7 @@ interface PoolDetailStakedProps {
   toggleWithdrawPosition: () => void;
   toggleLockPosition: () => void;
   toggleBoostPosition: () => void;
+  togglePoolInfo: () => void;
   setSpNFTTokenId: (id: string | null) => void;
 }
 
@@ -40,6 +41,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   toggleWithdrawPosition,
   toggleLockPosition,
   toggleBoostPosition,
+  togglePoolInfo,
   setSpNFTTokenId,
 }) => {
   console.log({ listSpNfts });
@@ -96,7 +98,13 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
           <tbody>
             {listSpNfts.map((sp) => (
               <tr className="hover:bg-darkBlue cursor-pointer">
-                <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
+                <td
+                  className="py-4 text-sm px-4 border-b border-[#344054] text-left"
+                  onClick={() => {
+                    setSpNFTTokenId(sp?.tokenId + '');
+                    togglePoolInfo();
+                  }}
+                >
                   <div className="relative">
                     <div className="absolute">
                       {token1Logo ? (
@@ -179,27 +187,27 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                     <AddToPositionIcon
                       message="Add to position"
                       onClick={() => {
-                        setSpNFTTokenId(sp?.tokenId);
+                        setSpNFTTokenId(sp?.tokenId + '');
                         toggleAddToPosition();
                       }}
                     />
                     <WithdrawPositionIcon
                       message="Withdraw position"
                       onClick={() => {
-                        setSpNFTTokenId(sp?.tokenId);
+                        setSpNFTTokenId(sp?.tokenId + '');
                         toggleWithdrawPosition();
                       }}
                     />
                     <HarvestIcon
                       message="Harvest position"
                       onClick={() => {
-                        setSpNFTTokenId(sp?.tokenId);
+                        setSpNFTTokenId(sp?.tokenId + '');
                         toggleHarvestPosition();
                       }}
                     />
                     <LockPositionIcon
                       onClick={() => {
-                        setSpNFTTokenId(sp?.tokenId);
+                        setSpNFTTokenId(sp?.tokenId + '');
                         toggleLockPosition();
                       }}
                     />
@@ -211,7 +219,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                         .div(new BigNumber(10).pow(18))
                         .toString(10)}
                       onClick={() => {
-                        setSpNFTTokenId(sp?.tokenId);
+                        setSpNFTTokenId(sp?.tokenId + '');
                         toggleBoostPosition();
                       }}
                     />
