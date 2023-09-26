@@ -1,9 +1,6 @@
 import React from 'react';
 
-export const FairLaunchpadProjectProposition = ({
-  values,
-  handleChange,
-}: any) => {
+const FairLaunchpadProjectProposition = ({ values, handleChange }: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">

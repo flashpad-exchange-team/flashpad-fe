@@ -1,10 +1,7 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-export const FairLaunchpadProjectSocialMedia = ({
-  values,
-  handleChange,
-}: any) => {
+const FairLaunchpadProjectSocialMedia = ({ values, handleChange }: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">

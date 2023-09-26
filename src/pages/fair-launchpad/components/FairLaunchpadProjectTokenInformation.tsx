@@ -1,7 +1,7 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-export const FairLaunchpadProjectTokenInformation = ({
+const FairLaunchpadProjectTokenInformation = ({
   values,
   handleChange,
 }: any) => {

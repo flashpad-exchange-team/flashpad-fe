@@ -1,8 +1,7 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-export const FairLaunchpadProjectDetail = ({ values, handleChange }: any) => {
-  console.log(values, 'values');
+const FairLaunchpadProjectDetail = ({ values, handleChange, error }: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">
@@ -23,6 +22,7 @@ export const FairLaunchpadProjectDetail = ({ values, handleChange }: any) => {
               <Pencil />
             </div>
           </div>
+          <div className="text-[#FF0000] pl-3">{error('projectName')}</div>
         </div>
         <div className="w-full">
           <div className="mt-5 text-[#98A2B3]">Project Website</div>
@@ -37,6 +37,7 @@ export const FairLaunchpadProjectDetail = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('projectWebsite')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -51,6 +52,9 @@ export const FairLaunchpadProjectDetail = ({ values, handleChange }: any) => {
             />
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
+            </div>
+            <div className="text-[#FF0000] pl-3">
+              {error('projectDescription')}
             </div>
           </div>
         </div>
@@ -68,6 +72,9 @@ export const FairLaunchpadProjectDetail = ({ values, handleChange }: any) => {
             />
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
+            </div>
+            <div className="text-[#FF0000] pl-3">
+              {error('projectCategory')}
             </div>
           </div>
         </div>
