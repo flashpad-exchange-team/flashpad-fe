@@ -161,7 +161,7 @@ const PoolDetail = () => {
       customToast({
         message:
           'This liquidity pool has not been initialized with a spNFT contract yet',
-        type: 'info',
+        type: 'warning',
       });
     }
   };

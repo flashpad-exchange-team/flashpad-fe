@@ -2,8 +2,10 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 
 type KeyContextType = {
-  dataKey: string;
-  setKey: (key: string) => void;
+  allPairsKey: string;
+  setAllPairsKey: (key: string) => void;
+  allNftPoolsKey: string;
+  setAllNftPoolsKey: (key: string) => void;
 };
 
 const KeyContext = createContext<KeyContextType | undefined>(undefined);
@@ -13,14 +15,11 @@ type KeyContextProviderProps = {
 };
 
 export const KeyContextProvider = ({ children }: KeyContextProviderProps) => {
-  const [dataKey, setDataKey] = useState<string>('initial-key-value');
-
-  const setKey = (key: string) => {
-    setDataKey(key);
-  };
+  const [allPairsKey, setAllPairsKey] = useState<string>('all-pairs-key');
+  const [allNftPoolsKey, setAllNftPoolsKey] = useState<string>('all-nft-pools-key');
 
   return (
-    <KeyContext.Provider value={{ dataKey, setKey }}>
+    <KeyContext.Provider value={{ allPairsKey, setAllPairsKey, allNftPoolsKey, setAllNftPoolsKey }}>
       {children}
     </KeyContext.Provider>
   );

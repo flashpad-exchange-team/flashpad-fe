@@ -39,7 +39,6 @@ import { useAccount, useBalance, useContractRead } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import { useRouter } from 'next/router';
-// import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 import { v4 as uuidv4 } from 'uuid';
 import { useKeyContext } from '@/context/KeyContext';
@@ -73,17 +72,11 @@ const TradeForm = ({
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
-  const { setKey } = useKeyContext(); // Access the dataKey from the context
+  const { setAllPairsKey } = useKeyContext(); // Access the dataKey from the context
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
   const [isOpenLockManage, setOpenLockManage] = useState<boolean>(false);
-
-  // const [isOpenCreatePosition, setOpenCreatePosition] =
-  //   useState<boolean>(false);
-  // const toggleOpenCreatePosition = () => {
-  //   setOpenCreatePosition(!isOpenCreatePosition);
-  // };
 
   const [isOpenAddLiquidityCreatePosition, setOpenAddLiquidityCreatePosition] =
     useState<boolean>(false);
@@ -458,7 +451,8 @@ const TradeForm = ({
       message: 'Added liquidity successfully',
       type: 'success',
     });
-    setKey(uuidv4());
+
+    setAllPairsKey(uuidv4());
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
         action: 'provided liquidity',
@@ -566,20 +560,6 @@ const TradeForm = ({
         deadline={deadline}
         nftPoolAddress={nftPoolAddress!}
       />
-      {/* <CreatePositionModal
-        isOpen={isOpenCreatePosition}
-        toggleOpen={toggleOpenCreatePosition}
-        lpAddress={pairAddress}
-        nftPoolAddress={nftPoolAddress}
-        token1Data={{
-          symbol: token1 ? token1.symbol : '',
-          logo: token1 ? token1.logoURI : '',
-        }}
-        token2Data={{
-          symbol: token2 ? token2.symbol : '',
-          logo: token2 ? token2.logoURI : '',
-        }}
-      /> */}
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
         <div className="text-2xl font-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />

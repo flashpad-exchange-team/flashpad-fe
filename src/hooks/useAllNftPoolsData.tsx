@@ -10,7 +10,7 @@ import { Address } from 'viem';
 
 const useAllNftPoolsData = (userAddress: Address | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
-  const { setKey } = useKeyContext(); // Access the dataKey from the context
+  const { allNftPoolsKey, setAllNftPoolsKey } = useKeyContext(); // Access the dataKey from the context
   const fetchAllPools = async () => {
     setIsLoading(true);
 
@@ -98,10 +98,12 @@ const useAllNftPoolsData = (userAddress: Address | undefined) => {
     return listPools;
   };
 
-  const { data, error } = useSWR([userAddress, 'all-nft-pools'], fetchAllPools, {
-    revalidateIfStale: false,
+  const { data, error } = useSWR([userAddress, allNftPoolsKey], fetchAllPools, {
+    revalidateIfStale: true,
     revalidateOnFocus: false,
-    revalidateOnReconnect: false,
+    revalidateOnReconnect: true,
+    revalidateOnMount: true,
+    // refreshInterval: 30000,
   });
 
   useEffect(() => {
@@ -111,7 +113,7 @@ const useAllNftPoolsData = (userAddress: Address | undefined) => {
   }, [data, error]);
 
   const reloadData = async (key: string) => {
-    setKey(key);
+    setAllNftPoolsKey(key);
   };
 
   return {

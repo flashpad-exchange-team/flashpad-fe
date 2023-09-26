@@ -11,7 +11,7 @@ import { Address } from 'viem';
 
 const useAllPairsData = (userAddress: Address | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
-  const { setKey } = useKeyContext(); // Access the dataKey from the context
+  const { allPairsKey, setAllPairsKey } = useKeyContext(); // Access the dataKey from the context
   const fetchAllPairs = async () => {
     setIsLoading(true);
 
@@ -88,10 +88,12 @@ const useAllPairsData = (userAddress: Address | undefined) => {
     return listPairs;
   };
 
-  const { data, error } = useSWR([userAddress, 'all-lp-pairs'], fetchAllPairs, {
-    revalidateIfStale: false,
+  const { data, error } = useSWR([userAddress, allPairsKey], fetchAllPairs, {
+    revalidateIfStale: true,
     revalidateOnFocus: false,
-    revalidateOnReconnect: false,
+    revalidateOnReconnect: true,
+    revalidateOnMount: true,
+    // refreshInterval: 30000,
   });
 
   useEffect(() => {
@@ -101,7 +103,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
   }, [data, error]);
 
   const reloadData = async (key: string) => {
-    setKey(key);
+    setAllPairsKey(key);
   };
 
   return {
