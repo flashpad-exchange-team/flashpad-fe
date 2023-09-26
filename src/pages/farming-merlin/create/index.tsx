@@ -18,6 +18,8 @@ import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
 import { waitForTransaction } from '@wagmi/core';
+import { useSWRConfig } from 'swr';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 
 enum MerlinPoolTypes {
   LP_V2 = 0,
@@ -27,6 +29,8 @@ enum MerlinPoolTypes {
 const CreateMerlinPool = () => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { mutate } = useSWRConfig();
+
   const [type, setType] = useState<MerlinPoolTypes>(MerlinPoolTypes.LP_V2);
   const [openCreateMerlinModal, setOpenCreateMerlinModal] = useState(false);
   const toggleOpenCreateMerlinModal = () =>
@@ -134,6 +138,8 @@ const CreateMerlinPool = () => {
       const hash = createPoolRes.hash;
       const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
+
+      mutate(allNftPoolsKey);
       stopLoadingTx();
       setSuccessful(true);
       customToast({
