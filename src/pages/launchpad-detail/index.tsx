@@ -8,9 +8,9 @@ import Safe from '@/icons/Safe';
 import TokenMinter from '@/icons/TokenMinter';
 import Wallet from '@/icons/Wallet';
 import Image from 'next/image';
-import launchpadlanding from 'public/assets/images/launchpadlanding.png';
+import Landing from 'public/assets/images/launchpad-landing.png';
 import CopyIcon from '@/icons/CopyIcon';
-import LaunchpadChart from 'public/assets/images/LaunchpadChart.png';
+import LaunchpadChart from 'public/assets/images/Launchpad-chart.png';
 
 const Launchpad = () => {
   return (
@@ -39,7 +39,7 @@ const Launchpad = () => {
       >
         <ArrowLeft /> Back to Sales list
       </Button>
-      <Image alt="logo" src={launchpadlanding.src} width={1096} height={740} />
+      <Image alt="logo" src={Landing.src} width={1096} height={740} />
       <div className="text-[#FCFCFD] text-base mt-8">
         Disclaimer: The $RDO token is not intended to constitute securities in
         any jurisdiction. This announcement is not an invitation to invest in
