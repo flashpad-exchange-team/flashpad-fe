@@ -4,6 +4,7 @@ import React from 'react';
 const FairLaunchpadProjectTokenInformation = ({
   values,
   handleChange,
+  error,
 }: any) => {
   return (
     <>
@@ -24,6 +25,7 @@ const FairLaunchpadProjectTokenInformation = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('tokenName')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -39,6 +41,7 @@ const FairLaunchpadProjectTokenInformation = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('tokenSymbol')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -54,6 +57,7 @@ const FairLaunchpadProjectTokenInformation = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('tokenSupply')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -71,6 +75,7 @@ const FairLaunchpadProjectTokenInformation = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('tokenType')}</div>
           </div>
         </div>
       </div>

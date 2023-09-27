@@ -1,6 +1,10 @@
 import React from 'react';
 
-const FairLaunchpadProjectProposition = ({ values, handleChange }: any) => {
+const FairLaunchpadProjectProposition = ({
+  values,
+  handleChange,
+  error,
+}: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">
@@ -17,6 +21,9 @@ const FairLaunchpadProjectProposition = ({ values, handleChange }: any) => {
             value={values.brieflyProblemProjectSolves}
             onChange={handleChange}
           />
+          <div className="text-[#FF0000]">
+            {error('brieflyProblemProjectSolves')}
+          </div>
         </div>
         <div className="w-full">
           <div className="mt-5 text-[#98A2B3]">
@@ -28,6 +35,7 @@ const FairLaunchpadProjectProposition = ({ values, handleChange }: any) => {
             value={values.valueYourProject}
             onChange={handleChange}
           />
+          <div className="text-[#FF0000]">{error('valueYourProject')}</div>
         </div>
       </div>
     </>

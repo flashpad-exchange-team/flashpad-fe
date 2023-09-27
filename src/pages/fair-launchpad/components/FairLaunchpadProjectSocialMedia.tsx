@@ -1,7 +1,11 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-const FairLaunchpadProjectSocialMedia = ({ values, handleChange }: any) => {
+const FairLaunchpadProjectSocialMedia = ({
+  values,
+  handleChange,
+  error,
+}: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">
@@ -21,6 +25,9 @@ const FairLaunchpadProjectSocialMedia = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">
+              {error('socialTelegramChannel')}
+            </div>
           </div>
         </div>
         <div className="w-full">
@@ -36,6 +43,7 @@ const FairLaunchpadProjectSocialMedia = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('socialTelegramGroup')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -51,6 +59,7 @@ const FairLaunchpadProjectSocialMedia = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('socialTwitter')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -66,6 +75,7 @@ const FairLaunchpadProjectSocialMedia = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('socialDiscord')}</div>
           </div>
         </div>
       </div>

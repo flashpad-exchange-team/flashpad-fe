@@ -1,7 +1,11 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-const FairLaunchpadRoadmapAndDistribution = ({ values, handleChange }: any) => {
+const FairLaunchpadRoadmapAndDistribution = ({
+  values,
+  handleChange,
+  error,
+}: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">
@@ -21,6 +25,7 @@ const FairLaunchpadRoadmapAndDistribution = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('roadMapLink')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -36,6 +41,7 @@ const FairLaunchpadRoadmapAndDistribution = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('roadMapInfo')}</div>
           </div>
         </div>
       </div>
@@ -56,6 +62,7 @@ const FairLaunchpadRoadmapAndDistribution = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('tokenomicLink')}</div>
           </div>
         </div>
       </div>

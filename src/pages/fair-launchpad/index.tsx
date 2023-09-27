@@ -12,7 +12,15 @@ import FairLaunchpadProjectSocialMedia from './components/FairLaunchpadProjectSo
 import FairLaunchpadProjectTeamInformation from './components/FairLaunchpadProjectTeamInformation';
 import FairLaunchpadProjectTokenInformation from './components/FairLaunchpadProjectTokenInformation';
 import FairLaunchpadRoadmapAndDistribution from './components/FairLaunchpadRoadmapAndDistribution';
-import { formDetailSchema } from './components/FormSchema';
+import {
+  formDetailSchema,
+  formDocumentsSchema,
+  formInfoSchema,
+  formPropositionSchema,
+  formRoadmapSchema,
+  formSocialMediaSchema,
+  formTokenSchema,
+} from './components/FormSchema';
 const Launchpad = () => {
   const [step, setStep] = useState(1);
   const [formValues, setFormValues] = useState({
@@ -60,13 +68,33 @@ const Launchpad = () => {
 
   const handleNextForm = (e: Event) => {
     e.preventDefault();
-
     try {
-      formDetailSchema.parse(formValues);
+      switch (step) {
+        case 1:
+          formDetailSchema.parse(formValues);
+          break;
+        case 2:
+          formInfoSchema.parse(formValues);
+          break;
+        case 3:
+          formTokenSchema.parse(formValues);
+          break;
+        case 4:
+          formPropositionSchema.parse(formValues);
+          break;
+        case 5:
+          formRoadmapSchema.parse(formValues);
+          break;
+        case 6:
+          formSocialMediaSchema.parse(formValues);
+          break;
+        case 7:
+          formDocumentsSchema.parse(formValues);
+          break;
+      }
       if (step === 7) {
         submitForm();
       } else {
-        console.log(222);
         setStep(step + 1);
       }
       setValidationError('');
@@ -76,12 +104,6 @@ const Launchpad = () => {
       }
     }
   };
-
-  let test = useMemo(() => {
-    console.log(step);
-    return step;
-  }, [step]);
-  console.log(test, '111');
   let componentRender;
   switch (step) {
     case 1:

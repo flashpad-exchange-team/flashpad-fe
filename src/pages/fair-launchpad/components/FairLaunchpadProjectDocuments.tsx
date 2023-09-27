@@ -1,7 +1,11 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-const FairLaunchpadProjectDocuments = ({ values, handleChange }: any) => {
+const FairLaunchpadProjectDocuments = ({
+  values,
+  handleChange,
+  error,
+}: any) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">
@@ -21,6 +25,7 @@ const FairLaunchpadProjectDocuments = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsWhitepaper')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -36,6 +41,7 @@ const FairLaunchpadProjectDocuments = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsPitchDeck')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -53,6 +59,7 @@ const FairLaunchpadProjectDocuments = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsTechnical')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -70,6 +77,7 @@ const FairLaunchpadProjectDocuments = ({ values, handleChange }: any) => {
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsLegal')}</div>
           </div>
         </div>
       </div>
