@@ -1,17 +1,15 @@
 import TickIcon from '@/icons/TickICon';
 import WarningIcon from '../../icons/WarningIcon';
 import InfoIcon from '@/icons/InfoIcon';
-import { ReactNode } from 'react';
-export interface NotificationProps {
-  type?: 'error' | 'success' | 'info';
-  message: string | ReactNode;
-  hideIcon?: boolean;
-}
+import { NotificationProps } from './Notification';
+
 const ToastContent = ({ type, message, hideIcon }: NotificationProps) => {
   const renderIcon = () => {
     switch (type) {
       case 'error':
         return <WarningIcon />;
+      case 'warning':
+        return <WarningIcon strokeColor={'#000'} />;
       case 'success':
         return <TickIcon size={'24'} />;
       case 'info':
@@ -28,6 +26,8 @@ const ToastContent = ({ type, message, hideIcon }: NotificationProps) => {
         return 'bg-[#17B26A]';
       case 'info':
         return 'bg-darkBlue';
+      case 'warning':
+        return 'bg-[#FFCC00]';
       default:
         return null;
     }
@@ -37,7 +37,9 @@ const ToastContent = ({ type, message, hideIcon }: NotificationProps) => {
       className={`rounded-lg ${renderBg()} h-full min-h-[60px] py-4 px-6 flex items-center pr-12 w-full leading-4 gap-4 text-sm relative z-50 `}
     >
       <div className="w-[50] text-left">{hideIcon || renderIcon()}</div>
-      {message}
+      <div className={`${type === 'warning' ? 'text-[#000]' : ''}`}>
+        {message}
+      </div>
     </div>
   );
 };

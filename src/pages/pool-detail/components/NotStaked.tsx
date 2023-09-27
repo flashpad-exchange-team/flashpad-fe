@@ -5,10 +5,12 @@ import QuestionIcon from '@/icons/QuestionIcon';
 
 interface PoolDetailNotStakedProps {
   toggleOpenCreatePosition: () => void;
+  isFirstSpMinter: boolean;
 }
 
 const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
   toggleOpenCreatePosition,
+  isFirstSpMinter,
 }) => {
   return (
     <div className="overflow-x-auto mt-8">
@@ -74,7 +76,7 @@ const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
           onClick={toggleOpenCreatePosition}
         >
           <AddIcon color="#0C111D" />
-          New Position
+          {isFirstSpMinter ? 'Initialize' : 'New Position'}
         </Button>
       </div>
     </div>

@@ -2,8 +2,9 @@ import TickIcon from '@/icons/TickICon';
 import WarningIcon from '../../icons/WarningIcon';
 import InfoIcon from '@/icons/InfoIcon';
 import { ReactNode } from 'react';
+
 export interface NotificationProps {
-  type?: 'error' | 'success' | 'info';
+  type?: 'error' | 'success' | 'info' | 'warning';
   message: string | ReactNode;
   hideIcon?: boolean;
   autoClose?: number;

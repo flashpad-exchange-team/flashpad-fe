@@ -8,8 +8,10 @@ import CrossSword from '@/icons/CrossSword';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
 import Linea from '@/icons/Linea';
 import Liquidity from '@/icons/Liquidity';
+import StackIcon from '@/icons/StackIcon';
 import Swap from '@/icons/Swap';
 import SwapIcon from '@/icons/SwapIcon';
+import TokenMintIcon from '@/icons/TokenMintIcon';
 import TradeIcon from '@/icons/TradeIcon';
 import WalletIcon from '@/icons/WalletIcon';
 import { Menu, MenuItem } from '@szhsin/react-menu';
@@ -50,6 +52,11 @@ const MENU_ITEMS = [
     path: '/earn',
     subMenu: [
       {
+        name: 'Positions',
+        path: '/positions',
+        icon: <TokenMintIcon width="18px" height="18px" />
+      },
+      {
         name: 'Genesis Pool',
         path: '/farming',
         icon: <SwapIcon />,
@@ -60,9 +67,9 @@ const MENU_ITEMS = [
         icon: <Liquidity width="18px" />,
       },
       {
-        name: 'Staking Pools',
+        name: 'Pools',
         path: '/pools',
-        icon: <Swap width="18px" />,
+        icon: <StackIcon width="18" height="18px" />,
       },
     ],
   },

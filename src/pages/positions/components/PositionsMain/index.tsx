@@ -35,7 +35,7 @@ const data = [
     pendingRewards: '0',
   },
 ];
-const StakingMain = () => {
+const PositionsMain = () => {
   const [isOpenSelectToken, setOpenSelectToken] = useState<boolean>(false);
   const [isOpenCreatePosition, setOpenCreatePosition] =
     useState<boolean>(false);
@@ -99,4 +99,4 @@ const StakingMain = () => {
     </>
   );
 };
-export default StakingMain;
+export default PositionsMain;

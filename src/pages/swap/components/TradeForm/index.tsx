@@ -162,30 +162,6 @@ const TradeForm = ({
       console.log({ txReceipt });
     }
 
-    // const token2Allowance = (await erc20TokenContract.erc20Read(
-    //   token2.address,
-    //   'allowance',
-    //   [userAddress, ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET]
-    // )) as bigint;
-
-    // if (token2Allowance.toString() < MAX_UINT256) {
-    //   const approveRes = await erc20TokenContract.erc20Write(
-    //     userAddress!,
-    //     token2.address,
-    //     'approve',
-    //     [ARTHUR_ROUTER_ADDRESS_LINEA_TESTNET, MAX_UINT256]
-    //   );
-    //   if (!approveRes) {
-    //     // stopLoadingTx();
-    //     // setSuccessful(false);
-    //     // setFailed(true);
-    //     return;
-    //   }
-
-    // const hash = approveRes.hash;
-    // const txReceipt = await waitForTransaction({ hash });
-    // }
-
     const { timestamp } = await web3Helpers.getBlock();
     let txResult = undefined;
     if (token2?.symbol === 'ETH') {
@@ -226,9 +202,8 @@ const TradeForm = ({
     }
 
     const hash = txResult.hash;
-    // const txReceipt =
     await waitForTransaction({ hash });
-    hash;
+
     startSuccessTx(
       handleSuccessTxMessageSwap({
         action: 'swapped',
@@ -239,10 +214,7 @@ const TradeForm = ({
         txHash: hash,
       })
     );
-    // customToast({
-    //   message: `Swap ${token1Amount} ${token1.symbol} to ${token2Amount} ${token2.symbol} successfully`,
-    //   type: 'success',
-    // });
+
     resetInput();
     stopLoadingTx();
   };

@@ -17,6 +17,7 @@ interface PoolListProps {}
 const PoolList = ({}: PoolListProps) => {
   const { address: userAddress } = useAccount();
   const router = useRouter();
+
   const [showSpNftPools, setShowSpNftPools] = useState(true);
 
   const { data: allPairsData, isLoading: isLoadingAllPairs } =

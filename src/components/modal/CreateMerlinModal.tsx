@@ -12,10 +12,14 @@ import { Address } from 'viem';
 import Image from 'next/image';
 import SelectTokenModal from './SelectTokenModal';
 import Select from '../select';
-import { ADDRESS_ZERO, CHAINS_TOKENS_LIST, daysToSeconds } from '@/utils/constants';
+import {
+  ADDRESS_ZERO,
+  CHAINS_TOKENS_LIST,
+  daysToSeconds,
+} from '@/utils/constants';
 import customToast from '../notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
-import moment from 'moment';
+import { add, getUnixTime, isSameDay } from 'date-fns';
 import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
 import { waitForTransaction } from '@wagmi/core';
@@ -114,7 +118,7 @@ const CreateMerlinModal = ({
     if (!token1) {
       customToast({
         message: 'Please select at least 1 incentive token for Merlin pool',
-        type: 'error'
+        type: 'error',
       });
       return;
     }
@@ -122,7 +126,7 @@ const CreateMerlinModal = ({
     if (!startTime || !endTime) {
       customToast({
         message: 'Start time & end time are required!',
-        type: 'error'
+        type: 'error',
       });
       return;
     }
@@ -130,25 +134,26 @@ const CreateMerlinModal = ({
     const rewardsToken1 = token1.address;
     const rewardsToken2 = token2?.address || ADDRESS_ZERO;
 
-    const mmNow = moment();
-    let mmStartTime = moment(startTime.startDate);
-    if (mmNow.isSameOrAfter(mmStartTime)) {
-      mmStartTime = mmNow.add(10, 'minutes');
+    const now = new Date();
+    let dStartTime = new Date(startTime.startDate);
+    if (isSameDay(now, dStartTime)) {
+      dStartTime = add(now, { minutes: 10 });
     }
-    const mmEndTime = moment(endTime.startDate);
+    const tsStartTime = getUnixTime(dStartTime);
+    const tsEndTime = getUnixTime(new Date(endTime.startDate));
 
-    const mmHarvestStartTime = harvestStartTime?.startDate
-      ? moment(harvestStartTime.startDate).unix()
+    const tsHarvestStartTime = harvestStartTime?.startDate
+      ? getUnixTime(new Date(harvestStartTime.startDate))
       : 0;
-    const mmDepositEndTime = depositEndTime?.startDate
-      ? moment(depositEndTime.startDate).unix()
+    const tsDepositEndTime = depositEndTime?.startDate
+      ? getUnixTime(new Date(depositEndTime.startDate))
       : 0;
 
     const settings: merlinPoolFactoryContract.MerlinPoolSettings = {
-      startTime: mmStartTime.unix() + '',
-      endTime: mmEndTime.unix() + '',
-      harvestStartTime: mmHarvestStartTime + '',
-      depositEndTime: mmDepositEndTime + '',
+      startTime: tsStartTime + '',
+      endTime: tsEndTime + '',
+      harvestStartTime: tsHarvestStartTime + '',
+      depositEndTime: tsDepositEndTime + '',
       description,
     };
 
@@ -167,10 +172,7 @@ const CreateMerlinModal = ({
       }
 
       const nMinDepositAmount = Number(minDepositAmount);
-      if (
-        Number.isNaN(nMinDepositAmount) ||
-        nMinDepositAmount < 0
-      ) {
+      if (Number.isNaN(nMinDepositAmount) || nMinDepositAmount < 0) {
         customToast({
           message: 'Please input valid min deposit amount',
           type: 'error',
@@ -178,13 +180,15 @@ const CreateMerlinModal = ({
         return;
       }
 
-      const mmMinLockEndTime = minLockEndTime?.startDate
-      ? moment(minLockEndTime.startDate).unix()
-      : 0;
+      const tsMinLockEndTime = minLockEndTime?.startDate
+        ? getUnixTime(new Date(minLockEndTime.startDate))
+        : 0;
 
       settings.lockDurationReq = daysToSeconds(nMinLockDuration) + '';
-      settings.lockEndReq = mmMinLockEndTime + '';
-      settings.depositAmountReq = BigNumber(nMinDepositAmount).times(BigNumber(10).pow(lpTokenDecimals)).toString();
+      settings.lockEndReq = tsMinLockEndTime + '';
+      settings.depositAmountReq = BigNumber(nMinDepositAmount)
+        .times(BigNumber(10).pow(lpTokenDecimals))
+        .toString();
       settings.whitelist = isWhitelist;
     } else {
       settings.lockDurationReq = '0';
@@ -196,7 +200,7 @@ const CreateMerlinModal = ({
     startLoadingTx({
       tokenPairs: token1Symbol + ' - ' + token2Symbol,
       title: 'Creating Merlin Pool ...',
-      message: 'Confirming your transaction. Please wait.'
+      message: 'Confirming your transaction. Please wait.',
     });
 
     const txResult = await merlinPoolFactoryContract.createMerlinPool(
@@ -338,7 +342,11 @@ const CreateMerlinModal = ({
             useRange={false}
             asSingle={true}
             value={endTime}
-            minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
+            minDate={
+              startTime
+                ? add(new Date((startTime as any).startDate), { days: 1 })
+                : new Date()
+            }
             onChange={(newVal: any) => {
               setEndTime(newVal);
             }}
@@ -350,7 +358,11 @@ const CreateMerlinModal = ({
             useRange={false}
             asSingle={true}
             value={harvestStartTime}
-            minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
+            minDate={
+              startTime
+                ? add(new Date((startTime as any).startDate), { days: 1 })
+                : new Date()
+            }
             onChange={(newVal: any) => setHarvestStartTime(newVal)}
           />
         </div>
@@ -360,7 +372,11 @@ const CreateMerlinModal = ({
             useRange={false}
             asSingle={true}
             value={depositEndTime}
-            minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
+            minDate={
+              startTime
+                ? add(new Date((startTime as any).startDate), { days: 1 })
+                : new Date()
+            }
             onChange={(newVal: any) => setDepositEndTime(newVal)}
           />
         </div>
@@ -396,7 +412,8 @@ const CreateMerlinModal = ({
                 </Button>
                 <input
                   className="w-[100px] bg-blue-opacity-50 rounded-mdh-[52px] pl-4 text-[15px] text-[#FFAF1D] font-semibold py-2 focus:outline-none placeholder-[#667085]"
-                  placeholder="0" value={minLockDuration}
+                  placeholder="0"
+                  value={minLockDuration}
                   onChange={(ev) => setMinLockDuration(ev.target.value)}
                 />
                 <div className="flex items-center rounded-md bg-blue-opacity-50 w-[80px] justify-end px-6 py-2">
@@ -418,7 +435,11 @@ const CreateMerlinModal = ({
                 useRange={false}
                 asSingle={true}
                 value={minLockEndTime}
-                minDate={startTime ? moment((startTime as any).startDate).add(1, 'day').toDate() : new Date()}
+                minDate={
+                  startTime
+                    ? add(new Date((startTime as any).startDate), { days: 1 })
+                    : new Date()
+                }
                 onChange={(newVal: any) => setMinLockEndTime(newVal)}
               />
             </div>
@@ -451,11 +472,7 @@ const CreateMerlinModal = ({
           <Button
             className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
             onClick={handleCreateMerlinPool}
-            disabled={
-              !userAddress ||
-              !token1 ||
-              !startTime || !endTime
-            }
+            disabled={!userAddress || !token1 || !startTime || !endTime}
           >
             Create
           </Button>

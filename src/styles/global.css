@@ -67,7 +67,7 @@ body {
 .hoverItem:hover svg path {
   stroke: #ffc700;
 }
-.active svg path {
+.active svg path, .active svg circle, .active svg ellipse {
   stroke: #ffc700;
 }
 

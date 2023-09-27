@@ -13,6 +13,7 @@ import {
 } from '@/utils/constants';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import Notification from '@/components/notification/Notification';
 import Staked from './components/Staked';
 import NotStaked from './components/NotStaked';
 import ApyCalculatorModal from '@/components/modal/ApyCalculatorModal';
@@ -32,6 +33,10 @@ import HarvestModal from '@/components/modal/HarvestModal';
 import LockPositionModal from '@/components/modal/LockPositionModal';
 import BoostPositionModal from '@/components/modal/BoostPositionModal';
 import PoolInfoModal from '@/components/modal/PoolInfoModal';
+import { waitForTransaction } from '@wagmi/core';
+import { useLoading } from '@/context/LoadingContext';
+import { useSWRConfig } from 'swr';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -41,7 +46,10 @@ const PoolDetail = () => {
   } = router.query;
 
   const { address: userAddress } = useAccount();
+  const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { mutate } = useSWRConfig();
 
+  const [ successful, setSuccessful ] = useState<boolean | undefined>(undefined);
   const [nftPoolAddress, setNftPoolAddress] = useState<Address>(ADDRESS_ZERO);
   const [token1Symbol, setToken1Symbol] = useState<string>('');
   const [token2Symbol, setToken2Symbol] = useState<string>('');
@@ -75,8 +83,55 @@ const PoolDetail = () => {
     setOpenApyCalculator(!isOpenApyCalculator);
   };
 
-  const toggleOpenCreatePosition = () => {
-    setOpenCreatePosition(!isOpenCreatePosition);
+  const handleCreateStakingPosition = async () => {
+    if (isOpenCreatePosition) {
+      setOpenCreatePosition(false);
+      return;
+    }
+
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (nftPoolAddress === ADDRESS_ZERO) {
+      setSuccessful(undefined);
+      startLoadingTx({
+        tokenPairs: token1Symbol + ' - ' + token2Symbol,
+        title: 'Creating spNFT pool ...',
+        message: 'Confirming your transaction. Please wait.',
+      });
+
+      const createPoolRes = await nftPoolFactoryContract.createPool(
+        userAddress,
+        {
+          lpTokenAddress: pairAddress as Address,
+        }
+      );
+
+      if (!createPoolRes) {
+        stopLoadingTx();
+        setSuccessful(false);
+        return;
+      }
+
+      const hash = createPoolRes.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      
+      setSuccessful(true);
+      mutate(allNftPoolsKey);
+      stopLoadingTx();
+      customToast({
+        message: 'Initialized spNFT pool successfully',
+        type: 'success',
+      });
+    }
+
+    setOpenCreatePosition(true);
   };
 
   console.log({ nftPoolAddress });
@@ -167,7 +222,7 @@ const PoolDetail = () => {
 
     getPoolInfo(pairAddress as Address);
     getUserStakedPositions();
-  }, [router.isReady, userAddress, nftPoolAddress]);
+  }, [router.isReady, userAddress, nftPoolAddress, successful]);
 
   const handleClickBtnContract = () => {
     if (nftPoolAddress !== ADDRESS_ZERO) {
@@ -176,11 +231,12 @@ const PoolDetail = () => {
       customToast({
         message:
           'This liquidity pool has not been initialized with a spNFT contract yet',
-        type: 'info',
+        type: 'warning',
       });
     }
   };
 
+  const isFirstSpMinter = nftPoolAddress === ADDRESS_ZERO;
   const isStaked = !!userSpNfts?.length;
 
   return (
@@ -287,7 +343,7 @@ const PoolDetail = () => {
       />
       <CreatePositionModal
         isOpen={isOpenCreatePosition}
-        toggleOpen={toggleOpenCreatePosition}
+        toggleOpen={handleCreateStakingPosition}
         lpAddress={pairAddress as Address}
         nftPoolAddress={nftPoolAddress}
         token1Data={{
@@ -386,7 +442,8 @@ const PoolDetail = () => {
             token1Logo={token1Logo}
             token2Logo={token2Logo}
             listSpNfts={userSpNfts}
-            toggleOpenCreatePosition={toggleOpenCreatePosition}
+            isFirstSpMinter={isFirstSpMinter}
+            toggleOpenCreatePosition={handleCreateStakingPosition}
             toggleAddToPosition={toggleAddToPosition}
             toggleHarvestPosition={toggleHarvestPosition}
             toggleWithdrawPosition={toggleWithdrawPosition}
@@ -396,7 +453,15 @@ const PoolDetail = () => {
             setSpNFTTokenId={setSpNFTTokenId}
           />
         ) : (
-          <NotStaked toggleOpenCreatePosition={toggleOpenCreatePosition} />
+          <NotStaked toggleOpenCreatePosition={handleCreateStakingPosition}
+          isFirstSpMinter={isFirstSpMinter} />
+        )}
+        {isFirstSpMinter && (
+          <Notification
+            message="The spNFT for this asset has not been created yet! You will need to initialize the spNFT contract first."
+            type="info"
+            className="mt-3 mb-6"
+          />
         )}
       </div>
     </>
