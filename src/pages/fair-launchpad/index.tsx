@@ -20,7 +20,7 @@ import {
   formRoadmapSchema,
   formSocialMediaSchema,
   formTokenSchema,
-} from './validation/FormSchema';
+} from '../../utils/validation/FormSchema';
 const Launchpad = () => {
   const [step, setStep] = useState(1);
   const [formValues, setFormValues] = useState({
