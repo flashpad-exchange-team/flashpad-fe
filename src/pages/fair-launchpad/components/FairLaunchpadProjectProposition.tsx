@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { FormHandler } from '..';
 
-const FairLaunchpadProjectProposition = ({
+interface FairLaunchpadProps {
+  values: {
+    brieflyProblemProjectSolves: string;
+    valueYourProject: string;
+  };
+  handleChange: FormHandler;
+  error: (value: string) => (string | undefined)[];
+}
+
+const FairLaunchpadProjectProposition: FC<FairLaunchpadProps> = ({
   values,
   handleChange,
   error,
-}: any) => {
+}) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">

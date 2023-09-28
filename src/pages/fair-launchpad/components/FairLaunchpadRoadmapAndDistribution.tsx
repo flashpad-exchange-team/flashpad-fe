@@ -1,11 +1,22 @@
 import Pencil from '@/icons/Pencil';
-import React from 'react';
+import React, { FC } from 'react';
+import { FormHandler } from '..';
 
-const FairLaunchpadRoadmapAndDistribution = ({
+interface FairLaunchpadProps {
+  values: {
+    roadMapLink: string;
+    roadMapInfo: string;
+    tokenomicLink: string;
+  };
+  handleChange: FormHandler;
+  error: (value: string) => (string | undefined)[];
+}
+
+const FairLaunchpadRoadmapAndDistribution: FC<FairLaunchpadProps> = ({
   values,
   handleChange,
   error,
-}: any) => {
+}) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">

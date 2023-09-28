@@ -21,6 +21,17 @@ import {
   formSocialMediaSchema,
   formTokenSchema,
 } from '../../utils/validation/FormSchema';
+export interface FormEvent {
+  target: {
+    name: string;
+    value: any;
+  };
+}
+
+export interface FormHandler {
+  (event: FormEvent): void;
+}
+
 const Launchpad = () => {
   const [step, setStep] = useState(1);
   const [formValues, setFormValues] = useState({
@@ -50,7 +61,7 @@ const Launchpad = () => {
     documentsLegal: '',
   });
   const [validationError, setValidationError] = useState<any>('');
-  const handleChange = (e: any) => {
+  const handleChange: FormHandler = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };

@@ -1,11 +1,21 @@
 import Pencil from '@/icons/Pencil';
-import React from 'react';
+import React, { FC } from 'react';
+import { FormHandler } from '..';
+interface FairLaunchpadProps {
+  values: {
+    teamName: string;
+    teamEmail: string;
+    teamExp: string;
+  };
+  handleChange: FormHandler;
+  error: (value: string) => (string | undefined)[];
+}
 
-const FairLaunchpadProjectTeamInformation = ({
+const FairLaunchpadProjectTeamInformation: FC<FairLaunchpadProps> = ({
   values,
   handleChange,
   error,
-}: any) => {
+}) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">

@@ -1,7 +1,23 @@
 import Pencil from '@/icons/Pencil';
-import React from 'react';
+import React, { FC } from 'react';
+import { FormHandler } from '..';
 
-const FairLaunchpadProjectDetail = ({ values, handleChange, error }: any) => {
+interface FairLaunchpadProps {
+  values: {
+    projectName: string;
+    projectWebsite: string;
+    projectDescription: string;
+    projectCategory: string;
+  };
+  handleChange: FormHandler;
+  error: (value: string) => (string | undefined)[];
+}
+
+const FairLaunchpadProjectDetail: FC<FairLaunchpadProps> = ({
+  values,
+  handleChange,
+  error,
+}) => {
   return (
     <>
       <div className="text-2xl text-bold text-center mt-6">
