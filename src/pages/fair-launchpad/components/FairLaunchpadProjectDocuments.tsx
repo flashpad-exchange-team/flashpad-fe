@@ -1,9 +1,10 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-export const FairLaunchpadProjectDocuments = ({
+const FairLaunchpadProjectDocuments = ({
   values,
   handleChange,
+  error,
 }: any) => {
   return (
     <>
@@ -24,6 +25,7 @@ export const FairLaunchpadProjectDocuments = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsWhitepaper')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -39,6 +41,7 @@ export const FairLaunchpadProjectDocuments = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsPitchDeck')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -56,6 +59,7 @@ export const FairLaunchpadProjectDocuments = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsTechnical')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -73,6 +77,7 @@ export const FairLaunchpadProjectDocuments = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000]">{error('documentsLegal')}</div>
           </div>
         </div>
       </div>

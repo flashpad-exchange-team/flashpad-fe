@@ -4,7 +4,7 @@ import PieChart from '@/icons/PieChart';
 import SaleIcon from '@/icons/SaleIcon';
 import Search from '@/icons/Search';
 import React from 'react';
-import AnalyticsChart from 'public/assets/images/AnalyticsChart.png';
+import AnalyticsChart from 'public/assets/images/analytics-chart.png';
 import Image from 'next/image';
 import { Button } from '@/components/button/Button';
 import BNBICon from '@/icons/BNBIcon';

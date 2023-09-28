@@ -54,7 +54,7 @@ const MENU_ITEMS = [
       {
         name: 'Positions',
         path: '/positions',
-        icon: <TokenMintIcon width="18px" height="18px" />
+        icon: <TokenMintIcon width="18px" height="18px" />,
       },
       {
         name: 'Genesis Pool',
@@ -101,6 +101,23 @@ const MENU_ITEMS = [
     iconActive: <AnalyticsIcon active />,
     name: 'Analytics',
     path: '/analytics',
+    // subMenu: [
+    //   {
+    //     name: 'Analytics',
+    //     path: '/analytics',
+    //     icon: <SwapIcon />,
+    //   },
+    //   {
+    //     name: 'Analytics token',
+    //     path: '/analytics-token',
+    //     icon: <Liquidity width="18px" />,
+    //   },
+    //   {
+    //     name: 'Analytics pair',
+    //     path: '/analytics-pair',
+    //     icon: <Swap width="18px" />,
+    //   },
+    // ],
   },
   {
     icon: <AddIcon />,

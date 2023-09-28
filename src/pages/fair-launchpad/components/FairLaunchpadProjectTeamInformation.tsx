@@ -1,9 +1,10 @@
 import Pencil from '@/icons/Pencil';
 import React from 'react';
 
-export const FairLaunchpadProjectTeamInformation = ({
+const FairLaunchpadProjectTeamInformation = ({
   values,
   handleChange,
+  error,
 }: any) => {
   return (
     <>
@@ -24,6 +25,7 @@ export const FairLaunchpadProjectTeamInformation = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('teamName')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -39,6 +41,7 @@ export const FairLaunchpadProjectTeamInformation = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('teamEmail')}</div>
           </div>
         </div>
         <div className="w-full">
@@ -56,6 +59,7 @@ export const FairLaunchpadProjectTeamInformation = ({
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
+            <div className="text-[#FF0000] pl-3">{error('teamExp')}</div>
           </div>
         </div>
       </div>
