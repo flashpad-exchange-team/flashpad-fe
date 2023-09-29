@@ -14,6 +14,7 @@ import BigNumber from 'bignumber.js';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { waitForTransaction } from '@wagmi/core';
 import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import Image from 'next/image';
 
 export interface AddToPositionModalProps {
   toggleOpen: () => void;
@@ -113,7 +114,7 @@ const AddToPositionModal = ({
     setAddAmount('0');
   };
   const currentSPNFT = listSpNfts?.find(
-    (item: any) => item.tokenId === spNFTTokenId
+    (item: any) => item.tokenId == spNFTTokenId
   );
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="600px">
@@ -121,10 +122,30 @@ const AddToPositionModal = ({
         <div className="text-sm mx-auto flex items-center justify-center">
           <div className="relative -mt-[30px]">
             <div className="absolute">
-              <BNBICon size={34} />
+              {token1Data?.logo ? (
+                <Image
+                  alt="logo"
+                  src={token1Data?.logo as any}
+                  width={34}
+                  height={34}
+                  className="max-w-[unset]"
+                />
+              ) : (
+                <BNBICon size="34" />
+              )}
             </div>
-            <div className="absolute left-[25px]">
-              <BNBICon size={34} />
+            <div className="absolute left-[22px]">
+              {token2Data?.logo ? (
+                <Image
+                  alt="logo"
+                  src={token2Data?.logo as any}
+                  width={34}
+                  height={34}
+                  className="max-w-[unset]"
+                />
+              ) : (
+                <BNBICon size="34" />
+              )}{' '}
             </div>
           </div>
           <div className="ml-[70px]">

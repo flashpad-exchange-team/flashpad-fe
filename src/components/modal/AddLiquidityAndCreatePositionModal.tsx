@@ -175,7 +175,6 @@ const AddLiquidityAndCreatePositionModal = ({
         .bnQuote(BigNumber(token2AmountIn), reserve2, reserve1)
         .toFixed(0, BigNumber.ROUND_DOWN);
     }
-    console.log({ token1AmountIn, token2AmountIn });
 
     if (token1Symbol != 'ETH') {
       const token1Allowance = (await erc20TokenContract.erc20Read(

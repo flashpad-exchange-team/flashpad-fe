@@ -46,7 +46,6 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   togglePoolInfo,
   setSpNFTTokenId,
 }) => {
-  console.log({ listSpNfts });
   const [harvestAllOff, setHarvestAllOff] = useState<boolean>(true);
 
   const handleHarvestAll = async () => {

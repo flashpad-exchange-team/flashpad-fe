@@ -21,7 +21,6 @@ export const getNFTsOwnedByAddress = async (
       headers: headers,
       params: queryParams,
     });
-    console.log('getNFTsOwnedByAddress:', response.data);
 
     const tokens = response.data.tokens || [];
     return tokens.map((e: any) => e.token)

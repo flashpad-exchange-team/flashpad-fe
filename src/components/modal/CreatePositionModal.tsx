@@ -12,6 +12,7 @@ import { waitForTransaction } from '@wagmi/core';
 import {
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
+  daysToSeconds,
   // daysToSeconds,
 } from '@/utils/constants';
 import BigNumber from 'bignumber.js';
@@ -21,6 +22,7 @@ import * as nftPoolContract from '@/utils/nftPoolContract';
 import { useLoading } from '@/context/LoadingContext';
 import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
 import DividerDown from '@/icons/DividerDown';
+import * as web3Helpers from '@/utils/web3Helpers';
 
 export interface CreatePositionModalProps {
   isOpen: boolean;
@@ -57,6 +59,7 @@ const CreatePositionModal = ({
   refetchData,
 }: CreatePositionModalProps) => {
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  console.log({ nftPoolAddress });
 
   const { address: userAddress } = useAccount();
   const [lockTime, setLockTime] = useState(DEFAULT_TIME_LOCK);
@@ -153,12 +156,16 @@ const CreatePositionModal = ({
       const txReceipt = await waitForTransaction({ hash: approveHash });
       console.log({ txReceipt });
     }
+    const { timestamp } = await web3Helpers.getBlock();
 
     const txResult = await nftPoolContract.write(
       userAddress,
       nftPoolAddress!,
       'createPosition',
-      [bnStakeAmountParsed, '30']
+      [
+        bnStakeAmountParsed,
+        (timestamp as bigint) + daysToSeconds(nLockTime) + '',
+      ]
     );
 
     if (!txResult) {
@@ -172,7 +179,7 @@ const CreatePositionModal = ({
     refetchData();
     resetInput();
     stopLoadingTx();
-
+    toggleOpen();
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
         action: 'created staked position',

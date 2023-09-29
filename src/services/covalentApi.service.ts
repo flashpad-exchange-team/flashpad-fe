@@ -21,7 +21,6 @@ export const getNFTsOwnedByAddress = async (
     const nftContractBalance = response.data?.items?.find((it) =>
       it.contract_address.toLowerCase() === erc721Contract.toLowerCase()
     );
-    console.log(nftContractBalance);
     return nftContractBalance?.nft_data || [];
   } catch (error) {
     console.error(error);

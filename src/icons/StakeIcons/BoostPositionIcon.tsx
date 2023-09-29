@@ -1,7 +1,6 @@
 import { Tooltip } from 'react-tooltip';
 
 const BoostPositionIcon = ({ onClick, active, amount }: any) => {
-  console.log({ amount, active });
   return (
     <div
       data-tooltip-id="my-tooltip"

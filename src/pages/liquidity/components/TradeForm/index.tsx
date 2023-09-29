@@ -73,7 +73,7 @@ const TradeForm = ({
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
-  const { mutate } = useSWRConfig()
+  const { mutate } = useSWRConfig();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isOpenSetting, setOpenSetting] = useState<boolean>(false);
@@ -215,7 +215,10 @@ const TradeForm = ({
       .pow(balanceToken1?.decimals!)
       .times(BigNumber(token1Amount));
     let adjustedToken2Amount;
-    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+    if (
+      !pairToken1 ||
+      (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()
+    ) {
       // adjustedToken2Amount = reserve2.times(bnToken1Amount).div(reserve1);
       adjustedToken2Amount = web3Helpers.bnQuote(
         bnToken1Amount,
@@ -245,7 +248,10 @@ const TradeForm = ({
       .pow(balanceToken2?.decimals!)
       .times(BigNumber(token2Amount));
     let adjustedToken1Amount;
-    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+    if (
+      !pairToken1 ||
+      (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()
+    ) {
       // adjustedToken1Amount = reserve1.times(bnToken2Amount).div(reserve2);
       adjustedToken1Amount = web3Helpers.bnQuote(
         bnToken2Amount,
@@ -318,7 +324,10 @@ const TradeForm = ({
     let reserve1, reserve2;
     const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
     const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
-    if (!pairToken1 || (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()) {
+    if (
+      !pairToken1 ||
+      (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()
+    ) {
       reserve1 = reserveA;
       reserve2 = reserveB;
     } else {
@@ -339,7 +348,6 @@ const TradeForm = ({
         .bnQuote(BigNumber(token2AmountIn), reserve2, reserve1)
         .toFixed(0, BigNumber.ROUND_DOWN);
     }
-    console.log({ token1AmountIn, token2AmountIn });
 
     if (token1.symbol != 'ETH') {
       const token1Allowance = (await erc20TokenContract.erc20Read(

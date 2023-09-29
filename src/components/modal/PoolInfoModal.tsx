@@ -1,20 +1,20 @@
-import DividerDown from '@/icons/DividerDown';
-import CloseIcon from '@/icons/CloseIcon';
-import { Button } from '../button/Button';
-import CommonModal from './CommonModal';
-import BNBICon from '@/icons/BNBIcon';
-import DownloadIcon from '@/icons/DownloadIcon';
-import Eligibility from '@/icons/Eligibility';
-import Withdrawal from '@/icons/Withdrawal';
-import Lock from '@/icons/Lock';
-import LaunchPadIcon from '@/icons/LaunchpadIcon';
-import ChartBreakoutIcon from '@/icons/ChartBreakoutIcon';
-import CreditCardMerge from '@/icons/CreditCardMerge';
-import CreditCardSplit from '@/icons/CreditCardSplit';
 import ArrowDown from '@/icons/ArrowDown';
 import ArrowUp from '@/icons/ArrowUp';
+import BNBICon from '@/icons/BNBIcon';
+import ChartBreakoutIcon from '@/icons/ChartBreakoutIcon';
+import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
+import DownloadIcon from '@/icons/DownloadIcon';
+import Eligibility from '@/icons/Eligibility';
+import LaunchPadIcon from '@/icons/LaunchpadIcon';
+import Lock from '@/icons/Lock';
+import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
+import { differenceInSeconds, formatDistance } from 'date-fns';
+import Image from 'next/image';
 import { useState } from 'react';
 import { Address } from 'viem';
+import { Button } from '../button/Button';
+import CommonModal from './CommonModal';
 
 export interface PoolInfoModalProps {
   toggleOpen: () => void;
@@ -34,32 +34,45 @@ export interface PoolInfoModalProps {
   refetchData: () => void;
   spNFTTokenId: string | null;
   listSpNfts: any[];
+  toggleAddToPosition: () => void;
+  toggleWithdrawPosition: () => void;
+  toggleLockPosition: () => void;
+  toggleBoostPosition: () => void;
+  poolInfo: any;
 }
 
 const PoolInfoModal = ({
   toggleOpen,
   isOpen,
-  lpAddress,
-  nftPoolAddress,
   token1Data,
   token2Data,
-  refetchData,
   spNFTTokenId,
   listSpNfts,
+  toggleAddToPosition,
+  toggleWithdrawPosition,
+  toggleLockPosition,
+  toggleBoostPosition,
+  poolInfo,
 }: PoolInfoModalProps) => {
-  console.log({
-    lpAddress,
-    nftPoolAddress,
-    token1Data,
-    token2Data,
-    refetchData,
-    spNFTTokenId,
-    listSpNfts,
-  });
-  const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
+  // const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
   const [isOpenValue, setIsOpenValue] = useState(true);
   const [isOpenApr, setIsOpenApr] = useState(true);
   const [isOpenRewards, setIsOpenRewards] = useState(true);
+  const currentSPNFT = listSpNfts?.find(
+    (item: any) => item.tokenId == spNFTTokenId
+  );
+  const remainingTime =
+    Math.abs(
+      differenceInSeconds(
+        (+currentSPNFT?.stakingPosition?.startLockTime.toString() +
+          +currentSPNFT?.stakingPosition?.lockDuration.toString()) *
+          1000,
+        new Date()
+      )
+    ) || 0;
+  const duration = formatDistance(0, remainingTime, { includeSeconds: true });
+  console.log({ poolInfo });
+
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="text-sm">
@@ -67,10 +80,30 @@ const PoolInfoModal = ({
           <div className="text-sm mx-auto flex items-center justify-center">
             <div className="relative -mt-[30px]">
               <div className="absolute">
-                <BNBICon size={34} />
+                {token1Data?.logo ? (
+                  <Image
+                    alt="logo"
+                    src={token1Data?.logo as any}
+                    width={34}
+                    height={34}
+                    className="max-w-[unset]"
+                  />
+                ) : (
+                  <BNBICon size="34" />
+                )}
               </div>
-              <div className="absolute left-[25px]">
-                <BNBICon size={34} />
+              <div className="absolute left-[22px]">
+                {token2Data?.logo ? (
+                  <Image
+                    alt="logo"
+                    src={token2Data?.logo as any}
+                    width={34}
+                    height={34}
+                    className="max-w-[unset]"
+                  />
+                ) : (
+                  <BNBICon size="34" />
+                )}{' '}
               </div>
             </div>
             <div className="ml-[70px]">
@@ -88,51 +121,82 @@ const PoolInfoModal = ({
         {/* <div className="text-[24px] text-center text-2xl mb-2">
           $0.3 - <span className="text-[#E6B300]">1.43%</span> APR
         </div> */}
-        <div className="text-center mb-2 mt-2">
-          This position has 0% pending farming rewards
+        <div className="text-center mb-3 mt-2">
+          This position has {currentSPNFT?.pendingRewards} pending farming
+          rewards
         </div>
-        <div className="flex px-10 py-2 justify-around">
-          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
-            <DownloadIcon stroke={'#FFAF1D'} />
+        <div className="flex px-10 justify-center gap-6">
+          <div>
+            <div
+              className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
+              onClick={toggleAddToPosition}
+            >
+              <DownloadIcon stroke={'#FFAF1D'} />
+            </div>
+            <div className="text-xs mt-2 text-center">Add</div>
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
-            <Withdrawal />
+          <div>
+            <div
+              className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
+              onClick={toggleWithdrawPosition}
+            >
+              <WithdrawPositionIcon />
+            </div>
+            <div className="text-xs mt-2 text-center">Withdraw</div>
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
-            <Lock />
+          <div>
+            <div
+              className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
+              onClick={toggleLockPosition}
+            >
+              <Lock />
+            </div>
+            <div className="text-xs mt-2 text-center">Lock</div>
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
-            <LaunchPadIcon active={true} />
+          <div>
+            <div
+              className="px-5 py-4 flex justify-center bg-blue-opacity-50  rounded-md h-[54px] items-center"
+              onClick={toggleBoostPosition}
+            >
+              <LaunchPadIcon active={true} />
+            </div>
+            <div className="text-xs mt-2 text-center">Boost</div>
           </div>
-          <div className="p-4 flex justify-center bg-blue-opacity-50 items-center">
-            <ChartBreakoutIcon stroke="#FFAF1D" />
+          <div>
+            <div
+              className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
+              title="Boost position"
+            >
+              <ChartBreakoutIcon stroke="#FFAF1D" />
+            </div>
+            <div className="text-xs mt-2 text-center">Stake Nitro</div>
           </div>
         </div>
-        <div
-          className="flex justify-center gap-2 mb-2 cursor-pointer"
+        {/* <div
+          className="flex justify-center gap-2 mb-3 mt-4 cursor-pointer"
           onClick={() => setIsOpenMoreAction(!isOpenMoreAction)}
         >
           <div>More action</div>
           {isOpenMoreAction ? (
-            <ArrowDown stroke="#fff" />
-          ) : (
             <ArrowUp stroke="#fff" />
+          ) : (
+            <ArrowDown stroke="#fff" />
           )}
         </div>
         {isOpenMoreAction && (
-          <div className="flex px-20 py-2 justify-around mb-2">
-            <div className="p-4 ml-15 flex justify-center bg-blue-opacity-50">
+          <div className="flex px-20 py-2 justify-center gap-6 mb-3">
+            <div className="px-5 py-4 rounded-md h-[54px] items-center ml-15 flex justify-center bg-blue-opacity-50">
               <CreditCardMerge />
             </div>
-            <div className="p-4 flex justify-center bg-blue-opacity-50">
+            <div className="px-5 py-4 rounded-md h-[54px] items-center flex justify-center bg-blue-opacity-50">
               <CreditCardSplit />
             </div>
-            <div className="p-4 mr-15 flex justify-center bg-blue-opacity-50">
+            <div className="px-5 py-4 rounded-md h-[54px] items-center mr-15 flex justify-center bg-blue-opacity-50">
               <CreditCardMerge />
             </div>
           </div>
-        )}
-        <div className="p-2 bg-blue-opacity-50 ">
+        )} */}
+        <div className="p-3 bg-blue-opacity-50 rounded-md mt-3 ">
           <div className="text-[#fff]">Properties</div>
         </div>
         <div className="flex justify-between items-center my-2">
@@ -147,11 +211,14 @@ const PoolInfoModal = ({
             <Eligibility />
             <div className="pl-2">
               <div>Locked</div>
-              <div className="text-xs text-secondary">1.61x Multiplier</div>
+              <div className="text-xs text-secondary">
+                {currentSPNFT?.stakingPosition?.lockMultiplier?.toString()}x
+                Multiplier
+              </div>
             </div>
           </div>
           <div className="flex flex-col items-end">
-            <div>110D 21D 26min 35s</div>
+            <div>{duration}</div>
             <div className="text-xs text-secondary">Remaining time</div>
           </div>
         </div>

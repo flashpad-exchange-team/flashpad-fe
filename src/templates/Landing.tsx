@@ -2,14 +2,19 @@ import JoinButton from '@/icons/JoinButton';
 import JoinButtonActive from '@/icons/JoinButtonActive';
 import PullSword from '@/public/assets/images/pull-sword.png';
 import UpSword from '@/public/assets/images/up-sword.png';
-
+import { Red_Rose } from 'next/font/google';
+import { Button } from '@/components/button/Button';
 import ListSocial from '@/components/listSocial/ListSocial';
+import WhitePaperIcon from '@/icons/WhitePaperIcon';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Header } from '../layout/header/Header';
 import { Logo } from './Logo';
-
+const redRose = Red_Rose({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+});
 const Landing = () => {
   const [isHover, setIsHover] = useState(false);
 
@@ -34,10 +39,23 @@ const Landing = () => {
           />
         </div>
         <div className="relative w-full xl:w-auto pt-32">
-          <div className="text-primary text-[36px] leading-9 font-bold mb-6 uppercase font-rem xl:max-w-[500px] text-center xl:text-left">
-            Be the King of Your Own Legend
+          <div
+            className={
+              'text-primary text-[52px] leading-9 font-bold mb-3 uppercase  xl:max-w-[500px] text-center xl:text-left ' +
+              redRose.className
+            }
+          >
+            Be the King
           </div>
-          <div className="text-white text-base xl:text-lg leading-6 xl:leading-7 font-semibold xl:max-w-[600px] text-center xl:text-left">
+          <div
+            className={
+              'text-white text-[36px] leading-9 font-bold mb-6 uppercase  xl:max-w-[500px] text-center xl:text-left ' +
+              redRose.className
+            }
+          >
+            of Your Own Legend
+          </div>
+          <div className="text-white text-base xl:text-lg leading-6 xl:leading-7 font-[500] xl:max-w-[600px] text-center xl:text-left">
             Introducing Arthur Exchange: Where Linea's potential meets DeFi
             innovation. A unified platform merging a Decentralized Exchange and
             Launchpad, Arthur Exchange empowers Linea's community for seamless
@@ -62,20 +80,36 @@ const Landing = () => {
       </div>
       <div className="flex-1 bg-transparent xl:bg-dark mt-8 xl:mt-0 text-center pb-6 2xl:pb-0 pt-6 box-content">
         <div className="block text-center">
-          <div className="text-primary text-[36px] font-bold mb-4 font-rem text-center">
+          <div
+            className={
+              'text-primary text-[36px] font-bold mb-2 font-rem text-center ' +
+              redRose.className
+            }
+          >
             GET READY!
           </div>
           <div>
-            <div className="text-white  text-base xl:text-lg font-semibold ">
+            <div className="text-white  text-base xl:text-lg font-[500] ">
               Arthur Exchange DEX is live on Linea
             </div>
-            <div className="text-white  text-base xl:text-lg font-semibold ">
+            <div className="text-white  text-base xl:text-lg font-[500] ">
               Join our <span className="text-primary">community</span> to find
               out more.
             </div>
           </div>
         </div>
-        <div className="text-center mt-3ss">
+        <div className="flex justify-center mt-4 mb-4 w-full">
+          <Button
+            onClick={() => {
+              window.open('https://docs.arthur.exchange/');
+            }}
+            icon={<WhitePaperIcon />}
+            className="flex px-[42px]"
+          >
+            Whitepaper
+          </Button>
+        </div>
+        <div className="text-center mt-3 ">
           <div className="text-white text-[22px] xl:text-2xl mt-4 xl:mt-0 font-bold mb-1 font-rem">
             Find us on
           </div>

@@ -44,12 +44,13 @@ const PoolDetail = () => {
     pairAddress,
     //...queryParams,
   } = router.query;
+  console.log({ pairAddress });
 
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
   const { mutate } = useSWRConfig();
-
-  const [ successful, setSuccessful ] = useState<boolean | undefined>(undefined);
+  const [poolInfo, setPoolInfo] = useState({} as any);
+  const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
   const [nftPoolAddress, setNftPoolAddress] = useState<Address>(ADDRESS_ZERO);
   const [token1Symbol, setToken1Symbol] = useState<string>('');
   const [token2Symbol, setToken2Symbol] = useState<string>('');
@@ -121,7 +122,7 @@ const PoolDetail = () => {
       const hash = createPoolRes.hash;
       const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
-      
+
       setSuccessful(true);
       mutate(allNftPoolsKey);
       stopLoadingTx();
@@ -134,15 +135,19 @@ const PoolDetail = () => {
     setOpenCreatePosition(true);
   };
 
-  console.log({ nftPoolAddress });
-
   const getPoolInfo = async (pairAddress: Address) => {
-    console.log({ pairAddress });
     const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
-    console.log({ poolAddress });
     if (poolAddress) {
       setNftPoolAddress(poolAddress);
     }
+
+    const poolInfoObj = await nftPoolContract.read(
+      poolAddress as Address,
+      'getPoolInfo',
+      []
+    );
+
+    setPoolInfo(poolInfoObj);
 
     let token1Symbol = 'TOKEN1',
       token2Symbol = 'TOKEN2';
@@ -257,6 +262,11 @@ const PoolDetail = () => {
         refetchData={getUserStakedPositions}
         spNFTTokenId={spNFTTokenId}
         listSpNfts={userSpNfts}
+        toggleAddToPosition={toggleAddToPosition}
+        toggleWithdrawPosition={toggleWithdrawPosition}
+        toggleLockPosition={toggleLockPosition}
+        toggleBoostPosition={toggleBoostPosition}
+        poolInfo={poolInfo}
       />
       <AddToPositionModal
         isOpen={openAddToPosition}
@@ -453,8 +463,10 @@ const PoolDetail = () => {
             setSpNFTTokenId={setSpNFTTokenId}
           />
         ) : (
-          <NotStaked toggleOpenCreatePosition={handleCreateStakingPosition}
-          isFirstSpMinter={isFirstSpMinter} />
+          <NotStaked
+            toggleOpenCreatePosition={handleCreateStakingPosition}
+            isFirstSpMinter={isFirstSpMinter}
+          />
         )}
         {isFirstSpMinter && (
           <Notification

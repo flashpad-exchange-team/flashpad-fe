@@ -1,7 +1,6 @@
 import { Tooltip } from 'react-tooltip';
 
 const LockPositionIcon = ({ onClick, remainingDays }: any) => {
-  console.log({ remainingDays });
   return (
     <div
       data-tooltip-id="my-tooltip"

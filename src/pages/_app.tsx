@@ -10,6 +10,19 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-tooltip/dist/react-tooltip.css';
 
+import LoadingTx from '@/components/loading/LoadingTx';
+import SuccessTx from '@/components/loading/SuccessTx';
+import AppLayout from '@/layout/layouts/AppLayout';
+import HomeLayout from '@/layout/layouts/HomeLayout';
+import {
+  ALCHEMY_MUMBAI_API_KEY,
+  APP_BASED_CHAIN,
+  INFURA_API_KEY,
+} from '@/utils/constants';
+import { alchemyProvider } from '@wagmi/core/providers/alchemy';
+import { infuraProvider } from '@wagmi/core/providers/infura';
+import { Open_Sans } from 'next/font/google';
+import { useRouter } from 'next/router';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
@@ -17,19 +30,6 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { publicProvider } from 'wagmi/providers/public';
-import { alchemyProvider } from '@wagmi/core/providers/alchemy';
-import { infuraProvider } from '@wagmi/core/providers/infura';
-import {
-  ALCHEMY_MUMBAI_API_KEY,
-  INFURA_API_KEY,
-  APP_BASED_CHAIN,
-} from '@/utils/constants';
-import { Open_Sans } from 'next/font/google';
-import LoadingTx from '@/components/loading/LoadingTx';
-import SuccessTx from '@/components/loading/SuccessTx';
-import { useRouter } from 'next/router';
-import HomeLayout from '@/layout/layouts/HomeLayout';
-import AppLayout from '@/layout/layouts/AppLayout';
 
 const { chains, publicClient } = configureChains(
   [lineaTestnet, polygonMumbai],
