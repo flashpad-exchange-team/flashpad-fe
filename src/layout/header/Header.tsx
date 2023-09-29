@@ -2,7 +2,6 @@ import { Button } from '@/components/button/Button';
 import ConnectWalletModal from '@/components/modal/ConnectWalletModal';
 import { useModal } from '@/context/ModalContext';
 import AddIcon from '@/icons/AddIcon';
-import AnalyticsIcon from '@/icons/AnalyticsIcon';
 import ArrowDown from '@/icons/ArrowDown';
 import CrossSword from '@/icons/CrossSword';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
