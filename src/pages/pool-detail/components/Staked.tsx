@@ -143,12 +143,24 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                     </div>
                   </div>
                 </td>
-                <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
+                <td
+                  className="py-4 text-sm px-4 border-b border-[#344054] text-right relative"
+                  onClick={() => {
+                    setSpNFTTokenId(sp?.tokenId + '');
+                    togglePoolInfo();
+                  }}
+                >
                   {new BigNumber(sp?.stakingPosition?.amount || 0)
                     .div(new BigNumber(10).pow(18))
                     .toString(10)}
                 </td>
-                <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
+                <td
+                  className="py-4 text-sm px-4 border-b border-[#344054] text-center"
+                  onClick={() => {
+                    setSpNFTTokenId(sp?.tokenId + '');
+                    togglePoolInfo();
+                  }}
+                >
                   1.48%
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
@@ -173,7 +185,13 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                     />
                   </div>
                 </td>
-                <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
+                <td
+                  className="py-4 text-sm px-4 border-b border-[#344054] text-left"
+                  onClick={() => {
+                    setSpNFTTokenId(sp?.tokenId + '');
+                    togglePoolInfo();
+                  }}
+                >
                   <div>{sp?.pendingRewards}</div>
 
                   {/* <div className="text-secondary text-sm">

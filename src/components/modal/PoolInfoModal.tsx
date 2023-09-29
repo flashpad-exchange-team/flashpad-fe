@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { Address } from 'viem';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
+import BigNumber from 'bignumber.js';
 
 export interface PoolInfoModalProps {
   toggleOpen: () => void;
@@ -224,10 +225,24 @@ const PoolInfoModal = ({
         </div>
         <div className="flex justify-between items-center my-2">
           <div className="flex items-center">
-            <CloseIcon />
-            <div className="pl-2">Unboosted</div>
+            {currentSPNFT?.stakingPosition?.boostPoints > 0 ? (
+              <Eligibility />
+            ) : (
+              <CloseIcon />
+            )}
+            <div className="pl-2">
+              {currentSPNFT?.stakingPosition?.boostPoints > 0
+                ? 'Boosted'
+                : 'Unboosted'}
+            </div>
           </div>
-          <div>-</div>
+          <div>
+            {currentSPNFT?.stakingPosition?.boostPoints > 0
+              ? new BigNumber(currentSPNFT?.stakingPosition?.boostPoints || 0)
+                  .div(new BigNumber(10).pow(18))
+                  .toString(10)
+              : '-'}
+          </div>
         </div>
         <div className="flex justify-between items-center my-2">
           <div className="flex items-center">
