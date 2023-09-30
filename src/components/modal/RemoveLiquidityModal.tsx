@@ -165,15 +165,13 @@ const RemoveLiquidityModal = ({
     let txResult: any;
 
     if (
-      token1Symbol == 'WFTM' ||
       token1Symbol == 'WETH' ||
-      token2Symbol == 'WFTM' ||
       token2Symbol == 'WETH'
     ) {
       let tokenAddress;
       let amountTokenMin;
       let amountETHMin;
-      if (token1Symbol == 'WFTM' || token1Symbol == 'WETH') {
+      if (token1Symbol == 'WETH') {
         tokenAddress = token2Address;
         amountTokenMin = amount2.toString();
         amountETHMin = amount1.toString();

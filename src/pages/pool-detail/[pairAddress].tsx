@@ -174,8 +174,8 @@ const PoolDetail = () => {
       }
     }
 
-    token1Symbol = token1Symbol == 'WFTM' ? 'ETH' : token1Symbol;
-    token2Symbol = token2Symbol == 'WFTM' ? 'ETH' : token2Symbol;
+    token1Symbol = token1Symbol == 'WETH' ? 'ETH' : token1Symbol;
+    token2Symbol = token2Symbol == 'WETH' ? 'ETH' : token2Symbol;
 
     setToken1Symbol(token1Symbol);
     setToken2Symbol(token2Symbol);
