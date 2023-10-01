@@ -4,71 +4,74 @@ import AddIcon from '@/icons/AddIcon';
 import Menu from '@/icons/Menu';
 import Search from '@/icons/Search';
 import TableFarm from './TableFarm';
-const data = [
-  {
-    tvl: '482.85',
-    incentivesToken: 'Token',
-    incentivesLogo:
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token1: 'BNB',
-    token2: 'FUSDC',
-    token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-    apr: '0,7748',
-    totalDeposit: '0',
-    pendingRewards: '0',
-  },
-  {
-    tvl: '482.85',
-    incentivesToken: 'Token',
-    incentivesLogo:
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token1: 'BNB',
-    token2: 'FDOGE',
-    token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-    apr: '0,7748',
-    totalDeposit: '0',
-    pendingRewards: '0',
-  },
-  {
-    tvl: '482.85',
-    incentivesToken: 'Token',
-    incentivesLogo: null,
-    token1: 'WETH',
-    token2: 'UNI',
-    token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-    apr: '0,7748',
-    totalDeposit: '0',
-    pendingRewards: '0',
-  },
-  {
-    tvl: '482.85',
-    incentivesToken: 'Token',
-    incentivesLogo:
-      'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token1: 'NEO',
-    token2: 'UNI',
-    token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-    apr: '0,7748',
-    totalDeposit: '0',
-    pendingRewards: '0',
-  },
-  {
-    tvl: '482.85',
-    incentivesToken: 'Token',
-    incentivesLogo: null,
-    token1: 'BNB',
-    token2: 'UNI',
-    token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-    token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-    apr: '0,7748',
-    totalDeposit: '0',
-    pendingRewards: '0',
-  },
-];
+import { useAccount } from 'wagmi';
+import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
+
+// const data = [
+//   {
+//     tvl: '482.85',
+//     incentivesToken: 'Token',
+//     incentivesLogo:
+//       'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token1: 'BNB',
+//     token2: 'FUSDC',
+//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
+//     apr: '0,7748',
+//     totalDeposit: '0',
+//     pendingRewards: '0',
+//   },
+//   {
+//     tvl: '482.85',
+//     incentivesToken: 'Token',
+//     incentivesLogo:
+//       'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token1: 'BNB',
+//     token2: 'FDOGE',
+//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
+//     apr: '0,7748',
+//     totalDeposit: '0',
+//     pendingRewards: '0',
+//   },
+//   {
+//     tvl: '482.85',
+//     incentivesToken: 'Token',
+//     incentivesLogo: null,
+//     token1: 'WETH',
+//     token2: 'UNI',
+//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
+//     apr: '0,7748',
+//     totalDeposit: '0',
+//     pendingRewards: '0',
+//   },
+//   {
+//     tvl: '482.85',
+//     incentivesToken: 'Token',
+//     incentivesLogo:
+//       'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token1: 'NEO',
+//     token2: 'UNI',
+//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
+//     apr: '0,7748',
+//     totalDeposit: '0',
+//     pendingRewards: '0',
+//   },
+//   {
+//     tvl: '482.85',
+//     incentivesToken: 'Token',
+//     incentivesLogo: null,
+//     token1: 'BNB',
+//     token2: 'UNI',
+//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
+//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
+//     apr: '0,7748',
+//     totalDeposit: '0',
+//     pendingRewards: '0',
+//   },
+// ];
 
 const FILTER_FARM = [
   {
@@ -81,6 +84,10 @@ const FILTER_FARM = [
   },
 ];
 const FarmPoolList = () => {
+  const { address: userAddress } = useAccount();
+
+  const { data, isLoading } = useAllMerlinPoolsData(userAddress);
+
   return (
     <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
       <div className="flex flex-col md:flex-wrap md:flex-row md:items-center md:justify-between md:mb-4">
@@ -122,7 +129,7 @@ const FarmPoolList = () => {
           </div>
         </div>
       </div>
-      <TableFarm data={data} />
+      <TableFarm data={data} loading={isLoading} />
     </div>
   );
 };

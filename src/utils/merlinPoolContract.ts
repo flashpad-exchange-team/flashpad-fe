@@ -15,9 +15,9 @@ export const read = async (
       functionName,
       args,
     });
-    return result;
+    return mapResultArrayToObj(functionName, result);
   } catch (err: any) {
-    handleError(err);
+    console.log(err);
     return undefined;
   }
 };
@@ -44,4 +44,32 @@ export const write = async (
     handleError(err);
     return undefined;
   }
+};
+
+const rewardsTokenResultKeys = [
+  'token',
+  'amount',
+  'remainingAmount',
+  'accRewardsPerShare',
+];
+
+const pendingRewardsResultKeys = [
+  'pending1',
+  'pending2',
+]
+
+const functionResultKeysMap: { [k: string]: string[] } = {
+  'rewardsToken1': rewardsTokenResultKeys,
+  'rewardsToken2': rewardsTokenResultKeys,
+  'pendingRewards': pendingRewardsResultKeys,
+};
+
+const mapResultArrayToObj = (functionName: string, result: any) => {
+  const props = functionResultKeysMap[functionName];
+  if (!props) return result;
+  const resObj: { [k: string]: any } = {};
+  props.forEach((prop, i) => {
+    resObj[prop] = result[i];
+  });
+  return resObj;
 };
