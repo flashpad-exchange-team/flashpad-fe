@@ -11,6 +11,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Header } from '../layout/header/Header';
 import { Logo } from './Logo';
+import BeenBoomLogo from '@/icons/BeenBoomLogo';
+import Ebiz from 'public/assets/images/ebiz-logo.png';
 const redRose = Red_Rose({
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
@@ -71,11 +73,25 @@ const Landing = () => {
             {isHover ? <JoinButton /> : <JoinButtonActive />}
           </div>
           <div
-            className="mt-6 mb-8 w-fit z-10 mx-auto block xl:hidden"
+            className="mt-6 mb-8 w-fit z-10 mx-auto xl:mx-0 block"
             onClick={() => router.push('/swap')}
           >
             <JoinButton />
           </div>
+        </div>
+      </div>
+      <div className="w-full bg-[#FFAF1D] h-30 flex justify-center text-[#0C111D] py-5">
+        <div className="mr-0 md:mr-10 px-4">
+          <div className="text-[16px] font-bold leading-normal mb-2">
+            Founder
+          </div>
+          <BeenBoomLogo />
+        </div>
+        <div className="ml-0 md:ml-10 px-4">
+          <div className="text-[16px] leading-normal font-bold mb-2">
+            CO-Founder
+          </div>
+          <Image src={Ebiz.src} alt="EbizBoom" width={200} height={26} />
         </div>
       </div>
       <div className="flex-1 bg-transparent xl:bg-dark mt-8 xl:mt-0 text-center pb-6 2xl:pb-0 pt-6 box-content">
