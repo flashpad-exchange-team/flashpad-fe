@@ -45,8 +45,8 @@ const useAllNftPoolsData = (userAddress: Address | undefined) => {
           token2Symbol = token1Symbol;
         }
 
-        token1Symbol = token1Symbol == 'WETH' ? 'ETH' : token1Symbol;
-        token2Symbol = token2Symbol == 'WETH' ? 'ETH' : token2Symbol;
+        token1Symbol = (token1Symbol == 'WFTM' || token1Symbol == 'WETH') ? 'ETH' : token1Symbol;
+        token2Symbol = (token2Symbol == 'WFTM' || token2Symbol == 'WETH') ? 'ETH' : token2Symbol;
 
         const token1Logo = CHAINS_TOKENS_LIST.find((e) => {
           return e.symbol === token1Symbol;

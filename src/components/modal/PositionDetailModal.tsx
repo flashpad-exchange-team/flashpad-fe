@@ -17,7 +17,7 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BigNumber from 'bignumber.js';
 
-export interface PoolInfoModalProps {
+export interface PositionDetailModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   lpAddress?: Address;
@@ -39,10 +39,10 @@ export interface PoolInfoModalProps {
   toggleWithdrawPosition: () => void;
   toggleLockPosition: () => void;
   toggleBoostPosition: () => void;
-  poolInfo: any;
+  positionDetail: any;
 }
 
-const PoolInfoModal = ({
+const PositionDetailModal = ({
   toggleOpen,
   isOpen,
   token1Data,
@@ -53,8 +53,8 @@ const PoolInfoModal = ({
   toggleWithdrawPosition,
   toggleLockPosition,
   toggleBoostPosition,
-  poolInfo,
-}: PoolInfoModalProps) => {
+  positionDetail,
+}: PositionDetailModalProps) => {
   // const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
   const [isOpenValue, setIsOpenValue] = useState(true);
   const [isOpenApr, setIsOpenApr] = useState(true);
@@ -72,7 +72,7 @@ const PoolInfoModal = ({
       )
     ) || 0;
   const duration = formatDistance(0, remainingTime, { includeSeconds: true });
-  console.log({ poolInfo });
+  console.log({ positionDetail });
 
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
@@ -392,4 +392,4 @@ const PoolInfoModal = ({
   );
 };
 
-export default PoolInfoModal;
+export default PositionDetailModal;

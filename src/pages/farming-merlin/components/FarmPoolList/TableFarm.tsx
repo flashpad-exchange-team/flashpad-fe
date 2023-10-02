@@ -6,8 +6,12 @@ import LiquidityLockIcon from '@/icons/LiquidityLockIcon';
 import QuestionIcon from '@/icons/QuestionIcon';
 import TokenIcon from '@/icons/TokenIcon';
 import Image from 'next/image';
+import { Tooltip } from 'react-tooltip';
 import { useRouter } from 'next/router';
 import InlineLoading from '@/components/loading/InlineLoading';
+import { secondsToDays } from '@/utils/constants';
+import { IMerlinPoolSettings } from '@/utils/merlinPoolContract';
+import BigNumber from 'bignumber.js';
 
 interface TableFarmProps {
   data: {
@@ -25,6 +29,8 @@ interface TableFarmProps {
     rewardsToken2Logo?: string;
     totalDeposit: string;
     pendingRewards: { pending1: any; pending2: any };
+    poolAddress: string;
+    settings: IMerlinPoolSettings;
     [k: string]: any;
   }[];
   loading: boolean;
@@ -40,11 +46,11 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
             <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
               Pool
             </th>
-            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
-              TVL
-            </th>
             <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
               Incentives
+            </th>
+            <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
+              TVL
             </th>
             <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
               APR
@@ -69,12 +75,15 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
         ) : (
           <tbody>
             {data?.map((item, index: number) => (
-              <tr
-                key={index}
-                className="hover:bg-darkBlue cursor-pointer"
-                onClick={() => router.push('/farm-detail-merlin')}
-              >
-                <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
+              <tr key={index} className="hover:bg-darkBlue cursor-pointer">
+                <td
+                  className="py-4 text-sm px-4 border-b border-[#344054] text-left"
+                  onClick={() => {
+                    if (item?.poolAddress) {
+                      router.push(`/farm-detail-merlin/${item.poolAddress}`);
+                    }
+                  }}
+                >
                   <div className="relative">
                     <div className="absolute">
                       {item?.token1Logo ? (
@@ -105,33 +114,53 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
                     {item?.token1} - {item?.token2}
                   </div>
                 </td>
-                <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
-                  ${item?.tvl}
-                </td>
-                <td className="flex py-4 text-sm px-4 border-b border-[#344054] text-center">
-                  {item?.rewardsToken1Logo ? (
-                    <Image
-                      className="mx-1"
-                      alt="logo"
-                      src={item?.rewardsToken1Logo}
-                      width={25}
-                      height={25}
-                    />
-                  ) : (
-                    <BNBICon className="mx-1" />
-                  )}
-                  {item?.rewardsToken2Symbol &&
-                    (item?.rewardsToken2Logo ? (
+                <td
+                  className="flex py-4 text-sm px-4 border-b border-[#344054] text-center"
+                  onClick={() => {
+                    if (item?.poolAddress) {
+                      router.push(`/farm-detail-merlin/${item.poolAddress}`);
+                    }
+                  }}
+                >
+                  <div
+                    data-tooltip-id="incentiveToken1"
+                    data-tooltip-content={item?.rewardsToken1Symbol}
+                  >
+                    {item?.rewardsToken1Logo ? (
                       <Image
                         className="mx-1"
                         alt="logo"
-                        src={item?.rewardsToken2Logo}
+                        src={item?.rewardsToken1Logo}
                         width={25}
                         height={25}
                       />
                     ) : (
                       <BNBICon className="mx-1" />
-                    ))}
+                    )}
+                    <Tooltip id="incentiveToken1" />
+                  </div>
+                  {item?.rewardsToken2Symbol && (
+                    <div
+                      data-tooltip-id="incentiveToken2"
+                      data-tooltip-content={item?.rewardsToken2Symbol}
+                    >
+                      {item?.rewardsToken2Logo ? (
+                        <Image
+                          className="mx-1"
+                          alt="logo"
+                          src={item?.rewardsToken2Logo}
+                          width={25}
+                          height={25}
+                        />
+                      ) : (
+                        <BNBICon className="mx-1" />
+                      )}
+                      <Tooltip id="incentiveToken2" />
+                    </div>
+                  )}
+                </td>
+                <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
+                  ${item?.tvl}
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                   <div className="flex items-center gap-2 cursor-pointer justify-end">
@@ -140,10 +169,42 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                   <div className="flex items-center gap-2 cursor-pointer justify-center">
-                    <ClockIcon />
-                    <TokenIcon />
-                    <FileIcon />
-                    <LiquidityLockIcon />
+                    <div
+                      data-tooltip-id="lockDurationReq"
+                      data-tooltip-content={`Required lock duration of ${secondsToDays(
+                        item?.settings.lockDurationReq!
+                      )} days`}
+                    >
+                      <ClockIcon />
+                      <Tooltip id="lockDurationReq" />
+                    </div>
+                    <div
+                      data-tooltip-id="depositAmountReq"
+                      data-tooltip-content={`Min deposit amount requirement: ${
+                        BigNumber(item?.settings.depositAmountReq + '').div(
+                          BigNumber(10).pow(18)
+                        ) + ''
+                      }`}
+                    >
+                      <TokenIcon />
+                      <Tooltip id="depositAmountReq" />
+                    </div>
+                    <div
+                      data-tooltip-id="whitelist"
+                      data-tooltip-content={`Whitelist ${
+                        item?.settings.whitelist ? 'enabled' : 'disabled'
+                      }`}
+                    >
+                      <FileIcon />
+                      <Tooltip id="whitelist" />
+                    </div>
+                    <div
+                      data-tooltip-id="lockEndReq"
+                      data-tooltip-content={`Lock end date requirement`}
+                    >
+                      <LiquidityLockIcon />
+                      <Tooltip id="lockEndReq" />
+                    </div>
                   </div>
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">

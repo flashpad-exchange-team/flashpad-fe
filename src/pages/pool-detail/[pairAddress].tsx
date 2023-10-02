@@ -26,7 +26,7 @@ import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
 import HarvestModal from '@/components/modal/HarvestModal';
 import LockPositionModal from '@/components/modal/LockPositionModal';
 import BoostPositionModal from '@/components/modal/BoostPositionModal';
-import PoolInfoModal from '@/components/modal/PoolInfoModal';
+import PositionDetailModal from '@/components/modal/PositionDetailModal';
 import { waitForTransaction } from '@wagmi/core';
 import { useLoading } from '@/context/LoadingContext';
 import { useSWRConfig } from 'swr';
@@ -65,8 +65,8 @@ const PoolDetail = () => {
   const [openBoostPosition, setOpenBoostPosition] = useState<boolean>(false);
   const [isOpenCreatePosition, setOpenCreatePosition] =
     useState<boolean>(false);
-  const [openPoolInfo, setOpenPoolInfo] = useState<boolean>(false);
-  const togglePoolInfo = () => setOpenPoolInfo(!openPoolInfo);
+  const [openPositionDetail, setOpenPositionDetail] = useState<boolean>(false);
+  const togglePositionDetail = () => setOpenPositionDetail(!openPositionDetail);
 
   const toggleAddToPosition = () => setOpenAddToPosition(!openAddToPosition);
   const toggleWithdrawPosition = () =>
@@ -223,9 +223,9 @@ const PoolDetail = () => {
 
   return (
     <>
-      <PoolInfoModal
-        isOpen={openPoolInfo}
-        toggleOpen={togglePoolInfo}
+      <PositionDetailModal
+        isOpen={openPositionDetail}
+        toggleOpen={togglePositionDetail}
         lpAddress={pairAddress as Address}
         nftPoolAddress={nftPoolAddress}
         token1Data={{
@@ -243,7 +243,7 @@ const PoolDetail = () => {
         toggleWithdrawPosition={toggleWithdrawPosition}
         toggleLockPosition={toggleLockPosition}
         toggleBoostPosition={toggleBoostPosition}
-        poolInfo={poolInfo}
+        positionDetail={poolInfo}
       />
       <AddToPositionModal
         isOpen={openAddToPosition}
@@ -436,7 +436,7 @@ const PoolDetail = () => {
             toggleWithdrawPosition={toggleWithdrawPosition}
             toggleLockPosition={toggleLockPosition}
             toggleBoostPosition={toggleBoostPosition}
-            togglePoolInfo={togglePoolInfo}
+            togglePositionDetail={togglePositionDetail}
             setSpNFTTokenId={setSpNFTTokenId}
           />
         ) : (

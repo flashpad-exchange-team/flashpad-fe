@@ -26,7 +26,7 @@ interface PoolDetailStakedProps {
   toggleWithdrawPosition: () => void;
   toggleLockPosition: () => void;
   toggleBoostPosition: () => void;
-  togglePoolInfo: () => void;
+  togglePositionDetail: () => void;
   setSpNFTTokenId: (id: string | null) => void;
 }
 
@@ -43,7 +43,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   toggleWithdrawPosition,
   toggleLockPosition,
   toggleBoostPosition,
-  togglePoolInfo,
+  togglePositionDetail,
   setSpNFTTokenId,
 }) => {
   const [harvestAllOff, setHarvestAllOff] = useState<boolean>(true);
@@ -103,7 +103,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                   className="py-4 text-sm px-4 border-b border-[#344054] text-left"
                   onClick={() => {
                     setSpNFTTokenId(sp?.tokenId + '');
-                    togglePoolInfo();
+                    togglePositionDetail();
                   }}
                 >
                   <div className="relative">
@@ -147,7 +147,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                   className="py-4 text-sm px-4 border-b border-[#344054] text-right relative"
                   onClick={() => {
                     setSpNFTTokenId(sp?.tokenId + '');
-                    togglePoolInfo();
+                    togglePositionDetail();
                   }}
                 >
                   {new BigNumber(sp?.stakingPosition?.amount || 0)
@@ -158,7 +158,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                   className="py-4 text-sm px-4 border-b border-[#344054] text-center"
                   onClick={() => {
                     setSpNFTTokenId(sp?.tokenId + '');
-                    togglePoolInfo();
+                    togglePositionDetail();
                   }}
                 >
                   1.48%
@@ -189,7 +189,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                   className="py-4 text-sm px-4 border-b border-[#344054] text-left"
                   onClick={() => {
                     setSpNFTTokenId(sp?.tokenId + '');
-                    togglePoolInfo();
+                    togglePositionDetail();
                   }}
                 >
                   <div>{sp?.pendingRewards}</div>

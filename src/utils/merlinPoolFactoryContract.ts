@@ -4,7 +4,7 @@ import { publicClient, walletClient } from './web3Clients';
 import { handleError } from './handleError';
 import { MERLIN_POOL_FACTORY_ADDRESS } from './constants';
 
-export interface MerlinPoolSettings {
+export interface MerlinPoolSettingsParams {
   startTime: string;
   endTime: string;
   harvestStartTime?: string;
@@ -40,7 +40,7 @@ export const write = async (
   address: Address,
   functionName: string,
   args: any[],
-  value?: string,
+  value?: string
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
@@ -63,26 +63,21 @@ export interface ICreateMerlinPoolParams {
   nftPoolAddress: Address;
   rewardsToken1: Address;
   rewardsToken2: Address;
-  settings: MerlinPoolSettings;
+  settings: MerlinPoolSettingsParams;
 }
 
 export const createMerlinPool = async (
   account: Address,
-  params: ICreateMerlinPoolParams,
+  params: ICreateMerlinPoolParams
 ) => {
-  console.log({params})
+  console.log({ params });
   const { nftPoolAddress, rewardsToken1, rewardsToken2, settings } = params;
   try {
     const { request, result } = await publicClient.simulateContract({
       address: MERLIN_POOL_FACTORY_ADDRESS as Address,
       abi: MerlinPoolFactoryABI,
       functionName: 'createMerlinPool',
-      args: [
-        nftPoolAddress,
-        rewardsToken1,
-        rewardsToken2,
-        settings,
-      ],
+      args: [nftPoolAddress, rewardsToken1, rewardsToken2, settings],
       account,
     });
     const hash = await walletClient.writeContract(request);

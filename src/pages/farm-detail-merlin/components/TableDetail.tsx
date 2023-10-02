@@ -1,32 +1,21 @@
+import React from 'react';
 import QuestionIcon from '@/icons/QuestionIcon';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { MerlinPoolDetailProps } from './types';
+import BigNumber from 'bignumber.js';
 
 interface TableDetailProps {
-  data?: {
-    tvl: string;
-    incentivesToken: string;
-    incentivesLogo: string;
-    token1: string;
-    token2: string;
-    token1Logo: string;
-    token2Logo: string;
-    apr: string;
-    totalDeposit: string;
-    pendingRewards: string;
-  }[];
+  data: MerlinPoolDetailProps;
 }
 
-const TableDetail: React.FC<TableDetailProps> = () => {
+const TableDetail: React.FC<TableDetailProps> = ({ data }) => {
   const router = useRouter();
+  console.log({ data })
   return (
     <div className="overflow-x-auto mt-8">
       <table className="min-w-full bg-dark">
         <tbody>
-          <tr
-            className="hover:bg-darkBlue cursor-pointer"
-            onClick={() => router.push('/farm-detail-merlin')}
-          >
+          <tr className="hover:bg-darkBlue cursor-pointer">
             <td className="py-4 text-sm font-bold px-4 border-b border-[#344054] text-left w-[120px]">
               Pool
             </td>
@@ -43,11 +32,33 @@ const TableDetail: React.FC<TableDetailProps> = () => {
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
               <div className="text-xs text-lightGray">Pending rewards #1</div>
               <div className="flex gap-1 items-center justify-end">
-                0.7749%
-                <div className="text-xs text-lightGray">($1,75k)</div>
+                {data.rewardsToken1Info?.remainingAmount != undefined
+                  ? BigNumber(data.rewardsToken1Info?.remainingAmount)
+                      .div(BigNumber(10).pow(data.rewardsToken1Decimals))
+                      .toFixed(2)
+                  : '-'}{' '}
+                {data.rewardsToken1Symbol}
+                <div className="text-xs text-lightGray">($1.75k)</div>
               </div>
             </td>
-            <td className="py-4 text-sm px-4 border-b border-[#344054] text-left"></td>
+            <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
+              {data.rewardsToken2Symbol && (
+                <>
+                  <div className="text-xs text-lightGray">
+                    Pending rewards #2
+                  </div>
+                  <div className="flex gap-1 items-center justify-end">
+                    {data.rewardsToken2Info?.remainingAmount != undefined
+                      ? BigNumber(data.rewardsToken2Info?.remainingAmount)
+                          .div(BigNumber(10).pow(data.rewardsToken2Decimals))
+                          .toFixed(2)
+                      : '-'}{' '}
+                    {data.rewardsToken2Symbol}
+                    <div className="text-xs text-lightGray">($1.75k)</div>
+                  </div>
+                </>
+              )}
+            </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right "></td>
           </tr>
           <tr

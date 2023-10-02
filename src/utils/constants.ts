@@ -182,6 +182,10 @@ export const daysToSeconds = (days: number) => {
   return BigInt(days * 86400);
 };
 
+export const secondsToDays = (seconds: number | string | BigInt) => {
+  return Number(seconds) / 86400;
+};
+
 export interface IERC20TokenMetadata {
   chainId?: number;
   chainURI?: string;

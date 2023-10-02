@@ -33,12 +33,14 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
         const [
           rewardsToken1,
           rewardsToken2,
+          settings,
           totalDepositAmount,
           pendingRewards,
           nftPoolAddress,
         ] = await Promise.all([
           merlinPoolContract.read(merlinPoolAddress, 'rewardsToken1', []),
           merlinPoolContract.read(merlinPoolAddress, 'rewardsToken2', []),
+          merlinPoolContract.read(merlinPoolAddress, 'settings', []),
           merlinPoolContract.read(merlinPoolAddress, 'totalDepositAmount', []),
           merlinPoolContract.read(merlinPoolAddress, 'pendingRewards', [userAddress]),
           merlinPoolContract.read(merlinPoolAddress, 'nftPool', []),
@@ -85,8 +87,8 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
           token2Symbol = token1Symbol;
         }
 
-        token1Symbol = token1Symbol == 'WETH' ? 'ETH' : token1Symbol;
-        token2Symbol = token2Symbol == 'WETH' ? 'ETH' : token2Symbol;
+        token1Symbol = (token1Symbol == 'WFTM' || token1Symbol == 'WETH') ? 'ETH' : token1Symbol;
+        token2Symbol = (token2Symbol == 'WFTM' || token2Symbol == 'WETH') ? 'ETH' : token2Symbol;
 
         const token1Logo = CHAINS_TOKENS_LIST.find((e) => {
           return e.symbol === token1Symbol;
@@ -109,6 +111,7 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
           rewardsToken2Symbol,
           rewardsToken1Logo,
           rewardsToken2Logo,
+          settings,
           totalDeposit: totalDepositAmount,
           pendingRewards,
           lpTokenAddress: lpToken,
@@ -134,6 +137,7 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
       revalidateOnMount: true,
     }
   );
+  console.log({listMerlinPools: data})
 
   return {
     data: data || [],
