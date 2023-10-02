@@ -73,24 +73,32 @@ const Landing = () => {
             {isHover ? <JoinButton /> : <JoinButtonActive />}
           </div>
           <div
-            className="mt-6 mb-8 w-fit z-10 mx-auto xl:mx-0 block"
+            className="mt-6 mb-8 w-fit z-10 mx-auto block xl:hidden"
             onClick={() => router.push('/swap')}
           >
             <JoinButton />
           </div>
         </div>
       </div>
-      <div className="w-full bg-[#FFAF1D] h-30 flex justify-center text-[#0C111D] py-5">
-        <div className="mr-0 md:mr-10 px-4">
-          <div className="text-[16px] font-bold leading-normal mb-2">
+      <div className="w-full bg-[#FFAF1D] h-30 flex justify-center text-[#0C111D] pb-6 pt-7">
+        <div
+          className="mr-0 md:mr-10 px-4 cursor-pointer"
+          onClick={() => window.open('https://beenboom.com/')}
+        >
+          {/* <div className="text-[16px] font-bold leading-normal mb-2">
             Founder
-          </div>
+          </div> */}
           <BeenBoomLogo />
         </div>
-        <div className="ml-0 md:ml-10 px-4">
-          <div className="text-[16px] leading-normal font-bold mb-2">
+        <div
+          className="ml-0 md:ml-10 px-4 cursor-pointer"
+          onClick={() =>
+            window.open('https://ebizworldsolutions.com/index.html')
+          }
+        >
+          {/* <div className="text-[16px] leading-normal font-bold mb-2">
             CO-Founder
-          </div>
+          </div> */}
           <Image src={Ebiz.src} alt="EbizBoom" width={200} height={26} />
         </div>
       </div>
