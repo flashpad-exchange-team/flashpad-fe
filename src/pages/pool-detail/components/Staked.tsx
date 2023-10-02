@@ -69,14 +69,14 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
           spNFT Positions {currentTimestamp}
         </div>
         <div className="flex gap-3 items-center">
-          <Button
+          {/* <Button
             className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center text-base"
             onClick={handleHarvestAll}
             disabled={harvestAllOff}
           >
             <AddIcon color={harvestAllOff ? '#667085' : '#0C111D'} />
             Harvest All
-          </Button>
+          </Button> */}
           <Button
             className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center  text-base"
             onClick={toggleOpenCreatePosition}

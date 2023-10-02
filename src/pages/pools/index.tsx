@@ -1,16 +1,15 @@
 import { Button } from '@/components/button/Button';
+import Notification from '@/components/notification/Notification';
 import ListLPv2PoolsTable from '@/components/table/ListLPv2PoolsTable';
 import ListSpNftPoolsTable from '@/components/table/ListSpNftPoolsTable';
-import AddIcon from '@/icons/AddIcon';
-import Notification from '@/components/notification/Notification';
-import { useAccount } from 'wagmi';
-import clsx from 'clsx';
-import Search from '@/icons/Search';
-import Bank from '@/icons/Bank';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import useAllPairsData from '@/hooks/useAllPairsData';
 import useAllNftPoolsData from '@/hooks/useAllNftPoolsData';
+import useAllPairsData from '@/hooks/useAllPairsData';
+import AddIcon from '@/icons/AddIcon';
+import Search from '@/icons/Search';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
 
 interface PoolListProps {}
 
@@ -57,7 +56,7 @@ const PoolList = ({}: PoolListProps) => {
           LP V2
         </Button>
       </div>
-      <div className="flex items-center gap-4 mt-4">
+      {/* <div className="flex items-center gap-4 mt-4">
         <div className="bg-dark rounded-md w-1/2 px-4 py-3 flex justify-between">
           <div>
             <div className="text-sm text-[#98A2B3]">TVL</div>
@@ -72,7 +71,7 @@ const PoolList = ({}: PoolListProps) => {
           </div>
           <div className="text-2xl font-bold text-primary">V2</div>
         </div>
-      </div>
+      </div> */}
       <div className="mt-5">
         <Notification
           message="Newly created pools may need some time to be updated to the list"

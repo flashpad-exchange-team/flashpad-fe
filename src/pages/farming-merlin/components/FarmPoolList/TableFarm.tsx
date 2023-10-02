@@ -40,7 +40,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
   const router = useRouter();
   return (
     <div className="overflow-x-auto mt-8">
-      <table className="min-w-full bg-dark">
+      <table className="min-w-full bg-dark relative">
         <thead>
           <tr>
             <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
@@ -68,7 +68,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
         </thead>
         {loading ? (
           <tbody className="bg-[transparent] h-[260px]">
-            <div className="flex items-center justify-center w-full">
+            <div className="flex items-center justify-center absolute w-[210px] left-[40%] top-[40%]">
               <InlineLoading message="Fetching Merlin Pools list" />
             </div>
           </tbody>
@@ -97,67 +97,73 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
                         <BNBICon />
                       )}
                     </div>
-                    <div className="absolute left-[15px]">
-                      {item?.token2Logo ? (
-                        <Image
-                          alt="logo"
-                          src={item?.token2Logo}
-                          width={25}
-                          height={25}
-                        />
-                      ) : (
-                        <BNBICon />
-                      )}
-                    </div>
+                    {item?.token1 !== item?.token2 && (
+                      <div className="absolute left-[15px]">
+                        {item?.token2Logo ? (
+                          <Image
+                            alt="logo"
+                            src={item?.token2Logo}
+                            width={25}
+                            height={25}
+                          />
+                        ) : (
+                          <BNBICon />
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="ml-12">
-                    {item?.token1} - {item?.token2}
+                    {item?.token1 === item?.token2
+                      ? `${item?.token1}`
+                      : `${item?.token1} - ${item?.token2}`}
                   </div>
                 </td>
                 <td
-                  className="flex py-4 text-sm px-4 border-b border-[#344054] text-center"
+                  className=" py-4 text-sm px-4 border-b border-[#344054] text-center"
                   onClick={() => {
                     if (item?.poolAddress) {
                       router.push(`/farm-detail-merlin/${item.poolAddress}`);
                     }
                   }}
                 >
-                  <div
-                    data-tooltip-id="incentiveToken1"
-                    data-tooltip-content={item?.rewardsToken1Symbol}
-                  >
-                    {item?.rewardsToken1Logo ? (
-                      <Image
-                        className="mx-1"
-                        alt="logo"
-                        src={item?.rewardsToken1Logo}
-                        width={25}
-                        height={25}
-                      />
-                    ) : (
-                      <BNBICon className="mx-1" />
-                    )}
-                    <Tooltip id="incentiveToken1" />
-                  </div>
-                  {item?.rewardsToken2Symbol && (
-                    <div
-                      data-tooltip-id="incentiveToken2"
-                      data-tooltip-content={item?.rewardsToken2Symbol}
-                    >
-                      {item?.rewardsToken2Logo ? (
-                        <Image
-                          className="mx-1"
-                          alt="logo"
-                          src={item?.rewardsToken2Logo}
-                          width={25}
-                          height={25}
-                        />
-                      ) : (
-                        <BNBICon className="mx-1" />
-                      )}
+                  <div className="relative flex items-center">
+                    <div className="absolute">
+                      <div
+                        data-tooltip-id="incentiveToken1"
+                        data-tooltip-content={item?.rewardsToken1Symbol}
+                      >
+                        {item?.rewardsToken1Logo ? (
+                          <Image
+                            className="mx-1"
+                            alt="logo"
+                            src={item?.rewardsToken1Logo}
+                            width={25}
+                            height={25}
+                          />
+                        ) : (
+                          <BNBICon className="mx-1" />
+                        )}
+                        <Tooltip id="incentiveToken1" />
+                      </div>
+                    </div>
+                    <div className="absolute left-[15px]">
+                      <div
+                        data-tooltip-id="incentiveToken2"
+                        data-tooltip-content={item?.rewardsToken2Symbol}
+                      >
+                        {item?.rewardsToken2Logo ? (
+                          <Image
+                            className="mx-1"
+                            alt="logo"
+                            src={item?.rewardsToken2Logo}
+                            width={25}
+                            height={25}
+                          />
+                        ) : null}
+                      </div>
                       <Tooltip id="incentiveToken2" />
                     </div>
-                  )}
+                  </div>
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
                   ${item?.tvl}

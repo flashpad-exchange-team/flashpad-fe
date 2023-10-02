@@ -60,6 +60,7 @@ const Launchpad = () => {
     documentsTechnical: '',
     documentsLegal: '',
   });
+
   const [validationError, setValidationError] = useState<any>('');
   const handleChange: FormHandler = (e) => {
     const { name, value } = e.target;

@@ -10,7 +10,6 @@ import Liquidity from '@/icons/Liquidity';
 import StackIcon from '@/icons/StackIcon';
 import Swap from '@/icons/Swap';
 import SwapIcon from '@/icons/SwapIcon';
-import TokenMintIcon from '@/icons/TokenMintIcon';
 import TradeIcon from '@/icons/TradeIcon';
 import WalletIcon from '@/icons/WalletIcon';
 import { Menu, MenuItem } from '@szhsin/react-menu';
@@ -50,16 +49,16 @@ const MENU_ITEMS = [
     name: 'Earn',
     path: '/earn',
     subMenu: [
-      {
-        name: 'Positions',
-        path: '/positions',
-        icon: <TokenMintIcon width="18px" height="18px" />,
-      },
-      {
-        name: 'Genesis Pools',
-        path: '/farming',
-        icon: <SwapIcon />,
-      },
+      // {
+      //   name: 'Positions',
+      //   path: '/positions',
+      //   icon: <TokenMintIcon width="18px" height="18px" />,
+      // },
+      // {
+      //   name: 'Genesis Pools',
+      //   path: '/farming',
+      //   icon: <SwapIcon />,
+      // },
       {
         name: 'Merlin Pools',
         path: '/farming-merlin',

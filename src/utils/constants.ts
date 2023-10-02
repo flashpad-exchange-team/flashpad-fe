@@ -77,7 +77,7 @@ export const DIVIDENDS_ADDRESS_LINEA_TESTNET =
 export const LAUNCHPAD_ADDRESS_LINEA_TESTNET =
   process.env.NEXT_PUBLIC_LAUNCHPAD_ADDRESS_LINEA_TESTNET || '0xE41B229e860Ce5676e7F7a0697347f56ff630642';
 
-export const WETH_ADDRESS_LINEA_TESTNET = 
+export const WETH_ADDRESS_LINEA_TESTNET =
   process.env.NEXT_PUBLIC_WETH_ADDRESS_LINEA_TESTNET ||
   '0xbe2C5113EebFe4C083da31346534CEA1cd2bBC46';
 
@@ -119,7 +119,7 @@ export const POSITION_HELPER_ADDRESS_MUMBAI =
   process.env.NEXT_PUBLIC_POSITION_HELPER_ADDRESS_MUMBAI ||
   '0x90C163cf7C29C449548EF605545d618009F1C74A';
 
-export const WETH_ADDRESS_MUMBAI = 
+export const WETH_ADDRESS_MUMBAI =
   process.env.NEXT_PUBLIC_WETH_ADDRESS_MUMBAI ||
   '0xc82f14458f68f076A4f2E756dB24B56A3C670bB4';
 
@@ -398,7 +398,10 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     name: 'Shiba Coin',
     address: '0x8B57916D9C0a6D97422590eF545Dd721cF46734b',
     decimals: 8,
-    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png',
+    // logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png',
+    logoURI: 'https://cryptologos.cc/logos/shiba-inu-shib-logo.png',
+
+
   },
   {
     symbol: 'ART',
@@ -471,4 +474,4 @@ export const RESERVOIR_API_BASE_URL = IS_LINEA
   ? RESERVOIR_LINEA_API_BASE_URL
   : RESERVOIR_MUMBAI_API_BASE_URL;
 
-  export const COVALENT_API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY || 'cqt_rQW9mc3mFKHt8mg37w8fpFcjmWgv';
+export const COVALENT_API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY || 'cqt_rQW9mc3mFKHt8mg37w8fpFcjmWgv';

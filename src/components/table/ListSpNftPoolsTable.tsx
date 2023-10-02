@@ -26,6 +26,7 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
   data,
   loading,
 }) => {
+  console.log('hehe', data);
   const router = useRouter();
 
   return (
@@ -35,19 +36,22 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
           <thead>
             <tr>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
-                <div className="ml-16">Name</div>
-              </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
-                APR Range
+                <div className="ml-16">Token</div>
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 TVL
               </th>
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
+                Composition
+              </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 Your deposit
               </th>
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
+                Fees APR
+              </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
-                Pending rewards
+                Pool Share
               </th>
             </tr>
           </thead>
@@ -102,6 +106,9 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     ${item.tvl}
+                  </td>
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
+                    ${item.yourDeposit}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     ${item.yourDeposit}
