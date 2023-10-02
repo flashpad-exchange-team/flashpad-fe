@@ -186,7 +186,7 @@ const PositionDetailModal = ({
             >
               <ChartBreakoutIcon stroke="#FFAF1D" />
             </div>
-            <div className="text-xs mt-2 text-center">Stake Nitro</div>
+            <div className="text-xs mt-2 text-center">Stake into Merlin</div>
           </div>
         </div>
         {/* <div

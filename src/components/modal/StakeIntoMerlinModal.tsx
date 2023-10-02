@@ -8,13 +8,13 @@ import SaleIcon from '@/icons/SaleIcon';
 import CalendarIcon from '@/icons/CalendarIcon';
 import UnlockIcon from '@/icons/UnlockIcon';
 
-export interface StakeInNitroModalProps {
+export interface StakeIntoMerlinModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   saveTimeLock: (value: number) => void;
 }
 
-const StakeInNitroModal = ({ toggleOpen, isOpen }: StakeInNitroModalProps) => {
+const StakeIntoMerlinModal = ({ toggleOpen, isOpen }: StakeIntoMerlinModalProps) => {
   const handleStake = () => {};
 
   return (
@@ -102,4 +102,4 @@ const StakeInNitroModal = ({ toggleOpen, isOpen }: StakeInNitroModalProps) => {
   );
 };
 
-export default StakeInNitroModal;
+export default StakeIntoMerlinModal;
