@@ -1,4 +1,5 @@
 import { Button } from '@/components/button/Button';
+import Notification from '@/components/notification/Notification';
 import AddIcon from '@/icons/AddIcon';
 import ArrowRight from '@/icons/ArrowRight';
 import QuestionIcon from '@/icons/QuestionIcon';
@@ -70,6 +71,13 @@ const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
           </tr>
         </tbody>
       </table>
+      {isFirstSpMinter && (
+        <Notification
+          message="The spNFT for this asset has not been created yet! You will need to initialize the spNFT contract first."
+          type="info"
+          className="mt-3 mb-6"
+        />
+      )}
       <div className="flex flex-col mt-10 items-center">
         <Button
           className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center  text-base"

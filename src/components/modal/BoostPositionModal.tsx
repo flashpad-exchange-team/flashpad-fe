@@ -4,6 +4,7 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
 import {
+  MAX_UINT256,
   X_ARTHUR_TOKEN_ADDRESS,
   YIELD_BOOSTER_ADDRESS,
 } from '@/utils/constants';
@@ -50,6 +51,8 @@ const BoostPositionModal = ({
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { address: userAddress } = useAccount();
   const [amount, setAmount] = useState('0');
+  const [isBoost, setIsBoost] = useState(true);
+  const toggleBoost = () => setIsBoost(!isBoost);
 
   const { data: balanceXART } = useBalance({
     address: isOpen ? userAddress : undefined,
@@ -73,16 +76,50 @@ const BoostPositionModal = ({
       });
     }
 
+    if (amount == '0') {
+      customToast({
+        message: 'Please input valid amount',
+        type: 'warning',
+      });
+      return;
+    }
+
+    const amountParsed = BigNumber(amount).times(
+      BigNumber(10).pow((balanceXART as any)?.decimals!)
+    );
+    const usageAddress = YIELD_BOOSTER_ADDRESS;
+
+    const usageAddressAllowance = (await xARTContract.read(
+      X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+      'getUsageApproval',
+      [userAddress, usageAddress]
+    )) as bigint;
+
+    if (BigNumber(usageAddressAllowance.toString()).isLessThan(amountParsed)) {
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'Approving Yield Booster ...',
+        message: 'Confirming your transaction. Please wait.',
+      });
+      const approveRes = await xARTContract.write(
+        userAddress!,
+        X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+        'approveUsage',
+        [usageAddress, MAX_UINT256]
+      );
+      if (!approveRes) {
+        stopLoadingTx();
+        return;
+      }
+      const approveHash = approveRes.hash;
+      await waitForTransaction({ hash: approveHash });
+    }
+
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Boosting your stake position ...',
       message: 'Confirming your transaction. Please wait.',
     });
-
-    const usageAddress = YIELD_BOOSTER_ADDRESS;
-    const amountParsed = BigNumber(amount).times(
-      BigNumber(10).pow((balanceXART as any)?.decimals!)
-    );
     const txResult = await xARTContract.write(
       userAddress,
       X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
@@ -139,6 +176,13 @@ const BoostPositionModal = ({
         message: 'Could not get LP balance info',
         type: 'error',
       });
+    }
+    if (amount == '0') {
+      customToast({
+        message: 'Please input valid amount',
+        type: 'error',
+      });
+      return;
     }
 
     startLoadingTx({
@@ -244,15 +288,16 @@ const BoostPositionModal = ({
       </div>
       <div className="block lg:flex items-center gap-2">
         <Button
-          onClick={handleBoost}
+          onClick={toggleBoost}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
+          type={isBoost ? '' : 'secondary'}
         >
           Boost
         </Button>
         <Button
           className="w-full justify-center mt-2 mb-2 px-[42px]"
-          type="secondary"
-          onClick={handleUnBoost}
+          type={!isBoost ? '' : 'secondary'}
+          onClick={toggleBoost}
         >
           Unboost
         </Button>
@@ -268,6 +313,7 @@ const BoostPositionModal = ({
             placeholder="Enter value "
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
+            type="number"
           />
         </div>
         <div className="flex justify-between items-center">
@@ -291,7 +337,7 @@ const BoostPositionModal = ({
           Cancel
         </Button>
         <Button
-          onClick={handleBoost}
+          onClick={isBoost ? handleBoost : handleUnBoost}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
           Submit

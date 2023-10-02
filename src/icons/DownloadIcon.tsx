@@ -10,9 +10,9 @@ const DownloadIcon = ({ stroke }: any) => {
       <path
         d="M1 19H19M10 1V15M10 15L17 8M10 15L3 8"
         stroke={stroke || '#0A071E'}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

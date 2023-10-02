@@ -23,7 +23,7 @@ const BNBICon = ({ className, size }: any) => {
           height={size ? `${size - 0.75}` : '23.25'}
           rx="11.625"
           stroke="#344054"
-          stroke-width="0.75"
+          strokeWidth="0.75"
         />
       </g>
       <defs>

@@ -10,9 +10,9 @@ const Menu = () => {
       <path
         d="M3.5 12H21.5M3.5 6H21.5M3.5 18H21.5"
         stroke="#0C111D"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

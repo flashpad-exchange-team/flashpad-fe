@@ -1,4 +1,15 @@
 import { Button } from '@/components/button/Button';
+import AddToPositionModal from '@/components/modal/AddToPositionModal';
+import ApyCalculatorModal from '@/components/modal/ApyCalculatorModal';
+import BoostPositionModal from '@/components/modal/BoostPositionModal';
+import CreatePositionModal from '@/components/modal/CreatePositionModal';
+import HarvestModal from '@/components/modal/HarvestModal';
+import LockPositionModal from '@/components/modal/LockPositionModal';
+import PoolInfoModal from '@/components/modal/PoolInfoModal';
+import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
+import customToast from '@/components/notification/customToast';
+import { useLoading } from '@/context/LoadingContext';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import BNBICon from '@/icons/BNBIcon';
 import CalculatorIcon from '@/icons/Calculator';
 import ChartLineIcon from '@/icons/ChartLineIcon';
@@ -6,37 +17,26 @@ import DollarIcon from '@/icons/DollarIcon';
 import FeeIcon from '@/icons/FeeIcon';
 import FlowIcon from '@/icons/FlowIcon';
 import Link from '@/icons/Link';
+import * as covalentApiService from '@/services/covalentApi.service';
 import {
   ADDRESS_ZERO,
   CHAINS_TOKENS_LIST,
   CHAIN_EXPLORER_URL,
 } from '@/utils/constants';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import Notification from '@/components/notification/Notification';
-import Staked from './components/Staked';
-import NotStaked from './components/NotStaked';
-import ApyCalculatorModal from '@/components/modal/ApyCalculatorModal';
-import { useRouter } from 'next/router';
-import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
-import * as covalentApiService from '@/services/covalentApi.service';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
+import * as pairContract from '@/utils/pairContract';
+import { waitForTransaction } from '@wagmi/core';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import { Address } from 'viem';
 import { useAccount } from 'wagmi';
-import CreatePositionModal from '@/components/modal/CreatePositionModal';
-import customToast from '@/components/notification/customToast';
-import AddToPositionModal from '@/components/modal/AddToPositionModal';
-import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
-import HarvestModal from '@/components/modal/HarvestModal';
-import LockPositionModal from '@/components/modal/LockPositionModal';
-import BoostPositionModal from '@/components/modal/BoostPositionModal';
-import PoolInfoModal from '@/components/modal/PoolInfoModal';
-import { waitForTransaction } from '@wagmi/core';
-import { useLoading } from '@/context/LoadingContext';
-import { useSWRConfig } from 'swr';
-import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
+import NotStaked from './components/NotStaked';
+import Staked from './components/Staked';
+import Notification from '@/components/notification/Notification';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -137,6 +137,8 @@ const PoolDetail = () => {
 
   const getPoolInfo = async (pairAddress: Address) => {
     const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
+    if (poolAddress === ADDRESS_ZERO) return;
+
     if (poolAddress) {
       setNftPoolAddress(poolAddress);
     }
@@ -403,29 +405,31 @@ const PoolDetail = () => {
                 </div>
               </div>
               <div className="ml-16">
-                {token1Symbol} - {token2Symbol}
+                {token1Symbol || 'Token A'} - {token2Symbol || 'Token B'}
               </div>
             </div>
-
-            <div className="flex items-center gap-3 font-medium text-base mt-6">
-              <div className="flex items-center gap-1 ">
-                <DollarIcon />
-                $44k <span className="text-secondary ">TVL</span>
+            {isFirstSpMinter || (
+              <div className="flex items-center gap-3 font-medium text-base mt-6">
+                <div className="flex items-center gap-1 ">
+                  <DollarIcon />
+                  $44k <span className="text-secondary ">TVL</span>
+                </div>
+                <div className="flex items-center gap-1 ">
+                  <FeeIcon />
+                  1,88% <span className="text-secondary ">Fees APR</span>
+                </div>
+                <div className="flex items-center gap-1 ">
+                  <FlowIcon />
+                  $185 <span className="text-secondary ">24h Volume</span>
+                </div>
+                <div className="flex items-center gap-1 ">
+                  <ChartLineIcon />
+                  $20 <span className="text-secondary ">24h fees</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1 ">
-                <FeeIcon />
-                1,88% <span className="text-secondary ">Fees APR</span>
-              </div>
-              <div className="flex items-center gap-1 ">
-                <FlowIcon />
-                $185 <span className="text-secondary ">24h Volume</span>
-              </div>
-              <div className="flex items-center gap-1 ">
-                <ChartLineIcon />
-                $20 <span className="text-secondary ">24h fees</span>
-              </div>
-            </div>
+            )}
           </div>
+
           <div className="flex gap-3">
             <Button
               className="text-white text-sm h-[42px] px-6"
@@ -445,6 +449,11 @@ const PoolDetail = () => {
             </Button>
           </div>
         </div>
+        <Notification
+          message="Newly position data may need some time to be updated."
+          type="info"
+          className="mt-3 mb-6"
+        />
         {isStaked ? (
           <Staked
             token1Symbol={token1Symbol}
@@ -466,13 +475,6 @@ const PoolDetail = () => {
           <NotStaked
             toggleOpenCreatePosition={handleCreateStakingPosition}
             isFirstSpMinter={isFirstSpMinter}
-          />
-        )}
-        {isFirstSpMinter && (
-          <Notification
-            message="The spNFT for this asset has not been created yet! You will need to initialize the spNFT contract first."
-            type="info"
-            className="mt-3 mb-6"
           />
         )}
       </div>

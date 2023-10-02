@@ -10,8 +10,8 @@ import HarvestIcon from '@/icons/StakeIcons/HarvestIcon';
 import LockPositionIcon from '@/icons/StakeIcons/LockPositionIcon';
 import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
 import BigNumber from 'bignumber.js';
-import { differenceInDays } from 'date-fns';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import * as web3Helpers from '@/utils/web3Helpers';
 
 interface PoolDetailStakedProps {
   token1Symbol: string;
@@ -47,15 +47,27 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   setSpNFTTokenId,
 }) => {
   const [harvestAllOff, setHarvestAllOff] = useState<boolean>(true);
+  const [currentTimestamp, setCurrentTimestamp] = useState(0);
 
   const handleHarvestAll = async () => {
     setHarvestAllOff(true);
   };
 
+  useEffect(() => {
+    const fetchTimeStamp = async () => {
+      const { timestamp } = await web3Helpers.getBlock();
+      console.log({ timestamp });
+      setCurrentTimestamp(timestamp.toString());
+    };
+    fetchTimeStamp();
+  }, []);
+
   return (
     <>
       <div className="flex justify-between mt-5">
-        <div className="text-xl font-bold">spNFT Positions</div>
+        <div className="text-xl font-bold">
+          spNFT Positions {currentTimestamp}
+        </div>
         <div className="flex gap-3 items-center">
           <Button
             className="px-2 h-[46px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[170px] flex justify-center text-base"
@@ -167,12 +179,12 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                   <div className="flex items-center gap-2 cursor-pointer justify-center">
                     <ClockIcon />
                     <LockPositionIcon
-                      remainingDays={differenceInDays(
+                      lockDays={
                         (+sp?.stakingPosition?.startLockTime.toString() +
-                          +sp?.stakingPosition?.lockDuration.toString()) *
-                          1000,
-                        new Date()
-                      )}
+                          +sp?.stakingPosition?.lockDuration.toString() -
+                          +currentTimestamp) *
+                        1000
+                      }
                     />
                     <FileIcon />
                     <BoostPositionIcon
@@ -225,6 +237,12 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                       }}
                     />
                     <LockPositionIcon
+                      lockDays={
+                        (+sp?.stakingPosition?.startLockTime.toString() +
+                          +sp?.stakingPosition?.lockDuration.toString() -
+                          +currentTimestamp) *
+                        1000
+                      }
                       onClick={() => {
                         setSpNFTTokenId(sp?.tokenId + '');
                         toggleLockPosition();

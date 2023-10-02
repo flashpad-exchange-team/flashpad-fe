@@ -62,7 +62,6 @@ const CreateMerlinPool = () => {
       if (!token1) return;
       lpAddress = token1.address;
     }
-    console.log({ lpAddress });
     setLpAddress(lpAddress);
     const [decimals, address] = await Promise.all([
       erc20TokenContract.erc20Read(lpAddress, 'decimals', []),
@@ -110,7 +109,6 @@ const CreateMerlinPool = () => {
     const nftPoolAddressOnFactory = await nftPoolFactoryContract.getPool(
       lpAddress
     );
-    console.log({ nftPoolAddressOnFactory });
 
     if (nftPoolAddressOnFactory && nftPoolAddressOnFactory === ADDRESS_ZERO) {
       startLoadingTx({
@@ -298,9 +296,7 @@ const CreateMerlinPool = () => {
           className="w-full justify-center mt-4 mb-2 px-[42px]"
           disabled={
             !userAddress ||
-            (type === MerlinPoolTypes.LP_V2
-              ? (!token1 || !token2)
-              : !token1)
+            (type === MerlinPoolTypes.LP_V2 ? !token1 || !token2 : !token1)
           }
         >
           {isFirstSpMinter ? 'Initialize' : 'Create Merlin'}

@@ -9,13 +9,14 @@ import Eligibility from '@/icons/Eligibility';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
 import Lock from '@/icons/Lock';
 import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
-import { differenceInSeconds, formatDistance } from 'date-fns';
+import * as web3Helpers from '@/utils/web3Helpers';
+import BigNumber from 'bignumber.js';
+import { formatDistanceToNow, isFuture } from 'date-fns';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
-import BigNumber from 'bignumber.js';
 
 export interface PoolInfoModalProps {
   toggleOpen: () => void;
@@ -53,7 +54,6 @@ const PoolInfoModal = ({
   toggleWithdrawPosition,
   toggleLockPosition,
   toggleBoostPosition,
-  poolInfo,
 }: PoolInfoModalProps) => {
   // const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
   const [isOpenValue, setIsOpenValue] = useState(true);
@@ -62,18 +62,22 @@ const PoolInfoModal = ({
   const currentSPNFT = listSpNfts?.find(
     (item: any) => item.tokenId == spNFTTokenId
   );
-  const remainingTime =
-    Math.abs(
-      differenceInSeconds(
-        (+currentSPNFT?.stakingPosition?.startLockTime.toString() +
-          +currentSPNFT?.stakingPosition?.lockDuration.toString()) *
-          1000,
-        new Date()
-      )
-    ) || 0;
-  const duration = formatDistance(0, remainingTime, { includeSeconds: true });
-  console.log({ poolInfo });
+  const [currentTimestamp, setCurrentTimestamp] = useState(0);
 
+  const lockDays =
+    (+currentSPNFT?.stakingPosition?.startLockTime.toString() +
+      +currentSPNFT?.stakingPosition?.lockDuration.toString() -
+      +currentTimestamp) *
+    1000;
+
+  useEffect(() => {
+    const fetchTimeStamp = async () => {
+      const { timestamp } = await web3Helpers.getBlock();
+      console.log({ timestamp });
+      setCurrentTimestamp(timestamp.toString());
+    };
+    fetchTimeStamp();
+  }, []);
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
       <div className="text-sm">
@@ -209,9 +213,12 @@ const PoolInfoModal = ({
         </div>
         <div className="flex justify-between items-center my-2">
           <div className="flex items-center">
-            <Eligibility />
+            <div>
+              {lockDays && isFuture(lockDays) ? <Eligibility /> : <CloseIcon />}
+            </div>
+
             <div className="pl-2">
-              <div>Locked</div>
+              <div>{lockDays && isFuture(lockDays) ? 'Locked' : 'No Lock'}</div>
               <div className="text-xs text-secondary">
                 {currentSPNFT?.stakingPosition?.lockMultiplier?.toString()}x
                 Multiplier
@@ -219,7 +226,11 @@ const PoolInfoModal = ({
             </div>
           </div>
           <div className="flex flex-col items-end">
-            <div>{duration}</div>
+            <div>
+              {lockDays && isFuture(lockDays)
+                ? `${formatDistanceToNow(lockDays)}`
+                : '-'}
+            </div>
             <div className="text-xs text-secondary">Remaining time</div>
           </div>
         </div>
@@ -240,7 +251,7 @@ const PoolInfoModal = ({
             {currentSPNFT?.stakingPosition?.boostPoints > 0
               ? new BigNumber(currentSPNFT?.stakingPosition?.boostPoints || 0)
                   .div(new BigNumber(10).pow(18))
-                  .toString(10)
+                  .toString(10) + ' xART'
               : '-'}
           </div>
         </div>

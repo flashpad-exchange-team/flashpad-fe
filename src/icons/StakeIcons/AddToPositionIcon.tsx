@@ -14,9 +14,9 @@ const AddToPositionIcon = ({ onClick, message }: any) => {
         <path
           d="M2.5 17.5H17.5M10 2.5V14.1667M10 14.1667L15.8333 8.33333M10 14.1667L4.16667 8.33333"
           stroke="#FFAF1D"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
       <Tooltip id="my-tooltip" />

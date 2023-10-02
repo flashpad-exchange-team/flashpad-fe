@@ -10,30 +10,30 @@ const FlowIcon = () => {
       <path
         d="M3.66699 9.66699L1.16699 12.167L3.66699 14.667"
         stroke="#FFAF1D"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M12.8337 12.1673H1.16699"
         stroke="#FFAF1D"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M10.334 6.33398L12.834 3.83398L10.334 1.33399"
         stroke="#FFAF1D"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M1.16699 3.83333L12.8337 3.83333"
         stroke="#FFAF1D"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

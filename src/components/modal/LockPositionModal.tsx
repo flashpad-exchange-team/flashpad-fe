@@ -90,7 +90,7 @@ const LockPositionModal = ({
     console.log({ txReceipt });
     refetchData();
     stopLoadingTx();
-
+    toggleOpen();
     startSuccessTx(
       handleSuccessTxMessageCreatePositionAndLiquidity({
         action: 'renew your lock',

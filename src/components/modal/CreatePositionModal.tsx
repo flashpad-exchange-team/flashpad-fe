@@ -12,7 +12,6 @@ import { waitForTransaction } from '@wagmi/core';
 import {
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
-  daysToSeconds,
   // daysToSeconds,
 } from '@/utils/constants';
 import BigNumber from 'bignumber.js';
@@ -59,8 +58,6 @@ const CreatePositionModal = ({
   refetchData,
 }: CreatePositionModalProps) => {
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
-  console.log({ nftPoolAddress });
-
   const { address: userAddress } = useAccount();
   const [lockTime, setLockTime] = useState(DEFAULT_TIME_LOCK);
   const [lockTimeOption, setLockTimeOption] = useState<LockTimeOptions>(
@@ -129,18 +126,17 @@ const CreatePositionModal = ({
       BigNumber(10).pow(balanceLP?.decimals!)
     );
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Creating Staked Position ...',
-      message: 'Confirming your transaction. Please wait.',
-    });
-
     const lpAllowance = (await pairContract.read(lpAddress!, 'allowance', [
       userAddress,
       nftPoolAddress,
     ])) as bigint;
 
     if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmountParsed)) {
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'Approving LP Token ...',
+        message: 'Confirming your transaction. Please wait.',
+      });
       const approveRes = await pairContract.write(
         userAddress!,
         lpAddress!,
@@ -157,15 +153,16 @@ const CreatePositionModal = ({
       console.log({ txReceipt });
     }
     const { timestamp } = await web3Helpers.getBlock();
-
+    startLoadingTx({
+      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+      title: 'Creating Staked Position ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
     const txResult = await nftPoolContract.write(
       userAddress,
       nftPoolAddress!,
       'createPosition',
-      [
-        bnStakeAmountParsed,
-        (timestamp as bigint) + daysToSeconds(nLockTime) + '',
-      ]
+      [bnStakeAmountParsed, BigInt(timestamp) + BigInt(1) + '']
     );
 
     if (!txResult) {

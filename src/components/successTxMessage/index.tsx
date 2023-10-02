@@ -1,5 +1,4 @@
 import { SuccessTxInfo } from '@/context/LoadingContext';
-import Link from 'next/link';
 
 export const handleSuccessTxMessageCreatePositionAndLiquidity: (
   params: any
@@ -9,6 +8,7 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
   const token2 = params.token2;
   const txHash = params.txHash;
   const usdValue = params.usdValue || '?';
+
   return {
     mainMessage: (
       <div>
@@ -18,19 +18,31 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
         </span>
       </div>
     ),
-    subMessage: (
-      <div>
-        Head to the{' '}
-        <Link href="/" className="text-primary">
-          dashboard page{' '}
-        </Link>
-        or to the{' '}
-        <Link href="/" className="text-primary">
-          pool page{' '}
-        </Link>
-        to check your position
-      </div>
-    ),
+    // subMessage: (
+    //   <div>
+    //     Head to the{' '}
+    //     <div
+    //       onClick={() => {
+    //         router.push('/pools');
+    //         stopSuccessTx();
+    //       }}
+    //       className="text-primary cursor-pointer"
+    //     >
+    //       dashboard page{' '}
+    //     </div>
+    //     or to the{' '}
+    //     <div
+    //       onClick={() => {
+    //         router.push('/pools');
+    //         stopSuccessTx();
+    //       }}
+    //       className="text-primary cursor-pointer"
+    //     >
+    //       pool page{' '}
+    //     </div>
+    //     to check your position
+    //   </div>
+    // ),
     tx: txHash,
   };
 };

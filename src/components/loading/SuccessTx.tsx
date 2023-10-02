@@ -5,10 +5,11 @@ import CloseIcon from '@/icons/CloseIcon';
 import SuccessIcon from '@/icons/SuccessIcon';
 import { Button } from '../button/Button';
 import { CHAIN_EXPLORER_URL } from '@/utils/constants';
+import { useRouter } from 'next/router';
 
 const SuccessTx = () => {
   const { isSuccessTx, stopSuccessTx, successTxInfo } = useLoading();
-
+  const router = useRouter();
   if (!isSuccessTx) return null;
 
   return (
@@ -31,7 +32,30 @@ const SuccessTx = () => {
           {successTxInfo?.mainMessage}
         </div>
         <div className="text-xs text-[#98A2B3] mb-2 font-semibold">
-          {successTxInfo?.subMessage}
+          {/* {successTxInfo?.subMessage} */}
+          <div className="flex gap-1 justify-center">
+            Head to the{' '}
+            <div
+              onClick={() => {
+                router.push('/pools');
+                stopSuccessTx();
+              }}
+              className="text-primary cursor-pointer"
+            >
+              dashboard page{' '}
+            </div>
+            or to the{' '}
+            <div
+              onClick={() => {
+                router.push('/pools');
+                stopSuccessTx();
+              }}
+              className="text-primary cursor-pointer"
+            >
+              pool page{' '}
+            </div>
+            to check your position
+          </div>
         </div>
         <div className="mt-4 mb-2">
           <Button

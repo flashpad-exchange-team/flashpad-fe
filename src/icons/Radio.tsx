@@ -24,7 +24,7 @@ const Radio = ({ active }: boolean | any) => {
         rx="11"
         fill="#0F0F0F"
         stroke="#FFAF1D"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <rect
         x="5.5"
@@ -69,7 +69,7 @@ const Radio = ({ active }: boolean | any) => {
         rx="11"
         fill="#0F0F0F"
         stroke="#344054"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <rect
         x="5.83203"

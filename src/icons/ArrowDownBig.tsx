@@ -10,9 +10,9 @@ const ArrowDownBig = () => {
       <path
         d="M5.5 7.5L10.5 12.5L15.5 7.5"
         stroke="white"
-        stroke-width="1.66667"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.66667"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

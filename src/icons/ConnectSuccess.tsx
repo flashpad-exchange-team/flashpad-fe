@@ -28,16 +28,16 @@ const ConnectSuccess = () => {
         clip-rule="evenodd"
         d="M320.51 31.5355C318.558 29.5829 318.558 26.4171 320.51 24.4645L324.465 20.5095C326.418 18.5569 329.584 18.5569 331.536 20.5095L335.491 24.4645C337.444 26.4171 337.444 29.5829 335.491 31.5355L331.536 35.4905C329.584 37.4431 326.418 37.4431 324.465 35.4905L320.51 31.5355Z"
         stroke="#17B26A"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M330.514 26.7065L327.374 29.8469L325.486 27.9651"
         stroke="#17B26A"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <defs>
         <pattern

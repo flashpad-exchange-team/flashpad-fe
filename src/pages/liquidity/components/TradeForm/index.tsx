@@ -145,9 +145,11 @@ const TradeForm = ({
 
   const resetInput = (isReload?: boolean) => {
     if (isReload) {
-      setToken1(null);
-      setToken2(null);
+      // setToken1(null);
+      // setToken2(null);
     }
+    setToken1(null);
+    setToken2(null);
     setToken1Amount('0');
     setToken2Amount('0');
     setTokenBeingSelected(0);
@@ -315,12 +317,6 @@ const TradeForm = ({
     }
     setInsufficient(false);
 
-    startLoadingTx({
-      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-      title: 'Adding Liquidity ...',
-      message: 'Confirming your transaction. Please wait.',
-    });
-
     let reserve1, reserve2;
     const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
     const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
@@ -357,6 +353,12 @@ const TradeForm = ({
       )) as bigint;
 
       if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
+        startLoadingTx({
+          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+          title: `Approving ${token1?.symbol}...`,
+          message: 'Confirming your transaction. Please wait.',
+        });
+
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,
           token1.address,
@@ -384,6 +386,12 @@ const TradeForm = ({
       )) as bigint;
 
       if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
+        startLoadingTx({
+          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+          title: `Approving ${token2?.symbol}...`,
+          message: 'Confirming your transaction. Please wait.',
+        });
+
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,
           token2.address,
@@ -402,6 +410,11 @@ const TradeForm = ({
         console.log({ txReceipt });
       }
     }
+    startLoadingTx({
+      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+      title: 'Adding Liquidity ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
 
     const { timestamp } = await web3Helpers.getBlock();
     let txResult: any;
@@ -468,7 +481,9 @@ const TradeForm = ({
         token1: token1.symbol,
         token2: token2.symbol,
         txHash: hash,
-        usdValue: result ? result[2] + '' : '',
+        usdValue: result
+          ? new BigNumber(result[2]).div(new BigNumber(10).pow(18)).toString(10)
+          : '',
       })
     );
   };

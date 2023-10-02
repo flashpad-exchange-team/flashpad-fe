@@ -187,9 +187,7 @@ const Launchpad = () => {
         error={validationError}
       />;
   }
-  const submitForm = () => {
-    console.log('Submit Form');
-  };
+  const submitForm = () => {};
 
   const handleBackForm = () => {
     setStep(step - 1);

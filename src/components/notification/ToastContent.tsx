@@ -27,7 +27,7 @@ const ToastContent = ({ type, message, hideIcon }: NotificationProps) => {
       case 'info':
         return 'bg-darkBlue';
       case 'warning':
-        return 'bg-[#FFCC00]';
+        return 'bg-primary';
       default:
         return null;
     }

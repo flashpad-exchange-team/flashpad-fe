@@ -89,7 +89,7 @@ const MENU_ITEMS = [
         icon: <Liquidity width="18px" />,
       },
       {
-        name: 'Fair launchpad',
+        name: 'Submit project',
         path: '/fair-launchpad',
         icon: <Swap width="18px" />,
       },
