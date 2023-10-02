@@ -1,19 +1,7 @@
 import { Address } from 'viem';
-import { abi as MerlinPoolABI } from '@/resources/abis/MerlinPool.json';
+import { abi as ArthurMasterABI } from '@/resources/abis/ArthurMaster.json';
 import { publicClient, walletClient } from './web3Clients';
 import { handleError } from './handleError';
-
-export interface IMerlinPoolSettings {
-  startTime: BigInt;
-  endTime: BigInt;
-  harvestStartTime?: BigInt;
-  depositEndTime?: BigInt;
-  lockDurationReq?: BigInt;
-  lockEndReq?: BigInt;
-  depositAmountReq?: BigInt;
-  whitelist?: boolean;
-  description: string;
-}
 
 export const read = async (
   address: Address,
@@ -23,7 +11,7 @@ export const read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: MerlinPoolABI,
+      abi: ArthurMasterABI,
       functionName,
       args,
     });
@@ -38,17 +26,15 @@ export const write = async (
   account: Address,
   address: Address,
   functionName: string,
-  args: any[],
-  value?: string,
+  args: any[]
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: MerlinPoolABI,
+      abi: ArthurMasterABI,
       functionName,
       args,
-      value,
     });
     const hash = await walletClient.writeContract(request);
     return { hash, result };
@@ -58,44 +44,16 @@ export const write = async (
   }
 };
 
-const rewardsTokenResultKeys = [
-  'token',
-  'amount',
-  'remainingAmount',
-  'accRewardsPerShare',
+const getPoolInfoResultKeys = [
+  'poolAddress',
+  'allocPoint',
+  'lastRewardTime',
+  'reserve',
+  'poolEmissionRate'
 ];
-
-const pendingRewardsResultKeys = [
-  'pending1',
-  'pending2',
-];
-
-const settingsResultKeys = [
-  'startTime',
-  'endTime',
-  'harvestStartTime',
-  'depositEndTime',
-  'lockDurationReq',
-  'lockEndReq',
-  'depositAmountReq',
-  'whitelist',
-  'description',
-];
-
-const userInfoResultKeys = [
-  'totalDepositAmount',
-  'rewardDebtToken1',
-  'rewardDebtToken2',
-  'pendingRewardsToken1',
-  'pendingRewardsToken2',
-]
 
 const functionResultKeysMap: { [k: string]: string[] } = {
-  'rewardsToken1': rewardsTokenResultKeys,
-  'rewardsToken2': rewardsTokenResultKeys,
-  'pendingRewards': pendingRewardsResultKeys,
-  'settings': settingsResultKeys,
-  'userInfo': userInfoResultKeys,
+  'getPoolInfo': getPoolInfoResultKeys,
 };
 
 const mapResultArrayToObj = (functionName: string, result: any) => {
@@ -106,4 +64,4 @@ const mapResultArrayToObj = (functionName: string, result: any) => {
     resObj[prop] = result[i];
   });
   return resObj;
-};
+}

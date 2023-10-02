@@ -56,12 +56,12 @@ const MENU_ITEMS = [
         icon: <TokenMintIcon width="18px" height="18px" />,
       },
       {
-        name: 'Genesis Pool',
+        name: 'Genesis Pools',
         path: '/farming',
         icon: <SwapIcon />,
       },
       {
-        name: 'Merlin Pool',
+        name: 'Merlin Pools',
         path: '/farming-merlin',
         icon: <Liquidity width="18px" />,
       },

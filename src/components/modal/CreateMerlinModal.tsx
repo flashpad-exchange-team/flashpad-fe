@@ -149,7 +149,7 @@ const CreateMerlinModal = ({
       ? getUnixTime(new Date(depositEndTime.startDate))
       : 0;
 
-    const settings: merlinPoolFactoryContract.MerlinPoolSettings = {
+    const settings: merlinPoolFactoryContract.MerlinPoolSettingsParams = {
       startTime: tsStartTime + '',
       endTime: tsEndTime + '',
       harvestStartTime: tsHarvestStartTime + '',

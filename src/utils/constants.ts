@@ -77,6 +77,10 @@ export const DIVIDENDS_ADDRESS_LINEA_TESTNET =
 export const LAUNCHPAD_ADDRESS_LINEA_TESTNET =
   process.env.NEXT_PUBLIC_LAUNCHPAD_ADDRESS_LINEA_TESTNET || '0xE41B229e860Ce5676e7F7a0697347f56ff630642';
 
+export const WETH_ADDRESS_LINEA_TESTNET = 
+  process.env.NEXT_PUBLIC_WETH_ADDRESS_LINEA_TESTNET ||
+  '0xbe2C5113EebFe4C083da31346534CEA1cd2bBC46';
+
 
 // Mumbai testnet
 export const ARTHUR_ROUTER_ADDRESS_MUMBAI =
@@ -114,6 +118,10 @@ export const YIELD_BOOSTER_ADDRESS_MUMBAI =
 export const POSITION_HELPER_ADDRESS_MUMBAI =
   process.env.NEXT_PUBLIC_POSITION_HELPER_ADDRESS_MUMBAI ||
   '0x90C163cf7C29C449548EF605545d618009F1C74A';
+
+export const WETH_ADDRESS_MUMBAI = 
+  process.env.NEXT_PUBLIC_WETH_ADDRESS_MUMBAI ||
+  '0xc82f14458f68f076A4f2E756dB24B56A3C670bB4';
 
 
 export const ARTHUR_FACTORY_ADDRESS = IS_LINEA
@@ -172,6 +180,10 @@ export const minutesToSeconds = (minutes: number) => {
 
 export const daysToSeconds = (days: number) => {
   return BigInt(days * 86400);
+};
+
+export const secondsToDays = (seconds: number | string | BigInt) => {
+  return Number(seconds) / 86400;
 };
 
 export interface IERC20TokenMetadata {
@@ -354,7 +366,7 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     chainId: 59140,
     chainURI: 'https://goerli.lineascan.build/block/0',
     tokenType: ['native'],
-    address: '0xbe2C5113EebFe4C083da31346534CEA1cd2bBC46',
+    address: WETH_ADDRESS_LINEA_TESTNET as Address,
     name: 'Ethereum',
     symbol: 'ETH',
     decimals: 18,
@@ -406,7 +418,7 @@ export const MUMBAI_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
   {
     chainId: 80001,
     tokenType: ['native'],
-    address: '0xc82f14458f68f076A4f2E756dB24B56A3C670bB4',
+    address: WETH_ADDRESS_MUMBAI as Address,
     name: 'Ethereum',
     symbol: 'ETH',
     decimals: 18,

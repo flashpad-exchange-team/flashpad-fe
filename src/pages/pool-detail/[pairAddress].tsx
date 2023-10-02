@@ -5,11 +5,9 @@ import BoostPositionModal from '@/components/modal/BoostPositionModal';
 import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import HarvestModal from '@/components/modal/HarvestModal';
 import LockPositionModal from '@/components/modal/LockPositionModal';
-import PoolInfoModal from '@/components/modal/PoolInfoModal';
 import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
-import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import BNBICon from '@/icons/BNBIcon';
 import CalculatorIcon from '@/icons/Calculator';
 import ChartLineIcon from '@/icons/ChartLineIcon';
@@ -17,16 +15,15 @@ import DollarIcon from '@/icons/DollarIcon';
 import FeeIcon from '@/icons/FeeIcon';
 import FlowIcon from '@/icons/FlowIcon';
 import Link from '@/icons/Link';
-import * as covalentApiService from '@/services/covalentApi.service';
 import {
   ADDRESS_ZERO,
-  CHAINS_TOKENS_LIST,
   CHAIN_EXPLORER_URL,
 } from '@/utils/constants';
-import * as erc20Contract from '@/utils/erc20TokenContract';
-import * as nftPoolContract from '@/utils/nftPoolContract';
+// import * as erc20Contract from '@/utils/erc20TokenContract';
+// import * as pairContract from '@/utils/pairContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
-import * as pairContract from '@/utils/pairContract';
+import * as nftPoolContract from '@/utils/nftPoolContract';
+import * as covalentApiService from '@/services/covalentApi.service';
 import { waitForTransaction } from '@wagmi/core';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -37,6 +34,9 @@ import { useAccount } from 'wagmi';
 import NotStaked from './components/NotStaked';
 import Staked from './components/Staked';
 import Notification from '@/components/notification/Notification';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
+import useAllPairsData from '@/hooks/useAllPairsData';
+import PositionDetailModal from '@/components/modal/PositionDetailModal';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -44,10 +44,11 @@ const PoolDetail = () => {
     pairAddress,
     //...queryParams,
   } = router.query;
-  console.log({ pairAddress });
 
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
+  const { data: allPairsData, isLoading: allPairsLoading } =
+    useAllPairsData(userAddress);
   const { mutate } = useSWRConfig();
   const [poolInfo, setPoolInfo] = useState({} as any);
   const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
@@ -69,8 +70,8 @@ const PoolDetail = () => {
   const [openBoostPosition, setOpenBoostPosition] = useState<boolean>(false);
   const [isOpenCreatePosition, setOpenCreatePosition] =
     useState<boolean>(false);
-  const [openPoolInfo, setOpenPoolInfo] = useState<boolean>(false);
-  const togglePoolInfo = () => setOpenPoolInfo(!openPoolInfo);
+  const [openPositionDetail, setOpenPositionDetail] = useState<boolean>(false);
+  const togglePositionDetail = () => setOpenPositionDetail(!openPositionDetail);
 
   const toggleAddToPosition = () => setOpenAddToPosition(!openAddToPosition);
   const toggleWithdrawPosition = () =>
@@ -136,61 +137,32 @@ const PoolDetail = () => {
   };
 
   const getPoolInfo = async (pairAddress: Address) => {
-    const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
-    if (poolAddress === ADDRESS_ZERO) return;
+    if (allPairsLoading) return;
 
-    if (poolAddress) {
-      setNftPoolAddress(poolAddress);
-    }
-
-    const poolInfoObj = await nftPoolContract.read(
-      poolAddress as Address,
-      'getPoolInfo',
-      []
+    const pairData = allPairsData?.find(
+      (p: any) =>
+        p.pairAddress.toLowerCase() === (pairAddress + '').toLowerCase()
     );
-
-    setPoolInfo(poolInfoObj);
-
-    let token1Symbol = 'TOKEN1',
-      token2Symbol = 'TOKEN2';
-    if (
-      pairAddress.toLowerCase() ===
-      '0xb1f8a7c4fdaA4b79ad2052e09D8BBA5296e42090'.toLowerCase()
-    ) {
-      token1Symbol = await erc20Contract.erc20Read(pairAddress, 'symbol', []);
-      token2Symbol = token1Symbol;
-    } else {
-      const [token1Address, token2Address] = await Promise.all([
-        pairContract.read(pairAddress, 'token0', []),
-        pairContract.read(pairAddress, 'token1', []),
-      ]);
-
-      if (token1Address) {
-        [token1Symbol, token2Symbol] = await Promise.all([
-          erc20Contract.erc20Read(token1Address, 'symbol', []),
-          erc20Contract.erc20Read(token2Address, 'symbol', []),
-        ]);
-      } else {
-        token1Symbol = await erc20Contract.erc20Read(pairAddress, 'symbol', []);
-        token2Symbol = token1Symbol;
-      }
+    if (!pairData) {
+      router.push('/not-found');
+      return;
     }
 
-    token1Symbol = token1Symbol == 'WFTM' ? 'ETH' : token1Symbol;
-    token2Symbol = token2Symbol == 'WFTM' ? 'ETH' : token2Symbol;
+    const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
+    if (poolAddress && poolAddress !== ADDRESS_ZERO) {
+      setNftPoolAddress(poolAddress);
+      const poolInfoObj = await nftPoolContract.read(
+        poolAddress as Address,
+        'getPoolInfo',
+        []
+      );
+      setPoolInfo(poolInfoObj);
+    }
 
-    setToken1Symbol(token1Symbol);
-    setToken2Symbol(token2Symbol);
-
-    const token1Logo = CHAINS_TOKENS_LIST.find(
-      (e) => e.symbol === token1Symbol
-    )?.logoURI;
-    setToken1Logo(token1Logo || '');
-
-    const token2Logo = CHAINS_TOKENS_LIST.find(
-      (e) => e.symbol === token2Symbol
-    )?.logoURI;
-    setToken2Logo(token2Logo || '');
+    setToken1Symbol(pairData.token1);
+    setToken2Symbol(pairData.token2);
+    setToken1Logo(pairData.token1Logo || '');
+    setToken2Logo(pairData.token2Logo || '');
   };
 
   const getUserStakedPositions = async () => {
@@ -225,11 +197,19 @@ const PoolDetail = () => {
     if (!router.isReady) return;
     if (!pairAddress) {
       router.push('/not-found');
+      return;
     }
 
     getPoolInfo(pairAddress as Address);
     getUserStakedPositions();
-  }, [router.isReady, userAddress, nftPoolAddress, successful]);
+  }, [
+    router.isReady,
+    userAddress,
+    nftPoolAddress,
+    successful,
+    allPairsData,
+    allPairsLoading,
+  ]);
 
   const handleClickBtnContract = () => {
     if (nftPoolAddress !== ADDRESS_ZERO) {
@@ -248,9 +228,9 @@ const PoolDetail = () => {
 
   return (
     <>
-      <PoolInfoModal
-        isOpen={openPoolInfo}
-        toggleOpen={togglePoolInfo}
+      <PositionDetailModal
+        isOpen={openPositionDetail}
+        toggleOpen={togglePositionDetail}
         lpAddress={pairAddress as Address}
         nftPoolAddress={nftPoolAddress}
         token1Data={{
@@ -268,7 +248,7 @@ const PoolDetail = () => {
         toggleWithdrawPosition={toggleWithdrawPosition}
         toggleLockPosition={toggleLockPosition}
         toggleBoostPosition={toggleBoostPosition}
-        poolInfo={poolInfo}
+        positionDetail={poolInfo}
       />
       <AddToPositionModal
         isOpen={openAddToPosition}
@@ -468,7 +448,7 @@ const PoolDetail = () => {
             toggleWithdrawPosition={toggleWithdrawPosition}
             toggleLockPosition={toggleLockPosition}
             toggleBoostPosition={toggleBoostPosition}
-            togglePoolInfo={togglePoolInfo}
+            togglePositionDetail={togglePositionDetail}
             setSpNFTTokenId={setSpNFTTokenId}
           />
         ) : (

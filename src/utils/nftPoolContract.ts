@@ -17,7 +17,7 @@ export const read = async (
     });
     return mapResultArrayToObj(functionName, result);
   } catch (err: any) {
-    handleError(err);
+    console.log(err);
     return undefined;
   }
 };

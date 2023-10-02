@@ -18,7 +18,7 @@ import { Address } from 'viem';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 
-export interface PoolInfoModalProps {
+export interface PositionDetailModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   lpAddress?: Address;
@@ -40,10 +40,10 @@ export interface PoolInfoModalProps {
   toggleWithdrawPosition: () => void;
   toggleLockPosition: () => void;
   toggleBoostPosition: () => void;
-  poolInfo: any;
+  positionDetail: any;
 }
 
-const PoolInfoModal = ({
+const PositionDetailModal = ({
   toggleOpen,
   isOpen,
   token1Data,
@@ -54,7 +54,8 @@ const PoolInfoModal = ({
   toggleWithdrawPosition,
   toggleLockPosition,
   toggleBoostPosition,
-}: PoolInfoModalProps) => {
+  positionDetail,
+}: PositionDetailModalProps) => {
   // const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
   const [isOpenValue, setIsOpenValue] = useState(true);
   const [isOpenApr, setIsOpenApr] = useState(true);
@@ -63,6 +64,17 @@ const PoolInfoModal = ({
     (item: any) => item.tokenId == spNFTTokenId
   );
   const [currentTimestamp, setCurrentTimestamp] = useState(0);
+  // const remainingTime =
+  //   Math.abs(
+  //     differenceInSeconds(
+  //       (+currentSPNFT?.stakingPosition?.startLockTime.toString() +
+  //         +currentSPNFT?.stakingPosition?.lockDuration.toString()) *
+  //         1000,
+  //       new Date()
+  //     )
+  //   ) || 0;
+  // const duration = formatDistance(0, remainingTime, { includeSeconds: true });
+  console.log({ positionDetail });
 
   const lockDays =
     (+currentSPNFT?.stakingPosition?.startLockTime.toString() +
@@ -403,4 +415,4 @@ const PoolInfoModal = ({
   );
 };
 
-export default PoolInfoModal;
+export default PositionDetailModal;
