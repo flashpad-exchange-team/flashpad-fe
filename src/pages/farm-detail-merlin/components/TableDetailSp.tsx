@@ -8,6 +8,7 @@ interface TableDetailSpProps {
 }
 
 const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
+  console.log({data});
   const router = useRouter();
   return (
     <div className="overflow-x-auto mt-8">
