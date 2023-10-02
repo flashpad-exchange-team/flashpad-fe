@@ -184,6 +184,11 @@ const AddLiquidityAndCreatePositionModal = ({
       )) as bigint;
 
       if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
+        startLoadingTx({
+          tokenPairs: token1Symbol,
+          title: `Approving ${token1Symbol} Token ...`,
+          message: 'Confirming your transaction. Please wait.',
+        });
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,
           token1Address,
@@ -209,6 +214,11 @@ const AddLiquidityAndCreatePositionModal = ({
       )) as bigint;
 
       if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
+        startLoadingTx({
+          tokenPairs: token2Symbol,
+          title: `Approving ${token2Symbol} Token ...`,
+          message: 'Confirming your transaction. Please wait.',
+        });
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,
           token2Address,

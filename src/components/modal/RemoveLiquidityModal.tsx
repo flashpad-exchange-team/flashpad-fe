@@ -144,6 +144,11 @@ const RemoveLiquidityModal = ({
     )) as bigint;
 
     if (BigNumber(lpTokenAllowance.toString()).isLessThan(bnAmountToRemove)) {
+      startLoadingTx({
+        tokenPairs: token1Symbol + ' - ' + token2Symbol,
+        title: `Approving LP Token ...`,
+        message: 'Confirming your transaction. Please wait.',
+      });
       const approveRes = await pairContract.write(
         userAddress!,
         pairAddress as Address,

@@ -12,7 +12,7 @@ import { waitForTransaction } from '@wagmi/core';
 import {
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
-  // daysToSeconds,
+  daysToSeconds,
 } from '@/utils/constants';
 import BigNumber from 'bignumber.js';
 import customToast from '../notification/customToast';
@@ -162,7 +162,7 @@ const CreatePositionModal = ({
       userAddress,
       nftPoolAddress!,
       'createPosition',
-      [bnStakeAmountParsed, BigInt(timestamp) + BigInt(1) + '']
+      [bnStakeAmountParsed, BigInt(timestamp) + daysToSeconds(nLockTime) + '']
     );
 
     if (!txResult) {

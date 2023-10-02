@@ -143,7 +143,12 @@ const TradeForm = ({
       [userAddress, ARTHUR_ROUTER_ADDRESS]
     )) as bigint;
 
-    if (token1Allowance.toString() < MAX_UINT256) {
+    if (BigNumber(token1Allowance.toString()).isLessThan(bnToken1Amount)) {
+      startLoadingTx({
+        tokenPairs: token1?.symbol,
+        title: `Approving ${token1?.symbol} Token ...`,
+        message: 'Confirming your transaction. Please wait.',
+      });
       const approveRes = await erc20TokenContract.erc20Write(
         userAddress!,
         token1.address,
