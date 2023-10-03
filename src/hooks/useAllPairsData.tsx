@@ -37,8 +37,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           pairContract.read(pairAddress, 'token1', []),
         ]);
 
-        let token1Symbol = 'TOKEN1',
-          token2Symbol = 'TOKEN2';
+        let token1Symbol = 'TOKEN1', token2Symbol = 'TOKEN2';
         if (token1Address) {
           [token1Symbol, token2Symbol] = await Promise.all([
             erc20Contract.erc20Read(token1Address, 'symbol', []),

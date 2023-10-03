@@ -27,7 +27,7 @@ interface PoolDetailStakedProps {
   toggleLockPosition: () => void;
   toggleBoostPosition: () => void;
   togglePositionDetail: () => void;
-  setSpNFTTokenId: (id: string | null) => void;
+  setSpNFTTokenId: (id: string) => void;
 }
 
 const Staked: React.FC<PoolDetailStakedProps> = ({
@@ -46,12 +46,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   togglePositionDetail,
   setSpNFTTokenId,
 }) => {
-  const [harvestAllOff, setHarvestAllOff] = useState<boolean>(true);
   const [currentTimestamp, setCurrentTimestamp] = useState(0);
-
-  const handleHarvestAll = async () => {
-    setHarvestAllOff(true);
-  };
 
   useEffect(() => {
     const fetchTimeStamp = async () => {
@@ -66,7 +61,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
     <>
       <div className="flex justify-between mt-5">
         <div className="text-xl font-bold">
-          spNFT Positions {currentTimestamp}
+          spNFT Positions
         </div>
         <div className="flex gap-3 items-center">
           {/* <Button

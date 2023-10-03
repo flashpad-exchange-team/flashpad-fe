@@ -11,13 +11,15 @@ import SaleIcon from '@/icons/SaleIcon';
 import TableDetail from './components/TableDetail';
 import TableDetailSp from './components/TableDetailSp';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
+import { Address, useAccount } from 'wagmi';
 import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
 import customToast from '@/components/notification/customToast';
 import { ADDRESS_ZERO, CHAIN_EXPLORER_URL } from '@/utils/constants';
 import { useEffect, useState } from 'react';
+import * as nftPoolContract from '@/utils/nftPoolContract';
 import * as merlinPoolContract from '@/utils/merlinPoolContract';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import BigNumber from 'bignumber.js';
 
 const FarmMerlinDetail = () => {
   const router = useRouter();
@@ -35,7 +37,7 @@ const FarmMerlinDetail = () => {
   const isSmallScreen = windowWidth < 768;
 
   const [merlinPoolAddress, setMerlinPoolAddress] = useState(ADDRESS_ZERO);
-  // const [totalValueLocked, setTotalValueLocked] = useState('');
+  const [lpTokenAddress, setLpTokenAddress] = useState(ADDRESS_ZERO);
 
   const [token1Symbol, setToken1Symbol] = useState('');
   const [token2Symbol, setToken2Symbol] = useState('');
@@ -69,8 +71,20 @@ const FarmMerlinDetail = () => {
       return;
     }
 
-    const merlinPoolAddr = merlinPoolData.poolAddress;
-    setMerlinPoolAddress(merlinPoolAddr);
+    setMerlinPoolAddress(merlinPool as Address);
+    const nftPoolAddr = merlinPoolData.nftPoolAddress;
+    if (nftPoolAddr) {
+      const nftPoolInfo = await nftPoolContract.read(
+        nftPoolAddr,
+        'getPoolInfo',
+        []
+      );
+      const lpTokenAddr = nftPoolInfo?.lpToken;
+      if (lpTokenAddr) {
+        setLpTokenAddress(lpTokenAddr);
+      }
+    }
+
     setToken1Symbol(merlinPoolData.token1);
     setToken2Symbol(merlinPoolData.token2);
     setToken1Logo(merlinPoolData.token1Logo);
@@ -89,7 +103,7 @@ const FarmMerlinDetail = () => {
     setMerlinPoolSettings(merlinPoolData.settings);
 
     const [userInfo, rwdToken1Decimals, rwdToken2Decimals] = await Promise.all([
-      merlinPoolContract.read(merlinPoolAddr, 'userInfo', [userAddress]),
+      merlinPoolContract.read(merlinPool as Address, 'userInfo', [userAddress]),
       erc20TokenContract.erc20Read(
         merlinPoolData.rewardsToken1Info.token,
         'decimals',
@@ -102,7 +116,7 @@ const FarmMerlinDetail = () => {
       ),
     ]);
 
-    setTotalDeposited((userInfo?.totalDepositAmount || 0) + '');
+    setTotalDeposited(BigNumber(userInfo?.totalDepositAmount || 0).div(BigNumber(10).pow(18)) + '');
     setRewardsToken1Decimals(rwdToken1Decimals ? Number(rwdToken1Decimals) : 18);
     setRewardsToken2Decimals(rwdToken2Decimals ? Number(rwdToken2Decimals) : 18);
   };
@@ -151,7 +165,7 @@ const FarmMerlinDetail = () => {
               )}
             </div>
             <div className="absolute left-[25px]">
-              {token2Logo ? (
+              {token1Logo != token2Logo && (token2Logo ? (
                 <Image
                   alt="logo"
                   src={token2Logo as any}
@@ -161,11 +175,11 @@ const FarmMerlinDetail = () => {
                 />
               ) : (
                 <BNBICon size="40" />
-              )}
+              ))}
             </div>
           </div>
           <div className="ml-16 pl-4">
-            {token1Symbol} - {token2Symbol}
+            {token1Symbol}{token1Symbol != token2Symbol && (' - ' + token2Symbol)}
           </div>
         </div>
         <div className="flex flex-wrap">
@@ -225,6 +239,11 @@ const FarmMerlinDetail = () => {
         <Button
           className="px-6 flex gap-3 order-3 md:order-2 w-full md:w-[147px] md:h-[47px] justify-center"
           icon={<DownloadIcon />}
+          onClick={() => {
+            if (lpTokenAddress != ADDRESS_ZERO) {
+              router.push(`/pool-detail/${lpTokenAddress}`);
+            }
+          }}
         >
           Deposit
         </Button>

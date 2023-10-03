@@ -59,7 +59,7 @@ const PoolDetail = () => {
   const [token2Logo, setToken2Logo] = useState<string>('');
 
   const [userSpNfts, setUserSpNfts] = useState<any>();
-  const [spNFTTokenId, setSpNFTTokenId] = useState<string | null>(null);
+  const [spNFTTokenId, setSpNFTTokenId] = useState<string>('');
   const [isOpenApyCalculator, setOpenApyCalculator] = useState<boolean>(false);
   const [openAddToPosition, setOpenAddToPosition] = useState<boolean>(false);
   const [openWithdrawPosition, setOpenWithdrawPosition] =
@@ -248,7 +248,7 @@ const PoolDetail = () => {
         toggleWithdrawPosition={toggleWithdrawPosition}
         toggleLockPosition={toggleLockPosition}
         toggleBoostPosition={toggleBoostPosition}
-        positionDetail={poolInfo}
+        poolInfo={poolInfo}
       />
       <AddToPositionModal
         isOpen={openAddToPosition}
@@ -430,7 +430,7 @@ const PoolDetail = () => {
           </div>
         </div>
         <Notification
-          message="Newly position data may need some time to be updated."
+          message="New position data may need some time to be updated."
           type="info"
           className="mt-3 mb-6"
         />

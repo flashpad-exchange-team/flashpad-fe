@@ -17,6 +17,7 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
   const fetchAllMerlinPools = async () => {
     try {
       const listMerlinPools = [];
+
       const nPools = await merlinPoolFactoryContract.read(
         MERLIN_POOL_FACTORY_ADDRESS as Address,
         'merlinPoolsLength',
@@ -29,6 +30,16 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
           'getMerlinPool',
           [i]
         );
+
+        const isPublished = await merlinPoolContract.read(
+          merlinPoolAddress as Address,
+          'published',
+          []
+        );
+
+        if (!isPublished) {
+          continue;
+        }
 
         const [
           rewardsToken1,
@@ -116,6 +127,7 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
           pendingRewards,
           lpTokenAddress: lpToken,
           lpTokenDecimals: Number(lpTokenDecimals),
+          nftPoolAddress,
           poolAddress: merlinPoolAddress,
         });
       }

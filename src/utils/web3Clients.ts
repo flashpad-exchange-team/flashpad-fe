@@ -9,6 +9,7 @@ const publicClient: any = createPublicClient({
   chain: IS_LINEA ? lineaTestnet : polygonMumbai,
   transport: http(RPC_URL),
 });
+
 const getWalletClient = () => {
   try {
     return createWalletClient({

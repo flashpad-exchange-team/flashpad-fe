@@ -33,9 +33,15 @@ const useAllNftPoolsData = (userAddress: Address | undefined) => {
           ]
         );
 
-        let token1Symbol = 'TOKEN1',
-          token2Symbol = 'TOKEN2';
-        if (token1Address) {
+        let token1Symbol = 'TOKEN1', token2Symbol = 'TOKEN2';
+        if (lpToken.toLowerCase() === '0xb1f8a7c4fdaA4b79ad2052e09D8BBA5296e42090'.toLowerCase()) {
+          token1Symbol = await erc20Contract.erc20Read(
+            lpToken,
+            'symbol',
+            []
+          );
+          token2Symbol = token1Symbol;
+        } else if (token1Address) {
           [token1Symbol, token2Symbol] = await Promise.all([
             erc20Contract.erc20Read(token1Address, 'symbol', []),
             erc20Contract.erc20Read(token2Address, 'symbol', []),

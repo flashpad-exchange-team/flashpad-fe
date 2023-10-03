@@ -26,7 +26,6 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
   data,
   loading,
 }) => {
-  console.log('hehe', data);
   const router = useRouter();
 
   return (
@@ -85,20 +84,22 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                         )}
                       </div>
                       <div className="absolute left-[15px]">
-                        {item.token2Logo ? (
-                          <Image
-                            alt="logo"
-                            src={item.token2Logo}
-                            width={25}
-                            height={25}
-                          />
-                        ) : (
-                          <BNBICon />
-                        )}
+                        {item.token1Logo != item.token2Logo &&
+                          (item.token2Logo ? (
+                            <Image
+                              alt="logo"
+                              src={item.token2Logo}
+                              width={25}
+                              height={25}
+                            />
+                          ) : (
+                            <BNBICon />
+                          ))}
                       </div>
                     </div>
                     <div className="ml-16">
-                      {item.token1} - {item.token2}
+                      {item.token1}
+                      {item.token1 != item.token2 && ' - ' + item.token2}
                     </div>
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
