@@ -78,13 +78,19 @@ const StakeIntoMerlinModal = ({
   }, [listMerlinPools, isLoading, isOpen]);
 
   const handleStakeToMerlinPool = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error'
+      });
+      return;
+    }
+
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Staking your spNFT into Merlin pool...',
       message: 'Confirming your transaction. Please wait.',
     });
-
-    console.log({stakingMerlinPoolAddress})
 
     const transferNftTx = await nftPoolContract.write(
       userAddress as Address,

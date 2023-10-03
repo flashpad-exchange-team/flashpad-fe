@@ -20,6 +20,10 @@ import * as nftPoolContract from '@/utils/nftPoolContract';
 import * as merlinPoolContract from '@/utils/merlinPoolContract';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import BigNumber from 'bignumber.js';
+import WalletIcon from '@/icons/WalletIcon';
+import { useLoading } from '@/context/LoadingContext';
+import { waitForTransaction } from '@wagmi/core';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
 
 const FarmMerlinDetail = () => {
   const router = useRouter();
@@ -30,6 +34,7 @@ const FarmMerlinDetail = () => {
   console.log({ merlinPool });
 
   const { address: userAddress } = useAccount();
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { data: allMerlinPools, isLoading } =
     useAllMerlinPoolsData(userAddress);
 
@@ -146,6 +151,52 @@ const FarmMerlinDetail = () => {
     router.push('/liquidity');
   };
 
+  const handleHarvest = async () => {
+    if (merlinPoolAddress === ADDRESS_ZERO) return;
+
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error'
+      });
+      return;
+    }
+
+    startLoadingTx({
+      tokenPairs: token1Symbol + ' - ' + token2Symbol,
+      title: 'Harvesting staked position in Merlin pool...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
+    const harvestTx = await merlinPoolContract.write(
+      userAddress as Address,
+      merlinPoolAddress,
+      'harvest',
+      []
+    );
+
+    if (!harvestTx) {
+      stopLoadingTx();
+      return;
+    }
+
+    const txHash = harvestTx.hash;
+    const txReceipt = await waitForTransaction({ hash: txHash });
+    console.log({txReceipt});
+
+    stopLoadingTx();
+
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: 'harvested position in Merlin pool',
+        token1: token1Symbol,
+        token2: token2Symbol,
+        txHash: txHash,
+        usdValue: `?`,
+      })
+    );
+  };
+
   return (
     <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
       <div className="flex flex-col md:flex-row text-2xl font-bold gap-4 justify-between">
@@ -236,6 +287,13 @@ const FarmMerlinDetail = () => {
       )}
       <div className="flex flex-wrap justify-between items-center mt-6">
         <div className="text-2xl font-bold order-1">Staked positions</div>
+        <Button
+          className="px-6 flex gap-3 order-3 md:order-2 w-full md:w-[147px] md:h-[47px] justify-center"
+          onClick={handleHarvest}
+        >
+          <WalletIcon/>
+          Harvest
+        </Button>
         <Button
           className="px-6 flex gap-3 order-3 md:order-2 w-full md:w-[147px] md:h-[47px] justify-center"
           icon={<DownloadIcon />}
