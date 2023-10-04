@@ -1,7 +1,7 @@
 import React from 'react';
 import QuestionIcon from '@/icons/QuestionIcon';
 import { useRouter } from 'next/router';
-import { MerlinPoolDetailProps } from './types';
+import MerlinPoolDetailProps from '../../../types/MerlinPoolDetail';
 import BigNumber from 'bignumber.js';
 
 interface TableDetailProps {
@@ -10,7 +10,7 @@ interface TableDetailProps {
 
 const TableDetail: React.FC<TableDetailProps> = ({ data }) => {
   const router = useRouter();
-  console.log({ data })
+  console.log({ data });
   return (
     <div className="overflow-x-auto mt-8">
       <table className="min-w-full bg-dark">

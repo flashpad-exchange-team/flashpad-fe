@@ -121,9 +121,16 @@ const FarmMerlinDetail = () => {
       ),
     ]);
 
-    setTotalDeposited(BigNumber(userInfo?.totalDepositAmount || 0).div(BigNumber(10).pow(18)) + '');
-    setRewardsToken1Decimals(rwdToken1Decimals ? Number(rwdToken1Decimals) : 18);
-    setRewardsToken2Decimals(rwdToken2Decimals ? Number(rwdToken2Decimals) : 18);
+    setTotalDeposited(
+      BigNumber(userInfo?.totalDepositAmount || 0).div(BigNumber(10).pow(18)) +
+        ''
+    );
+    setRewardsToken1Decimals(
+      rwdToken1Decimals ? Number(rwdToken1Decimals) : 18
+    );
+    setRewardsToken2Decimals(
+      rwdToken2Decimals ? Number(rwdToken2Decimals) : 18
+    );
   };
 
   useEffect(() => {
@@ -157,7 +164,7 @@ const FarmMerlinDetail = () => {
     if (!userAddress) {
       customToast({
         message: 'A wallet is not yet connected',
-        type: 'error'
+        type: 'error',
       });
       return;
     }
@@ -182,7 +189,7 @@ const FarmMerlinDetail = () => {
 
     const txHash = harvestTx.hash;
     const txReceipt = await waitForTransaction({ hash: txHash });
-    console.log({txReceipt});
+    console.log({ txReceipt });
 
     stopLoadingTx();
 
@@ -216,21 +223,23 @@ const FarmMerlinDetail = () => {
               )}
             </div>
             <div className="absolute left-[25px]">
-              {token1Logo != token2Logo && (token2Logo ? (
-                <Image
-                  alt="logo"
-                  src={token2Logo as any}
-                  width={40}
-                  height={40}
-                  className="max-w-[unset]"
-                />
-              ) : (
-                <BNBICon size="40" />
-              ))}
+              {token1Logo != token2Logo &&
+                (token2Logo ? (
+                  <Image
+                    alt="logo"
+                    src={token2Logo as any}
+                    width={40}
+                    height={40}
+                    className="max-w-[unset]"
+                  />
+                ) : (
+                  <BNBICon size="40" />
+                ))}
             </div>
           </div>
           <div className="ml-16 pl-4">
-            {token1Symbol}{token1Symbol != token2Symbol && (' - ' + token2Symbol)}
+            {token1Symbol}
+            {token1Symbol != token2Symbol && ' - ' + token2Symbol}
           </div>
         </div>
         <div className="flex flex-wrap">
@@ -286,25 +295,28 @@ const FarmMerlinDetail = () => {
         />
       )}
       <div className="flex flex-wrap justify-between items-center mt-6">
-        <div className="text-2xl font-bold order-1">Staked positions</div>
-        <Button
-          className="px-6 flex gap-3 order-3 md:order-2 w-full md:w-[147px] md:h-[47px] justify-center"
-          onClick={handleHarvest}
-        >
-          <WalletIcon/>
-          Harvest
-        </Button>
-        <Button
-          className="px-6 flex gap-3 order-3 md:order-2 w-full md:w-[147px] md:h-[47px] justify-center"
-          icon={<DownloadIcon />}
-          onClick={() => {
-            if (lpTokenAddress != ADDRESS_ZERO) {
-              router.push(`/pool-detail/${lpTokenAddress}`);
-            }
-          }}
-        >
-          Deposit
-        </Button>
+        <div className="text-2xl font-bold ">Staked positions</div>
+        <div className="flex items-center gap-2">
+          <Button
+            className="px-6 flex gap-3 order-3 md:order-2 w-full md:w-[147px] md:h-[47px] justify-center"
+            onClick={handleHarvest}
+          >
+            <WalletIcon />
+            Harvest
+          </Button>
+          <Button
+            className="px-6 flex gap-3 order-3 md:order-2 w-full md:w-[147px] md:h-[47px] justify-center"
+            icon={<DownloadIcon />}
+            onClick={() => {
+              if (lpTokenAddress != ADDRESS_ZERO) {
+                router.push(`/pool-detail/${lpTokenAddress}`);
+              }
+            }}
+          >
+            Deposit
+          </Button>
+        </div>
+
         <div className="w-full bg-dark flex flex-col md:flex-row items-center gap-3 py-4 px-5 order-2 md:order-3">
           <div className=" rounded-md w-full md:w-1/3">
             <div className="bg-darkBlue px-3 py-2 rounded-md w-full flex items-center justify-between">

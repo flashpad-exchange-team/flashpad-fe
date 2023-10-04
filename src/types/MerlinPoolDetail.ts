@@ -1,6 +1,6 @@
 import { IMerlinPoolSettings } from '@/utils/merlinPoolContract';
 
-export interface MerlinPoolDetailProps {
+export default interface MerlinPoolDetailProps {
   tvl: string;
   apr: string;
   // token1?: string;

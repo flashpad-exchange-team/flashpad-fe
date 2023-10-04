@@ -1,14 +1,14 @@
 import QuestionIcon from '@/icons/QuestionIcon';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { MerlinPoolDetailProps } from './types';
+import MerlinPoolDetailProps from '../../../types/MerlinPoolDetail';
 
 interface TableDetailSpProps {
   data: MerlinPoolDetailProps;
 }
 
 const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
-  console.log({data});
+  console.log({ data });
   const router = useRouter();
   return (
     <div className="overflow-x-auto mt-8">
