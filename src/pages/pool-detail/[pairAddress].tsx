@@ -18,9 +18,9 @@ import Link from '@/icons/Link';
 import {
   ADDRESS_ZERO,
   CHAIN_EXPLORER_URL,
+  MERLIN_POOL_FACTORY_ADDRESS,
 } from '@/utils/constants';
-// import * as erc20Contract from '@/utils/erc20TokenContract';
-// import * as pairContract from '@/utils/pairContract';
+import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import * as covalentApiService from '@/services/covalentApi.service';
@@ -60,6 +60,9 @@ const PoolDetail = () => {
 
   const [userSpNfts, setUserSpNfts] = useState<any>();
   const [spNFTTokenId, setSpNFTTokenId] = useState<string>('');
+  const [isSpNFTStakedToMerlin, setIsSpNFTStakedToMerlin] = useState<
+    boolean | undefined
+  >(undefined);
   const [isOpenApyCalculator, setOpenApyCalculator] = useState<boolean>(false);
   const [openAddToPosition, setOpenAddToPosition] = useState<boolean>(false);
   const [openWithdrawPosition, setOpenWithdrawPosition] =
@@ -172,6 +175,31 @@ const PoolDetail = () => {
       userAddress,
       nftPoolAddress
     );
+
+    const nPublishedMerlinPools = await merlinPoolFactoryContract.read(
+      MERLIN_POOL_FACTORY_ADDRESS as Address,
+      'nftPoolPublishedMerlinPoolsLength',
+      [nftPoolAddress]
+    );
+
+    for (let i = 0; i < Number(nPublishedMerlinPools); i++) {
+      const publishedMerlinPoolAddr = await merlinPoolFactoryContract.read(
+        MERLIN_POOL_FACTORY_ADDRESS as Address,
+        'getNftPoolPublishedMerlinPool',
+        [nftPoolAddress, i]
+      );
+      const stakedInMerlinSpNfts =
+        await covalentApiService.getNFTsOwnedByAddress(
+          publishedMerlinPoolAddr,
+          nftPoolAddress
+        );
+
+      if (stakedInMerlinSpNfts && stakedInMerlinSpNfts.length) {
+        spNfts.push(...stakedInMerlinSpNfts);
+      }
+    }
+    console.log({ spNfts });
+
     let spNftsWithRewards = [];
     for (const spNft of spNfts) {
       const nft: any = { ...spNft, tokenId: spNft.token_id };
@@ -243,6 +271,7 @@ const PoolDetail = () => {
         }}
         refetchData={getUserStakedPositions}
         spNFTTokenId={spNFTTokenId}
+        isSpNFTStakedToMerlin={isSpNFTStakedToMerlin}
         listSpNfts={userSpNfts}
         toggleAddToPosition={toggleAddToPosition}
         toggleWithdrawPosition={toggleWithdrawPosition}
@@ -450,6 +479,7 @@ const PoolDetail = () => {
             toggleBoostPosition={toggleBoostPosition}
             togglePositionDetail={togglePositionDetail}
             setSpNFTTokenId={setSpNFTTokenId}
+            setIsSpNFTStakedToMerlin={setIsSpNFTStakedToMerlin}
           />
         ) : (
           <NotStaked

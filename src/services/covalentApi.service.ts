@@ -18,10 +18,14 @@ export const getNFTsOwnedByAddress = async (
         withUncached: true
       }
     );
+    const owner = response.data?.address;
     const nftContractBalance = response.data?.items?.find((it) =>
       it.contract_address.toLowerCase() === erc721Contract.toLowerCase()
     );
-    return nftContractBalance?.nft_data || [];
+    return nftContractBalance?.nft_data.map((e) => ({
+      ...e,
+      owner,
+    })) || [];
   } catch (error) {
     console.error(error);
     return [];

@@ -18,6 +18,12 @@ import { Address } from 'viem';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import StakeIntoMerlin from './StakeIntoMerlinModal';
+import { useAccount } from 'wagmi';
+import customToast from '../notification/customToast';
+import { useLoading } from '@/context/LoadingContext';
+import * as merlinPoolContract from '@/utils/merlinPoolContract';
+import { waitForTransaction } from '@wagmi/core';
+import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
 
 export interface PositionDetailModalProps {
   toggleOpen: () => void;
@@ -36,6 +42,7 @@ export interface PositionDetailModalProps {
   };
   refetchData: () => void;
   spNFTTokenId: string;
+  isSpNFTStakedToMerlin: boolean | undefined;
   listSpNfts: any[];
   toggleAddToPosition: () => void;
   toggleWithdrawPosition: () => void;
@@ -50,6 +57,7 @@ const PositionDetailModal = ({
   token1Data,
   token2Data,
   spNFTTokenId,
+  isSpNFTStakedToMerlin,
   listSpNfts,
   toggleAddToPosition,
   toggleWithdrawPosition,
@@ -59,6 +67,8 @@ const PositionDetailModal = ({
   poolInfo,
   refetchData,
 }: PositionDetailModalProps) => {
+  const { address: userAddress } = useAccount();
+  const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   // const [isOpenMoreAction, setIsOpenMoreAction] = useState(true);
   const [isOpenValue, setIsOpenValue] = useState(true);
   const [isOpenApr, setIsOpenApr] = useState(true);
@@ -91,6 +101,54 @@ const PositionDetailModal = ({
   const handleOpenStakeToMerlinModal = () => {
     setOpenStakeToMerlinModal(!isOpenStakeToMerlinModal);
     setShowThisModal(!showThisModal);
+  };
+
+  const handleUnstakeFromMerlin = async () => {
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    startLoadingTx({
+      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+      title: 'Unstaking your spNFT from Merlin pool...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
+    console.log({ currentSPNFT });
+    const merlinPoolAddress = currentSPNFT.owner;
+
+    const withdrawSpNftTx = await merlinPoolContract.write(
+      userAddress as Address,
+      merlinPoolAddress as Address,
+      'withdraw',
+      [currentSPNFT?.token_id]
+    );
+
+    if (!withdrawSpNftTx) {
+      stopLoadingTx();
+      return;
+    }
+
+    const txHash = withdrawSpNftTx.hash;
+    const txReceipt = await waitForTransaction({ hash: txHash });
+    console.log({ txReceipt });
+
+    toggleOpen();
+    stopLoadingTx();
+    refetchData();
+
+    startSuccessTx(
+      handleSuccessTxMessageCreatePositionAndLiquidity({
+        action: `unstaked position #ID-${spNFTTokenId} from Merlin pool`,
+        token1: token1Data?.symbol,
+        token2: token2Data?.symbol,
+        txHash: txHash,
+      })
+    );
   };
 
   const handleHarvestPosition = () => {};
@@ -171,9 +229,21 @@ const PositionDetailModal = ({
             <div>
               <div
                 className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
-                onClick={toggleWithdrawPosition}
+                onClick={() => {
+                  console.log({ isSpNFTStakedToMerlin });
+                  if (!isSpNFTStakedToMerlin) {
+                    toggleWithdrawPosition();
+                  }
+                }}
               >
-                <WithdrawPositionIcon />
+                <WithdrawPositionIcon
+                  message={
+                    isSpNFTStakedToMerlin
+                      ? 'This position is being staked in a Merlin Pool. Please withdraw it from the Merlin Pool first.'
+                      : 'Withdraw position'
+                  }
+                  strokeColor={isSpNFTStakedToMerlin ? '#475467' : ''}
+                />
               </div>
               <div className="text-xs mt-2 text-center">Withdraw</div>
             </div>
@@ -195,14 +265,31 @@ const PositionDetailModal = ({
               </div>
               <div className="text-xs mt-2 text-center">Boost</div>
             </div>
-            <div onClick={handleOpenStakeToMerlinModal}>
+            <div
+              onClick={() => {
+                if (!isSpNFTStakedToMerlin) {
+                  handleOpenStakeToMerlinModal();
+                  return;
+                }
+                handleUnstakeFromMerlin();
+              }}
+            >
               <div
                 className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
-                title="Boost position"
+                title="Stake into Merlin"
               >
-                <ChartBreakoutIcon stroke="#FFAF1D" />
+                {isSpNFTStakedToMerlin ? (
+                  // unstake button
+                  <ChartBreakoutIcon stroke="#FFAF1D" />
+                ) : (
+                  <ChartBreakoutIcon stroke="#FFAF1D" />
+                )}
               </div>
-              <div className="text-xs mt-2 text-center">Stake into Merlin</div>
+              <div className="text-xs mt-2 text-center">
+                {isSpNFTStakedToMerlin
+                  ? 'Unstake from Merlin'
+                  : 'Stake into Merlin'}
+              </div>
             </div>
           </div>
           {/* <div
@@ -290,11 +377,23 @@ const PositionDetailModal = ({
             </div>
           </div>
           <div className="flex justify-between items-center my-2">
-            <div className="flex items-center">
-              <CloseIcon />
-              <div className="pl-2">Not staked in a Merlin pool</div>
-            </div>
-            <div>-</div>
+            {isSpNFTStakedToMerlin ? (
+              <>
+                <div className="flex items-center">
+                  <Eligibility />
+                  <div className="pl-2">Staked in a Merlin pool </div>
+                </div>
+                <div>-</div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center">
+                  <CloseIcon />
+                  <div className="pl-2">Not staked in a Merlin pool </div>
+                </div>
+                <div>-</div>
+              </>
+            )}
           </div>
           <div className="p-2 bg-blue-opacity-50 ">
             <div className="text-[#fff]">Data breakdown</div>
