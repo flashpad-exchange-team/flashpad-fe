@@ -3,7 +3,6 @@ import useWindowWidth from '@/hooks/useWindowWidth';
 import Image from 'next/image';
 import AddIcon from '@/icons/AddIcon';
 import BNBICon from '@/icons/BNBIcon';
-import CalculatorIcon from '@/icons/Calculator';
 import DownloadIcon from '@/icons/DownloadIcon';
 import LayerIcon from '@/icons/LayerIcon';
 import Link from '@/icons/Link';
@@ -250,10 +249,10 @@ const FarmMerlinDetail = () => {
             <Link />
             Contract
           </Button>
-          <Button className="px-2 h-[52px] w-[100%] order-3 md:order-2 mr-2 md:w-[210px] flex justify-center">
+          {/* <Button className="px-2 h-[52px] w-[100%] order-3 md:order-2 mr-2 md:w-[210px] flex justify-center">
             <CalculatorIcon />
             APY Calculator
-          </Button>
+          </Button> */}
           <Button
             className="px-2 h-[52px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[210px] flex justify-center"
             onClick={handleClickAddLiquidity}
