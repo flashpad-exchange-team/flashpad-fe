@@ -34,6 +34,7 @@ export interface StakeIntoMerlinModalProps {
   };
   nftPoolAddress?: Address;
   refetchData: () => void;
+  togglePositionDetailModal: () => void;
 }
 
 const StakeIntoMerlinModal = ({
@@ -44,6 +45,7 @@ const StakeIntoMerlinModal = ({
   token2Data,
   nftPoolAddress,
   refetchData,
+  togglePositionDetailModal,
 }: StakeIntoMerlinModalProps) => {
   const { address: userAddress } = useAccount();
   const { data: listMerlinPools, isLoading } = useAllMerlinPoolsData(userAddress);
@@ -113,6 +115,7 @@ const StakeIntoMerlinModal = ({
     console.log({txReceipt});
 
     toggleOpen();
+    togglePositionDetailModal();
     stopLoadingTx();
     refetchData();
 

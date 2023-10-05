@@ -9,7 +9,6 @@ import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
 import BNBICon from '@/icons/BNBIcon';
-import CalculatorIcon from '@/icons/Calculator';
 import ChartLineIcon from '@/icons/ChartLineIcon';
 import DollarIcon from '@/icons/DollarIcon';
 import FeeIcon from '@/icons/FeeIcon';
@@ -53,6 +52,7 @@ const PoolDetail = () => {
   const [poolInfo, setPoolInfo] = useState({} as any);
   const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
   const [nftPoolAddress, setNftPoolAddress] = useState<Address>(ADDRESS_ZERO);
+  const [publishedMerlinPoolsCount, setPublishedMerlinPoolsCount] = useState(0);
   const [token1Symbol, setToken1Symbol] = useState<string>('');
   const [token2Symbol, setToken2Symbol] = useState<string>('');
   const [token1Logo, setToken1Logo] = useState<string>('');
@@ -182,6 +182,8 @@ const PoolDetail = () => {
       [nftPoolAddress]
     );
 
+    setPublishedMerlinPoolsCount(Number(nPublishedMerlinPools || 0));
+
     for (let i = 0; i < Number(nPublishedMerlinPools); i++) {
       const publishedMerlinPoolAddr = await merlinPoolFactoryContract.read(
         MERLIN_POOL_FACTORY_ADDRESS as Address,
@@ -198,6 +200,7 @@ const PoolDetail = () => {
         spNfts.push(...stakedInMerlinSpNfts);
       }
     }
+    spNfts.sort((a, b) => Number(a.token_id || 0) - Number(b.token_id || 0));
     console.log({ spNfts });
 
     let spNftsWithRewards = [];
@@ -277,7 +280,9 @@ const PoolDetail = () => {
         toggleWithdrawPosition={toggleWithdrawPosition}
         toggleLockPosition={toggleLockPosition}
         toggleBoostPosition={toggleBoostPosition}
+        toggleHarvestPosition={toggleHarvestPosition}
         poolInfo={poolInfo}
+        publishedMerlinPoolsCount={publishedMerlinPoolsCount}
       />
       <AddToPositionModal
         isOpen={openAddToPosition}
@@ -448,14 +453,14 @@ const PoolDetail = () => {
               <Link color="white" />
               Contract
             </Button>
-            <Button
+            {/* <Button
               className="text-white text-sm h-[42px] px-6 "
               style={{ background: '#101828' }}
               onClick={toggleOpenApyCalculator}
             >
               <CalculatorIcon color="white" />
               APY
-            </Button>
+            </Button> */}
           </div>
         </div>
         <Notification

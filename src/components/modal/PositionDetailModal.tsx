@@ -48,7 +48,9 @@ export interface PositionDetailModalProps {
   toggleWithdrawPosition: () => void;
   toggleLockPosition: () => void;
   toggleBoostPosition: () => void;
+  toggleHarvestPosition: () => void;
   poolInfo: any;
+  publishedMerlinPoolsCount: number;
 }
 
 const PositionDetailModal = ({
@@ -63,9 +65,11 @@ const PositionDetailModal = ({
   toggleWithdrawPosition,
   toggleLockPosition,
   toggleBoostPosition,
+  toggleHarvestPosition,
   nftPoolAddress,
   poolInfo,
   refetchData,
+  publishedMerlinPoolsCount,
 }: PositionDetailModalProps) => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
@@ -151,8 +155,6 @@ const PositionDetailModal = ({
     );
   };
 
-  const handleHarvestPosition = () => {};
-
   return (
     <>
       <StakeIntoMerlin
@@ -163,6 +165,7 @@ const PositionDetailModal = ({
         token2Data={token2Data}
         nftPoolAddress={nftPoolAddress}
         refetchData={refetchData}
+        togglePositionDetailModal={toggleOpen}
       />
       <CommonModal
         isOpen={isOpen && showThisModal}
@@ -267,6 +270,9 @@ const PositionDetailModal = ({
             </div>
             <div
               onClick={() => {
+                if (!publishedMerlinPoolsCount) {
+                  return;
+                }
                 if (!isSpNFTStakedToMerlin) {
                   handleOpenStakeToMerlinModal();
                   return;
@@ -278,17 +284,24 @@ const PositionDetailModal = ({
                 className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
                 title="Stake into Merlin"
               >
-                {isSpNFTStakedToMerlin ? (
-                  // unstake button
-                  <ChartBreakoutIcon stroke="#FFAF1D" />
+                {publishedMerlinPoolsCount > 0 ? (
+                  isSpNFTStakedToMerlin ? (
+                    //TODO: unstake icon
+                    <ChartBreakoutIcon stroke="#FFAF1D" />
+                  ) : (
+                    <ChartBreakoutIcon stroke="#FFAF1D" />
+                  )
                 ) : (
+                  //TODO: no merlin pools available icon
                   <ChartBreakoutIcon stroke="#FFAF1D" />
                 )}
               </div>
               <div className="text-xs mt-2 text-center">
-                {isSpNFTStakedToMerlin
-                  ? 'Unstake from Merlin'
-                  : 'Stake into Merlin'}
+                {publishedMerlinPoolsCount > 0
+                  ? isSpNFTStakedToMerlin
+                    ? 'Unstake from Merlin'
+                    : 'Stake into Merlin'
+                  : 'No Merlin pools available'}
               </div>
             </div>
           </div>
@@ -527,7 +540,7 @@ const PositionDetailModal = ({
             </Button>
             <Button
               className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
-              onClick={handleHarvestPosition}
+              onClick={toggleHarvestPosition}
             >
               Harvest
             </Button>
