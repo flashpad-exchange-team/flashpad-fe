@@ -63,9 +63,7 @@ const RemoveLiquidityModal = ({
     );
 
     setTotalLiquidity(
-      BigNumber(userLpBalance)
-        .div(BigNumber(10).pow(lpTokenDecimals))
-        .toString()
+      BigNumber(userLpBalance).div(BigNumber(10).pow(lpTokenDecimals)).toFixed()
     );
   };
 
