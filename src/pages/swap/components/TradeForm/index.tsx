@@ -106,9 +106,13 @@ const TradeForm = ({
       .pow(balanceToken1?.decimals!)
       .times(new BigNumber(token1Amount));
 
+    // const bnToken2Amount = BigNumber(10)
+    //   .pow(balanceToken2?.decimals!)
+    //   .times(new BigNumber(token2Amount));
     const bnToken2Amount = BigNumber(10)
-      .pow(balanceToken2?.decimals!)
-      .times(new BigNumber(token2Amount));
+      .pow(balanceToken1?.decimals!)
+      .times(new BigNumber(token1Amount))
+      .times(swapRate1To2);
     if (
       bnToken1Amount.isNaN() ||
       bnToken2Amount.isNaN() ||
@@ -193,7 +197,7 @@ const TradeForm = ({
     } else {
       txResult = await routerContract.swapTokensForTokens(userAddress!, {
         amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        amountOutMin: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
         path: [token1.address, token2.address],
         to: userAddress!,
         referrer: ADDRESS_ZERO,

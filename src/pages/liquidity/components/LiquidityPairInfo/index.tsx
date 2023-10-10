@@ -101,6 +101,7 @@ const LiquidityPairInfo = ({
         amount1In,
         token1Address,
       ]);
+
       setSwapRate1To2(
         BigNumber(amount2Out).div(amount2In).toFixed(token2Decimals!)
       );
