@@ -16,22 +16,21 @@ const Launchpad = () => {
   return (
     <div className="max-w-[1096px] w-full mx-auto p-6 md:p-0">
       <header className="text-primary text-[36px] mt-20 font-bold">
-        Rodeo auction
+        Arthur Exchange Launchpad
       </header>
       <div className="text-[#FCFCFD] text-base">
-        Rodeo Finance is the largest platform of leveraged DeFi products on
-        Arbitrum, allowing users to earn yield on a diverse range of managed and
-        passive investment strategies. The protocol utilizes undercollateralized
-        leverage to enable users to increase their positions in top-tier vaults
-        and strategies, resulting in higher returns for both yield farmers and
-        passive lenders.At its core, Rodeo has two sides: passive liquidity
-        providers (lenders) earning high, yet safe APR by providing single
-        assets for use by leverage farmers, and leverage farmers who borrow up
-        to 10x to farm real yield strategies. By building additional DeFi
-        products on top of the core leverage Farms, Rodeo aims to become
-        Arbitrium's hub for maximizing yield. Enabling users and protocols to
-        become more capital efficient, generate higher yields, and onboard the
-        next generation of DeFi users through a simplified, composable solution
+        Contrary to popular belief, Lorem Ipsum is not simply random text. It
+        has roots in a piece of classical Latin literature from 45 BC, making it
+        over 2000 years old. Richard McClintock, a Latin professor at
+        Hampden-Sydney College in Virginia, looked up one of the more obscure
+        Latin words, consectetur, from a Lorem Ipsum passage, and going through
+        the cites of the word in classical literature, discovered the
+        undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33
+        of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by
+        Cicero, written in 45 BC. This book is a treatise on the theory of
+        ethics, very popular during the Renaissance. The first line of Lorem
+        Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
+        1.10.32.
       </div>
       <Button
         className="justify-center my-8 h-[52px] text-base px-[42px]"
@@ -41,20 +40,19 @@ const Launchpad = () => {
       </Button>
       <Image alt="logo" src={Landing.src} width={1096} height={740} />
       <div className="text-[#FCFCFD] text-base mt-8">
-        Disclaimer: The $RDO token is not intended to constitute securities in
-        any jurisdiction. This announcement is not an invitation to invest in
-        securities or solicitations thereof in any jurisdiction. Please do your
-        own due diligence.
+        It is a long established fact that a reader will be distracted by the
+        readable content of a page when looking at its layout. The point of
+        using Lorem Ipsum is that it has a more-or-less normal distribution of
+        letters, as opposed to using 'Content here, content here', making it
+        look like readable English.
       </div>
       <div className="text-xs py-3 px-4 border-b border-[#344054] text-left"></div>
       <div className="text-[#FCFCFD] text-base mt-8">
-        Please ensure you understand the public sale mechanics and terms before
-        proceeding, deposited amounts CANNOT be withdrawn.Initially, the auction
-        will start with a fully diluted valuation (FDV) of $830k, fixing a
-        $0.0083 floor price for $RDO, and will increase after the first $100k
-        have been raised. Once those $100k are reached, we'll enter a
-        price-discovery phase, where the token price will continuously increase
-        at every purchase.
+        There are many variations of passages of Lorem Ipsum available, but the
+        majority have suffered alteration in some form, by injected humour, or
+        randomised words which don't look even slightly believable. If you are
+        going to use a passage of Lorem Ipsum, you need to be sure there isn't
+        anything embarrassing hidden in the middle of text.
       </div>
 
       <div className="text-[#FCFCFD] text-base mt-2 flex">
@@ -62,7 +60,7 @@ const Launchpad = () => {
           <Error />
         </div>
         <div className="ml-2">
-          No matter when you participate, everyone will get $RDO tokens at the
+          No matter when you participate, everyone will get $ART tokens at the
           same final price.
         </div>
       </div>
@@ -71,9 +69,9 @@ const Launchpad = () => {
           <Error />
         </div>
         <div className="ml-2">
-          Your allocation will be made up of $srRDO, a receipt token made up of
-          30% $RDO and 70% $xRDO. $srRDO will be automatically converted to $RDO
-          and $xRDO 24h after the claims open.
+          Your allocation will be made up of $ART, a receipt token made up of
+          30% $ART and 70% $xART. $ART will be automatically converted to $ART
+          and $xART 24h after the claims open.
         </div>
       </div>
 
@@ -195,10 +193,10 @@ const Launchpad = () => {
             </div>
           </div>
           <div className="text-[#98A2B3]">
-            You can contribute with USDC in exchange for $srRDO tokens, which
-            are to be claimed 24h after the end of the sale. The tokens you will
+            You can contribute with USDC in exchange for $ART tokens, which are
+            to be claimed 24h after the end of the sale. The tokens you will
             receive will have the exact same USDC value than your contribution.
-            1,200,000 $srRDO, worth 360,000 $RDO and 840,000 $xRDO (out of a
+            1,200,000 $ART, worth 360,000 $ART and 840,000 $xART (out of a
             10,000,000 total supply) will be allocated to the sale. The final
             price will therefore be:
           </div>
@@ -235,25 +233,21 @@ const Launchpad = () => {
             The public sale will last until July 3rd @ 12pm UTC. Shortly after
             (exact date TBA), the purchased tokens will be entirely and directly
             claimable from this same page. In order to align the long-term
-            objectives of the protocol, the sale will be distributed in $srRDO ,
-            worth 30% of $RDO and 70% of $xRDO. The claimed $srRDO will be
-            automatically converted to $RDO directly from your wallet on July
-            4th @ 12pm UTC, at the same time as $RDO liquidity is seeded and
+            objectives of the protocol, the sale will be distributed in $ART ,
+            worth 30% of $ART and 70% of $xART. The claimed $ART will be
+            automatically converted to $ART directly from your wallet on July
+            4th @ 12pm UTC, at the same time as $ART liquidity is seeded and
             trading opens.
           </div>
         </div>
       </div>
 
       <div className="text-[#F04438]">
-        Camelot is a suite of decentralized contracts built to support Arbitrum
-        native builders. As a permissionless protocol, Camelot bears no
-        responsibility for any tokens purchased using its contracts. All users
-        are taking full responsibility that they are aware of the relevant risks
-        involved, and that they are participating for a token that is completely
-        independent and not associated with Camelot in any way. Social media
-        posts and visible information on the Camelot app in no way counts as an
-        endorsement of a protocol by the Camelot team, and nothing posted or
-        shared in any Camelot media is a recommendation or financial advice.
+        The standard chunk of Lorem Ipsum used since the 1500s is reproduced
+        below for those interested. Sections 1.10.32 and 1.10.33 from "de
+        Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
+        original form, accompanied by English versions from the 1914 translation
+        by H. Rackham.
       </div>
     </div>
   );

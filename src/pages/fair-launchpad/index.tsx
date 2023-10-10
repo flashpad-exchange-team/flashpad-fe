@@ -21,6 +21,8 @@ import {
   formSocialMediaSchema,
   formTokenSchema,
 } from '../../utils/validation/FormSchema';
+import { useRouter } from 'next/router';
+import customToast from '@/components/notification/customToast';
 export interface FormEvent {
   target: {
     name: string;
@@ -62,6 +64,7 @@ const Launchpad = () => {
   });
 
   const [validationError, setValidationError] = useState<any>('');
+  const router = useRouter();
   const handleChange: FormHandler = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
@@ -105,6 +108,12 @@ const Launchpad = () => {
           break;
       }
       if (step === 7) {
+        customToast({
+          message: 'Submit form successfully! ',
+          type: 'success',
+        });
+        router.push('/launchpad-detail');
+
         submitForm();
       } else {
         setStep(step + 1);
@@ -219,7 +228,8 @@ const Launchpad = () => {
               onClick={(e: any) => handleNextForm(e)}
               type="submit"
             >
-              {step !== 7 ? 'Next' : 'Send'} <ArrowRight fill />
+              {step !== 7 ? 'Next' : 'Submit'}{' '}
+              {step !== 7 && <ArrowRight fill />}
             </Button>
           </div>
         </form>
