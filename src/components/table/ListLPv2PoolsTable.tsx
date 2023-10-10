@@ -83,17 +83,14 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 My Pool Share
               </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
+              {/* <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 APR Range
-              </th>
+              </th> */}
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 TVL
               </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 Your deposit
-              </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
-                Pending rewards
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center"></th>
             </tr>
@@ -166,17 +163,14 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     {item.myPool || 0}%
                   </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                  {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     {item.apr}%
-                  </td>
+                  </td> */}
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     ${item.totalStaked}
                   </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    ${item.myStake}
-                  </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    ${item.earnings}
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                    {item.userLpBalance}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     {item.locked || item.myPool === '0.00' ? (

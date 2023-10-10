@@ -37,7 +37,8 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           pairContract.read(pairAddress, 'token1', []),
         ]);
 
-        let token1Symbol = 'TOKEN1', token2Symbol = 'TOKEN2';
+        let token1Symbol = 'TOKEN1',
+          token2Symbol = 'TOKEN2';
         if (token1Address) {
           [token1Symbol, token2Symbol] = await Promise.all([
             erc20Contract.erc20Read(token1Address, 'symbol', []),
@@ -52,8 +53,14 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           token2Symbol = token1Symbol;
         }
 
-        token1Symbol = (token1Symbol == 'WFTM' || token1Symbol == 'WETH') ? 'ETH' : token1Symbol;
-        token2Symbol = (token2Symbol == 'WFTM' || token2Symbol == 'WETH') ? 'ETH' : token2Symbol;
+        token1Symbol =
+          token1Symbol == 'WFTM' || token1Symbol == 'WETH'
+            ? 'ETH'
+            : token1Symbol;
+        token2Symbol =
+          token2Symbol == 'WFTM' || token2Symbol == 'WETH'
+            ? 'ETH'
+            : token2Symbol;
 
         const token1Logo = CHAINS_TOKENS_LIST.find((e) => {
           return e.symbol === token1Symbol;
@@ -80,6 +87,12 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           token2Logo,
           myPool: poolShare,
           pairAddress,
+          userLpBalance:
+            userLpBalance == 0
+              ? '0.00'
+              : BigNumber(userLpBalance)
+                  .div(new BigNumber(10).pow(18))
+                  .toFixed(),
         });
       }
 
