@@ -15,6 +15,7 @@ interface PoolListProps {}
 
 const PoolList = ({}: PoolListProps) => {
   const { address: userAddress } = useAccount();
+  const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
 
   const [showSpNftPools, setShowSpNftPools] = useState(true);
@@ -28,6 +29,7 @@ const PoolList = ({}: PoolListProps) => {
     setShowSpNftPools(!showSpNftPools);
   };
 
+  console.log({ allPairsData, allPoolsData });
   return (
     <div className={clsx(['max-w-[1096px] w-full mx-auto my-20 px-2'])}>
       <div className="block lg:flex items-center justify-between">
@@ -86,6 +88,8 @@ const PoolList = ({}: PoolListProps) => {
           <input
             className="w-full w-[300px] bg-dark h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
             placeholder="Search "
+            value={searchValue}
+            onChange={(e: any) => setSearchValue(e.target.value)}
           />
         </div>
         <Button
@@ -100,12 +104,54 @@ const PoolList = ({}: PoolListProps) => {
       </div>
       {showSpNftPools ? (
         <ListSpNftPoolsTable
-          data={allPoolsData as any}
+          data={
+            searchValue
+              ? allPoolsData?.filter(
+                  (item: any) =>
+                    item.token1Address
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.token2Address
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.poolAddress
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.token1
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.token2
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase())
+                )
+              : (allPoolsData as any)
+          }
           loading={isLoadingAllPools}
         />
       ) : (
         <ListLPv2PoolsTable
-          data={allPairsData as any}
+          data={
+            searchValue
+              ? allPairsData?.filter(
+                  (item: any) =>
+                    item.token1Address
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.token2Address
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.pairAddress
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.token1
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase()) ||
+                    item.token2
+                      ?.toLowerCase()
+                      ?.includes(searchValue?.toLowerCase())
+                )
+              : (allPairsData as any)
+          }
           loading={isLoadingAllPairs}
         />
       )}

@@ -40,7 +40,6 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
   const [token1Address, setToken1Address] = useState<string>('');
   const [token2Address, setToken2Address] = useState<string>('');
   const [lpTokenDecimals, setLPTokenDecimals] = useState<number>(18);
-
   const router = useRouter();
 
   const openRemoveLiquidityModal = (
@@ -180,7 +179,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                     ${item.earnings}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    {item.locked ? (
+                    {item.locked || item.myPool === '0.00' ? (
                       <div className="cursor-default text-[#475467] font-semibold">
                         Remove
                       </div>
