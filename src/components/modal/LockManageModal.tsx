@@ -64,11 +64,6 @@ const LockManageModal = ({
           <CloseIcon />
         </div>
       </div>
-      <div className="text-[15px]">Select Pool</div>
-      <input
-        className="w-full bg-darkBlue h-[44px] pl-3 text-sm mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
-        placeholder="Enter value"
-      />
       <div className="text-[15px]">Lock time (days)</div>
       <div className="flex gap-2 items-center my-2">
         <div
