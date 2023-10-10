@@ -105,19 +105,31 @@ const TradeForm = ({
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
       .times(new BigNumber(token1Amount));
-
+    const address: any = await routerContract.getPair(
+      token1.address,
+      token2.address
+    );
     // const bnToken2Amount = BigNumber(10)
     //   .pow(balanceToken2?.decimals!)
     //   .times(new BigNumber(token2Amount));
-    const bnToken2Amount = BigNumber(10)
-      .pow(balanceToken1?.decimals!)
-      .times(new BigNumber(token1Amount))
-      .times(swapRate1To2);
+    // const bnToken2Amount = BigNumber(10)
+    //   .pow(balanceToken1?.decimals!)
+    //   .times(new BigNumber(token1Amount))
+    //   .times(swapRate1To2);
+    const bnToken2Amount = new BigNumber(
+      await pairContract.read(address, 'getAmountOut', [
+        BigNumber(10)
+          .pow(balanceToken1?.decimals!)
+          .times(new BigNumber(token1Amount)),
+        token1.address,
+      ])
+    );
+    console.log({ bnToken2Amount }, typeof bnToken2Amount);
     if (
-      bnToken1Amount.isNaN() ||
-      bnToken2Amount.isNaN() ||
-      bnToken1Amount.isZero() ||
-      bnToken2Amount.isZero()
+      bnToken1Amount?.isNaN() ||
+      bnToken2Amount?.isNaN() ||
+      bnToken1Amount?.isZero() ||
+      bnToken2Amount?.isZero()
     ) {
       customToast({
         message: 'Please input valid amount! ',
@@ -195,9 +207,17 @@ const TradeForm = ({
         }
       );
     } else {
+      console.log({
+        amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        path: [token1.address, token2.address],
+        to: userAddress!,
+        referrer: ADDRESS_ZERO,
+        deadline: timestamp + K_5_MIN + '',
+      });
       txResult = await routerContract.swapTokensForTokens(userAddress!, {
         amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountOutMin: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+        amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
         path: [token1.address, token2.address],
         to: userAddress!,
         referrer: ADDRESS_ZERO,
