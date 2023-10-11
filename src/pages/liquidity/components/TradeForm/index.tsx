@@ -21,6 +21,7 @@ import {
   ADDRESS_ZERO,
   ARTHUR_ROUTER_ADDRESS,
   DEFAULT_DEADLINE,
+  DEFAULT_SLIPPAGE,
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
   daysToSeconds,
@@ -103,6 +104,7 @@ const TradeForm = ({
   const [failed, setFailed] = useState<boolean | undefined>(false);
 
   const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
+  const [slippage, setSlippage] = useState<number>(Number(DEFAULT_SLIPPAGE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
 
   const { data: balanceToken1 } = useBalance({
@@ -155,8 +157,9 @@ const TradeForm = ({
     setTokenBeingSelected(0);
   };
 
-  const saveSettings = ({ deadline }: ILiquiditySettings) => {
+  const saveSettings = ({ deadline, slippage }: ILiquiditySettings) => {
     setDeadline(deadline);
+    setSlippage(slippage);
   };
 
   const getPairAddress = async () => {
@@ -317,33 +320,14 @@ const TradeForm = ({
     }
     setInsufficient(false);
 
-    let reserve1, reserve2;
-    const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
-    const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
-    if (
-      !pairToken1 ||
-      (pairToken1 as string).toLowerCase() === token1.address.toLowerCase()
-    ) {
-      reserve1 = reserveA;
-      reserve2 = reserveB;
-    } else {
-      reserve1 = reserveB;
-      reserve2 = reserveA;
-    }
-
-    let token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    let token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    if (bnToken1Amount.isGreaterThan(token1AmountIn)) {
-      // token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_UP);
-      token2AmountIn = web3Helpers
-        .bnQuote(BigNumber(token1AmountIn), reserve1, reserve2)
-        .toFixed(0, BigNumber.ROUND_DOWN);
-    } else if (bnToken2Amount.isGreaterThan(token2AmountIn)) {
-      // token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_UP);
-      token1AmountIn = web3Helpers
-        .bnQuote(BigNumber(token2AmountIn), reserve2, reserve1)
-        .toFixed(0, BigNumber.ROUND_DOWN);
-    }
+    const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    const token1AmountMin = bnToken1Amount
+      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+      .toFixed(0, BigNumber.ROUND_DOWN);
+    const token2AmountMin = bnToken2Amount
+      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+      .toFixed(0, BigNumber.ROUND_DOWN);
 
     if (token1.symbol != 'ETH') {
       const token1Allowance = (await erc20TokenContract.erc20Read(
@@ -423,8 +407,8 @@ const TradeForm = ({
       txResult = await routerContract.addLiquidityETH(userAddress!, {
         token: token2.address,
         amountTokenDesired: token2AmountIn,
-        amountTokenMin: token2AmountIn,
-        amountETHMin: token1AmountIn,
+        amountTokenMin: token2AmountMin,
+        amountETHMin: token1AmountMin,
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
         timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
@@ -433,8 +417,8 @@ const TradeForm = ({
       txResult = await routerContract.addLiquidityETH(userAddress!, {
         token: token1.address,
         amountTokenDesired: token1AmountIn,
-        amountTokenMin: token1AmountIn,
-        amountETHMin: token2AmountIn,
+        amountTokenMin: token1AmountMin,
+        amountETHMin: token2AmountMin,
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
         timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
@@ -445,8 +429,8 @@ const TradeForm = ({
         tokenB: token2.address,
         amountADesired: token1AmountIn,
         amountBDesired: token2AmountIn,
-        amountAMin: token1AmountIn,
-        amountBMin: token2AmountIn,
+        amountAMin: token1AmountMin,
+        amountBMin: token2AmountMin,
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
         timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',

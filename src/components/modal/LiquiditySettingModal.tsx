@@ -87,6 +87,9 @@ const LiquiditySettingModal = ({
         value={slippage}
         onChange={(e) => setSlippage(e.target.value)}
       />
+      {Number(slippage) < 0.5 && <div className="mb-2 mt-1 ml-2 text-sm text-[#FFAF1D]">
+        Warning: Your transaction may fail!
+        </div>}
       <div className="text-[15px]">Deadline (mins)</div>
       <input
         className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none  placeholder-[#667085]"
