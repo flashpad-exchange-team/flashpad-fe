@@ -15,10 +15,10 @@ const routerContract: any = getContract({
 export interface IAddLiquidityParams {
   tokenA: string;
   tokenB: string;
-  amountADesired: string;
-  amountBDesired: string;
-  amountAMin: string;
-  amountBMin: string;
+  amountADesired: string | BigNumber;
+  amountBDesired: string | BigNumber;
+  amountAMin: string | BigNumber;
+  amountBMin: string | BigNumber;
   to: Address;
   deadline: string;
   timeLock: string;
