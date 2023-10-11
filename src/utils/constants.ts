@@ -23,10 +23,10 @@ export const MUMBAI_ALCHEMY_RPC = process.env.NEXT_PUBLIC_MUMBAI_ALCHEMY_RPC;
 
 export const RPC_URL = IS_LINEA ? LINEA_GOERLI_INFURA_RPC : MUMBAI_ALCHEMY_RPC;
 
-export const MUMBAI_EXPLORER_URL = process.env.NEXT_PUBLIC_MUMBAI_EXPLORER_URL;
+export const MUMBAI_EXPLORER_URL = process.env.NEXT_PUBLIC_MUMBAI_EXPLORER_URL || 'https://mumbai.polygonscan.com';
 
 export const LINEA_GOERLI_EXPLORER_URL =
-  process.env.NEXT_PUBLIC_LINEA_GOERLI_EXPLORER_URL;
+  process.env.NEXT_PUBLIC_LINEA_GOERLI_EXPLORER_URL || 'https://goerli.lineascan.build';
 
 export const CHAIN_EXPLORER_URL = IS_LINEA
   ? LINEA_GOERLI_EXPLORER_URL
