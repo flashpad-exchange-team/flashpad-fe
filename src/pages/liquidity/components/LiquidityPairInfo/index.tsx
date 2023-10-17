@@ -21,6 +21,8 @@ interface IPairTokenInfo {
 interface LiquidityPairInfoProps {
   token1Data: IPairTokenInfo;
   token2Data: IPairTokenInfo;
+  token1Amount: string;
+  token2Amount: string;
   isFirstLP?: boolean;
   isSpNFT: boolean;
   reserves: any;
@@ -32,6 +34,8 @@ const LiquidityPairInfo = ({
   isSpNFT,
   token1Data,
   token2Data,
+  token1Amount,
+  token2Amount,
   reserves,
   pairToken1,
 }: LiquidityPairInfoProps) => {
@@ -81,6 +85,9 @@ const LiquidityPairInfo = ({
       ratioToken1Token2 = reserve2Formatted.div(reserve1Formatted).toString();
       ratioToken2Token1 = reserve1Formatted.div(reserve2Formatted).toString();
     }
+  } else {
+    ratioToken1Token2 = BigNumber(token2Amount).div(token1Amount).toString();
+    ratioToken2Token1 = BigNumber(token1Amount).div(token2Amount).toString();
   }
 
   const getLPInfo = async () => {
@@ -166,8 +173,12 @@ const LiquidityPairInfo = ({
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm mt-0 ">Pair Type</div>
-              <div className="text-sm mt-1.5 ">{token1Symbol} Swap rate</div>
-              <div className="text-sm mt-1.5 ">{token2Symbol} Swap rate</div>
+              {isFirstLP === false && (
+                <div className="text-sm mt-1.5 ">{token1Symbol} Swap rate</div>
+              )}
+              {isFirstLP === false && (
+                <div className="text-sm mt-1.5 ">{token2Symbol} Swap rate</div>
+              )}
               <div className="text-sm mt-1.5 ">
                 {token1Symbol}/{token2Symbol} Liquidity ratio
               </div>
@@ -184,17 +195,21 @@ const LiquidityPairInfo = ({
               <div className="text-sm mt-0 text-right text-primary ">
                 {isStableSwap ? 'Stable' : 'Volatile'}
               </div>
+              {isFirstLP === false && (
+                <div className="text-sm mt-1.5 text-right ">
+                  {swapRate1To2} {token2Symbol}
+                </div>
+              )}
+              {isFirstLP === false && (
+                <div className="text-sm mt-1.5 text-right ">
+                  {swapRate2To1} {token1Symbol}
+                </div>
+              )}
               <div className="text-sm mt-1.5 text-right ">
-                {isFirstLP ? 0 : swapRate1To2} {token2Symbol}
+                {ratioToken1Token2}
               </div>
               <div className="text-sm mt-1.5 text-right ">
-                {isFirstLP ? 0 : swapRate2To1} {token1Symbol}
-              </div>
-              <div className="text-sm mt-1.5 text-right ">
-                {isFirstLP ? 0 : ratioToken1Token2}
-              </div>
-              <div className="text-sm mt-1.5 text-right ">
-                {isFirstLP ? 0 : ratioToken2Token1}
+                {ratioToken2Token1}
               </div>
               <div className="text-sm mt-1.5 text-right ">
                 {isFirstLP ? '100%' : `${poolShare}%`}
