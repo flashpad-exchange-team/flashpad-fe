@@ -660,6 +660,8 @@ const TradeForm = ({
               symbol: token2?.symbol,
               decimals: balanceToken2?.decimals,
             }}
+            token1Amount={token1Amount}
+            token2Amount={token2Amount}
           />
         )}
         {insufficient && (
