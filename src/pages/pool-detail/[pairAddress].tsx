@@ -36,6 +36,7 @@ import Notification from '@/components/notification/Notification';
 import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import useAllPairsData from '@/hooks/useAllPairsData';
 import PositionDetailModal from '@/components/modal/PositionDetailModal';
+import BigNumber from 'bignumber.js';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -57,6 +58,7 @@ const PoolDetail = () => {
   const [token2Symbol, setToken2Symbol] = useState<string>('');
   const [token1Logo, setToken1Logo] = useState<string>('');
   const [token2Logo, setToken2Logo] = useState<string>('');
+  const [TVL, setTVL] = useState<string>('0');
 
   const [userSpNfts, setUserSpNfts] = useState<any>();
   const [spNFTTokenId, setSpNFTTokenId] = useState<string>('');
@@ -150,6 +152,7 @@ const PoolDetail = () => {
       router.push('/not-found');
       return;
     }
+    setTVL(pairData.TVL);
 
     const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
     if (poolAddress && poolAddress !== ADDRESS_ZERO) {
@@ -161,7 +164,6 @@ const PoolDetail = () => {
       );
       setPoolInfo(poolInfoObj);
     }
-
     setToken1Symbol(pairData.token1);
     setToken2Symbol(pairData.token2);
     setToken1Logo(pairData.token1Logo || '');
@@ -256,7 +258,10 @@ const PoolDetail = () => {
 
   const isFirstSpMinter = nftPoolAddress === ADDRESS_ZERO;
   const isStaked = !!userSpNfts?.length;
-
+  const MOCKED_VOLUME = new BigNumber(TVL).div(7).toFixed(2);
+  // TODO
+  const MOCKED_24H_FEE = new BigNumber(TVL).div(7000).times(3).toFixed(2);
+  // TODO
   return (
     <>
       <PositionDetailModal
@@ -425,20 +430,20 @@ const PoolDetail = () => {
             {isFirstSpMinter || (
               <div className="flex items-center gap-3 font-medium text-base mt-6">
                 <div className="flex items-center gap-1 ">
-                  <DollarIcon />
-                  $44k <span className="text-secondary ">TVL</span>
+                  <DollarIcon />${TVL}{' '}
+                  <span className="text-secondary ">TVL</span>
                 </div>
                 <div className="flex items-center gap-1 ">
                   <FeeIcon />
                   1,88% <span className="text-secondary ">Fees APR</span>
                 </div>
                 <div className="flex items-center gap-1 ">
-                  <FlowIcon />
-                  $185 <span className="text-secondary ">24h Volume</span>
+                  <FlowIcon />${MOCKED_VOLUME}
+                  <span className="text-secondary ">24h Volume</span>
                 </div>
                 <div className="flex items-center gap-1 ">
-                  <ChartLineIcon />
-                  $20 <span className="text-secondary ">24h fees</span>
+                  <ChartLineIcon />${MOCKED_24H_FEE}{' '}
+                  <span className="text-secondary ">24h fees</span>
                 </div>
               </div>
             )}

@@ -4,8 +4,8 @@ import * as web3Helpers from '@/utils/web3Helpers';
 import * as factoryContract from '@/utils/factoryContract';
 import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
-import { CHAINS_TOKENS_LIST } from '@/utils/constants';
-import { Address } from 'viem';
+import { CHAINS_TOKENS_LIST, USD_PRICE } from '@/utils/constants';
+import { Address, formatUnits } from 'viem';
 
 export const allPairsKey = 'all-lp-pairs';
 
@@ -26,6 +26,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           totalSupply,
           token1Address,
           token2Address,
+          reserves,
         ] = await Promise.all([
           pairContract.read(pairAddress, 'timeLock', []),
           pairContract.read(pairAddress, 'decimals', []),
@@ -35,6 +36,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           pairContract.read(pairAddress, 'totalSupply', []),
           pairContract.read(pairAddress, 'token0', []),
           pairContract.read(pairAddress, 'token1', []),
+          pairContract.read(pairAddress, 'getReserves', []),
         ]);
 
         let token1Symbol = 'TOKEN1',
@@ -62,14 +64,22 @@ const useAllPairsData = (userAddress: Address | undefined) => {
             ? 'ETH'
             : token2Symbol;
 
-        const token1Logo = CHAINS_TOKENS_LIST.find((e) => {
+        const token1 = CHAINS_TOKENS_LIST.find((e) => {
           return e.symbol === token1Symbol;
-        })?.logoURI;
-
-        const token2Logo = CHAINS_TOKENS_LIST.find((e) => {
+        });
+        const token2 = CHAINS_TOKENS_LIST.find((e) => {
           return e.symbol === token2Symbol;
-        })?.logoURI;
+        });
+        const token1Logo = token1?.logoURI;
+        const token2Logo = token2?.logoURI;
 
+        const token1Reserve = formatUnits(reserves[0], token1?.decimals || 8);
+        const token2Reserve = formatUnits(reserves[1], token2?.decimals || 8);
+
+        const TVL = new BigNumber(token1Reserve)
+          .times(USD_PRICE)
+          .plus(new BigNumber(token2Reserve).times(USD_PRICE))
+          .toFixed(2);
         const poolShare = BigNumber(userLpBalance)
           .div(totalSupply)
           .times(100)
@@ -87,6 +97,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           token2Logo,
           myPool: poolShare,
           pairAddress,
+          TVL,
           userLpBalance:
             userLpBalance == 0
               ? '0.00'

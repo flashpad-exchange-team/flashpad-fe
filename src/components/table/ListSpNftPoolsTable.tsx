@@ -40,17 +40,15 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 TVL
               </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
+              {/* <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 Composition
-              </th>
+              </th> */}
+              {/* TODO */}
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 Your deposit
               </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
-                Fees APR
-              </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
-                Pool Share
+                Fees APR
               </th>
             </tr>
           </thead>
@@ -103,19 +101,16 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                     </div>
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    {item.apr}%
+                    ${item.TVL}
                   </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                  {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     ${item.tvl}
+                  </td> */}
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
+                    ${item.poolTVL}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    ${item.yourDeposit}
-                  </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    ${item.yourDeposit}
-                  </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    ${item.pendingRewards}
+                    1.8%
                   </td>
                 </tr>
               ))}

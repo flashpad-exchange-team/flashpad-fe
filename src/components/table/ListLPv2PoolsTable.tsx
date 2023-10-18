@@ -167,7 +167,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                     {item.apr}%
                   </td> */}
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    ${item.totalStaked}
+                    ${item.TVL}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     {item.userLpBalance}

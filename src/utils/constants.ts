@@ -475,3 +475,6 @@ export const RESERVOIR_API_BASE_URL = IS_LINEA
   : RESERVOIR_MUMBAI_API_BASE_URL;
 
 export const COVALENT_API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY || 'cqt_rQW9mc3mFKHt8mg37w8fpFcjmWgv';
+
+
+export const USD_PRICE = 1
