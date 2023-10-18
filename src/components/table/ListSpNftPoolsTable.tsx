@@ -45,7 +45,7 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
               </th> */}
               {/* TODO */}
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
-                Your deposit
+                Deposits
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 Fees APR

@@ -90,7 +90,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                 TVL
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
-                Your deposit
+                Your Deposits
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center"></th>
             </tr>
