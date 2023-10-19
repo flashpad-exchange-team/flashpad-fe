@@ -1,8 +1,7 @@
 import { useLoading } from '@/context/LoadingContext';
 import Bg from 'public/assets/images/landing-pg.png'; // Import your image
 import { useEffect } from 'react';
-import { Meta } from '../layout/Meta';
-import { AppConfig } from '../utils/AppConfig';
+
 import { Landing } from './Landing';
 
 const Base = () => {
@@ -20,7 +19,6 @@ const Base = () => {
       className={`min-h-[104vh] flex flex-col  justify-between`}
       style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
     >
-      <Meta title={AppConfig.title} description={AppConfig.description} />
       <Landing />
     </div>
   );

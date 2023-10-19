@@ -30,6 +30,8 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { publicProvider } from 'wagmi/providers/public';
+import { Meta } from '@/layout/Meta';
+import { AppConfig } from '@/utils/AppConfig';
 
 const { chains, publicClient } = configureChains(
   [lineaTestnet, polygonMumbai],
@@ -81,6 +83,8 @@ const MyApp = ({ Component, pageProps }: any) => {
   const Layout: any = router.pathname === '/' ? HomeLayout : AppLayout;
   return (
     <WagmiConfig config={config}>
+      <Meta title={AppConfig.title} description={AppConfig.description} />
+
       <ModalProvider>
         <LoadingProvider>
           <Layout>

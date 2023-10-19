@@ -5,8 +5,6 @@ import Footer from '../footer';
 import { useLoading } from '@/context/LoadingContext';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
 import { useNetwork } from 'wagmi';
-import { Meta } from '../Meta';
-import { AppConfig } from '@/utils/AppConfig';
 // import { APP_BASED_CHAIN } from '@/utils/constants';
 // import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
 
@@ -47,7 +45,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
         className=" min-h-[104vh] flex flex-col  justify-between "
       >
-        <Meta title={AppConfig.title} description={AppConfig.description} />
+        {/* <Meta title={AppConfig.title} description={AppConfig.description} /> */}
 
         <Header logo={<Logo xl />} mode="app" />
         {children}
