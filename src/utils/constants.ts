@@ -468,13 +468,13 @@ export const CHAINS_TOKENS_LIST = IS_LINEA
 
 export const RESERVOIR_MUMBAI_API_BASE_URL = process.env.NEXT_PUBLIC_RESERVOIR_MUMBAI_API_BASE_URL || 'https://api-mumbai.reservoir.tools';
 export const RESERVOIR_LINEA_API_BASE_URL = process.env.NEXT_PUBLIC_RESERVOIR_LINEA_API_BASE_URL || 'https://api-linea.reservoir.tools';
-export const RESERVOIR_API_KEY = process.env.NEXT_PUBLIC_RESERVOIR_API_KEY || 'db12704a-207c-55a7-be27-2ec6ebd5ed41';
+export const RESERVOIR_API_KEY = process.env.NEXT_PUBLIC_RESERVOIR_API_KEY;
 
 export const RESERVOIR_API_BASE_URL = IS_LINEA
   ? RESERVOIR_LINEA_API_BASE_URL
   : RESERVOIR_MUMBAI_API_BASE_URL;
 
-export const COVALENT_API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY || 'cqt_rQW9mc3mFKHt8mg37w8fpFcjmWgv';
+export const COVALENT_API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY;
 
 
 export const USD_PRICE = 1
