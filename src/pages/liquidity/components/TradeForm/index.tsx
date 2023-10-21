@@ -107,6 +107,7 @@ const TradeForm = ({
   const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
   const [slippage, setSlippage] = useState<number>(Number(DEFAULT_SLIPPAGE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
+  const [lockSwapDuration, setLockSwapDuration] = useState<number>(0);
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
@@ -402,6 +403,7 @@ const TradeForm = ({
     });
 
     const { timestamp } = await web3Helpers.getBlock();
+    const startSwapTime = (timestamp as bigint) + daysToSeconds(lockSwapDuration) + '';
     let txResult: any;
 
     if (token1.symbol == 'ETH') {
@@ -413,6 +415,7 @@ const TradeForm = ({
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
         timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+        startTime: startSwapTime,
       });
     } else if (token2.symbol == 'ETH') {
       txResult = await routerContract.addLiquidityETH(userAddress!, {
@@ -423,6 +426,7 @@ const TradeForm = ({
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
         timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+        startTime: startSwapTime,
       });
     } else {
       txResult = await routerContract.addLiquidity(userAddress!, {
@@ -435,6 +439,7 @@ const TradeForm = ({
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
         timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+        startTime: startSwapTime,
       });
     }
 
@@ -694,7 +699,7 @@ const TradeForm = ({
         {isFirstLP && feature === 'ADD LIQUIDITY' && (
           <>
             <div className="text-sm mt-4 flex gap-2 items-center">
-              Swap Lockup Period
+              Swap Lockup Period (days)
               <div
                 data-tooltip-id="swapLockup"
                 data-tooltip-content={
@@ -710,6 +715,8 @@ const TradeForm = ({
               className="w-full bg-[#150E39]  h-[52px] pl-4 text-sm mb-3 mt-3 rounded-md focus:outline-none placeholder-[#667085]"
               placeholder="Enter lockup period (days)"
               type="number"
+              value={lockSwapDuration}
+              onChange={(event) => setLockSwapDuration(Number(event.target.value) || 0)}
             />
           </>
         )}

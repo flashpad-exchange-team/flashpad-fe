@@ -22,6 +22,7 @@ export interface IAddLiquidityParams {
   to: Address;
   deadline: string;
   timeLock: string;
+  startTime: string;
 }
 
 export interface IAddLiquidityETHParams {
@@ -32,6 +33,7 @@ export interface IAddLiquidityETHParams {
   to: string;
   deadline: string;
   timeLock: string;
+  startTime: string;
 }
 
 export const addLiquidity = async (
