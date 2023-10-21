@@ -44,6 +44,7 @@ import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityA
 import { useSWRConfig } from 'swr';
 import { allPairsKey } from '@/hooks/useAllPairsData';
 import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
+import { Tooltip } from 'react-tooltip';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -690,6 +691,29 @@ const TradeForm = ({
             type="error"
           />
         )}
+        {isFirstLP && feature === 'ADD LIQUIDITY' && (
+          <>
+            <div className="text-sm mt-4 flex gap-2 items-center">
+              Swap Lockup Period
+              <div
+                data-tooltip-id="swapLockup"
+                data-tooltip-content={
+                  'The duration which users must wait before they can start swapping their tokens.'
+                }
+                data-tooltip-place="right-start"
+              >
+                <QuestionIcon />
+                <Tooltip id="swapLockup" />
+              </div>
+            </div>
+            <input
+              className="w-full bg-[#150E39]  h-[52px] pl-4 text-sm mb-3 mt-3 rounded-md focus:outline-none placeholder-[#667085]"
+              placeholder="Enter lockup period (days)"
+              type="number"
+            />
+          </>
+        )}
+
         {isFirstLP && (
           <Notification
             message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."

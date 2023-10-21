@@ -197,19 +197,19 @@ const LiquidityPairInfo = ({
               </div>
               {isFirstLP === false && (
                 <div className="text-sm mt-1.5 text-right ">
-                  {swapRate1To2} {token2Symbol}
+                  {swapRate1To2 || 0} {token2Symbol}
                 </div>
               )}
               {isFirstLP === false && (
                 <div className="text-sm mt-1.5 text-right ">
-                  {swapRate2To1} {token1Symbol}
+                  {swapRate2To1 || 0} {token1Symbol}
                 </div>
               )}
               <div className="text-sm mt-1.5 text-right ">
-                {ratioToken1Token2}
+                {ratioToken1Token2 || 0}
               </div>
               <div className="text-sm mt-1.5 text-right ">
-                {ratioToken2Token1}
+                {ratioToken2Token1 || 0}
               </div>
               <div className="text-sm mt-1.5 text-right ">
                 {isFirstLP ? '100%' : `${poolShare}%`}

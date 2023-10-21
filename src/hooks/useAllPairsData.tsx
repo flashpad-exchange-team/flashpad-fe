@@ -84,7 +84,6 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           .div(totalSupply)
           .times(100)
           .toFixed(2);
-
         listPairs.push({
           timeLock: web3Helpers.getDateFormat(timeLock),
           locked: timestamp < timeLock,
@@ -106,7 +105,6 @@ const useAllPairsData = (userAddress: Address | undefined) => {
                   .toFixed(),
         });
       }
-
       return listPairs;
     } catch (error) {
       console.log('fetchAllPairs error:', error);

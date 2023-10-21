@@ -2,6 +2,8 @@ import JoinButton from '@/icons/JoinButton';
 import JoinButtonActive from '@/icons/JoinButtonActive';
 import PullSword from '@/public/assets/images/pull-sword.png';
 import UpSword from '@/public/assets/images/up-sword.png';
+import AuditImg from '@/public/assets/images/audit.png';
+
 import { Red_Rose } from 'next/font/google';
 import { Button } from '@/components/button/Button';
 import ListSocial from '@/components/listSocial/ListSocial';
@@ -64,19 +66,37 @@ const Landing = () => {
             trading and project launches. Join us in shaping the future of
             decentralized finance.
           </div>
-          <div
-            className="mt-7 mb-7 w-fit z-10 hidden xl:block"
-            onMouseOver={handleMouseEnter}
-            onMouseOut={handleMouseLeave}
-            onClick={() => router.push('/swap')}
-          >
-            {isHover ? <JoinButton /> : <JoinButtonActive />}
-          </div>
-          <div
-            className="mt-6 mb-8 w-fit z-10 mx-auto block xl:hidden"
-            onClick={() => router.push('/swap')}
-          >
-            <JoinButton />
+          <div className="block lg:flex gap-8 items-center">
+            <div
+              className="mt-7 mb-7 w-fit z-10 hidden xl:block"
+              onMouseOver={handleMouseEnter}
+              onMouseOut={handleMouseLeave}
+              onClick={() => router.push('/swap')}
+            >
+              {isHover ? <JoinButton /> : <JoinButtonActive />}
+            </div>
+            <div
+              className="mt-6 mb-8 w-fit z-10 mx-auto block xl:hidden"
+              onClick={() => router.push('/swap')}
+            >
+              <JoinButton />
+            </div>
+            <div className="mx-auto text-center lg:m-0 lg:text-left">
+              <div
+                className={
+                  'text-primary text-2xl font-bold mb-1 ' + redRose.className
+                }
+              >
+                AUDIT BY
+              </div>
+              <Image
+                src={AuditImg.src}
+                alt="Audit"
+                width={200}
+                height={26}
+                className="mx-auto mb-4 lg:m-0"
+              />
+            </div>
           </div>
         </div>
       </div>
