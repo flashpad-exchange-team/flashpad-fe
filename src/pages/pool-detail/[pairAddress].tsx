@@ -203,7 +203,6 @@ const PoolDetail = () => {
       }
     }
     spNfts.sort((a, b) => Number(a.token_id || 0) - Number(b.token_id || 0));
-    console.log({ spNfts });
 
     let spNftsWithRewards = [];
     for (const spNft of spNfts) {

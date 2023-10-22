@@ -7,7 +7,7 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import Image from 'next/image';
 import { Address } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { waitForTransaction } from '@wagmi/core';
 import {
   DEFAULT_TIME_LOCK,
@@ -22,7 +22,8 @@ import { useLoading } from '@/context/LoadingContext';
 import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
 import DividerDown from '@/icons/DividerDown';
 import * as web3Helpers from '@/utils/web3Helpers';
-
+import { lineaTestnet } from 'wagmi/chains';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 export interface CreatePositionModalProps {
   isOpen: boolean;
   toggleOpen: () => void;
@@ -75,7 +76,8 @@ const CreatePositionModal = ({
     token: lpAddress,
     watch: true,
   });
-
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
   const resetInput = () => {
     setStakeAmount('0');
     setLockTime('14');
@@ -83,6 +85,10 @@ const CreatePositionModal = ({
   };
 
   const handleCreatePosition = async () => {
+    if (chain?.id !== lineaTestnet.id) {
+      handleSwitchNetwork(switchNetwork);
+      return;
+    }
     if (!userAddress) {
       customToast({
         message: 'A wallet is not yet connected',

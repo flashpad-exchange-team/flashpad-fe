@@ -70,7 +70,6 @@ export const createMerlinPool = async (
   account: Address,
   params: ICreateMerlinPoolParams
 ) => {
-  console.log({ params });
   const { nftPoolAddress, rewardsToken1, rewardsToken2, settings } = params;
   try {
     const { request, result } = await publicClient.simulateContract({

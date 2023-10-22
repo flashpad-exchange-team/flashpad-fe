@@ -86,7 +86,6 @@ const useAllNftPoolsData = (userAddress: Address | undefined) => {
           poolTVL = new BigNumber(lpSupplyAmount)
             .times(new BigNumber(TVL))
             .toFixed(4);
-          console.log(poolTVL, lpSupplyAmount);
         }
 
         listPools.push({

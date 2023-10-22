@@ -22,9 +22,12 @@ import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { Address } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, useSwitchNetwork } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import { useNetwork } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 
 interface TradeFormProps {
   title: string;
@@ -43,6 +46,8 @@ const TradeForm = ({
 }: TradeFormProps) => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  const { chain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
@@ -102,6 +107,10 @@ const TradeForm = ({
   };
 
   const handleSwap = async () => {
+    if (chain?.id !== lineaTestnet.id) {
+      handleSwitchNetwork(switchNetwork);
+      return;
+    }
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
       .times(new BigNumber(token1Amount));
@@ -109,6 +118,19 @@ const TradeForm = ({
       token1.address,
       token2.address
     );
+    const startTime = await pairContract.read(address, 'startTime', []);
+    const { timestamp } = await web3Helpers.getBlock();
+
+    if (startTime > timestamp) {
+      customToast({
+        message:
+          'Token swapping is currently unavailable due to a pool lock. Please wait for the lock to be lifted until ' +
+          web3Helpers.getDateFormat(startTime),
+        type: 'error',
+      });
+      return;
+    }
+
     // const bnToken2Amount = BigNumber(10)
     //   .pow(balanceToken2?.decimals!)
     //   .times(new BigNumber(token2Amount));
@@ -124,7 +146,6 @@ const TradeForm = ({
         token1.address,
       ])
     );
-    console.log({ bnToken2Amount }, typeof bnToken2Amount);
     if (
       bnToken1Amount?.isNaN() ||
       bnToken2Amount?.isNaN() ||
@@ -147,12 +168,6 @@ const TradeForm = ({
       return;
     }
 
-    startLoadingTx({
-      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-      title: 'Swapping tokens ...',
-      message: 'Confirming your transaction. Please wait.',
-    });
-
     const token1Allowance = (await erc20TokenContract.erc20Read(
       token1.address,
       'allowance',
@@ -172,7 +187,7 @@ const TradeForm = ({
         [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
       );
       if (!approveRes) {
-        // stopLoadingTx();
+        stopLoadingTx();
         // setSuccessful(false);
         // setFailed(true);
         return;
@@ -180,10 +195,16 @@ const TradeForm = ({
 
       const hash = approveRes.hash;
       const txReceipt = await waitForTransaction({ hash });
+      stopLoadingTx();
       console.log({ txReceipt });
     }
 
-    const { timestamp } = await web3Helpers.getBlock();
+    startLoadingTx({
+      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+      title: 'Swapping tokens ...',
+      message: 'Confirming your transaction. Please wait.',
+    });
+
     let txResult = undefined;
     if (token2?.symbol === 'ETH') {
       txResult = await routerContract.swapTokensForETH(userAddress!, {
@@ -207,14 +228,6 @@ const TradeForm = ({
         }
       );
     } else {
-      console.log({
-        amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        path: [token1.address, token2.address],
-        to: userAddress!,
-        referrer: ADDRESS_ZERO,
-        deadline: timestamp + K_5_MIN + '',
-      });
       txResult = await routerContract.swapTokensForTokens(userAddress!, {
         amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
         amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),

@@ -50,7 +50,9 @@ const SwitchNetworkModal = ({
         </div>
       </div>
       <div className="text-[14px] text-center">
-        You need to switch to {APP_BASED_CHAIN.name} network to continue using<br/>Arthur Exchange
+        You need to switch to {APP_BASED_CHAIN.name} network to continue using
+        <br />
+        Arthur Exchange
       </div>
       <div className="block lg:flex items-center gap-2">
         <Button

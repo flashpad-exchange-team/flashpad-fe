@@ -62,7 +62,6 @@ const SuccessTx = () => {
             className="px-4 mx-auto !py-2"
             onClick={() => {
               const txHash = successTxInfo?.tx;
-              console.log({ txHash });
               if (txHash) {
                 window.open(`${CHAIN_EXPLORER_URL}/tx/${txHash}`, '_blank');
               }

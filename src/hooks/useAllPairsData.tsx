@@ -6,6 +6,7 @@ import * as pairContract from '@/utils/pairContract';
 import * as erc20Contract from '@/utils/erc20TokenContract';
 import { CHAINS_TOKENS_LIST, USD_PRICE } from '@/utils/constants';
 import { Address, formatUnits } from 'viem';
+import { getDateFormat } from '../utils/web3Helpers';
 
 export const allPairsKey = 'all-lp-pairs';
 
@@ -27,6 +28,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           token1Address,
           token2Address,
           reserves,
+          startTime,
         ] = await Promise.all([
           pairContract.read(pairAddress, 'timeLock', []),
           pairContract.read(pairAddress, 'decimals', []),
@@ -37,8 +39,9 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           pairContract.read(pairAddress, 'token0', []),
           pairContract.read(pairAddress, 'token1', []),
           pairContract.read(pairAddress, 'getReserves', []),
+          pairContract.read(pairAddress, 'startTime', []),
         ]);
-
+        console.log({ startTime }, getDateFormat(startTime));
         let token1Symbol = 'TOKEN1',
           token2Symbol = 'TOKEN2';
         if (token1Address) {

@@ -30,7 +30,6 @@ const FarmMerlinDetail = () => {
     merlinPool,
     //...queryParams,
   } = router.query;
-  console.log({ merlinPool });
 
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();

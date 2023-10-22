@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { useEffect, useState } from 'react';
 import customToast from '../notification/customToast';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import {
   MAX_UINT256,
   POSITION_HELPER_ADDRESS,
@@ -25,6 +25,8 @@ import { waitForTransaction } from '@wagmi/core';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as positionHelperContract from '@/utils/positionHelperContract';
 import ArrowUp from '@/icons/ArrowUp';
+import { lineaTestnet } from 'wagmi/chains';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 
 export interface AddLiquidityAndCreatePositionModalProps {
   isOpen: boolean;
@@ -79,7 +81,8 @@ const AddLiquidityAndCreatePositionModal = ({
   const [merlinAutoStaking, setMerlinAutoStaking] = useState(false);
   const [lockDuration, setLockDuration] = useState('0');
   const [isOpenTotalApr, setIsOpenTotalApr] = useState(true);
-
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
   const toggleMerlinAutoStaking = () => {
@@ -97,6 +100,10 @@ const AddLiquidityAndCreatePositionModal = ({
   }, [initialToken1Amount, initialToken2Amount]);
 
   const handleAddLiquidityAndCreatePosition = async () => {
+    if (chain?.id !== lineaTestnet.id) {
+      handleSwitchNetwork(switchNetwork);
+      return;
+    }
     const nLockDuration = Number(lockDuration);
     if (
       Number.isNaN(nLockDuration) ||

@@ -48,26 +48,27 @@ const StakeIntoMerlinModal = ({
   togglePositionDetailModal,
 }: StakeIntoMerlinModalProps) => {
   const { address: userAddress } = useAccount();
-  const { data: listMerlinPools, isLoading } = useAllMerlinPoolsData(userAddress);
+  const { data: listMerlinPools, isLoading } =
+    useAllMerlinPoolsData(userAddress);
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
-  const [stakingMerlinPoolAddress, setStakingMerlinPoolAddress] = useState(ADDRESS_ZERO);
+  const [stakingMerlinPoolAddress, setStakingMerlinPoolAddress] =
+    useState(ADDRESS_ZERO);
 
   const getMerlinPoolInfo = async () => {
-    if (isLoading || !isOpen) return; 
+    if (isLoading || !isOpen) return;
 
-    const merlinPool = listMerlinPools?.find((p) =>
-      p.nftPoolAddress.toLowerCase() === nftPoolAddress?.toLowerCase()
+    const merlinPool = listMerlinPools?.find(
+      (p) => p.nftPoolAddress.toLowerCase() === nftPoolAddress?.toLowerCase()
     );
 
     if (!merlinPool) {
       customToast({
         message: 'No Merlin pool for this spNFT pool found!',
-        type: 'error'
+        type: 'error',
       });
       return;
     }
-    console.log({merlinPool})
 
     const merlinPoolAddr = merlinPool.poolAddress;
     if (merlinPoolAddr) {
@@ -83,7 +84,7 @@ const StakeIntoMerlinModal = ({
     if (!userAddress) {
       customToast({
         message: 'A wallet is not yet connected',
-        type: 'error'
+        type: 'error',
       });
       return;
     }
@@ -98,11 +99,7 @@ const StakeIntoMerlinModal = ({
       userAddress as Address,
       nftPoolAddress as Address,
       'safeTransferFrom',
-      [
-        userAddress,
-        stakingMerlinPoolAddress,
-        tokenId,
-      ]
+      [userAddress, stakingMerlinPoolAddress, tokenId]
     );
 
     if (!transferNftTx) {
@@ -112,7 +109,7 @@ const StakeIntoMerlinModal = ({
 
     const txHash = transferNftTx.hash;
     const txReceipt = await waitForTransaction({ hash: txHash });
-    console.log({txReceipt});
+    console.log({ txReceipt });
 
     toggleOpen();
     togglePositionDetailModal();

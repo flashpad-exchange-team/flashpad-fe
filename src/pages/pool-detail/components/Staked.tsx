@@ -55,7 +55,6 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   useEffect(() => {
     const fetchTimeStamp = async () => {
       const { timestamp } = await web3Helpers.getBlock();
-      console.log({ timestamp });
       setCurrentTimestamp(timestamp.toString());
     };
     fetchTimeStamp();

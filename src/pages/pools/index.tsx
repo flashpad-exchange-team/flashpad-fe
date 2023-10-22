@@ -29,7 +29,6 @@ const PoolList = ({}: PoolListProps) => {
     setShowSpNftPools(!showSpNftPools);
   };
 
-  console.log({ allPairsData, allPoolsData });
   return (
     <div className={clsx(['max-w-[1096px] w-full mx-auto my-20 px-2'])}>
       <div className="block lg:flex items-center justify-between">

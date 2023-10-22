@@ -46,3 +46,5 @@ package-lock.json
 *.bak
 *.tmp
 *.log
+
+.env

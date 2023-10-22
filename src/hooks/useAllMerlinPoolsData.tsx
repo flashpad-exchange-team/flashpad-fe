@@ -53,21 +53,30 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
           merlinPoolContract.read(merlinPoolAddress, 'rewardsToken2', []),
           merlinPoolContract.read(merlinPoolAddress, 'settings', []),
           merlinPoolContract.read(merlinPoolAddress, 'totalDepositAmount', []),
-          merlinPoolContract.read(merlinPoolAddress, 'pendingRewards', [userAddress]),
+          merlinPoolContract.read(merlinPoolAddress, 'pendingRewards', [
+            userAddress,
+          ]),
           merlinPoolContract.read(merlinPoolAddress, 'nftPool', []),
         ]);
 
-        const [rewardsToken1Symbol, poolInfoObj] =
-          await Promise.all([
-            erc20Contract.erc20Read(rewardsToken1?.token, 'symbol', []),
-            nftPoolContract.read(nftPoolAddress, 'getPoolInfo', []),
-          ]);
-        
+        const [rewardsToken1Symbol, poolInfoObj] = await Promise.all([
+          erc20Contract.erc20Read(rewardsToken1?.token, 'symbol', []),
+          nftPoolContract.read(nftPoolAddress, 'getPoolInfo', []),
+        ]);
+
         let rewardsToken2Symbol = '';
-        if (rewardsToken2 && rewardsToken2.token && rewardsToken2.token !== ADDRESS_ZERO) {
-          rewardsToken2Symbol = await erc20Contract.erc20Read(rewardsToken2?.token, 'symbol', []);
+        if (
+          rewardsToken2 &&
+          rewardsToken2.token &&
+          rewardsToken2.token !== ADDRESS_ZERO
+        ) {
+          rewardsToken2Symbol = await erc20Contract.erc20Read(
+            rewardsToken2?.token,
+            'symbol',
+            []
+          );
         }
-        
+
         const rewardsToken1Logo = CHAINS_TOKENS_LIST.find((e) => {
           return e.symbol == rewardsToken1Symbol;
         })?.logoURI;
@@ -98,8 +107,14 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
           token2Symbol = token1Symbol;
         }
 
-        token1Symbol = (token1Symbol == 'WFTM' || token1Symbol == 'WETH') ? 'ETH' : token1Symbol;
-        token2Symbol = (token2Symbol == 'WFTM' || token2Symbol == 'WETH') ? 'ETH' : token2Symbol;
+        token1Symbol =
+          token1Symbol == 'WFTM' || token1Symbol == 'WETH'
+            ? 'ETH'
+            : token1Symbol;
+        token2Symbol =
+          token2Symbol == 'WFTM' || token2Symbol == 'WETH'
+            ? 'ETH'
+            : token2Symbol;
 
         const token1Logo = CHAINS_TOKENS_LIST.find((e) => {
           return e.symbol === token1Symbol;
@@ -149,7 +164,6 @@ const useAllMerlinPoolsData = (userAddress: Address | undefined) => {
       revalidateOnMount: true,
     }
   );
-  console.log({listMerlinPools: data})
 
   return {
     data: data || [],

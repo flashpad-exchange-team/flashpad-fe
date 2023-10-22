@@ -36,7 +36,13 @@ import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { Address } from 'viem';
-import { useAccount, useBalance, useContractRead } from 'wagmi';
+import {
+  useAccount,
+  useBalance,
+  useContractRead,
+  useNetwork,
+  useSwitchNetwork,
+} from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import { useRouter } from 'next/router';
@@ -45,6 +51,8 @@ import { useSWRConfig } from 'swr';
 import { allPairsKey } from '@/hooks/useAllPairsData';
 import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import { Tooltip } from 'react-tooltip';
+import { lineaTestnet } from 'wagmi/chains';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -74,6 +82,8 @@ const TradeForm = ({
   const [feature, setFeature] = useState('STAKE POSITION');
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   const { mutate } = useSWRConfig();
 
@@ -108,6 +118,14 @@ const TradeForm = ({
   const [slippage, setSlippage] = useState<number>(Number(DEFAULT_SLIPPAGE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
   const [lockSwapDuration, setLockSwapDuration] = useState<number>(0);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSuccessful(false);
+      setFailed(false);
+      setInsufficient(false);
+    }, 5000);
+  }, [insufficient, failed, successful]);
 
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
@@ -285,6 +303,10 @@ const TradeForm = ({
   };
 
   const handleAddLiquidity = async () => {
+    if (chain?.id !== lineaTestnet.id) {
+      handleSwitchNetwork(switchNetwork);
+      return;
+    }
     setSuccessful(undefined);
     const bnToken1Amount = BigNumber(10)
       .pow(balanceToken1?.decimals!)
@@ -403,7 +425,8 @@ const TradeForm = ({
     });
 
     const { timestamp } = await web3Helpers.getBlock();
-    const startSwapTime = (timestamp as bigint) + daysToSeconds(lockSwapDuration) + '';
+    const startSwapTime =
+      (timestamp as bigint) + daysToSeconds(lockSwapDuration) + '';
     let txResult: any;
 
     if (token1.symbol == 'ETH') {
@@ -715,8 +738,11 @@ const TradeForm = ({
               className="w-full bg-[#150E39]  h-[52px] pl-4 text-sm mb-3 mt-3 rounded-md focus:outline-none placeholder-[#667085]"
               placeholder="Enter lockup period (days)"
               type="number"
+              min={0}
               value={lockSwapDuration}
-              onChange={(event) => setLockSwapDuration(Number(event.target.value) || 0)}
+              onChange={(event) =>
+                setLockSwapDuration(Number(event.target.value) || 0)
+              }
             />
           </>
         )}

@@ -67,7 +67,6 @@ const PositionDetailModal = ({
   toggleBoostPosition,
   toggleHarvestPosition,
   nftPoolAddress,
-  poolInfo,
   refetchData,
   publishedMerlinPoolsCount,
 }: PositionDetailModalProps) => {
@@ -85,7 +84,6 @@ const PositionDetailModal = ({
     (item: any) => item.tokenId == spNFTTokenId
   );
   const [currentTimestamp, setCurrentTimestamp] = useState(0);
-  console.log({ poolInfo });
 
   const lockDays =
     (+currentSPNFT?.stakingPosition?.startLockTime.toString() +
@@ -96,7 +94,6 @@ const PositionDetailModal = ({
   useEffect(() => {
     const fetchTimeStamp = async () => {
       const { timestamp } = await web3Helpers.getBlock();
-      console.log({ timestamp });
       setCurrentTimestamp(timestamp.toString());
     };
     fetchTimeStamp();
@@ -122,7 +119,6 @@ const PositionDetailModal = ({
       message: 'Confirming your transaction. Please wait.',
     });
 
-    console.log({ currentSPNFT });
     const merlinPoolAddress = currentSPNFT.owner;
 
     const withdrawSpNftTx = await merlinPoolContract.write(
@@ -233,7 +229,6 @@ const PositionDetailModal = ({
               <div
                 className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
                 onClick={() => {
-                  console.log({ isSpNFTStakedToMerlin });
                   if (!isSpNFTStakedToMerlin) {
                     toggleWithdrawPosition();
                   }
