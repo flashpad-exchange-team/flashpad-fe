@@ -37,6 +37,7 @@ import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import useAllPairsData from '@/hooks/useAllPairsData';
 import PositionDetailModal from '@/components/modal/PositionDetailModal';
 import BigNumber from 'bignumber.js';
+import { fetch24hVol } from '@/api';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -257,10 +258,17 @@ const PoolDetail = () => {
 
   const isFirstSpMinter = nftPoolAddress === ADDRESS_ZERO;
   const isStaked = !!userSpNfts?.length;
-  const MOCKED_VOLUME = new BigNumber(TVL).div(7).toFixed(2);
-  // TODO
-  const MOCKED_24H_FEE = new BigNumber(TVL).div(7000).times(3).toFixed(2);
-  // TODO
+  const [vol24h, setVol24h] = useState(0);
+  const fetchData = async () => {
+    const response = await fetch24hVol();
+    setVol24h(response);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [pairAddress]);
+
+  const feeShare = new BigNumber(vol24h).times(0.3).div(100);
+  const feeAPR = feeShare.times(365).div(TVL).times(100);
   return (
     <>
       <PositionDetailModal
@@ -434,14 +442,16 @@ const PoolDetail = () => {
                 </div>
                 <div className="flex items-center gap-1 ">
                   <FeeIcon />
-                  1,88% <span className="text-secondary ">Fees APR</span>
+                  {feeAPR.times(100).toFixed(2)} %{' '}
+                  <span className="text-secondary ">Fees APR</span>
                 </div>
                 <div className="flex items-center gap-1 ">
-                  <FlowIcon />${MOCKED_VOLUME}
+                  <FlowIcon />${new BigNumber(vol24h).toFixed(2)}
                   <span className="text-secondary ">24h Volume</span>
                 </div>
                 <div className="flex items-center gap-1 ">
-                  <ChartLineIcon />${MOCKED_24H_FEE}{' '}
+                  <ChartLineIcon />$
+                  {new BigNumber(vol24h).div(1000).times(3).toFixed(2)}{' '}
                   <span className="text-secondary ">24h fees</span>
                 </div>
               </div>

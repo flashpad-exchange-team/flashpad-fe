@@ -110,7 +110,7 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                     ${item.poolTVL}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    1.8%
+                    {item.feeAPR.times(100).toFixed(2)}%
                   </td>
                 </tr>
               ))}

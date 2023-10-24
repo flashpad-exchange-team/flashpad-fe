@@ -79,7 +79,7 @@ const TradeForm = ({
   dividerIcon,
 }: TradeFormProps) => {
   const router = useRouter();
-  const [feature, setFeature] = useState('STAKE POSITION');
+  const [feature, setFeature] = useState('ADD LIQUIDITY');
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { switchNetwork } = useSwitchNetwork();
