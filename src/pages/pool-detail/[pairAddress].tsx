@@ -267,7 +267,7 @@ const PoolDetail = () => {
 
   const isFirstSpMinter = nftPoolAddress === ADDRESS_ZERO;
   const isStaked = !!userSpNfts?.length;
-  const [vol24h, setVol24h] = useState(0);
+  const [vol24h, setVol24h] = useState('0');
 
   const fetchData = async () => {
     const response = await fetchTotalVolumeByLp({
