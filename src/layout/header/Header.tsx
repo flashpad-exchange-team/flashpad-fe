@@ -147,7 +147,7 @@ const Header = (props: INavbarProps) => {
         toggleOpen={toggleConnectWallet}
       />
       <div className="bg-dark h-[80px] items-center flex ">
-        <div className=" m-auto w-full flex flex-wrap items-center justify-between px-4 lg:px-20  max-w-[1440px]">
+        <div className="m-auto w-full flex flex-wrap items-center justify-between px-4 lg:px-20  max-w-[1440px]">
           <div
             className={clsx([
               'flex gap-5 ',

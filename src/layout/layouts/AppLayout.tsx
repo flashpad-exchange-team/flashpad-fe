@@ -1,10 +1,12 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { Header } from '../header/Header';
-import { Logo } from '@/templates/Logo';
-import Footer from '../footer';
+import RequireWalletConnectModal from '@/components/modal/RequireConnectWalletModal';
 import { useLoading } from '@/context/LoadingContext';
+import { useModal } from '@/context/ModalContext';
+import { Logo } from '@/templates/Logo';
 import Bg from 'public/assets/images/app-bg.png'; // Import your image
-import { useNetwork } from 'wagmi';
+import { ReactNode, useEffect, useState } from 'react';
+import { useAccount, useNetwork } from 'wagmi';
+import Footer from '../footer';
+import { Header } from '../header/Header';
 // import { APP_BASED_CHAIN } from '@/utils/constants';
 // import SwitchNetworkModal from '@/components/modal/SwitchNetworkModal';
 
@@ -15,11 +17,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [isClient, setIsClient] = useState(false); // Check content mismatch error
   const { chain } = useNetwork();
   const { startLoading, stopLoading } = useLoading();
+  const { toggleRequireConnect } = useModal();
+  const { isConnected } = useAccount();
 
-  // const [isOpenSwitchNetwork, setOpenSwitchNetwork] = useState(false);
-  // const toggleSwitchNetwork = () => {
-  //   setOpenSwitchNetwork(!isOpenSwitchNetwork);
-  // };
+  useEffect(() => {
+    if (!isConnected) toggleRequireConnect();
+  }, [isConnected]);
 
   useEffect(() => {
     setIsClient(true);
@@ -29,11 +32,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     }, 1000);
   }, []);
 
-  useEffect(() => {
-    // if (chain?.id != APP_BASED_CHAIN.id) {
-    // setOpenSwitchNetwork(true);
-    // }
-  }, [chain]);
+  useEffect(() => {}, [chain]);
 
   return isClient ? (
     <>
@@ -49,6 +48,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
         <Header logo={<Logo xl />} mode="app" />
         {children}
+        <RequireWalletConnectModal />
         <Footer />
       </div>
     </>

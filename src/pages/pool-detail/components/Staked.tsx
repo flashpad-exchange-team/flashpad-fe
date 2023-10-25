@@ -2,18 +2,17 @@ import { Button } from '@/components/button/Button';
 import AddIcon from '@/icons/AddIcon';
 import BNBICon from '@/icons/BNBIcon';
 import ClockIcon from '@/icons/ClockIcon';
-import FileIcon from '@/icons/FileIcon';
-import Image from 'next/image';
 import AddToPositionIcon from '@/icons/StakeIcons/AddToPositionIcon';
 import BoostPositionIcon from '@/icons/StakeIcons/BoostPositionIcon';
 import HarvestIcon from '@/icons/StakeIcons/HarvestIcon';
 import LockPositionIcon from '@/icons/StakeIcons/LockPositionIcon';
 import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
-import BigNumber from 'bignumber.js';
-import { useEffect, useState } from 'react';
 import * as web3Helpers from '@/utils/web3Helpers';
-import { useAccount } from 'wagmi';
+import BigNumber from 'bignumber.js';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { formatUnits } from 'viem';
+import { useAccount } from 'wagmi';
 
 interface PoolDetailStakedProps {
   token1Symbol: string;
@@ -191,7 +190,6 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                           1000
                         }
                       />
-                      <FileIcon />
                       <BoostPositionIcon
                         active={sp?.stakingPosition?.boostPoints > 0}
                         amount={new BigNumber(

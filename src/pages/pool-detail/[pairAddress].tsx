@@ -1,3 +1,4 @@
+import { fetchTotalVolumeByLp } from '@/api';
 import { Button } from '@/components/button/Button';
 import AddToPositionModal from '@/components/modal/AddToPositionModal';
 import ApyCalculatorModal from '@/components/modal/ApyCalculatorModal';
@@ -5,15 +6,21 @@ import BoostPositionModal from '@/components/modal/BoostPositionModal';
 import CreatePositionModal from '@/components/modal/CreatePositionModal';
 import HarvestModal from '@/components/modal/HarvestModal';
 import LockPositionModal from '@/components/modal/LockPositionModal';
+import PositionDetailModal from '@/components/modal/PositionDetailModal';
 import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
+import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
+import useAllPairsData from '@/hooks/useAllPairsData';
 import BNBICon from '@/icons/BNBIcon';
 import ChartLineIcon from '@/icons/ChartLineIcon';
 import DollarIcon from '@/icons/DollarIcon';
 import FeeIcon from '@/icons/FeeIcon';
 import FlowIcon from '@/icons/FlowIcon';
 import Link from '@/icons/Link';
+import * as covalentApiService from '@/services/covalentApi.service';
+import * as arthurMasterContract from '@/utils/arthurMasterContract';
 import {
   ADDRESS_ZERO,
   ARTHUR_MASTER_ADDRESS,
@@ -21,11 +28,10 @@ import {
   MERLIN_POOL_FACTORY_ADDRESS,
 } from '@/utils/constants';
 import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
-import * as arthurMasterContract from '@/utils/arthurMasterContract';
-import * as covalentApiService from '@/services/covalentApi.service';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -34,12 +40,6 @@ import { Address } from 'viem';
 import { useAccount } from 'wagmi';
 import NotStaked from './components/NotStaked';
 import Staked from './components/Staked';
-import Notification from '@/components/notification/Notification';
-import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
-import useAllPairsData from '@/hooks/useAllPairsData';
-import PositionDetailModal from '@/components/modal/PositionDetailModal';
-import BigNumber from 'bignumber.js';
-import { fetchTotalVolumeByLp } from '@/api';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -317,6 +317,8 @@ const PoolDetail = () => {
         toggleHarvestPosition={toggleHarvestPosition}
         poolInfo={poolInfo}
         publishedMerlinPoolsCount={publishedMerlinPoolsCount}
+        farmBaseAPR={farmBaseAPR}
+        feeAPR={feeAPR}
       />
       <AddToPositionModal
         isOpen={openAddToPosition}

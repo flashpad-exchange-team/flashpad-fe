@@ -1,29 +1,28 @@
+import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
+import { useLoading } from '@/context/LoadingContext';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { useState } from 'react';
-import { Button } from '../button/Button';
-import CommonModal from './CommonModal';
-import Image from 'next/image';
-import { Address } from 'viem';
-import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
-import { waitForTransaction } from '@wagmi/core';
 import {
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
   daysToSeconds,
 } from '@/utils/constants';
-import BigNumber from 'bignumber.js';
-import customToast from '../notification/customToast';
-import * as pairContract from '@/utils/pairContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
-import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
-import DividerDown from '@/icons/DividerDown';
-import * as web3Helpers from '@/utils/web3Helpers';
-import { lineaTestnet } from 'wagmi/chains';
+import * as pairContract from '@/utils/pairContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
+import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
+import Image from 'next/image';
+import { useState } from 'react';
+import { Address } from 'viem';
+import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import CommonModal from './CommonModal';
 export interface CreatePositionModalProps {
   isOpen: boolean;
   toggleOpen: () => void;
@@ -162,17 +161,17 @@ const CreatePositionModal = ({
       const txReceipt = await waitForTransaction({ hash: approveHash });
       console.log({ txReceipt });
     }
-    const { timestamp } = await web3Helpers.getBlock();
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Creating Staked Position ...',
       message: 'Confirming your transaction. Please wait.',
     });
+
     const txResult = await nftPoolContract.write(
       userAddress,
       nftPoolAddress!,
       'createPosition',
-      [bnStakeAmountParsed, BigInt(timestamp) + daysToSeconds(nLockTime) + '']
+      [bnStakeAmountParsed, daysToSeconds(nLockTime) + '']
     );
 
     if (!txResult) {
@@ -258,9 +257,8 @@ const CreatePositionModal = ({
       <div className="text-[15px]">Lock duration (days)</div>
       <div className="flex gap-2 items-center my-2">
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is2WeeksSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: is2WeeksSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.TWO_WEEKS);
             setLockTime('14');
@@ -269,9 +267,8 @@ const CreatePositionModal = ({
           2 WEEKS
         </div>
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is1MonthSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: is1MonthSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.ONE_MONTH);
             setLockTime('30');
@@ -280,9 +277,8 @@ const CreatePositionModal = ({
           1 MONTH
         </div>
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is3MonthsSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: is3MonthsSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.THREE_MONTHS);
             setLockTime('90');
@@ -291,9 +287,8 @@ const CreatePositionModal = ({
           3 MONTHS
         </div>
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            isCustomSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: isCustomSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.CUSTOM);
           }}

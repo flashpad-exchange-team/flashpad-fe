@@ -1,16 +1,16 @@
-import DividerDown from '@/icons/DividerDown';
-import CloseIcon from '@/icons/CloseIcon';
-import { Button } from '../button/Button';
-import CommonModal from './CommonModal';
-import BNBICon from '@/icons/BNBIcon';
-import { Address } from 'viem';
 import { useLoading } from '@/context/LoadingContext';
-import { useAccount, useBalance } from 'wagmi';
-import customToast from '../notification/customToast';
+import BNBICon from '@/icons/BNBIcon';
+import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 import Image from 'next/image';
+import { Address } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import { handleSuccessTxMessageActionWithNoValue } from '../successTxMessage';
+import CommonModal from './CommonModal';
 
 export interface HarvestModalProps {
   toggleOpen: () => void;
@@ -90,12 +90,9 @@ const HarvestModal = ({
     stopLoadingTx();
 
     startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
+      handleSuccessTxMessageActionWithNoValue({
         action: 'harvest position',
-        token1: token1Data.symbol,
-        token2: token2Data.symbol,
         txHash: hash,
-        // usdValue: bnStakeAmount.toString(10),
       })
     );
   };
@@ -163,11 +160,11 @@ const HarvestModal = ({
           </div>
         </div>
         <div className="text-[#E6B300]">
-          $<span>0.01</span>
+          <span>0.00</span>
         </div>
       </div>
-
-      <div className="p-2 my-4 mb-5 bg-blue-opacity-50 ">Rewards breakdown</div>
+      {/* 
+      <div className="p-2 my-4 mb-5 bg-blue-opacity-50 ">Rewards breakdown</div> */}
 
       {/* <div className="flex justify-between p-2 bg-blue-opacity-50">
         <div className="flex items-end">

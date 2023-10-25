@@ -1,5 +1,4 @@
-import ArrowDown from '@/icons/ArrowDown';
-import ArrowUp from '@/icons/ArrowUp';
+import { useLoading } from '@/context/LoadingContext';
 import BNBICon from '@/icons/BNBIcon';
 import ChartBreakoutIcon from '@/icons/ChartBreakoutIcon';
 import CloseIcon from '@/icons/CloseIcon';
@@ -9,21 +8,20 @@ import Eligibility from '@/icons/Eligibility';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
 import Lock from '@/icons/Lock';
 import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
+import * as merlinPoolContract from '@/utils/merlinPoolContract';
 import * as web3Helpers from '@/utils/web3Helpers';
+import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
-import { formatDistanceToNow, isFuture } from 'date-fns';
+import { formatDistance, isFuture } from 'date-fns';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Address, formatUnits } from 'viem';
+import { useAccount } from 'wagmi';
 import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 import CommonModal from './CommonModal';
 import StakeIntoMerlin from './StakeIntoMerlinModal';
-import { useAccount } from 'wagmi';
-import customToast from '../notification/customToast';
-import { useLoading } from '@/context/LoadingContext';
-import * as merlinPoolContract from '@/utils/merlinPoolContract';
-import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 
 export interface PositionDetailModalProps {
   toggleOpen: () => void;
@@ -51,6 +49,8 @@ export interface PositionDetailModalProps {
   toggleHarvestPosition: () => void;
   poolInfo: any;
   publishedMerlinPoolsCount: number;
+  feeAPR: BigNumber;
+  farmBaseAPR: BigNumber;
 }
 
 const PositionDetailModal = ({
@@ -69,6 +69,8 @@ const PositionDetailModal = ({
   nftPoolAddress,
   refetchData,
   publishedMerlinPoolsCount,
+  feeAPR,
+  farmBaseAPR,
 }: PositionDetailModalProps) => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
@@ -347,9 +349,7 @@ const PositionDetailModal = ({
               </div>
 
               <div className="pl-2">
-                <div>
-                  {lockDays && isFuture(lockDays) ? 'Locked' : 'No Lock'}
-                </div>
+                <div>{lockDays && lockDays > 0 ? 'Locked' : 'No Lock'}</div>
                 <div className="text-xs text-secondary">
                   {currentSPNFT?.stakingPosition?.lockMultiplier?.toString()}x
                   Multiplier
@@ -358,8 +358,10 @@ const PositionDetailModal = ({
             </div>
             <div className="flex flex-col items-end">
               <div>
-                {lockDays && isFuture(lockDays)
-                  ? `${formatDistanceToNow(lockDays)}`
+                {lockDays && lockDays > 0
+                  ? `${formatDistance(0, lockDays, {
+                      includeSeconds: true,
+                    })}`
                   : '-'}
               </div>
               <div className="text-xs text-secondary">Remaining time</div>
@@ -459,15 +461,15 @@ const PositionDetailModal = ({
           >
             <div className="pl-2 flex">
               <div>APR</div>
-              {isOpenApr ? (
+              {/* {isOpenApr ? (
                 <ArrowDown stroke="#fff" />
               ) : (
                 <ArrowUp stroke="#fff" />
-              )}
+              )} */}
             </div>
-            <div>-</div>
+            <div>{farmBaseAPR.plus(feeAPR).toFixed(2)}%</div>
           </div>
-          {isOpenApr && (
+          {/* {isOpenApr && (
             <>
               <div className="flex justify-between items-center bg-blue-opacity-50">
                 <div className="pl-2">Name</div>
@@ -490,22 +492,22 @@ const PositionDetailModal = ({
                 </div>
               </div>
             </>
-          )}
+          )} */}
           <div
             className="flex justify-between mt-2 items-center cursor-pointer"
             onClick={() => setIsOpenRewards(!isOpenRewards)}
           >
             <div className="pl-2 flex">
               <div>Pending rewards</div>
-              {isOpenRewards ? (
+              {/* {isOpenRewards ? (
                 <ArrowDown stroke="#fff" />
               ) : (
                 <ArrowUp stroke="#fff" />
-              )}
+              )} */}
             </div>
-            <div>-</div>
+            <div>{currentSPNFT?.pendingRewards}</div>
           </div>
-          {isOpenRewards && (
+          {/* {isOpenRewards && (
             <>
               <div className="flex justify-between items-center bg-blue-opacity-50">
                 <div className="pl-2">Name</div>
@@ -528,7 +530,7 @@ const PositionDetailModal = ({
                 </div>
               </div>
             </>
-          )}
+          )} */}
           {/* <div className="flex justify-between mt-2 items-center bg-blue-opacity-50">
             <div className="pl-2">Farm rewards</div>
             <div>-</div>

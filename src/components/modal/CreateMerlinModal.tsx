@@ -1,30 +1,30 @@
+import { useLoading } from '@/context/LoadingContext';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { useState } from 'react';
-import { Button } from '../button/Button';
-import Switch from '../switch/Switch';
-import CommonModal from './CommonModal';
-import Datepicker from 'react-tailwindcss-datepicker';
-import { Address } from 'viem';
-import Image from 'next/image';
-import SelectTokenModal from './SelectTokenModal';
-import Select from '../select';
 import {
   ADDRESS_ZERO,
   CHAINS_TOKENS_LIST,
   daysToSeconds,
 } from '@/utils/constants';
-import customToast from '../notification/customToast';
-import { useLoading } from '@/context/LoadingContext';
-import { add, getUnixTime, isSameDay } from 'date-fns';
-import BigNumber from 'bignumber.js';
-import { useAccount } from 'wagmi';
-import { waitForTransaction } from '@wagmi/core';
 import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
-import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
+import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
+import { add, getUnixTime, isSameDay } from 'date-fns';
+import Image from 'next/image';
+import { useState } from 'react';
+import Datepicker from 'react-tailwindcss-datepicker';
+import { Address } from 'viem';
+import { useAccount } from 'wagmi';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import Select from '../select';
+import { handleSuccessTxMessageActionWithNoValue } from '../successTxMessage';
+import Switch from '../switch/Switch';
+import CommonModal from './CommonModal';
+import SelectTokenModal from './SelectTokenModal';
 
 export interface CreateMerlinModalProps {
   toggleOpen: () => void;
@@ -225,10 +225,8 @@ const CreateMerlinModal = ({
     stopLoadingTx();
 
     startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
+      handleSuccessTxMessageActionWithNoValue({
         action: 'created a new merlin pool',
-        token1: token1Symbol,
-        token2: token2Symbol,
         txHash: hash,
       })
     );
