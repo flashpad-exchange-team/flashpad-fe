@@ -1,17 +1,12 @@
 import { Button } from '@/components/button/Button';
+import customToast from '@/components/notification/customToast';
 import ArrowRight from '@/icons/ArrowRight';
 import BackIcon from '@/icons/BackIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { ZodError } from 'zod';
-import FairLaunchpadProjectDetail from './components/FairLaunchpadProjectDetail';
-import FairLaunchpadProjectDocuments from './components/FairLaunchpadProjectDocuments';
-import FairLaunchpadProjectProposition from './components/FairLaunchpadProjectProposition';
-import FairLaunchpadProjectSocialMedia from './components/FairLaunchpadProjectSocialMedia';
-import FairLaunchpadProjectTeamInformation from './components/FairLaunchpadProjectTeamInformation';
-import FairLaunchpadProjectTokenInformation from './components/FairLaunchpadProjectTokenInformation';
-import FairLaunchpadRoadmapAndDistribution from './components/FairLaunchpadRoadmapAndDistribution';
 import {
   formDetailSchema,
   formDocumentsSchema,
@@ -21,8 +16,13 @@ import {
   formSocialMediaSchema,
   formTokenSchema,
 } from '../../utils/validation/FormSchema';
-import { useRouter } from 'next/router';
-import customToast from '@/components/notification/customToast';
+import FairLaunchpadProjectDetail from './components/FairLaunchpadProjectDetail';
+import FairLaunchpadProjectDocuments from './components/FairLaunchpadProjectDocuments';
+import FairLaunchpadProjectProposition from './components/FairLaunchpadProjectProposition';
+import FairLaunchpadProjectSocialMedia from './components/FairLaunchpadProjectSocialMedia';
+import FairLaunchpadProjectTeamInformation from './components/FairLaunchpadProjectTeamInformation';
+import FairLaunchpadProjectTokenInformation from './components/FairLaunchpadProjectTokenInformation';
+import FairLaunchpadRoadmapAndDistribution from './components/FairLaunchpadRoadmapAndDistribution';
 export interface FormEvent {
   target: {
     name: string;
