@@ -70,9 +70,9 @@ const Launchpad = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const errors: any = useMemo(() => {
-    return validationError ? (JSON.parse(validationError) as any) : ([] as any);
-  }, [validationError]);
+  const errors: any = validationError
+    ? (JSON.parse(validationError) as any)
+    : ([] as any);
 
   const showError = (value: string) => {
     const result = errors?.map((i: any) => {
