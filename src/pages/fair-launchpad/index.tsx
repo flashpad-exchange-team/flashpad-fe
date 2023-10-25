@@ -71,7 +71,7 @@ const Launchpad = () => {
   };
 
   const errors: any = useMemo(() => {
-    return validationError ? JSON.parse(validationError) : [];
+    return validationError ? (JSON.parse(validationError) as any) : ([] as any);
   }, [validationError]);
 
   const showError = (value: string) => {
