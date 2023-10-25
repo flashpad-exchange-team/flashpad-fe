@@ -6,7 +6,7 @@ import * as pairContract from '@/utils/pairContract';
 import { CHAINS_TOKENS_LIST, USD_PRICE } from '@/utils/constants';
 import { Address, formatUnits } from 'viem';
 import BigNumber from 'bignumber.js';
-import { fetch24hVol } from '@/api';
+import { fetchTotalVolumeByLp } from '@/api';
 
 export const allNftPoolsKey = 'all-nft-pools';
 
@@ -88,7 +88,10 @@ const useAllNftPoolsData = (userAddress: Address | undefined) => {
             .times(new BigNumber(TVL))
             .toFixed(4);
         }
-        const vol24h = await fetch24hVol();
+        const vol24h = await fetchTotalVolumeByLp({
+          lpAddress: lpToken,
+          last24h: true
+        });
         const feeShare = new BigNumber(vol24h).times(0.3).div(100);
         const feeAPR = feeShare.times(365).div(TVL).times(100);
 

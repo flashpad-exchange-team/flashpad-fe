@@ -39,7 +39,7 @@ import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import useAllPairsData from '@/hooks/useAllPairsData';
 import PositionDetailModal from '@/components/modal/PositionDetailModal';
 import BigNumber from 'bignumber.js';
-import { fetch24hVol } from '@/api';
+import { fetchTotalVolumeByLp } from '@/api';
 
 const PoolDetail = () => {
   const router = useRouter();
@@ -268,12 +268,19 @@ const PoolDetail = () => {
   const isFirstSpMinter = nftPoolAddress === ADDRESS_ZERO;
   const isStaked = !!userSpNfts?.length;
   const [vol24h, setVol24h] = useState(0);
+
   const fetchData = async () => {
-    const response = await fetch24hVol();
+    const response = await fetchTotalVolumeByLp({
+      lpAddress: pairAddress as string,
+      last24h: true,
+    });
     setVol24h(response);
   };
   useEffect(() => {
-    fetchData();
+    if (!router.isReady) return;
+    if (pairAddress) {
+      fetchData();
+    }
   }, [pairAddress]);
 
   const feeShare = new BigNumber(vol24h).times(0.3).div(100);
