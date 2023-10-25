@@ -70,7 +70,7 @@ const Launchpad = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const errors = useMemo(() => {
+  const errors: any = useMemo(() => {
     return validationError ? JSON.parse(validationError) : [];
   }, [validationError]);
 
