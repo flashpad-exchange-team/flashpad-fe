@@ -4,16 +4,21 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
 import ArrowRight from '@/icons/ArrowRight';
+import BigNumber from 'bignumber.js';
 
 export interface RenewPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   saveTimeLock: (value: number) => void;
+  feeAPR: BigNumber;
+  farmBaseAPR: BigNumber;
 }
 
 const RenewPositionModal = ({
   toggleOpen,
   isOpen,
+  feeAPR,
+  farmBaseAPR,
 }: RenewPositionModalProps) => {
   const handleStake = () => {};
   return (
@@ -81,25 +86,24 @@ const RenewPositionModal = ({
       <div className="flex justify-between mb-5">
         <div>Total APR</div>
         <div className="flex items-center">
-          <div className="text-secondary">20.3%</div>
+          <div className="text-secondary">
+            {' '}
+            {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+          </div>
           <ArrowRight />
-          <div className="text-primary">20.3%</div>
+          <div className="text-primary">
+            {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+          </div>
         </div>
       </div>
       <div className="flex justify-between my-3">
-        <div>Swap fees APR</div>
-        <div>10.11%</div>
-      </div>
-      <div className="flex justify-between my-3">
         <div>Farm base APR</div>
-        <div>23.55%</div>
+        <div> {farmBaseAPR.toFixed(2)}%</div>
       </div>
-      <div className="flex justify-between my-3">
-        <div>Lock bonus APR</div>
+      <div className="flex justify-between my-3 text-sm">
+        <div>Earned fees APR</div>
         <div className="flex items-center">
-          <div className="text-secondary">20.3%</div>
-          <ArrowRight />
-          <div>20.3%</div>
+          <div className="text-secondary">{feeAPR.times(100).toFixed(2)}%</div>
         </div>
       </div>
 

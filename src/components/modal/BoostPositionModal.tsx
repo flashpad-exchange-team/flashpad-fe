@@ -14,7 +14,7 @@ import { useAccount, useBalance } from 'wagmi';
 import customToast from '../notification/customToast';
 import * as xARTContract from '@/utils/xARTContract';
 import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionSingleToken } from '../successTxMessage';
 import { useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { encodeAbiParameters } from 'viem';
@@ -148,15 +148,12 @@ const BoostPositionModal = ({
     refetchData();
     stopLoadingTx();
 
-    const usdValue = amount;
-
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionSingleToken({
         action: 'boost to position',
-        token1: token1Data.symbol,
-        token2: token2Data.symbol,
+        token: 'xART',
         txHash: hash,
-        usdValue,
+        amount,
       })
     );
     setAmount('0');
@@ -223,15 +220,12 @@ const BoostPositionModal = ({
     refetchData();
     stopLoadingTx();
 
-    const usdValue = amount;
-
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionSingleToken({
         action: 'unboost from position',
-        token1: token1Data.symbol,
-        token2: token2Data.symbol,
+        token: 'xART',
         txHash: hash,
-        usdValue,
+        amount,
       })
     );
     setAmount('0');

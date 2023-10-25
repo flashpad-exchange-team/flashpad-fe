@@ -11,8 +11,9 @@ import * as nftPoolContract from '@/utils/nftPoolContract';
 import { waitForTransaction } from '@wagmi/core';
 import { useAccount, useBalance } from 'wagmi';
 import customToast from '../notification/customToast';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithNoValue } from '../successTxMessage';
 import Image from 'next/image';
+import BigNumber from 'bignumber.js';
 export interface LockPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
@@ -31,6 +32,8 @@ export interface LockPositionModalProps {
   refetchData: () => void;
   spNFTTokenId: string | null;
   listSpNfts: any[];
+  feeAPR: BigNumber;
+  farmBaseAPR: BigNumber;
 }
 
 const LockPositionModal = ({
@@ -42,6 +45,8 @@ const LockPositionModal = ({
   token2Data,
   refetchData,
   spNFTTokenId,
+  feeAPR,
+  farmBaseAPR,
 }: LockPositionModalProps) => {
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { address: userAddress } = useAccount();
@@ -92,7 +97,7 @@ const LockPositionModal = ({
     stopLoadingTx();
     toggleOpen();
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithNoValue({
         action: 'renew your lock',
         token1: token1Data.symbol,
         token2: token2Data.symbol,
@@ -162,32 +167,27 @@ const LockPositionModal = ({
       <div className="px-2 py-3 bg-blue-opacity-50 my-4 rounded-md text-sm">
         <div className="text-[#fff]">Estimates</div>
       </div>
-      <div className="flex justify-between my-5 text-sm">
-        <div>Deposit value</div>
-        <div>$0</div>
-      </div>
       <div className="flex justify-between mb-5 text-sm">
         <div>Total APR</div>
         <div className="flex items-center">
-          <div className="text-secondary">20.3%</div>
+          <div className="text-secondary">
+            {' '}
+            {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+          </div>
           <ArrowRight />
-          <div className="text-primary">20.3%</div>
+          <div className="text-primary">
+            {farmBaseAPR.plus(feeAPR.times(100)).times(3).toFixed(2)}%
+          </div>
         </div>
       </div>
       <div className="flex justify-between my-3 text-sm">
-        <div>Swap fees APR</div>
-        <div>10.11%</div>
+        <div>Farm Base APR</div>
+        <div> {farmBaseAPR.toFixed(2)}%</div>
       </div>
       <div className="flex justify-between my-3 text-sm">
-        <div>Farm base APR</div>
-        <div>23.55%</div>
-      </div>
-      <div className="flex justify-between my-3 text-sm">
-        <div>Lock bonus APR</div>
+        <div>Earned fees APR</div>
         <div className="flex items-center">
-          <div className="text-secondary">20.3%</div>
-          <ArrowRight />
-          <div>20.3%</div>
+          <div className="text-secondary">{feeAPR.times(100).toFixed(2)}%</div>
         </div>
       </div>
 

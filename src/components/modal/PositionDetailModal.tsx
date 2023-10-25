@@ -23,7 +23,7 @@ import customToast from '../notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
 import * as merlinPoolContract from '@/utils/merlinPoolContract';
 import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 
 export interface PositionDetailModalProps {
   toggleOpen: () => void;
@@ -142,7 +142,7 @@ const PositionDetailModal = ({
     refetchData();
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: `unstaked position #ID-${spNFTTokenId} from Merlin pool`,
         token1: token1Data?.symbol,
         token2: token2Data?.symbol,

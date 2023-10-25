@@ -6,7 +6,7 @@ import LockManageModal from '@/components/modal/LockManageModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
 import BackIcon from '@/icons/BackIcon';
 import DividerDown from '@/icons/DividerDown';
@@ -489,7 +489,7 @@ const TradeForm = ({
 
     mutate(allPairsKey);
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'provided liquidity',
         token1: token1.symbol,
         token2: token2.symbol,

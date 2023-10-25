@@ -13,7 +13,7 @@ import customToast from '../notification/customToast';
 import BigNumber from 'bignumber.js';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 import Image from 'next/image';
 
 export interface AddToPositionModalProps {
@@ -34,6 +34,8 @@ export interface AddToPositionModalProps {
   refetchData: () => void;
   spNFTTokenId: string | null;
   listSpNfts: any[];
+  feeAPR: BigNumber;
+  farmBaseAPR: BigNumber;
 }
 
 const AddToPositionModal = ({
@@ -46,6 +48,8 @@ const AddToPositionModal = ({
   refetchData,
   spNFTTokenId,
   listSpNfts,
+  feeAPR,
+  farmBaseAPR,
 }: AddToPositionModalProps) => {
   const [addAmount, setAddAmount] = useState('0');
 
@@ -103,7 +107,7 @@ const AddToPositionModal = ({
     const usdValue = addAmount;
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'add to position',
         token1: token1Data.symbol,
         token2: token2Data.symbol,
@@ -208,9 +212,14 @@ const AddToPositionModal = ({
       <div className="flex justify-between mb-5 text-sm">
         <div>Total APR</div>
         <div className="flex items-center">
-          <div className="text-secondary">20.3%</div>
+          <div className="text-secondary">
+            {' '}
+            {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+          </div>
           <ArrowRight />
-          <div className="text-primary">20.3%</div>
+          <div className="text-primary">
+            {farmBaseAPR.plus(feeAPR.times(100)).times(3).toFixed(2)}%
+          </div>
         </div>
       </div>
       <div className="px-2 py-4 flex items-center bg-blue-opacity-50 text-sm">

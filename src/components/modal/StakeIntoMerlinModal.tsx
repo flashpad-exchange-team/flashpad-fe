@@ -16,7 +16,7 @@ import * as nftPoolContract from '@/utils/nftPoolContract';
 import { ADDRESS_ZERO } from '@/utils/constants';
 import { waitForTransaction } from '@wagmi/core';
 import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 
 export interface StakeIntoMerlinModalProps {
   toggleOpen: () => void;
@@ -117,7 +117,7 @@ const StakeIntoMerlinModal = ({
     refetchData();
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'staked into Merlin pool',
         token1: token1Data?.symbol,
         token2: token2Data?.symbol,

@@ -4,7 +4,7 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import BNBICon from '@/icons/BNBIcon';
 import { Address } from 'viem';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 import { waitForTransaction } from '@wagmi/core';
 import customToast from '../notification/customToast';
 import { useAccount, useBalance } from 'wagmi';
@@ -102,7 +102,7 @@ const WithdrawPositionModal = ({
     const usdValue = withdrawAmount;
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'withdraw position',
         token1: token1Data.symbol,
         token2: token2Data.symbol,

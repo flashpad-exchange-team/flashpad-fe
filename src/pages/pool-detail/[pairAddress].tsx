@@ -16,12 +16,14 @@ import FlowIcon from '@/icons/FlowIcon';
 import Link from '@/icons/Link';
 import {
   ADDRESS_ZERO,
+  ARTHUR_MASTER_ADDRESS,
   CHAIN_EXPLORER_URL,
   MERLIN_POOL_FACTORY_ADDRESS,
 } from '@/utils/constants';
 import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
+import * as arthurMasterContract from '@/utils/arthurMasterContract';
 import * as covalentApiService from '@/services/covalentApi.service';
 import { waitForTransaction } from '@wagmi/core';
 import Image from 'next/image';
@@ -52,6 +54,7 @@ const PoolDetail = () => {
     useAllPairsData(userAddress);
   const { mutate } = useSWRConfig();
   const [poolInfo, setPoolInfo] = useState({} as any);
+  const [masterPoolInfo, setMasterPoolInfo] = useState({} as any);
   const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
   const [nftPoolAddress, setNftPoolAddress] = useState<Address>(ADDRESS_ZERO);
   const [publishedMerlinPoolsCount, setPublishedMerlinPoolsCount] = useState(0);
@@ -163,6 +166,12 @@ const PoolDetail = () => {
         'getPoolInfo',
         []
       );
+      const masterPoolInfoRes = await arthurMasterContract.read(
+        ARTHUR_MASTER_ADDRESS as any,
+        'getPoolInfo',
+        [poolAddress as Address]
+      );
+      setMasterPoolInfo(masterPoolInfoRes);
       setPoolInfo(poolInfoObj);
     }
     setToken1Symbol(pairData.token1);
@@ -269,6 +278,12 @@ const PoolDetail = () => {
 
   const feeShare = new BigNumber(vol24h).times(0.3).div(100);
   const feeAPR = feeShare.times(365).div(TVL).times(100);
+
+  const dailyART = new BigNumber(masterPoolInfo?.poolEmissionRate)
+    .times(86400)
+    .div(1000000000000000000);
+
+  const farmBaseAPR = dailyART.times(365).div(TVL).times(100);
   return (
     <>
       <PositionDetailModal
@@ -312,6 +327,8 @@ const PoolDetail = () => {
         refetchData={getUserStakedPositions}
         spNFTTokenId={spNFTTokenId}
         listSpNfts={userSpNfts}
+        feeAPR={feeAPR}
+        farmBaseAPR={farmBaseAPR}
       />
       <WithdrawPositionModal
         isOpen={openWithdrawPosition}
@@ -362,6 +379,8 @@ const PoolDetail = () => {
         refetchData={getUserStakedPositions}
         spNFTTokenId={spNFTTokenId}
         listSpNfts={userSpNfts}
+        feeAPR={feeAPR}
+        farmBaseAPR={farmBaseAPR}
       />
       <BoostPositionModal
         isOpen={openBoostPosition}
@@ -393,6 +412,8 @@ const PoolDetail = () => {
           logo: token2Logo,
         }}
         refetchData={getUserStakedPositions}
+        feeAPR={feeAPR}
+        farmBaseAPR={farmBaseAPR}
       />
       <ApyCalculatorModal
         isOpen={isOpenApyCalculator}
@@ -442,7 +463,7 @@ const PoolDetail = () => {
                 </div>
                 <div className="flex items-center gap-1 ">
                   <FeeIcon />
-                  {feeAPR.times(100).toFixed(2)} %{' '}
+                  {feeAPR.times(100).toFixed(2)}%{' '}
                   <span className="text-secondary ">Fees APR</span>
                 </div>
                 <div className="flex items-center gap-1 ">
@@ -499,11 +520,16 @@ const PoolDetail = () => {
             togglePositionDetail={togglePositionDetail}
             setSpNFTTokenId={setSpNFTTokenId}
             setIsSpNFTStakedToMerlin={setIsSpNFTStakedToMerlin}
+            feeAPR={feeAPR}
+            farmBaseAPR={farmBaseAPR}
           />
         ) : (
           <NotStaked
             toggleOpenCreatePosition={handleCreateStakingPosition}
             isFirstSpMinter={isFirstSpMinter}
+            dailyART={dailyART}
+            feeAPR={feeAPR}
+            farmBaseAPR={farmBaseAPR}
           />
         )}
       </div>

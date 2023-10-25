@@ -19,7 +19,7 @@ import {
   minutesToSeconds,
 } from '@/utils/constants';
 import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 import { Address } from 'viem';
 import { waitForTransaction } from '@wagmi/core';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
@@ -322,7 +322,7 @@ const AddLiquidityAndCreatePositionModal = ({
     });
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'provided liquidity',
         token1: token1Symbol,
         token2: token2Symbol,

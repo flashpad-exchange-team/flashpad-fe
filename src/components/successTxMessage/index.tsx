@@ -1,6 +1,6 @@
 import { SuccessTxInfo } from '@/context/LoadingContext';
 
-export const handleSuccessTxMessageCreatePositionAndLiquidity: (
+export const handleSuccessTxMessageActionWithPair: (
   params: any
 ) => SuccessTxInfo = (params: any) => {
   const action = params.action;
@@ -18,31 +18,39 @@ export const handleSuccessTxMessageCreatePositionAndLiquidity: (
         </span>
       </div>
     ),
-    // subMessage: (
-    //   <div>
-    //     Head to the{' '}
-    //     <div
-    //       onClick={() => {
-    //         router.push('/pools');
-    //         stopSuccessTx();
-    //       }}
-    //       className="text-primary cursor-pointer"
-    //     >
-    //       dashboard page{' '}
-    //     </div>
-    //     or to the{' '}
-    //     <div
-    //       onClick={() => {
-    //         router.push('/pools');
-    //         stopSuccessTx();
-    //       }}
-    //       className="text-primary cursor-pointer"
-    //     >
-    //       pool page{' '}
-    //     </div>
-    //     to check your position
-    //   </div>
-    // ),
+    tx: txHash,
+  };
+};
+
+export const handleSuccessTxMessageActionSingleToken: (
+  params: any
+) => SuccessTxInfo = (params: any) => {
+  const action = params.action;
+  const token = params.token;
+  const txHash = params.txHash;
+  const amount = params.amount || '0';
+
+  return {
+    mainMessage: (
+      <div>
+        You’ve successfully {action} worth{' '}
+        <span className="text-primary">
+          {amount} of token <span className="text-primary">{token}</span>
+        </span>
+      </div>
+    ),
+    tx: txHash,
+  };
+};
+
+export const handleSuccessTxMessageActionWithNoValue: (
+  params: any
+) => SuccessTxInfo = (params: any) => {
+  const action = params.action;
+  const txHash = params.txHash;
+
+  return {
+    mainMessage: <div>You’ve successfully {action}</div>,
     tx: txHash,
   };
 };

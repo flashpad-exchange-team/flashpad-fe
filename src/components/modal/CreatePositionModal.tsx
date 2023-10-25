@@ -19,7 +19,7 @@ import customToast from '../notification/customToast';
 import * as pairContract from '@/utils/pairContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 import DividerDown from '@/icons/DividerDown';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { lineaTestnet } from 'wagmi/chains';
@@ -40,6 +40,8 @@ export interface CreatePositionModalProps {
     [p: string]: any;
   };
   refetchData: () => void;
+  feeAPR: BigNumber;
+  farmBaseAPR: BigNumber;
 }
 
 enum LockTimeOptions {
@@ -57,6 +59,8 @@ const CreatePositionModal = ({
   token1Data,
   token2Data,
   refetchData,
+  feeAPR,
+  farmBaseAPR,
 }: CreatePositionModalProps) => {
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { address: userAddress } = useAccount();
@@ -109,7 +113,7 @@ const CreatePositionModal = ({
     const nLockTime = Number(lockTime);
     if (bnStakeAmount.isGreaterThan(balanceLP?.formatted!)) {
       customToast({
-        message: 'Not enough LP Balance',
+        message: 'Not enough LP Balance. Please add liquidity first',
         type: 'error',
       });
       return;
@@ -118,8 +122,8 @@ const CreatePositionModal = ({
       bnStakeAmount.isNaN() ||
       bnStakeAmount.isLessThanOrEqualTo(0) ||
       Number.isNaN(nLockTime) ||
-      !Number.isInteger(nLockTime) ||
-      nLockTime <= 0
+      !Number.isInteger(nLockTime)
+      //  ||nLockTime <= 0
     ) {
       customToast({
         message: 'Please input valid amount and lock time',
@@ -184,7 +188,7 @@ const CreatePositionModal = ({
     stopLoadingTx();
     toggleOpen();
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'created staked position',
         token1: token1Data.symbol,
         token2: token2Data.symbol,
@@ -310,15 +314,19 @@ const CreatePositionModal = ({
           <div className="text-sm mt-1 ">Deposit value</div>
           <div className="text-sm mt-1 ">Total APR</div>
           <div className="text-sm mt-1 ">Farm base APR</div>
-          <div className="text-sm mt-1 ">Farm bonus APR</div>
           <div className="text-sm mt-1 ">Earned fees APR</div>
         </div>
         <div>
-          <div className="text-sm mt-1 text-right ">0</div>
-          <div className="text-sm mt-1 text-right text-primary ">0%</div>
-          <div className="text-sm mt-1 text-right ">0%</div>
-          <div className="text-sm mt-1 text-right ">0%</div>
-          <div className="text-sm mt-1 text-right ">0%</div>
+          <div className="text-sm mt-1 text-right ">{stakeAmount}</div>
+          <div className="text-sm mt-1 text-right text-primary ">
+            {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+          </div>
+          <div className="text-sm mt-1 text-right ">
+            {farmBaseAPR.toFixed(2)}%
+          </div>
+          <div className="text-sm mt-1 text-right ">
+            {feeAPR.times(100).toFixed(2)}%
+          </div>
         </div>
       </div>
       <div className="block lg:flex items-center gap-2">

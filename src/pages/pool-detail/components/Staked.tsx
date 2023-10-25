@@ -30,6 +30,8 @@ interface PoolDetailStakedProps {
   togglePositionDetail: () => void;
   setSpNFTTokenId: (id: string) => void;
   setIsSpNFTStakedToMerlin: (staked: boolean) => void;
+  feeAPR: BigNumber;
+  farmBaseAPR: BigNumber;
 }
 
 const Staked: React.FC<PoolDetailStakedProps> = ({
@@ -48,6 +50,8 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
   togglePositionDetail,
   setSpNFTTokenId,
   setIsSpNFTStakedToMerlin,
+  feeAPR,
+  farmBaseAPR,
 }) => {
   const { address: userAddress } = useAccount();
   const [currentTimestamp, setCurrentTimestamp] = useState(0);
@@ -175,7 +179,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                       handleSelectSpNFT(sp?.tokenId, isStakedToMerlin);
                     }}
                   >
-                    1.48%
+                    {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     <div className="flex items-center gap-2 cursor-pointer justify-center">

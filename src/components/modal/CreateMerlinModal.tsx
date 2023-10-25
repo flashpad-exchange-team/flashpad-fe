@@ -24,7 +24,7 @@ import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
 import { waitForTransaction } from '@wagmi/core';
 import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 
 export interface CreateMerlinModalProps {
   toggleOpen: () => void;
@@ -225,7 +225,7 @@ const CreateMerlinModal = ({
     stopLoadingTx();
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'created a new merlin pool',
         token1: token1Symbol,
         token2: token2Symbol,

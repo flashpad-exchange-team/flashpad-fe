@@ -170,7 +170,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                     ${item.TVL}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    {item.userLpBalance}
+                    {item.userLpBalance} LP
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     {item.locked || item.myPool === '0.00' ? (

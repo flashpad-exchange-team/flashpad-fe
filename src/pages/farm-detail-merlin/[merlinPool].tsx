@@ -22,7 +22,7 @@ import BigNumber from 'bignumber.js';
 import WalletIcon from '@/icons/WalletIcon';
 import { useLoading } from '@/context/LoadingContext';
 import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '@/components/successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 
 const FarmMerlinDetail = () => {
   const router = useRouter();
@@ -192,7 +192,7 @@ const FarmMerlinDetail = () => {
     stopLoadingTx();
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'harvested position in Merlin pool',
         token1: token1Symbol,
         token2: token2Symbol,

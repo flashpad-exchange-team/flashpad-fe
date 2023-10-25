@@ -9,7 +9,7 @@ import { useAccount, useBalance } from 'wagmi';
 import customToast from '../notification/customToast';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageCreatePositionAndLiquidity } from '../successTxMessage';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
 import Image from 'next/image';
 
 export interface HarvestModalProps {
@@ -90,7 +90,7 @@ const HarvestModal = ({
     stopLoadingTx();
 
     startSuccessTx(
-      handleSuccessTxMessageCreatePositionAndLiquidity({
+      handleSuccessTxMessageActionWithPair({
         action: 'harvest position',
         token1: token1Data.symbol,
         token2: token2Data.symbol,
@@ -169,7 +169,7 @@ const HarvestModal = ({
 
       <div className="p-2 my-4 mb-5 bg-blue-opacity-50 ">Rewards breakdown</div>
 
-      <div className="flex justify-between p-2 bg-blue-opacity-50">
+      {/* <div className="flex justify-between p-2 bg-blue-opacity-50">
         <div className="flex items-end">
           <div>Name</div>
           <div className="pl-2 text-secondary text-xs">Farm</div>
@@ -198,7 +198,7 @@ const HarvestModal = ({
             <BNBICon />
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="block lg:flex items-center gap-2">
         <Button
