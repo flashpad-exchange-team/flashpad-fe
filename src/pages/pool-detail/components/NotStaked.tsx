@@ -38,11 +38,11 @@ const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
             <td className="py-4 text-sm font-semibold px-4 border-b border-[#344054] text-left w-[150px]">
               <div className=" text-lightGray">APR Range</div>
               <div className="text-secondary flex items-center gap-1">
-                {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+                {farmBaseAPR.plus(feeAPR).toFixed(2)}%
                 <ArrowRight />{' '}
                 <span className="text-primary">
                   {' '}
-                  {farmBaseAPR.plus(feeAPR.times(100)).times(3).toFixed(2)}%
+                  {farmBaseAPR.plus(feeAPR).times(3).toFixed(2)}%
                 </span>
                 <QuestionIcon />
               </div>

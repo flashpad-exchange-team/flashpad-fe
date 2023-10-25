@@ -13,6 +13,7 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { useAccount } from 'wagmi';
+import { formatUnits } from 'viem';
 
 interface PoolDetailStakedProps {
   token1Symbol: string;
@@ -169,9 +170,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                       handleSelectSpNFT(sp?.tokenId, isStakedToMerlin);
                     }}
                   >
-                    {new BigNumber(sp?.stakingPosition?.amount || 0)
-                      .div(new BigNumber(10).pow(18))
-                      .toString(10)}
+                    <div>{formatUnits(sp?.stakingPosition?.amount, 18)}</div>
                   </td>
                   <td
                     className="py-4 text-sm px-4 border-b border-[#344054] text-center"
@@ -179,7 +178,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                       handleSelectSpNFT(sp?.tokenId, isStakedToMerlin);
                     }}
                   >
-                    {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+                    {farmBaseAPR.plus(feeAPR).toFixed(2)}%
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     <div className="flex items-center gap-2 cursor-pointer justify-center">

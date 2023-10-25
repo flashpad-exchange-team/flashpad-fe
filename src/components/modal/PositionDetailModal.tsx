@@ -14,7 +14,7 @@ import BigNumber from 'bignumber.js';
 import { formatDistanceToNow, isFuture } from 'date-fns';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { Address } from 'viem';
+import { Address, formatUnits } from 'viem';
 import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 import StakeIntoMerlin from './StakeIntoMerlinModal';
@@ -329,14 +329,16 @@ const PositionDetailModal = ({
           </div>
           <div className="flex justify-between items-center my-2">
             <div className="flex">
-              <Eligibility />
+              <div className="w-[30px]">
+                <Eligibility />
+              </div>
               <div className="pl-2">Non yield-bearing</div>
             </div>
             <div>-</div>
           </div>
           <div className="flex justify-between items-center my-2">
             <div className="flex items-center">
-              <div>
+              <div className="w-[30px] text-left">
                 {lockDays && isFuture(lockDays) ? (
                   <Eligibility />
                 ) : (
@@ -365,11 +367,14 @@ const PositionDetailModal = ({
           </div>
           <div className="flex justify-between items-center my-2">
             <div className="flex items-center">
-              {currentSPNFT?.stakingPosition?.boostPoints > 0 ? (
-                <Eligibility />
-              ) : (
-                <CloseIcon />
-              )}
+              <div className="w-[30px]">
+                {currentSPNFT?.stakingPosition?.boostPoints > 0 ? (
+                  <Eligibility />
+                ) : (
+                  <CloseIcon />
+                )}
+              </div>
+
               <div className="pl-2">
                 {currentSPNFT?.stakingPosition?.boostPoints > 0
                   ? 'Boosted'
@@ -388,7 +393,9 @@ const PositionDetailModal = ({
             {isSpNFTStakedToMerlin ? (
               <>
                 <div className="flex items-center">
-                  <Eligibility />
+                  <div className="w-[30px]">
+                    <Eligibility />
+                  </div>
                   <div className="pl-2">Staked in a Merlin pool </div>
                 </div>
                 <div>-</div>
@@ -412,17 +419,19 @@ const PositionDetailModal = ({
           >
             <div className="pl-2 flex">
               <div>Value</div>
-              {isOpenValue ? (
+              {/* {isOpenValue ? (
                 <ArrowDown stroke="#fff" />
               ) : (
                 <ArrowUp stroke="#fff" />
-              )}
+              )} */}
             </div>
-            <div>-</div>
+            <div>
+              {formatUnits(currentSPNFT?.stakingPosition?.amount || 0, 18)}
+            </div>
           </div>
           {isOpenValue && (
             <>
-              <div className="flex justify-between items-center mt-2 bg-blue-opacity-50">
+              {/* <div className="flex justify-between items-center mt-2 bg-blue-opacity-50">
                 <div className="pl-2">Name</div>
                 <div className="flex items-center ">
                   <div className="pl-1">($0.1)</div>
@@ -441,7 +450,7 @@ const PositionDetailModal = ({
                     <BNBICon />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </>
           )}
           <div
@@ -520,10 +529,10 @@ const PositionDetailModal = ({
               </div>
             </>
           )}
-          <div className="flex justify-between mt-2 items-center bg-blue-opacity-50">
+          {/* <div className="flex justify-between mt-2 items-center bg-blue-opacity-50">
             <div className="pl-2">Farm rewards</div>
             <div>-</div>
-          </div>
+          </div> */}
 
           <div className="block lg:flex items-center gap-2">
             <Button

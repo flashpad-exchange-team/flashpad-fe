@@ -319,14 +319,12 @@ const CreatePositionModal = ({
         <div>
           <div className="text-sm mt-1 text-right ">{stakeAmount}</div>
           <div className="text-sm mt-1 text-right text-primary ">
-            {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+            {farmBaseAPR.plus(feeAPR).toFixed(2)}%
           </div>
           <div className="text-sm mt-1 text-right ">
             {farmBaseAPR.toFixed(2)}%
           </div>
-          <div className="text-sm mt-1 text-right ">
-            {feeAPR.times(100).toFixed(2)}%
-          </div>
+          <div className="text-sm mt-1 text-right ">{feeAPR.toFixed(2)}%</div>
         </div>
       </div>
       <div className="block lg:flex items-center gap-2">

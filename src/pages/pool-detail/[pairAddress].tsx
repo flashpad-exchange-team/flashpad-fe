@@ -470,7 +470,7 @@ const PoolDetail = () => {
                 </div>
                 <div className="flex items-center gap-1 ">
                   <FeeIcon />
-                  {feeAPR.times(100).toFixed(2)}%{' '}
+                  {feeAPR.toFixed(2)}%{' '}
                   <span className="text-secondary ">Fees APR</span>
                 </div>
                 <div className="flex items-center gap-1 ">

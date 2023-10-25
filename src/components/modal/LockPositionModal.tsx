@@ -172,11 +172,11 @@ const LockPositionModal = ({
         <div className="flex items-center">
           <div className="text-secondary">
             {' '}
-            {farmBaseAPR.plus(feeAPR.times(100)).toFixed(2)}%
+            {farmBaseAPR.plus(feeAPR).toFixed(2)}%
           </div>
           <ArrowRight />
           <div className="text-primary">
-            {farmBaseAPR.plus(feeAPR.times(100)).times(3).toFixed(2)}%
+            {farmBaseAPR.plus(feeAPR).times(3).toFixed(2)}%
           </div>
         </div>
       </div>
@@ -187,7 +187,7 @@ const LockPositionModal = ({
       <div className="flex justify-between my-3 text-sm">
         <div>Earned fees APR</div>
         <div className="flex items-center">
-          <div className="text-secondary">{feeAPR.times(100).toFixed(2)}%</div>
+          <div className="text-secondary">{feeAPR.toFixed(2)}%</div>
         </div>
       </div>
 

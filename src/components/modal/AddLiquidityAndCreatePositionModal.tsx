@@ -489,10 +489,10 @@ const AddLiquidityAndCreatePositionModal = ({
           <div className="text-[#344054]">($1,91)</div>
         </div>
       </div> */}
-      <div className="bg-blue-opacity-50 p-2 text-[16px] mt-2 mb-1">
+      <div className="bg-blue-opacity-50 p-3 text-sm mt-2 mb-1 rounded-md ">
         Boost options
       </div>
-      <div className="p-3 flex items-center justify-between">
+      <div className="p-3 flex items-center justify-between text-sm">
         <div className="">Lock duration</div>
         <div className="flex gap-2">
           <Button
@@ -506,7 +506,7 @@ const AddLiquidityAndCreatePositionModal = ({
           >
             -
           </Button>
-          <div className="flex items-center bg-blue-opacity-50 justify-end px-6 py-2">
+          <div className="flex items-center bg-blue-opacity-50 justify-end px-6 py-2 text-sm">
             <input
               type="text"
               placeholder="0"
@@ -530,7 +530,7 @@ const AddLiquidityAndCreatePositionModal = ({
 
       <div className="p-2 flex justify-between bg-blue-opacity-50">
         <div>
-          <div className="text-lg">Merlin auto-staking</div>
+          <div className="text-md">Merlin auto-staking</div>
           <div className="text-secondary text-sm">
             Auto unbind your underlying LP tokens
           </div>
@@ -556,11 +556,11 @@ const AddLiquidityAndCreatePositionModal = ({
       </div>
 
       <div className="bg-blue-opacity-50 p-2 text-[16px] my-1">Estimates</div>
-      <div className="flex justify-between my-5">
+      {/* <div className="flex justify-between my-5">
         <div>Deposit value</div>
         <div>$0</div>
-      </div>
-      <div className="flex justify-between mb-5 text-[12px]">
+      </div> */}
+      <div className="flex justify-between mb-5 mt-3 pl-2 text-[12px]">
         <div
           className="flex items-center"
           onClick={() => setIsOpenTotalApr(!isOpenTotalApr)}
@@ -571,15 +571,15 @@ const AddLiquidityAndCreatePositionModal = ({
       </div>
       {isOpenTotalApr && (
         <>
-          <div className="flex justify-between my-3 text-[12px]">
+          <div className="flex justify-between my-3 text-[12px] pl-2">
             <div>Swap fees APR</div>
             <div>0</div>
           </div>
-          <div className="flex justify-between my-3 text-[12px]">
+          <div className="flex justify-between my-3 text-[12px] pl-2">
             <div>Farm base APR</div>
             <div>0</div>
           </div>
-          <div className="flex justify-between my-3 text-[12px]">
+          <div className="flex justify-between my-3 text-[12px] pl-2">
             <div>Lock bonus APR</div>
             <div>0</div>
           </div>
