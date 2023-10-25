@@ -11,6 +11,8 @@ export const fetchTotalVolumeByLp = async (params: {
     const response = await axios.get(url, {
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '"Origin, X-Requested-With, Content-Type, Accept"'
       },
     });
 
