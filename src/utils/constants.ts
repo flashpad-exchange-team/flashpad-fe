@@ -408,13 +408,13 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
   {
     symbol: 'ART',
     name: 'Arthur Token',
-    address: '0x93F7D76C33409FC8d1e6fCc330b21d97a8cAa2E8',
+    address: '0xb056CeD9d51eb4A9C366229921CAC57E8A7a17c3',
     decimals: 18,
   },
   {
     symbol: 'XART',
     name: 'XArthur Token',
-    address: '0xd1777a54f9F1e4a727C6A0809B6d943CEB1e2267',
+    address: '0xF34BAEc8B153E2d14DCC99F0bA9b0bB539Bbe68d',
     decimals: 18,
   },
 ];
