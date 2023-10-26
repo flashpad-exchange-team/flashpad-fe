@@ -86,6 +86,9 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                     // chainId: lineaTestnet.id,
                     chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
                   });
+                  window.open(
+                    'https://metamask.app.link/dapp/www.arthur.exchange/'
+                  );
                 }}
               >
                 <Metamask />
