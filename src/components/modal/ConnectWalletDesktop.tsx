@@ -22,6 +22,14 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
   const { connect } = useConnect();
   const checkWalletInstalled = (type: string) => {
     if (type === 'Metamask') {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        // open the deeplink page
+        window.open('https://metamask.app.link/dapp/www.arthur.exchange/');
+      }
       if (typeof window.ethereum === 'undefined') {
         customToast({
           message:
