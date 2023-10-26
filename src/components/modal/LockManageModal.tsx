@@ -25,9 +25,9 @@ const LockManageModal = ({
   isOpen,
   saveTimeLock,
 }: LockManageModalProps) => {
-  const [lockTime, setLockTime] = useState('14');
+  const [lockTime, setLockTime] = useState('0');
   const [lockTimeOption, setLockTimeOption] = useState<LockTimeOptions>(
-    LockTimeOptions.TWO_WEEKS
+    LockTimeOptions.CUSTOM
   );
 
   const is2WeeksSelected = lockTimeOption == LockTimeOptions.TWO_WEEKS;
@@ -37,11 +37,7 @@ const LockManageModal = ({
 
   const handleConfirmLock = () => {
     const nLockTime = Number(lockTime);
-    if (
-      Number.isNaN(nLockTime) ||
-      !Number.isInteger(nLockTime) ||
-      nLockTime <= 0
-    ) {
+    if (Number.isNaN(nLockTime) || !Number.isInteger(nLockTime)) {
       customToast({
         message: 'Please input valid number',
         type: 'error',
@@ -67,9 +63,8 @@ const LockManageModal = ({
       <div className="text-[15px]">Lock time (days)</div>
       <div className="flex gap-2 items-center my-2">
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is2WeeksSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: is2WeeksSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.TWO_WEEKS);
             setLockTime('14');
@@ -78,9 +73,8 @@ const LockManageModal = ({
           2 WEEKS
         </div>
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is1MonthSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: is1MonthSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.ONE_MONTH);
             setLockTime('30');
@@ -89,9 +83,8 @@ const LockManageModal = ({
           1 MONTH
         </div>
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            is3MonthsSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: is3MonthsSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.THREE_MONTHS);
             setLockTime('90');
@@ -100,9 +93,8 @@ const LockManageModal = ({
           3 MONTHS
         </div>
         <div
-          className={`p-2 text-center bg-darkBlue cursor-pointer border-[${
-            isCustomSelected ? '#E6B300' : '#150E3980'
-          }] hover:border-[#E6B300] border w-1/4 text-sm`}
+          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          style={{ borderColor: isCustomSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.CUSTOM);
           }}

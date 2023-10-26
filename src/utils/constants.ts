@@ -168,7 +168,7 @@ export const DEFAULT_DEADLINE =
   process.env.NEXT_PUBLIC_DEFAULT_DEADLINE || '10';
 export const DEFAULT_MAX_HOPS = process.env.NEXT_PUBLIC_DEFAULT_MAX_HOPS || '4';
 
-export const DEFAULT_TIME_LOCK = '14';
+export const DEFAULT_TIME_LOCK = '0';
 
 export const K_5_MIN = BigInt(300);
 

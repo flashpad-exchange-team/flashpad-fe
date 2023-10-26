@@ -65,7 +65,7 @@ const CreatePositionModal = ({
   const { address: userAddress } = useAccount();
   const [lockTime, setLockTime] = useState(DEFAULT_TIME_LOCK);
   const [lockTimeOption, setLockTimeOption] = useState<LockTimeOptions>(
-    LockTimeOptions.TWO_WEEKS
+    LockTimeOptions.CUSTOM
   );
   const [stakeAmount, setStakeAmount] = useState('0');
 
