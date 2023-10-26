@@ -22,14 +22,6 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
   const { connect } = useConnect();
   const checkWalletInstalled = (type: string) => {
     if (type === 'Metamask') {
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      ) {
-        // open the deeplink page
-        window.open('https://metamask.app.link/dapp/www.arthur.exchange/');
-      }
       if (typeof window.ethereum === 'undefined') {
         customToast({
           message:
@@ -77,7 +69,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
           <>
             <div className="flex flex-wrap gap-2  mt-4">
               <div
-                className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer "
+                className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer hidden md:flex"
                 onClick={() => {
                   setIsClick(true);
                   checkWalletInstalled('Metamask');
