@@ -69,7 +69,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
           <>
             <div className="flex flex-wrap gap-2  mt-4">
               <div
-                className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer hidden md:flex"
+                className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer flex"
                 onClick={() => {
                   setIsClick(true);
                   checkWalletInstalled('Metamask');
@@ -78,9 +78,6 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                     // chainId: lineaTestnet.id,
                     chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
                   });
-                  window.open(
-                    'https://metamask.app.link/dapp/www.arthur.exchange/'
-                  );
                 }}
               >
                 <Metamask />

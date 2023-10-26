@@ -39,19 +39,6 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
                 onClick={() => {
                   setIsClick(true);
                   connect({
-                    connector: connectors[1],
-                    chainId: lineaTestnet.id,
-                  });
-                }}
-              >
-                <Metamask />
-                Metamask
-              </div>
-              <div
-                className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
-                onClick={() => {
-                  setIsClick(true);
-                  connect({
                     connector: connectors[2],
                     chainId: lineaTestnet.id,
                   });
