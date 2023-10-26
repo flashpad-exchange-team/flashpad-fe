@@ -28,6 +28,7 @@ import TokenForm from '../TokenForm';
 import { useNetwork } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 import handleSwitchNetwork from '@/utils/switchNetwork';
+import * as factoryContract from '@/utils/factoryContract';
 
 interface TradeFormProps {
   title: string;
@@ -59,6 +60,7 @@ const TradeForm = ({
   const [swapRate1To2, setSwapRate1To2] = useState('-');
   const [swapRate2To1, setSwapRate2To1] = useState('-');
   const [isFetchingRate, setIsFetchingRate] = useState<boolean>(false);
+  const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     setToken2Amount('' + +token1Amount * +swapRate1To2);
@@ -97,6 +99,19 @@ const TradeForm = ({
   });
 
   const toggleOpen = () => setOpen(!isOpen);
+
+  const getPairAddress = async () => {
+    if (!token1 || !token2) return;
+    const address = await factoryContract.getPair(
+      token1.address,
+      token2.address
+    );
+    setIsFirstLP(!address || address === ADDRESS_ZERO);
+  };
+
+  useEffect(() => {
+    getPairAddress();
+  }, [token1, token2]);
 
   const onSelectedToken = (token: any) => {
     if (tokenBeingSelected === 1) {
@@ -361,24 +376,31 @@ const TradeForm = ({
           }}
           setTokenAmount={(value) => setToken2Amount(value)}
         />
-        <LiquidityPairInfo
-          swapRate1To2={swapRate1To2}
-          swapRate2To1={swapRate2To1}
-          isStableSwap={isStableSwap}
-          isFetchingRate={isFetchingRate}
-          token1Data={{
-            address: token1?.address,
-            symbol: token1?.symbol,
-            amountIn: token1Amount,
-            decimals: balanceToken1?.decimals,
-          }}
-          token2Data={{
-            address: token2?.address,
-            symbol: token2?.symbol,
-            amountIn: token2Amount,
-            decimals: balanceToken2?.decimals,
-          }}
-        />
+        {isFirstLP ? (
+          <div className="bg-darkBlue rounded-lg my-2 mb-3 p-4 text-sm">
+            There is currently no liquidity pool for the selected pair
+          </div>
+        ) : (
+          <LiquidityPairInfo
+            swapRate1To2={swapRate1To2}
+            swapRate2To1={swapRate2To1}
+            isStableSwap={isStableSwap}
+            isFetchingRate={isFetchingRate}
+            token1Data={{
+              address: token1?.address,
+              symbol: token1?.symbol,
+              amountIn: token1Amount,
+              decimals: balanceToken1?.decimals,
+            }}
+            token2Data={{
+              address: token2?.address,
+              symbol: token2?.symbol,
+              amountIn: token2Amount,
+              decimals: balanceToken2?.decimals,
+            }}
+          />
+        )}
+
         <Button
           onClick={() => handleSwap()}
           className="w-full justify-center mb-2 px-[42px]"

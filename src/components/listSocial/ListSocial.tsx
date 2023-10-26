@@ -10,10 +10,10 @@ const ListSocial = () => {
       <a href="https://docs.arthur.exchange/" target="_blank">
         <DocsIcon />
       </a>
-      <a href="https://discord.gg/yaenZHbd" target="_blank">
+      <a href="https://discord.com/invite/arthurexchange" target="_blank">
         <DiscordIcon />
       </a>
-      <a href="https://twitter.com/AthurExchange" target="_blank">
+      <a href="https://twitter.com/ArthurExchange" target="_blank">
         <TwitterIcon />
       </a>
       <a href="https://t.me/Athurexchange" target="_blank">
