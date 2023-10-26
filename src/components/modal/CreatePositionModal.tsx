@@ -257,7 +257,7 @@ const CreatePositionModal = ({
       <div className="text-[15px]">Lock duration (days)</div>
       <div className="flex gap-2 items-center my-2">
         <div
-          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          className="p-1 md:p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-xs md:text-sm"
           style={{ borderColor: is2WeeksSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.TWO_WEEKS);
@@ -267,7 +267,7 @@ const CreatePositionModal = ({
           2 WEEKS
         </div>
         <div
-          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          className="p-1 md:p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-xs md:text-sm"
           style={{ borderColor: is1MonthSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.ONE_MONTH);
@@ -277,7 +277,7 @@ const CreatePositionModal = ({
           1 MONTH
         </div>
         <div
-          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          className="p-1 md:p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-xs md:text-sm"
           style={{ borderColor: is3MonthsSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.THREE_MONTHS);
@@ -287,7 +287,7 @@ const CreatePositionModal = ({
           3 MONTHS
         </div>
         <div
-          className="p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-sm"
+          className="p-1 md:p-2 text-center bg-darkBlue cursor-pointer hover:border-[#E6B300] border w-1/4 text-xs md:text-sm"
           style={{ borderColor: isCustomSelected ? '#E6B300' : '#150E3980' }}
           onClick={() => {
             setLockTimeOption(LockTimeOptions.CUSTOM);

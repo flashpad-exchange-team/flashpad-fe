@@ -142,7 +142,7 @@ const LiquidityPairInfo = ({
 
   return (
     <div
-      className={`bg-darkBlue rounded-lg my-2 p-4 ${
+      className={`bg-darkBlue rounded-lg my-2 p-4 px-2 md:px-4 ${
         token1Address && token2Address ? '' : 'hidden'
       }`}
     >
@@ -154,11 +154,11 @@ const LiquidityPairInfo = ({
           <InlineLoading message="Fetching liquidity ratio" className="mb-2" />
         ) : (
           <div>
-            <div className="text-sm ">
+            <div className="text-xs md:text-sm ">
               1 {token1Symbol} = <AnimatedNumber value={ratioToken1Token2} />
               {token2Symbol}
             </div>
-            <div className="text-sm ">
+            <div className="text-xs md:text-sm ">
               1 {token2Symbol} = <AnimatedNumber value={ratioToken2Token1} />
               {token1Symbol}
             </div>
@@ -170,55 +170,67 @@ const LiquidityPairInfo = ({
       {open && (
         <>
           <div className="h-[1px] w-full bg-[#1D2939] my-2"></div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between break-all">
             <div>
-              <div className="text-sm mt-0 ">Pair Type</div>
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-0 ">
+                Pair Type
+              </div>
               {isFirstLP === false && (
-                <div className="text-sm mt-1.5 ">{token1Symbol} Swap rate</div>
+                <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 ">
+                  {token1Symbol} Swap rate
+                </div>
               )}
               {isFirstLP === false && (
-                <div className="text-sm mt-1.5 ">{token2Symbol} Swap rate</div>
+                <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 ">
+                  {token2Symbol} Swap rate
+                </div>
               )}
-              <div className="text-sm mt-1.5 ">
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 ">
                 {token1Symbol}/{token2Symbol} Liquidity ratio
               </div>
-              <div className="text-sm mt-1.5 ">
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 ">
                 {token2Symbol}/{token1Symbol} Liquidity ratio
               </div>
-              <div className="text-sm mt-1.5 ">Pool share</div>
-              <div className="text-sm mt-1.5 ">LP address</div>
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 ">
+                Pool share
+              </div>
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 ">
+                LP address
+              </div>
               {isSpNFT && (
-                <div className="text-sm mt-1.5 ">NFT Pool address</div>
+                <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 ">
+                  NFT Pool address
+                </div>
               )}
             </div>
             <div>
-              <div className="text-sm mt-0 text-right text-primary ">
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-0 text-right text-primary ">
                 {isStableSwap ? 'Stable' : 'Volatile'}
               </div>
               {isFirstLP === false && (
-                <div className="text-sm mt-1.5 text-right ">
+                <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
                   {swapRate1To2 || 0} {token2Symbol}
                 </div>
               )}
               {isFirstLP === false && (
-                <div className="text-sm mt-1.5 text-right ">
+                <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
                   {swapRate2To1 || 0} {token1Symbol}
                 </div>
               )}
-              <div className="text-sm mt-1.5 text-right ">
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
                 {ratioToken1Token2 || 0}
               </div>
-              <div className="text-sm mt-1.5 text-right ">
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
                 {ratioToken2Token1 || 0}
               </div>
-              <div className="text-sm mt-1.5 text-right ">
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
                 {isFirstLP ? '100%' : `${poolShare}%`}
               </div>
-              <div className="text-sm mt-1.5 text-right ">
+              <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
                 <CopyableText text={lpAddress} />
               </div>
               {isSpNFT && (
-                <div className="text-sm mt-1.5 text-right ">
+                <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
                   <CopyableText text={nftPoolAddress} />
                 </div>
               )}

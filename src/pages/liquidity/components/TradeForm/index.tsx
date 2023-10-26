@@ -599,7 +599,7 @@ const TradeForm = ({
         deadline={deadline}
         nftPoolAddress={nftPoolAddress!}
       />
-      <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[24px]">
+      <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[10px] md:px-[24px]">
         <div className="text-2xl font-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />
           {FEATURE_PROPS[feature].label}

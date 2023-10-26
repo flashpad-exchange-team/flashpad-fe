@@ -65,7 +65,7 @@ const TokenForm = ({
           />
         </div>
       </div>
-      <div className="flex items-center justify-between w-full text-sm lg:[text-16px]">
+      <div className="block md:flex items-center justify-between w-full text-sm lg:[text-16px] break-all">
         <div className="mt-2 font-semibold">
           Balance:{' '}
           {tokenData?.symbol
@@ -74,7 +74,7 @@ const TokenForm = ({
         </div>
 
         <div
-          className="text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer"
+          className="mt-2 md:mt-0 text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer"
           onClick={() => setTokenAmount(tokenData.balance)}
         >
           Max

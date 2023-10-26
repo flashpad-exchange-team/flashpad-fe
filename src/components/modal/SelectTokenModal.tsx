@@ -165,7 +165,9 @@ const SelectTokenModal = ({
                 <div className="text-xs text-[#475467]">{item.name}</div>
               </div>
             </div>
-            <div className="text-lg pr-2">{item.curBalance}</div>
+            <div className="text-sm md:text-lg pr-2 break-all pl-16 md:pl-0">
+              {item.curBalance}
+            </div>
           </div>
         ))}
       </div>
