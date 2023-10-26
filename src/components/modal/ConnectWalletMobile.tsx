@@ -2,7 +2,6 @@ import CloseIcon from '@/icons/CloseIcon';
 import Coinbase from '@/icons/Coinbase';
 import ConnectSuccess from '@/icons/ConnectSuccess';
 import InfoIcon from '@/icons/InfoIcon';
-import Metamask from '@/icons/Metamask';
 import WalletConnect from '@/icons/WalletConnect';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
@@ -11,6 +10,13 @@ import Notification from '../notification/Notification';
 interface ConnectWalletProps {
   toggleOpen: () => void;
 }
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+const connectorWalletConnect = new WalletConnectConnector({
+  chains: [lineaTestnet],
+  options: {
+    projectId: '14f71914de6c8aae8a6b49b7ba15522f',
+  },
+});
 const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
   const [isClick, setIsClick] = useState(false);
   const { isConnected } = useAccount();
@@ -52,7 +58,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
                 onClick={() => {
                   setIsClick(true);
                   connect({
-                    connector: connectors[3],
+                    connector: connectorWalletConnect,
                     chainId: lineaTestnet.id,
                   });
                 }}
