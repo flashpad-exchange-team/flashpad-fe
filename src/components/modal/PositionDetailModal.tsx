@@ -118,7 +118,7 @@ const PositionDetailModal = ({
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Unstaking your spNFT from Merlin pool...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const merlinPoolAddress = currentSPNFT.owner;

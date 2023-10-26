@@ -114,7 +114,7 @@ const CreateMerlinPool = () => {
       startLoadingTx({
         tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
         title: 'Creating spNFT pool ...',
-        message: 'Confirming your transaction. Please wait.',
+        message: 'Confirming your transaction, please wait.',
       });
 
       const createPoolRes = await nftPoolFactoryContract.createPool(

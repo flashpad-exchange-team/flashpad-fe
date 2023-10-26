@@ -113,7 +113,7 @@ const PoolDetail = () => {
       startLoadingTx({
         tokenPairs: token1Symbol + ' - ' + token2Symbol,
         title: 'Creating spNFT pool ...',
-        message: 'Confirming your transaction. Please wait.',
+        message: 'Confirming your transaction, please wait.',
       });
 
       const createPoolRes = await nftPoolFactoryContract.createPool(

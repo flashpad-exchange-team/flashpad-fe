@@ -99,7 +99,7 @@ const BoostPositionModal = ({
       startLoadingTx({
         tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
         title: 'Approving Yield Booster ...',
-        message: 'Confirming your transaction. Please wait.',
+        message: 'Confirming your transaction, please wait.',
       });
       const approveRes = await xARTContract.write(
         userAddress!,
@@ -118,7 +118,7 @@ const BoostPositionModal = ({
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Boosting your stake position ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
     const txResult = await xARTContract.write(
       userAddress,
@@ -185,7 +185,7 @@ const BoostPositionModal = ({
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'UnBoosting your stake position ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const usageAddress = YIELD_BOOSTER_ADDRESS;

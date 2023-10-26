@@ -152,7 +152,7 @@ const AddLiquidityAndCreatePositionModal = ({
     startLoadingTx({
       tokenPairs: token1Symbol + ' - ' + token2Symbol,
       title: 'Adding liquidity and creating position...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     let reserve1, reserve2;
@@ -194,7 +194,7 @@ const AddLiquidityAndCreatePositionModal = ({
         startLoadingTx({
           tokenPairs: token1Symbol,
           title: `Approving ${token1Symbol} Token ...`,
-          message: 'Confirming your transaction. Please wait.',
+          message: 'Confirming your transaction, please wait.',
         });
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,
@@ -224,7 +224,7 @@ const AddLiquidityAndCreatePositionModal = ({
         startLoadingTx({
           tokenPairs: token2Symbol,
           title: `Approving ${token2Symbol} Token ...`,
-          message: 'Confirming your transaction. Please wait.',
+          message: 'Confirming your transaction, please wait.',
         });
         const approveRes = await erc20TokenContract.erc20Write(
           userAddress!,

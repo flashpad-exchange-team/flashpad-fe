@@ -110,7 +110,7 @@ const RemoveLiquidityModal = ({
     startLoadingTx({
       tokenPairs: token1Symbol + ' - ' + token2Symbol,
       title: 'Removing liquidity ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
     const balance1 = await erc20Contract.erc20Read(
       token1Address as Address,
@@ -145,7 +145,7 @@ const RemoveLiquidityModal = ({
       startLoadingTx({
         tokenPairs: token1Symbol + ' - ' + token2Symbol,
         title: `Approving LP Token ...`,
-        message: 'Confirming your transaction. Please wait.',
+        message: 'Confirming your transaction, please wait.',
       });
       const approveRes = await pairContract.write(
         userAddress!,

@@ -213,7 +213,7 @@ const Launchpad = () => {
             <SwapRightIcon />
           </div>
           {componentRender}
-          <div className="flex justify-end">
+          <div className="md:flex justify-end">
             {step !== 1 && (
               <Button
                 type="secondary"

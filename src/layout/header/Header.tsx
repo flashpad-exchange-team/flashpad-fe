@@ -46,8 +46,8 @@ const MENU_ITEMS = [
   {
     icon: <LaunchPadIcon />,
     iconActive: <LaunchPadIcon active />,
-    name: 'Earn',
-    path: '/earn',
+    name: 'Pools',
+    path: '/pools',
     subMenu: [
       // {
       //   name: 'Positions',
@@ -260,7 +260,7 @@ const Header = (props: INavbarProps) => {
         </div>
       </div>
       {props.mode === 'app' && (
-        <div className="bg-[#0C111D] h-[78px] flex items-center justify-center fixed left-0 bottom-0 w-full lg:hidden">
+        <div className="bg-[#0C111D] h-[78px] flex items-center justify-center fixed left-0 bottom-0 w-full lg:hidden z-10">
           <div className="flex gap-6">
             {MENU_ITEMS.map((menuItem: any) =>
               menuItem.subMenu ? (

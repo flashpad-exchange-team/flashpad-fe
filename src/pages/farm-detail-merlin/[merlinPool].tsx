@@ -170,7 +170,7 @@ const FarmMerlinDetail = () => {
     startLoadingTx({
       tokenPairs: token1Symbol + ' - ' + token2Symbol,
       title: 'Harvesting staked position in Merlin pool...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const harvestTx = await merlinPoolContract.write(

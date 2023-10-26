@@ -75,7 +75,7 @@ const LockPositionModal = ({
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Renewing the lock of your stake position ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const txResult = await nftPoolContract.write(

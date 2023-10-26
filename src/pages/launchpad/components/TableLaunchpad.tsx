@@ -19,29 +19,25 @@ const TableLaunchpad: React.FC<TableLaunchpadProps> = ({ data }) => {
   const router = useRouter();
   return (
     <div className="overflow-x-auto my-10">
+      <div className="w-full text-lg py-3 text-center md:text-left">
+        Launchpad
+      </div>
+      <div className="w-full text-sm text-[#98A2B3] pb-3 text-center md:text-left">
+        Custom-built infrastructure for Linea native public sales
+      </div>
+      <div className="w-full text-sm text-[#98A2B3] pb-3 px-3 md:px-0 text-center md:text-left">
+        <div className="w-full  flex">
+          <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
+            <Search />
+          </div>
+          <input
+            className=" bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
+            placeholder="Search by name or address"
+          />
+        </div>
+      </div>
       <table className="min-w-full bg-dark">
         <thead>
-          <tr>
-            <div className="w-full text-lg py-3 px-4 text-left">Launchpad</div>
-          </tr>
-          <tr>
-            <div className="w-full text-sm text-[#98A2B3] pb-3 px-4 text-left">
-              Custom-built infrastructure for Linea native public sales
-            </div>
-          </tr>
-          <tr>
-            <div className="w-full text-sm text-[#98A2B3] pb-3 px-4 text-left">
-              <div className="w-full w-[300px] flex">
-                <div className="w-[70px] bg-[#150E39] flex items-center justify-center rounded-tl-lg rounded-bl-lg">
-                  <Search />
-                </div>
-                <input
-                  className="w-full w-[300px] bg-[#150E39] h-[52px] text-[15px] font-semibold rounded-tr-lg rounded-br-lg focus:outline-none  placeholder-[#667085] w-full"
-                  placeholder="Search by name or address"
-                />
-              </div>
-            </div>
-          </tr>
           <tr>
             <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
               Name

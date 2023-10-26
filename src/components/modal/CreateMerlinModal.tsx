@@ -200,7 +200,7 @@ const CreateMerlinModal = ({
     startLoadingTx({
       tokenPairs: token1Symbol + ' - ' + token2Symbol,
       title: 'Creating Merlin Pool ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const txResult = await merlinPoolFactoryContract.createMerlinPool(

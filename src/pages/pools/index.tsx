@@ -18,7 +18,7 @@ const PoolList = ({}: PoolListProps) => {
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
 
-  const [showSpNftPools, setShowSpNftPools] = useState(true);
+  const [showSpNftPools, setShowSpNftPools] = useState(false);
 
   const { data: allPairsData, isLoading: isLoadingAllPairs } =
     useAllPairsData(userAddress);

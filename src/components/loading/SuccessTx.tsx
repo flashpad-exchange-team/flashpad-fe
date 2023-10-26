@@ -33,9 +33,9 @@ const SuccessTx = () => {
         </div>
         <div className="text-xs text-[#98A2B3] mb-2 font-semibold">
           {/* {successTxInfo?.subMessage} */}
-          <div className="flex gap-1 justify-center">
+          <div className="">
             Head to the{' '}
-            <div
+            {/* <span
               onClick={() => {
                 router.push('/pools');
                 stopSuccessTx();
@@ -43,9 +43,9 @@ const SuccessTx = () => {
               className="text-primary cursor-pointer"
             >
               dashboard page{' '}
-            </div>
-            or to the{' '}
-            <div
+            </span> */}
+            {/* or to the{' '} */}
+            <span
               onClick={() => {
                 router.push('/pools');
                 stopSuccessTx();
@@ -53,7 +53,7 @@ const SuccessTx = () => {
               className="text-primary cursor-pointer"
             >
               pool page{' '}
-            </div>
+            </span>
             to check your position
           </div>
         </div>

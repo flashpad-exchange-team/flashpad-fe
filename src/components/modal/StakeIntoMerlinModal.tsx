@@ -92,7 +92,7 @@ const StakeIntoMerlinModal = ({
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Staking your spNFT into Merlin pool...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const transferNftTx = await nftPoolContract.write(

@@ -77,8 +77,8 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
                 Lock
               </th>
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
-                Name
+              <th className="text-xs py-3 px-4  border-b border-[#344054] text-center">
+                <div className="mr-8">Name</div>
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
                 My Pool Share
@@ -97,7 +97,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
           </thead>
           {loading ? (
             <tbody className="bg-[transparent] h-[260px]">
-              <div className="flex items-center justify-center absolute w-[190px] left-[40%] top-[40%]">
+              <div className="flex items-center justify-center absolute w-100px left-[20%]  md:w-[190px] md:left-[40%] top-[40%]">
                 <InlineLoading message="Fetching Pools list data" />
               </div>
             </tbody>
@@ -125,12 +125,12 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                     )}
                   </td>
                   <td
-                    className="py-4 text-sm px-4 border-b border-[#344054] text-left relative"
+                    className="py-4 text-sm px-4 border-b border-[#344054] text-center relative"
                     onClick={() => {
                       router.push(`/pool-detail/${item.pairAddress}`);
                     }}
                   >
-                    <div className="relative">
+                    <div className="relative ">
                       <div className="absolute">
                         {item.token1Logo ? (
                           <Image
@@ -156,7 +156,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                         )}
                       </div>
                     </div>
-                    <div className="ml-16">
+                    <div className="ml-11 w-[120px] text-center">
                       {item.token1} - {item.token2}
                     </div>
                   </td>
@@ -174,8 +174,14 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     {item.locked || item.myPool === '0.00' ? (
-                      <div className="cursor-default text-[#475467] font-semibold">
-                        Remove
+                      <div
+                        data-tooltip-id="lock"
+                        data-tooltip-content={`Locked until: ${item.timeLock}`}
+                      >
+                        <div className="cursor-default text-[#475467] font-semibold">
+                          Remove
+                        </div>{' '}
+                        <Tooltip id="lock" />
                       </div>
                     ) : (
                       <div

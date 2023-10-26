@@ -364,7 +364,7 @@ const TradeForm = ({
         startLoadingTx({
           tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
           title: `Approving ${token1?.symbol}...`,
-          message: 'Confirming your transaction. Please wait.',
+          message: 'Confirming your transaction, please wait.',
         });
 
         const approveRes = await erc20TokenContract.erc20Write(
@@ -397,7 +397,7 @@ const TradeForm = ({
         startLoadingTx({
           tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
           title: `Approving ${token2?.symbol}...`,
-          message: 'Confirming your transaction. Please wait.',
+          message: 'Confirming your transaction, please wait.',
         });
 
         const approveRes = await erc20TokenContract.erc20Write(
@@ -421,7 +421,7 @@ const TradeForm = ({
     startLoadingTx({
       tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
       title: 'Adding Liquidity ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const { timestamp } = await web3Helpers.getBlock();
@@ -515,7 +515,7 @@ const TradeForm = ({
       startLoadingTx({
         tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
         title: 'Creating spNFT pool ...',
-        message: 'Confirming your transaction. Please wait.',
+        message: 'Confirming your transaction, please wait.',
       });
       const lpAddress = await routerContract.getPair(
         token1.address,
@@ -749,7 +749,7 @@ const TradeForm = ({
 
         {isFirstLP && (
           <Notification
-            message="You are the first liquidity provider! The token ratio that you choose here will set the price on this pool."
+            message="You are the first liquidity provider! The token ratio that you choose here will set the price of this pool."
             type="info"
           />
         )}

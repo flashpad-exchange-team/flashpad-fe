@@ -193,7 +193,7 @@ const TradeForm = ({
       startLoadingTx({
         tokenPairs: token1?.symbol,
         title: `Approving ${token1?.symbol} Token ...`,
-        message: 'Confirming your transaction. Please wait.',
+        message: 'Confirming your transaction, please wait.',
       });
       const approveRes = await erc20TokenContract.erc20Write(
         userAddress!,
@@ -217,7 +217,7 @@ const TradeForm = ({
     startLoadingTx({
       tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
       title: 'Swapping tokens ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     let txResult = undefined;

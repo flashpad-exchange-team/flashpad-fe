@@ -79,7 +79,7 @@ const AddToPositionModal = ({
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Adding to your stake position ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const addAmountParse = BigNumber(addAmount).times(

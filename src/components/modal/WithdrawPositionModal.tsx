@@ -74,7 +74,7 @@ const WithdrawPositionModal = ({
     startLoadingTx({
       tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
       title: 'Withdrawing your stake position ...',
-      message: 'Confirming your transaction. Please wait.',
+      message: 'Confirming your transaction, please wait.',
     });
 
     const withdrawAmountParse = BigNumber(withdrawAmount).times(
