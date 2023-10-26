@@ -87,7 +87,7 @@ const Landing = () => {
                   'text-primary text-2xl font-bold mb-1 ' + redRose.className
                 }
               >
-                AUDIT BY
+                AUDITED BY
               </div>
               <Image
                 src={AuditImg.src}
