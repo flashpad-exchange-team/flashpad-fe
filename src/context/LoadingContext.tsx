@@ -16,6 +16,7 @@ export interface SuccessTxInfo {
   mainMessage?: ReactElement;
   subMessage?: ReactElement;
   tx?: string;
+  action?: string;
 }
 
 interface LoadingContextType {

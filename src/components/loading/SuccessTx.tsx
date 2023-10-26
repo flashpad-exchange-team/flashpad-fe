@@ -12,6 +12,18 @@ const SuccessTx = () => {
   const router = useRouter();
   if (!isSuccessTx) return null;
 
+  const lpv2Actions = ['provided liquidity', 'swapped'];
+
+  const spNFTActions = [
+    'add to position',
+    'boost to position',
+    'unboost from position',
+    'created staked position',
+    'harvest position',
+    'renew your lock',
+    'withdraw position',
+  ];
+
   return (
     <div
       className="fixed inset-0  bg-[#000000E5] top-[0px] z-50 flex items-center justify-center"
@@ -47,7 +59,13 @@ const SuccessTx = () => {
             {/* or to the{' '} */}
             <span
               onClick={() => {
-                router.push('/pools');
+                if (successTxInfo?.action) {
+                  if (lpv2Actions.includes(successTxInfo.action))
+                    router.push('/lp-pools');
+                  else if (spNFTActions.includes(successTxInfo.action))
+                    router.push('/spnft-pools');
+                  else router.push('/farming-merlin');
+                }
                 stopSuccessTx();
               }}
               className="text-primary cursor-pointer"

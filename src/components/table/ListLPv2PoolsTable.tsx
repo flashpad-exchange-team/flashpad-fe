@@ -98,111 +98,113 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
           {loading ? (
             <tbody className="bg-[transparent] h-[260px]">
               <div className="flex items-center justify-center absolute w-100px left-[20%]  md:w-[190px] md:left-[40%] top-[40%]">
-                <InlineLoading message="Fetching Pools list data" />
+                <InlineLoading message="Fetching LP pools data" />
               </div>
             </tbody>
           ) : (
             <tbody>
-              {data?.map((item, index: number) => (
-                <tr key={index} className="hover:bg-darkBlue cursor-pointer">
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
-                    {item.locked ? (
-                      <div
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content={`Locked until: ${item.timeLock}`}
-                      >
-                        <LockIcon active />
-                        <Tooltip id="my-tooltip" />
+              {data
+                ?.filter((item) => item.myPool != '0.00')
+                ?.map((item, index: number) => (
+                  <tr key={index} className="hover:bg-darkBlue cursor-pointer">
+                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
+                      {item.locked ? (
+                        <div
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content={`Locked until: ${item.timeLock}`}
+                        >
+                          <LockIcon active />
+                          <Tooltip id="my-tooltip" />
+                        </div>
+                      ) : (
+                        <div
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content="Unlocked"
+                        >
+                          <LockIcon />
+                          <Tooltip id="my-tooltip" />
+                        </div>
+                      )}
+                    </td>
+                    <td
+                      className="py-4 text-sm px-4 border-b border-[#344054] text-center relative"
+                      onClick={() => {
+                        router.push(`/pool-detail/${item.pairAddress}`);
+                      }}
+                    >
+                      <div className="relative ">
+                        <div className="absolute">
+                          {item.token1Logo ? (
+                            <Image
+                              alt="logo"
+                              src={item.token1Logo}
+                              width={25}
+                              height={25}
+                            />
+                          ) : (
+                            <BNBICon />
+                          )}
+                        </div>
+                        <div className="absolute left-[15px]">
+                          {item.token2Logo ? (
+                            <Image
+                              alt="logo"
+                              src={item.token2Logo}
+                              width={25}
+                              height={25}
+                            />
+                          ) : (
+                            <BNBICon />
+                          )}
+                        </div>
                       </div>
-                    ) : (
-                      <div
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Unlocked"
-                      >
-                        <LockIcon />
-                        <Tooltip id="my-tooltip" />
+                      <div className="ml-11 w-[120px] text-center">
+                        {item.token1} - {item.token2}
                       </div>
-                    )}
-                  </td>
-                  <td
-                    className="py-4 text-sm px-4 border-b border-[#344054] text-center relative"
-                    onClick={() => {
-                      router.push(`/pool-detail/${item.pairAddress}`);
-                    }}
-                  >
-                    <div className="relative ">
-                      <div className="absolute">
-                        {item.token1Logo ? (
-                          <Image
-                            alt="logo"
-                            src={item.token1Logo}
-                            width={25}
-                            height={25}
-                          />
-                        ) : (
-                          <BNBICon />
-                        )}
-                      </div>
-                      <div className="absolute left-[15px]">
-                        {item.token2Logo ? (
-                          <Image
-                            alt="logo"
-                            src={item.token2Logo}
-                            width={25}
-                            height={25}
-                          />
-                        ) : (
-                          <BNBICon />
-                        )}
-                      </div>
-                    </div>
-                    <div className="ml-11 w-[120px] text-center">
-                      {item.token1} - {item.token2}
-                    </div>
-                  </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    {item.myPool || 0}%
-                  </td>
-                  {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                    </td>
+                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
+                      {item.myPool || 0}%
+                    </td>
+                    {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     {item.apr}%
                   </td> */}
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    ${item.TVL}
-                  </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    {item.userLpBalance} LP
-                  </td>
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    {item.locked || item.myPool === '0.00' ? (
-                      <div
-                        data-tooltip-id="lock"
-                        data-tooltip-content={`Locked until: ${item.timeLock}`}
-                      >
-                        <div className="cursor-default text-[#475467] font-semibold">
+                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                      ${item.TVL}
+                    </td>
+                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                      {item.userLpBalance} LP
+                    </td>
+                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
+                      {item.locked || item.myPool === '0.00' ? (
+                        <div
+                          data-tooltip-id="lock"
+                          data-tooltip-content={`Locked until: ${item.timeLock}`}
+                        >
+                          <div className="cursor-default text-[#475467] font-semibold">
+                            Remove
+                          </div>{' '}
+                          <Tooltip id="lock" />
+                        </div>
+                      ) : (
+                        <div
+                          className="cursor-pointer text-[#E6B300] font-semibold"
+                          onClick={() => {
+                            openRemoveLiquidityModal(
+                              item.pairAddress,
+                              item.token1,
+                              item.token2,
+                              item.token1Address,
+                              item.token2Address,
+                              item.lpTokenDecimals
+                            );
+                          }}
+                        >
                           Remove
-                        </div>{' '}
-                        <Tooltip id="lock" />
-                      </div>
-                    ) : (
-                      <div
-                        className="cursor-pointer text-[#E6B300] font-semibold"
-                        onClick={() => {
-                          openRemoveLiquidityModal(
-                            item.pairAddress,
-                            item.token1,
-                            item.token2,
-                            item.token1Address,
-                            item.token2Address,
-                            item.lpTokenDecimals
-                          );
-                        }}
-                      >
-                        Remove
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           )}
         </table>

@@ -10,6 +10,8 @@ export const handleSuccessTxMessageActionWithPair: (
   const usdValue = params.usdValue || '?';
 
   return {
+    action,
+
     mainMessage: (
       <div>
         You’ve successfully {action} worth{' '}
@@ -31,6 +33,7 @@ export const handleSuccessTxMessageActionSingleToken: (
   const amount = params.amount || '0';
 
   return {
+    action,
     mainMessage: (
       <div>
         You’ve successfully {action} worth{' '}
@@ -50,6 +53,8 @@ export const handleSuccessTxMessageActionWithNoValue: (
   const txHash = params.txHash;
 
   return {
+    action,
+
     mainMessage: <div>You’ve successfully {action}</div>,
     tx: txHash,
   };
@@ -60,6 +65,8 @@ export const handleSuccessTxMessageSwap: (params: any) => SuccessTxInfo = (
 ) => {
   const { token1Amount, token2Amount, token1, token2, txHash, action } = params;
   return {
+    action,
+
     mainMessage: (
       <div>
         You’ve successfully {action}{' '}

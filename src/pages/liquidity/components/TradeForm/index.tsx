@@ -158,7 +158,7 @@ const TradeForm = ({
   });
 
   const handleViewPoolList = () => {
-    router.push('/pools');
+    router.push('/lp-pools');
   };
 
   const toggleOpen = () => setOpen(!isOpen);

@@ -59,15 +59,21 @@ const MENU_ITEMS = [
       //   path: '/farming',
       //   icon: <SwapIcon />,
       // },
+
+      {
+        name: 'LP Pools',
+        path: '/lp-pools',
+        icon: <StackIcon width="18" height="18px" />,
+      },
+      {
+        name: 'spNFT Pools',
+        path: '/spnft-pools',
+        icon: <StackIcon width="18" height="18px" />,
+      },
       {
         name: 'Merlin Pools',
         path: '/farming-merlin',
         icon: <Liquidity width="18px" />,
-      },
-      {
-        name: 'Pools',
-        path: '/pools',
-        icon: <StackIcon width="18" height="18px" />,
       },
     ],
   },

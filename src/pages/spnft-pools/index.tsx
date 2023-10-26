@@ -1,9 +1,7 @@
 import { Button } from '@/components/button/Button';
 import Notification from '@/components/notification/Notification';
-import ListLPv2PoolsTable from '@/components/table/ListLPv2PoolsTable';
 import ListSpNftPoolsTable from '@/components/table/ListSpNftPoolsTable';
 import useAllNftPoolsData from '@/hooks/useAllNftPoolsData';
-import useAllPairsData from '@/hooks/useAllPairsData';
 import AddIcon from '@/icons/AddIcon';
 import Search from '@/icons/Search';
 import clsx from 'clsx';
@@ -18,16 +16,8 @@ const PoolList = ({}: PoolListProps) => {
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
 
-  const [showSpNftPools, setShowSpNftPools] = useState(false);
-
-  const { data: allPairsData, isLoading: isLoadingAllPairs } =
-    useAllPairsData(userAddress);
   const { data: allPoolsData, isLoading: isLoadingAllPools } =
     useAllNftPoolsData(userAddress);
-
-  const toggleShowSpNftPools = () => {
-    setShowSpNftPools(!showSpNftPools);
-  };
 
   return (
     <div className={clsx(['max-w-[1096px] w-full mx-auto my-20 px-2'])}>
@@ -41,18 +31,14 @@ const PoolList = ({}: PoolListProps) => {
       </div>
       <div className="flex ml-1 my-4">
         <Button
-          className={`w-[100px] ${
-            showSpNftPools ? '' : '!bg-[#000] text-[#fff]'
-          } !rounded-[4px] !text-[16px] flex justify-center items-center`}
-          onClick={toggleShowSpNftPools}
+          className={`w-[100px]  !rounded-[4px] !text-[16px] flex justify-center items-center`}
+          // onClick={toggleShowSpNftPools}
         >
           spNFT
         </Button>
         <Button
-          className={`w-[100px] ${
-            !showSpNftPools ? '' : '!bg-[#000] text-[#fff]'
-          } !rounded-[4px] !text-[16px] flex justify-center items-center`}
-          onClick={toggleShowSpNftPools}
+          className={`w-[100px] ${'!bg-[#000] text-[#fff]'} !rounded-[4px] !text-[16px] flex justify-center items-center`}
+          onClick={() => router.push('/lp-pools')}
         >
           LP V2
         </Button>
@@ -101,59 +87,31 @@ const PoolList = ({}: PoolListProps) => {
           Add Liquidity
         </Button>
       </div>
-      {showSpNftPools ? (
-        <ListSpNftPoolsTable
-          data={
-            searchValue
-              ? allPoolsData?.filter(
-                  (item: any) =>
-                    item.token1Address
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.token2Address
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.poolAddress
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.token1
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.token2
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase())
-                )
-              : (allPoolsData as any)
-          }
-          loading={isLoadingAllPools}
-        />
-      ) : (
-        <ListLPv2PoolsTable
-          data={
-            searchValue
-              ? allPairsData?.filter(
-                  (item: any) =>
-                    item.token1Address
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.token2Address
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.pairAddress
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.token1
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase()) ||
-                    item.token2
-                      ?.toLowerCase()
-                      ?.includes(searchValue?.toLowerCase())
-                )
-              : (allPairsData as any)
-          }
-          loading={isLoadingAllPairs}
-        />
-      )}
+      <ListSpNftPoolsTable
+        data={
+          searchValue
+            ? allPoolsData?.filter(
+                (item: any) =>
+                  item.token1Address
+                    ?.toLowerCase()
+                    ?.includes(searchValue?.toLowerCase()) ||
+                  item.token2Address
+                    ?.toLowerCase()
+                    ?.includes(searchValue?.toLowerCase()) ||
+                  item.poolAddress
+                    ?.toLowerCase()
+                    ?.includes(searchValue?.toLowerCase()) ||
+                  item.token1
+                    ?.toLowerCase()
+                    ?.includes(searchValue?.toLowerCase()) ||
+                  item.token2
+                    ?.toLowerCase()
+                    ?.includes(searchValue?.toLowerCase())
+              )
+            : (allPoolsData as any)
+        }
+        loading={isLoadingAllPools}
+      />
     </div>
   );
 };

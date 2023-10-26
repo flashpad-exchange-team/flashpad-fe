@@ -54,8 +54,8 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
           </thead>
           {loading ? (
             <tbody className="bg-[transparent] h-[260px]">
-              <div className="flex items-center justify-center absolute w-[190px] left-[40%] top-[40%]">
-                <InlineLoading message="Fetching Pools list data" />
+              <div className="flex items-center justify-center absolute w-[210px] left-[40%] top-[40%]">
+                <InlineLoading message="Fetching spNFT pools data" />
               </div>
             </tbody>
           ) : (
