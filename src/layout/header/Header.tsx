@@ -87,11 +87,6 @@ const MENU_ITEMS = [
         icon: <SwapIcon />,
       },
       {
-        name: 'Launchpad detail',
-        path: '/launchpad-detail',
-        icon: <Liquidity width="18px" />,
-      },
-      {
         name: 'Support Request',
         path: '/support-request',
         icon: <Swap width="18px" />,

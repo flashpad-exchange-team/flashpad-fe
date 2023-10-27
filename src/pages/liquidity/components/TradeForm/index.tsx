@@ -57,12 +57,12 @@ import handleSwitchNetwork from '@/utils/switchNetwork';
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
     value: 'ADD LIQUIDITY',
-    label: 'Add Liquidity',
+    label: 'Liquidity',
     buttonName: 'Add Liquidity',
   },
   'STAKE POSITION': {
     value: 'STAKE POSITION',
-    label: 'Stake position',
+    label: 'spNFT',
     buttonName: 'Create Position',
   },
 };

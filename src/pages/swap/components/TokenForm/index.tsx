@@ -58,10 +58,11 @@ const TokenForm = ({
             value={
               tokenData?.amount && tokenData?.amount !== 'NaN'
                 ? tokenData?.amount
-                : 0
+                : '0'
             }
+            type="number"
             onChange={(event) => {
-              setTokenAmount(event.target.value);
+              setTokenAmount('' + event.target.value);
             }}
           />
         </div>
