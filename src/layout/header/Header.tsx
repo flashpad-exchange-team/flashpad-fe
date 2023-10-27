@@ -94,8 +94,8 @@ const MENU_ITEMS = [
         icon: <Liquidity width="18px" />,
       },
       {
-        name: 'Submit project',
-        path: '/fair-launchpad',
+        name: 'Support Request',
+        path: '/support-request',
         icon: <Swap width="18px" />,
       },
     ],

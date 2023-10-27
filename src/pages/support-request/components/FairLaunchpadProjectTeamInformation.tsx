@@ -18,8 +18,8 @@ const FairLaunchpadProjectTeamInformation: FC<FairLaunchpadProps> = ({
 }) => {
   return (
     <>
-      <div className="text-2xl text-bold text-center mt-6">
-        2. Team Infomation
+      <div className="text-lg text-bold text-center mt-6">
+        2. Team Information
       </div>
       <div className="flex flex-wrap">
         <div className="w-full ">

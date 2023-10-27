@@ -4,96 +4,99 @@ import { FormHandler } from '..';
 
 interface FairLaunchpadProps {
   values: {
-    documentsWhitepaper: string;
-    documentsPitchDeck: string;
-    documentsTechnical: string;
-    documentsLegal: string;
+    projectName: string;
+    projectWebsite: string;
+    projectDescription: string;
+    projectCategory: string;
   };
   handleChange: FormHandler;
   error: (value: string) => (string | undefined)[];
 }
 
-const FairLaunchpadProjectDocuments: FC<FairLaunchpadProps> = ({
+const FairLaunchpadProjectDetail: FC<FairLaunchpadProps> = ({
   values,
   handleChange,
   error,
 }) => {
   return (
     <>
-      <div className="text-2xl text-bold text-center mt-6">
-        8. Additional Documents
+      <div className="text-lg text-bold text-center mt-6">
+        1. Project Details:
       </div>
       <div className="flex flex-wrap">
         <div className="w-full ">
-          <div className="mt-5 text-[#98A2B3]">Whitepaper (Link)</div>
+          <div className="mt-5 text-[#98A2B3]">Project Name</div>
           <div className="relative">
             <input
               className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
               placeholder="Typing"
-              name="documentsWhitepaper"
-              value={values.documentsWhitepaper}
+              value={values.projectName}
               onChange={handleChange}
+              name="projectName"
             />
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
-            <div className="text-[#FF0000]">{error('documentsWhitepaper')}</div>
+          </div>
+          <div className="text-[#FF0000] pl-3">{error('projectName')}</div>
+        </div>
+        <div className="w-full">
+          <div className="mt-5 text-[#98A2B3]">Project Website</div>
+          <div className="relative">
+            <input
+              className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
+              placeholder="Typing"
+              value={values.projectWebsite}
+              onChange={handleChange}
+              name="projectWebsite"
+            />
+            <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
+              <Pencil />
+            </div>
+            <div className="text-[#FF0000] pl-3">{error('projectWebsite')}</div>
           </div>
         </div>
         <div className="w-full">
-          <div className="mt-5 text-[#98A2B3]">Pitch Deck (Link)</div>
+          <div className="mt-5 text-[#98A2B3]">Project Description</div>
           <div className="relative">
             <input
               className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
               placeholder="Typing"
-              name="documentsPitchDeck"
-              value={values.documentsPitchDeck}
+              value={values.projectDescription}
               onChange={handleChange}
+              name="projectDescription"
             />
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
-            <div className="text-[#FF0000]">{error('documentsPitchDeck')}</div>
+            <div className="text-[#FF0000] pl-3">
+              {error('projectDescription')}
+            </div>
           </div>
         </div>
         <div className="w-full">
           <div className="mt-5 text-[#98A2B3]">
-            Technical Documentation (if available)
+            Project Category (DeFi, NFTs, Gaming, etc.)
           </div>
           <div className="relative">
             <input
               className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
               placeholder="Typing"
-              name="documentsTechnical"
-              value={values.documentsTechnical}
+              value={values.projectCategory}
               onChange={handleChange}
+              name="projectCategory"
             />
             <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
               <Pencil />
             </div>
-            <div className="text-[#FF0000]">{error('documentsTechnical')}</div>
-          </div>
-        </div>
-        <div className="w-full">
-          <div className="mt-5 text-[#98A2B3]">
-            Legal and Compliance Information (Link)
-          </div>
-          <div className="relative">
-            <input
-              className="w-full bg-darkBlue h-[44px] pl-3 text-sm  mb-2 mt-2 rounded-md focus:outline-none placeholder-[#667085]"
-              placeholder="Typing"
-              name="documentsLegal"
-              value={values.documentsLegal}
-              onChange={handleChange}
-            />
-            <div className="absolute right-[20px] bottom-[50%] transform translate-y-[50%]">
-              <Pencil />
+            <div className="text-[#FF0000] pl-3">
+              {error('projectCategory')}
             </div>
-            <div className="text-[#FF0000]">{error('documentsLegal')}</div>
           </div>
         </div>
       </div>
     </>
   );
 };
-export default FairLaunchpadProjectDocuments;
+
+export default FairLaunchpadProjectDetail;
