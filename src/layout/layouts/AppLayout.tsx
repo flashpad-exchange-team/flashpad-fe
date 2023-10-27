@@ -22,7 +22,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   useEffect(() => {
     if (!isConnected) toggleRequireConnect();
-  }, [isConnected]);
+  }, []);
 
   useEffect(() => {
     setIsClient(true);
