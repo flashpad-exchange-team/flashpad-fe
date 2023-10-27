@@ -51,9 +51,6 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
                 My Pool Share
               </th>
-              {/* <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
-                APR Range
-              </th> */}
 
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
                 Your Deposits
@@ -63,7 +60,7 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
           {loading ? (
             <tbody className="bg-[transparent] h-[260px]">
               <div className="flex items-center justify-center absolute w-100px left-[20%]  md:w-[190px] md:left-[40%] top-[40%]">
-                <InlineLoading message="Fetching LP pools data" />
+                <InlineLoading message="Fetching pools data" />
               </div>
             </tbody>
           ) : (

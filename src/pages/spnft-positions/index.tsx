@@ -32,7 +32,6 @@ const PoolList = ({}: PoolListProps) => {
       <div className="flex ml-1 my-4">
         <Button
           className={`w-[100px]  !rounded-[4px] !text-[16px] flex justify-center items-center`}
-          onClick={() => router.push('/spnft-positions')}
         >
           spNFT
         </Button>
@@ -49,22 +48,6 @@ const PoolList = ({}: PoolListProps) => {
           LP V3
         </Button>
       </div>
-      {/* <div className="flex items-center gap-4 mt-4">
-        <div className="bg-dark rounded-md w-1/2 px-4 py-3 flex justify-between">
-          <div>
-            <div className="text-sm text-[#98A2B3]">TVL</div>
-            <div className="text-sm">$53M</div>
-          </div>
-          <Bank />
-        </div>
-        <div className="bg-dark rounded-md w-1/2 px-4 py-3 flex justify-between">
-          <div>
-            <div className="text-sm text-[#98A2B3]">V2 Pool TVL</div>
-            <div className="text-sm">$53M</div>
-          </div>
-          <div className="text-2xl font-bold text-primary">V2</div>
-        </div>
-      </div> */}
       <div className="mt-5">
         <Notification
           message="Newly created pools may need some time to be updated to the list"
@@ -86,11 +69,11 @@ const PoolList = ({}: PoolListProps) => {
         <Button
           className="px-2 h-[48px] lg:h-[52px] w-full lg:w-[290px] flex justify-center"
           onClick={() => {
-            router.push('/liquidity');
+            router.push('/liquidity?feat=spnft');
           }}
         >
           <AddIcon color="#0C111D" />
-          Add Liquidity
+          New Position
         </Button>
       </div>
       <ListSpNftPoolsTable

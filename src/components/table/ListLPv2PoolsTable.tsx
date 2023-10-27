@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
+import { Button } from '../button/Button';
 import InlineLoading from '../loading/InlineLoading';
 import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
 
@@ -19,7 +20,7 @@ interface ListLPv2PoolsTableProps {
     lpTokenDecimals: number;
     apr: string;
     totalStaked: string;
-    myPool: string;
+    myPoolShare: string;
     myStake: string;
     earnings: string;
     pairAddress: string;
@@ -90,7 +91,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                 TVL
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
-                Your Deposits
+                My Deposits
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center"></th>
             </tr>
@@ -98,13 +99,13 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
           {loading ? (
             <tbody className="bg-[transparent] h-[260px]">
               <div className="flex items-center justify-center absolute w-100px left-[20%]  md:w-[190px] md:left-[40%] top-[40%]">
-                <InlineLoading message="Fetching LP pools data" />
+                <InlineLoading message="Fetching pools data" />
               </div>
             </tbody>
           ) : (
             <tbody>
               {data
-                ?.filter((item) => item.myPool != '0.00')
+                ?.filter((item) => item.myPoolShare != '0.00')
                 ?.map((item, index: number) => (
                   <tr key={index} className="hover:bg-darkBlue cursor-pointer">
                     <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
@@ -163,7 +164,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                       </div>
                     </td>
                     <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                      {item.myPool || 0}%
+                      {item.myPoolShare || 0}%
                     </td>
                     {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     {item.apr}%
@@ -174,20 +175,20 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                     <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                       {item.userLpBalance} LP
                     </td>
-                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                      {item.locked || item.myPool === '0.00' ? (
+                    <td className="flex justify-end gap-2 py-4 text-sm px-1 border-b border-[#344054]">
+                      {item.locked || item.myPoolShare === '0.00' ? (
                         <div
                           data-tooltip-id="lock"
                           data-tooltip-content={`Locked until: ${item.timeLock}`}
                         >
-                          <div className="cursor-default text-[#475467] font-semibold">
-                            Remove
-                          </div>{' '}
+                          <Button className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px]">
+                            -
+                          </Button>
                           <Tooltip id="lock" />
                         </div>
                       ) : (
-                        <div
-                          className="cursor-pointer text-[#E6B300] font-semibold"
+                        <Button
+                          className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px]"
                           onClick={() => {
                             openRemoveLiquidityModal(
                               item.pairAddress,
@@ -199,9 +200,19 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                             );
                           }}
                         >
-                          Remove
-                        </div>
+                          -
+                        </Button>
                       )}
+                      <Button
+                        className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px]"
+                        onClick={() => {
+                          router.push(
+                            `/liquidity?token1=${item.token1Address}&token2=${item.token2Address}`
+                          );
+                        }}
+                      >
+                        +
+                      </Button>
                     </td>
                   </tr>
                 ))}

@@ -1,7 +1,6 @@
 import { Button } from '@/components/button/Button';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import Image from 'next/image';
-import AddIcon from '@/icons/AddIcon';
 import BNBICon from '@/icons/BNBIcon';
 import DownloadIcon from '@/icons/DownloadIcon';
 import LayerIcon from '@/icons/LayerIcon';
@@ -152,10 +151,6 @@ const FarmMerlinDetail = () => {
     }
   };
 
-  const handleClickAddLiquidity = () => {
-    router.push('/liquidity');
-  };
-
   const handleHarvest = async () => {
     if (merlinPoolAddress === ADDRESS_ZERO) return;
 
@@ -252,13 +247,6 @@ const FarmMerlinDetail = () => {
             <CalculatorIcon />
             APY Calculator
           </Button> */}
-          <Button
-            className="px-2 h-[52px] w-[100%] order-2 md:order-3 mr-2 mb-2 md:mb-0 md:mr-0 md:w-[210px] flex justify-center"
-            onClick={handleClickAddLiquidity}
-          >
-            <AddIcon color="#0C111D" />
-            Add Liquidity
-          </Button>
         </div>
       </div>
       {isSmallScreen ? (

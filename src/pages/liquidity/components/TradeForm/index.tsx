@@ -20,6 +20,7 @@ import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
 import {
   ADDRESS_ZERO,
   ARTHUR_ROUTER_ADDRESS,
+  CHAINS_TOKENS_LIST,
   DEFAULT_DEADLINE,
   DEFAULT_SLIPPAGE,
   DEFAULT_TIME_LOCK,
@@ -57,12 +58,12 @@ import handleSwitchNetwork from '@/utils/switchNetwork';
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
     value: 'ADD LIQUIDITY',
-    label: 'Add Liquidity',
+    label: 'Liquidity',
     buttonName: 'Add Liquidity',
   },
   'STAKE POSITION': {
     value: 'STAKE POSITION',
-    label: 'Stake position',
+    label: 'spNFT',
     buttonName: 'Create Position',
   },
 };
@@ -79,7 +80,15 @@ const TradeForm = ({
   dividerIcon,
 }: TradeFormProps) => {
   const router = useRouter();
-  const [feature, setFeature] = useState('ADD LIQUIDITY');
+  const queryParams = router.query;
+  let feat = 'ADD LIQUIDITY';
+  if (queryParams?.feat === 'spnft') {
+    feat = 'STAKE POSITION';
+  }
+  const initialToken1 = CHAINS_TOKENS_LIST.find((tk) => tk.address.toLowerCase() === (queryParams?.token1 as string)?.toLowerCase());
+  const initialToken2 = CHAINS_TOKENS_LIST.find((tk) => tk.address.toLowerCase() === (queryParams?.token2 as string)?.toLowerCase());
+
+  const [feature, setFeature] = useState(feat);
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { switchNetwork } = useSwitchNetwork();
@@ -98,8 +107,8 @@ const TradeForm = ({
   };
 
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
-  const [token1, setToken1] = useState<any>(null);
-  const [token2, setToken2] = useState<any>(null);
+  const [token1, setToken1] = useState<any>(initialToken1);
+  const [token2, setToken2] = useState<any>(initialToken2);
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
   const [insufficient, setInsufficient] = useState(false);
@@ -157,8 +166,12 @@ const TradeForm = ({
     functionName: 'token0',
   });
 
-  const handleViewPoolList = () => {
-    router.push('/lp-positions');
+  const handleViewPositions = () => {
+    if (feature === 'ADD LIQUIDITY') {
+      router.push('/lp-positions');
+      return;
+    }
+    router.push('/spnft-positions');
   };
 
   const toggleOpen = () => setOpen(!isOpen);
@@ -619,7 +632,6 @@ const TradeForm = ({
         </div>
         <div className="flex bg-darkBlue mt-3 rounded-lg">
           {Object.keys(FEATURE_PROPS)
-            .slice(0, 2)
             .map((key: string) => (
               <button
                 className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
@@ -774,9 +786,9 @@ const TradeForm = ({
         )}
         <div
           className="mx-auto w-fit mt-4 mb-4 hover:underline cursor-pointer flex items-center gap-2 text-[#98A2B3]"
-          onClick={handleViewPoolList}
+          onClick={handleViewPositions}
         >
-          <BackIcon /> View Pool list
+          <BackIcon /> View {feature === 'ADD LIQUIDITY' ? 'LP V2' : 'spNFT'} Positions
         </div>
         <Button
           onClick={() => {

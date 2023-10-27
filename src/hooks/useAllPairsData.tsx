@@ -94,7 +94,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           lpTokenDecimals: Number(lpTokenDecimals),
           token1Logo,
           token2Logo,
-          myPool: poolShare,
+          myPoolShare: poolShare,
           pairAddress,
           TVL,
           userLpBalance:

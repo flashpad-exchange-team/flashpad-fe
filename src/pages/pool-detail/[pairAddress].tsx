@@ -167,7 +167,7 @@ const PoolDetail = () => {
     setToken2Logo(token2Data?.logoURI || '');
 
     const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
-    console.log({poolAddress})
+
     if (poolAddress && poolAddress !== ADDRESS_ZERO) {
       setNftPoolAddress(poolAddress);
       const poolInfoRes = await nftPoolContract.read(
