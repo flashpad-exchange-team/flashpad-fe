@@ -36,10 +36,34 @@ const FooterMobile = () => {
         </div>
         {show1 && (
           <>
-            <div className=" text-base mb-[4px] mt-4">Audit</div>
-            <div className=" text-base mb-[4px]">Contact us</div>
-            <div className=" text-base mb-[4px]">Contracts</div>
-            <div className=" text-base mb-[4px]">Documentation</div>
+            <a
+              // href="https://docs.arthur.exchange/present-to-the-king-all-link"
+              target="_blank"
+              className="block text-base mb-[4px]"
+            >
+              Audit
+            </a>
+            <a
+              href="https://docs.arthur.exchange/present-to-the-king-all-link"
+              target="_blank"
+              className="block text-base mb-[4px]"
+            >
+              Contact us
+            </a>
+            <a
+              href="https://docs.arthur.exchange/contract-info/"
+              target="_blank"
+              className="block text-base mb-[4px]"
+            >
+              Contracts
+            </a>
+            <a
+              href="https://docs.arthur.exchange/"
+              target="_blank"
+              className="block text-base mb-[4px]"
+            >
+              Documentation
+            </a>
           </>
         )}
       </div>
@@ -52,9 +76,20 @@ const FooterMobile = () => {
         </div>
         {show2 && (
           <>
-            <div className=" text-base mb-[4px] mt-4">FAQ</div>
-            <div className=" text-base mb-[4px]">Guides</div>
-            <div className=" text-base mb-[4px]">Support</div>
+            <a
+              href="https://docs.arthur.exchange/let-arthur-guide-you/"
+              target="_blank"
+              className="block text-base mb-[4px]"
+            >
+              FAQ
+            </a>{' '}
+            <a
+              href="https://docs.arthur.exchange/practice-on-dex/"
+              target="_blank"
+              className="block text-base mb-[4px]"
+            >
+              Guides
+            </a>{' '}
           </>
         )}
       </div>
