@@ -1,11 +1,11 @@
 import BNBICon from '@/icons/BNBIcon';
 import LockIcon from '@/icons/LockIcon';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import InlineLoading from '../loading/InlineLoading';
 import RemoveLiquidityModal from '../modal/RemoveLiquidityModal';
-import { useRouter } from 'next/router';
 
 interface ListLPv2PoolsTableProps {
   data: {
@@ -127,7 +127,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                       )}
                     </td>
                     <td
-                      className="py-4 text-sm px-4 border-b border-[#344054] text-center relative"
+                      className="py-4 text-sm px-4 border-b border-[#344054] text-center relative font-semibold"
                       onClick={() => {
                         router.push(`/pool-detail/${item.pairAddress}`);
                       }}

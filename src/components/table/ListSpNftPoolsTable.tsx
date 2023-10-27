@@ -1,8 +1,8 @@
 import BNBICon from '@/icons/BNBIcon';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 import InlineLoading from '../loading/InlineLoading';
-import { useRouter } from 'next/router';
 
 interface ListSpNftPoolsTableProps {
   data: {
@@ -63,7 +63,7 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
               {data?.map((item, index: number) => (
                 <tr key={index} className="hover:bg-darkBlue cursor-pointer">
                   <td
-                    className="py-4 text-sm px-4 border-b border-[#344054] text-left relative"
+                    className="py-4 text-sm px-4 border-b border-[#344054] text-left relative font-semibold"
                     onClick={() => {
                       router.push(`/pool-detail/${item.lpTokenAddress}`);
                     }}

@@ -1,7 +1,6 @@
 import { Button } from '@/components/button/Button';
 import ConnectWalletModal from '@/components/modal/ConnectWalletModal';
 import { useModal } from '@/context/ModalContext';
-import AddIcon from '@/icons/AddIcon';
 import ArrowDown from '@/icons/ArrowDown';
 import CrossSword from '@/icons/CrossSword';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
@@ -46,8 +45,8 @@ const MENU_ITEMS = [
   {
     icon: <LaunchPadIcon />,
     iconActive: <LaunchPadIcon active />,
-    name: 'Pools',
-    path: '/pools',
+    name: 'Earn',
+    path: '',
     subMenu: [
       // {
       //   name: 'Positions',
@@ -59,15 +58,14 @@ const MENU_ITEMS = [
       //   path: '/farming',
       //   icon: <SwapIcon />,
       // },
-
       {
-        name: 'LP Pools',
-        path: '/lp-pools',
-        icon: <StackIcon width="18" height="18px" />,
+        name: 'Pools',
+        path: '/pools',
+        icon: <Swap width="18" height="18px" />,
       },
       {
-        name: 'spNFT Pools',
-        path: '/spnft-pools',
+        name: 'Positions',
+        path: '/lp-pools',
         icon: <StackIcon width="18" height="18px" />,
       },
       {
@@ -123,12 +121,12 @@ const MENU_ITEMS = [
   //       },
   //     ],
   //   },
-  {
-    icon: <AddIcon />,
-    iconActive: <AddIcon active />,
-    name: 'More',
-    path: '/',
-  },
+  // {
+  //   icon: <AddIcon />,
+  //   iconActive: <AddIcon active />,
+  //   name: 'More',
+  //   path: '/',
+  // },
 ];
 
 const Header = (props: INavbarProps) => {

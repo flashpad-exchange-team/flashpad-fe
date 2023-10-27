@@ -23,9 +23,9 @@ const PoolList = ({}: PoolListProps) => {
     <div className={clsx(['max-w-[1096px] w-full mx-auto my-20 px-2'])}>
       <div className="block lg:flex items-center justify-between">
         <div>
-          <div className="font-bold">Pools List</div>
+          <div className="font-bold">LP V2 Positions</div>
           <div className="text-sm text-[#98A2B3] mt-2 font-semibold">
-            Custom-built infrastructure for Linea native public sales
+            Create and manage all your staking positions.
           </div>
         </div>
       </div>
