@@ -61,9 +61,9 @@ const SuccessTx = () => {
               onClick={() => {
                 if (successTxInfo?.action) {
                   if (lpv2Actions.includes(successTxInfo.action))
-                    router.push('/lp-pools');
+                    router.push('/lp-positions');
                   else if (spNFTActions.includes(successTxInfo.action))
-                    router.push('/spnft-pools');
+                    router.push('/spnft-positions');
                   else router.push('/farming-merlin');
                 }
                 stopSuccessTx();

@@ -65,7 +65,7 @@ const MENU_ITEMS = [
       },
       {
         name: 'Positions',
-        path: '/lp-pools',
+        path: '/lp-positions',
         icon: <StackIcon width="18" height="18px" />,
       },
       {
