@@ -59,8 +59,9 @@ const TokenForm = ({
           <input
             className="text-base lg:text-xl font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none  placeholder-[#667085]"
             value={value}
+            type="number"
             onChange={(event) => {
-              setTokenAmount(event.target.value);
+              setTokenAmount('' + event.target.value);
             }}
           />
         </div>

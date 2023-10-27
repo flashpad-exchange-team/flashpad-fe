@@ -54,8 +54,8 @@ const TradeForm = ({
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>();
   const [token2, setToken2] = useState<any>();
-  const [token1Amount, setToken1Amount] = useState<string>('0');
-  const [token2Amount, setToken2Amount] = useState<string>('0');
+  const [token1Amount, setToken1Amount] = useState<string>('');
+  const [token2Amount, setToken2Amount] = useState<string>('');
   const [isStableSwap, setIsStableSwap] = useState(false);
   const [swapRate1To2, setSwapRate1To2] = useState('-');
   const [swapRate2To1, setSwapRate2To1] = useState('-');
@@ -75,8 +75,8 @@ const TradeForm = ({
       setToken1(null);
       setToken2(null);
     }
-    setToken1Amount('0');
-    setToken2Amount('0');
+    setToken1Amount('');
+    setToken2Amount('');
     setTokenBeingSelected(0);
   };
 
@@ -279,8 +279,8 @@ const TradeForm = ({
   const handleSwitchPair = () => {
     setToken1(token2);
     setToken2(token1);
-    setToken1Amount('0');
-    setToken2Amount('0');
+    setToken1Amount('');
+    setToken2Amount('');
   };
   const getLPInfo = async () => {
     setIsFetchingRate(true);

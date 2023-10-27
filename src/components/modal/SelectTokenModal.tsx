@@ -144,32 +144,34 @@ const SelectTokenModal = ({
           ))}
         </div>
         <div className="text-lg font-semibold my-2">Tokens list</div>
-        {tokensListFiltered.map((item: any) => (
-          <div
-            className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2"
-            key={item.symbol}
-            onClick={() => {
-              if (selectValue) selectValue(item);
-              toggleOpen();
-            }}
-          >
-            <div className="flex items-center gap-2">
-              {item.logoURI ? (
-                <Image alt="logo" src={item.logoURI} width={25} height={25} />
-              ) : (
-                <BNBICon />
-              )}
+        {tokensListFiltered
+          .sort((a, b) => b.curBalance - a.curBalance)
+          .map((item: any) => (
+            <div
+              className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2"
+              key={item.symbol}
+              onClick={() => {
+                if (selectValue) selectValue(item);
+                toggleOpen();
+              }}
+            >
+              <div className="flex items-center gap-2">
+                {item.logoURI ? (
+                  <Image alt="logo" src={item.logoURI} width={25} height={25} />
+                ) : (
+                  <BNBICon />
+                )}
 
-              <div>
-                <div className="text-sm">{item.symbol}</div>
-                <div className="text-xs text-[#475467]">{item.name}</div>
+                <div>
+                  <div className="text-sm">{item.symbol}</div>
+                  <div className="text-xs text-[#475467]">{item.name}</div>
+                </div>
+              </div>
+              <div className="text-sm md:text-lg pr-2 break-all pl-16 md:pl-0">
+                {item.curBalance}
               </div>
             </div>
-            <div className="text-sm md:text-lg pr-2 break-all pl-16 md:pl-0">
-              {item.curBalance}
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
       <Button
         onClick={toggleOpen}
