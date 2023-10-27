@@ -12,7 +12,6 @@ import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
 import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
-import useAllPairsData from '@/hooks/useAllPairsData';
 import BNBICon from '@/icons/BNBIcon';
 import ChartLineIcon from '@/icons/ChartLineIcon';
 import DollarIcon from '@/icons/DollarIcon';
@@ -24,11 +23,14 @@ import * as arthurMasterContract from '@/utils/arthurMasterContract';
 import {
   ADDRESS_ZERO,
   ARTHUR_MASTER_ADDRESS,
+  CHAINS_TOKENS_LIST,
   CHAIN_EXPLORER_URL,
   MERLIN_POOL_FACTORY_ADDRESS,
+  USD_PRICE,
 } from '@/utils/constants';
 import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
+import * as pairContract from '@/utils/pairContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -36,7 +38,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useSWRConfig } from 'swr';
-import { Address } from 'viem';
+import { Address, formatUnits } from 'viem';
 import { useAccount } from 'wagmi';
 import NotStaked from './components/NotStaked';
 import Staked from './components/Staked';
@@ -50,8 +52,6 @@ const PoolDetail = () => {
 
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
-  const { data: allPairsData, isLoading: allPairsLoading } =
-    useAllPairsData(userAddress);
   const { mutate } = useSWRConfig();
   const [poolInfo, setPoolInfo] = useState({} as any);
   const [masterPoolInfo, setMasterPoolInfo] = useState({} as any);
@@ -94,74 +94,83 @@ const PoolDetail = () => {
     setOpenApyCalculator(!isOpenApyCalculator);
   };
 
-  const handleCreateStakingPosition = async () => {
-    if (isOpenCreatePosition) {
-      setOpenCreatePosition(false);
-      return;
-    }
-
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (nftPoolAddress === ADDRESS_ZERO) {
-      setSuccessful(undefined);
-      startLoadingTx({
-        tokenPairs: token1Symbol + ' - ' + token2Symbol,
-        title: 'Creating spNFT pool ...',
-        message: 'Confirming your transaction, please wait.',
-      });
-
-      const createPoolRes = await nftPoolFactoryContract.createPool(
-        userAddress,
-        {
-          lpTokenAddress: pairAddress as Address,
-        }
-      );
-
-      if (!createPoolRes) {
-        stopLoadingTx();
-        setSuccessful(false);
-        return;
-      }
-
-      const hash = createPoolRes.hash;
-      const txReceipt = await waitForTransaction({ hash });
-      console.log({ txReceipt });
-
-      setSuccessful(true);
-      mutate(allNftPoolsKey);
-      stopLoadingTx();
-      customToast({
-        message: 'Initialized spNFT pool successfully',
-        type: 'success',
-      });
-    }
-
-    setOpenCreatePosition(true);
-  };
-
   const getPoolInfo = async (pairAddress: Address) => {
-    if (allPairsLoading) return;
+    const [
+      token1Address,
+      token2Address,
+      reserves,
+    ] = await Promise.all([
+      pairContract.read(pairAddress, 'token0', []),
+      pairContract.read(pairAddress, 'token1', []),
+      pairContract.read(pairAddress, 'getReserves', []),
+    ]);
 
-    const pairData = allPairsData?.find(
-      (p: any) =>
-        p.pairAddress.toLowerCase() === (pairAddress + '').toLowerCase()
-    );
-    if (!pairData) {
+    if (!token1Address || !token2Address) {
+      router.push('not-found');
+      return;
+    }
+
+    // let token1Symbol = 'TOKEN1', token2Symbol = 'TOKEN2';
+    // if (token1Address) {
+    //   [token1Symbol, token2Symbol] = await Promise.all([
+    //     pairContract.read(token1Address, 'symbol', []),
+    //     pairContract.read(token2Address, 'symbol', []),
+    //   ]);
+    // } else {
+    //   token1Symbol = await pairContract.read(
+    //     pairAddress,
+    //     'symbol',
+    //     []
+    //   );
+    //   if (!token1Symbol) {
+    //     router.push('not-found');
+    //     return;
+    //   }
+    //   token2Symbol = token1Symbol;
+    // }
+
+    // token1Symbol =
+    //   token1Symbol == 'WFTM' || token1Symbol == 'WETH'
+    //     ? 'ETH'
+    //     : token1Symbol;
+    // token2Symbol =
+    //   token2Symbol == 'WFTM' || token2Symbol == 'WETH'
+    //     ? 'ETH'
+    //     : token2Symbol;
+
+    const token1Data = CHAINS_TOKENS_LIST.find((e) => {
+      return e.address.toLowerCase() === token1Address.toLowerCase();
+    });
+    const token2Data = CHAINS_TOKENS_LIST.find((e) => {
+      return e.address.toLowerCase() === token2Address.toLowerCase();
+    });
+    if (!token1Data || !token2Data) {
       router.push('/not-found');
       return;
     }
-    setTVL(pairData.TVL);
+
+    let token1Reserve = '0', token2Reserve = '0';
+    if (reserves && reserves.length) {
+      token1Reserve = formatUnits(reserves[0], token1Data?.decimals || 8);
+      token2Reserve = formatUnits(reserves[1], token2Data?.decimals || 8);
+    }
+
+    const TVL = new BigNumber(token1Reserve)
+      .times(USD_PRICE)
+      .plus(new BigNumber(token2Reserve).times(USD_PRICE))
+      .toFixed(2);
+
+    setTVL(TVL);
+    setToken1Symbol(token1Data?.symbol || '');
+    setToken2Symbol(token2Data?.symbol || '');
+    setToken1Logo(token1Data?.logoURI || '');
+    setToken2Logo(token2Data?.logoURI || '');
 
     const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
+    console.log({poolAddress})
     if (poolAddress && poolAddress !== ADDRESS_ZERO) {
       setNftPoolAddress(poolAddress);
-      const poolInfoObj = await nftPoolContract.read(
+      const poolInfoRes = await nftPoolContract.read(
         poolAddress as Address,
         'getPoolInfo',
         []
@@ -172,12 +181,8 @@ const PoolDetail = () => {
         [poolAddress as Address]
       );
       setMasterPoolInfo(masterPoolInfoRes);
-      setPoolInfo(poolInfoObj);
+      setPoolInfo(poolInfoRes);
     }
-    setToken1Symbol(pairData.token1);
-    setToken2Symbol(pairData.token2);
-    setToken1Logo(pairData.token1Logo || '');
-    setToken2Logo(pairData.token2Logo || '');
   };
 
   const getUserStakedPositions = async () => {
@@ -249,8 +254,6 @@ const PoolDetail = () => {
     userAddress,
     nftPoolAddress,
     successful,
-    allPairsData,
-    allPairsLoading,
   ]);
 
   const handleClickBtnContract = () => {
@@ -263,6 +266,57 @@ const PoolDetail = () => {
         type: 'warning',
       });
     }
+  };
+
+  const handleCreateStakingPosition = async () => {
+    if (isOpenCreatePosition) {
+      setOpenCreatePosition(false);
+      return;
+    }
+
+    if (!userAddress) {
+      customToast({
+        message: 'A wallet is not yet connected',
+        type: 'error',
+      });
+      return;
+    }
+
+    if (nftPoolAddress === ADDRESS_ZERO) {
+      setSuccessful(undefined);
+      startLoadingTx({
+        tokenPairs: token1Symbol + ' - ' + token2Symbol,
+        title: 'Creating spNFT pool ...',
+        message: 'Confirming your transaction, please wait.',
+      });
+
+      const createPoolRes = await nftPoolFactoryContract.createPool(
+        userAddress,
+        {
+          lpTokenAddress: pairAddress as Address,
+        }
+      );
+
+      if (!createPoolRes) {
+        stopLoadingTx();
+        setSuccessful(false);
+        return;
+      }
+
+      const hash = createPoolRes.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+
+      setSuccessful(true);
+      mutate(allNftPoolsKey);
+      stopLoadingTx();
+      customToast({
+        message: 'Initialized spNFT pool successfully',
+        type: 'success',
+      });
+    }
+
+    setOpenCreatePosition(true);
   };
 
   const isFirstSpMinter = nftPoolAddress === ADDRESS_ZERO;
@@ -288,9 +342,9 @@ const PoolDetail = () => {
 
   const dailyART = new BigNumber(masterPoolInfo?.poolEmissionRate)
     .times(86400)
-    .div(1000000000000000000);
-
+    .div('1000000000000000000');
   const farmBaseAPR = dailyART.times(365).div(TVL).times(100);
+
   return (
     <>
       <PositionDetailModal

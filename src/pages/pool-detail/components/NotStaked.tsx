@@ -49,7 +49,7 @@ const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
             </td>
             <td className="py-4 text-sm font-semibold px-4 border-b border-[#344054] text-right w-[200px]">
               <div className="text-lightGray">Daily Emissions</div>
-              <div>{dailyART.toFixed(2)} TOKEN</div>
+              <div>{dailyART.toFixed(2)} ART</div>
             </td>
             {/* <td className="py-4 text-sm font-semibold px-4 border-b border-[#344054] text-right w-[200px]">
               <div className="text-lightGray">TOKENB/XTOPKEN</div>

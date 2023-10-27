@@ -9,7 +9,7 @@ import CalendarIcon from '@/icons/CalendarIcon';
 import UnlockIcon from '@/icons/UnlockIcon';
 import Image from 'next/image';
 import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
-import { Address, useAccount } from 'wagmi';
+import { Address, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import customToast from '../notification/customToast';
 import * as nftPoolContract from '@/utils/nftPoolContract';
@@ -17,6 +17,8 @@ import { ADDRESS_ZERO } from '@/utils/constants';
 import { waitForTransaction } from '@wagmi/core';
 import { useLoading } from '@/context/LoadingContext';
 import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
+import { lineaTestnet } from 'wagmi/chains';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 
 export interface StakeIntoMerlinModalProps {
   toggleOpen: () => void;
@@ -51,6 +53,8 @@ const StakeIntoMerlinModal = ({
   const { data: listMerlinPools, isLoading } =
     useAllMerlinPoolsData(userAddress);
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   const [stakingMerlinPoolAddress, setStakingMerlinPoolAddress] =
     useState(ADDRESS_ZERO);
@@ -81,6 +85,11 @@ const StakeIntoMerlinModal = ({
   }, [listMerlinPools, isLoading, isOpen]);
 
   const handleStakeToMerlinPool = async () => {
+    if (chain?.id !== lineaTestnet.id) {
+      handleSwitchNetwork(switchNetwork);
+      return;
+    }
+
     if (!userAddress) {
       customToast({
         message: 'A wallet is not yet connected',

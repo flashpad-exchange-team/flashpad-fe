@@ -11,7 +11,8 @@ import SwapRightIcon from '@/icons/SwapRight';
 import Image from 'next/image';
 import { ADDRESS_ZERO, CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useEffect, useState } from 'react';
-import { Address, useAccount } from 'wagmi';
+import { Address, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as routerContract from '@/utils/routerContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
@@ -20,6 +21,7 @@ import { useLoading } from '@/context/LoadingContext';
 import { waitForTransaction } from '@wagmi/core';
 import { useSWRConfig } from 'swr';
 import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 
 enum MerlinPoolTypes {
   LP_V2 = 0,
@@ -30,6 +32,8 @@ const CreateMerlinPool = () => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
   const { mutate } = useSWRConfig();
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   const [type, setType] = useState<MerlinPoolTypes>(MerlinPoolTypes.LP_V2);
   const [openCreateMerlinModal, setOpenCreateMerlinModal] = useState(false);
@@ -90,6 +94,11 @@ const CreateMerlinPool = () => {
   };
 
   const handleCreateMerlinPool = async () => {
+    if (chain?.id !== lineaTestnet.id) {
+      handleSwitchNetwork(switchNetwork);
+      return;
+    }
+
     if (!userAddress) {
       customToast({
         message: 'A wallet is not yet connected',
