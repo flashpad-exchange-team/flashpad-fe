@@ -32,7 +32,7 @@ const PoolList = ({}: PoolListProps) => {
       <div className="flex ml-1 my-4">
         <Button
           className={`w-[100px]  !rounded-[4px] !text-[16px] flex justify-center items-center`}
-          // onClick={toggleShowSpNftPools}
+          onClick={() => router.push('/spnft-pools')}
         >
           spNFT
         </Button>
@@ -41,6 +41,12 @@ const PoolList = ({}: PoolListProps) => {
           onClick={() => router.push('/lp-pools')}
         >
           LP V2
+        </Button>
+        <Button
+          className={`w-[100px] ${'!bg-[#000] text-[#fff]'} x!rounded-[4px] !text-[16px] flex justify-center items-center`}
+          onClick={() => router.push('/lpv3-pools')}
+        >
+          LP V3
         </Button>
       </div>
       {/* <div className="flex items-center gap-4 mt-4">
