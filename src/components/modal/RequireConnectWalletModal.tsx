@@ -2,6 +2,7 @@ import { useModal } from '@/context/ModalContext';
 import DividerDown from '@/icons/DividerDown';
 import WalletIcon from '@/icons/WalletIcon';
 import { Button } from '../button/Button';
+import CloseIcon from '@/icons/CloseIcon';
 
 const RequireWalletConnectModal = () => {
   const { toggleConnectWallet, toggleRequireConnect, isOpenRequireConnect } =
@@ -15,6 +16,12 @@ const RequireWalletConnectModal = () => {
       style={{ zIndex: 100 }}
     >
       <div className="w-[648px] bg-[#0A071E] p-6 mt-8 text-center">
+        <div className="flex items-center justify-between mb-2">
+          <div></div>
+          <div className="cursor-pointer" onClick={toggleRequireConnect}>
+            <CloseIcon />
+          </div>
+        </div>
         <div className="mt-3"></div>
         <div className="text-primary text-xl font-semibold">
           Please connect your wallet

@@ -211,27 +211,27 @@ const CreatePositionModal = ({
       </div>
       <div className="text-base font-semibold mb-3 flex items-center gap-2 w-fit mx-auto">
         {token1Data.logo ? (
-          <Image alt="logo" src={token1Data.logo} width={54} height={54} />
+          <Image alt="logo" src={token1Data.logo} width={32} height={32} />
         ) : (
-          <BNBICon size={54} />
+          <BNBICon size={32} />
         )}
         <div>
           <div className="text-sm">Token</div>
-          <div className="text-[22px] flex items-center gap-2">
+          <div className="text-[20px] flex items-center gap-2">
             {token1Data.symbol}
           </div>
         </div>
 
-        <div className="text-[22px] ml-3 mr-3">-</div>
+        <div className="text-[20px] ml-3 mr-3">-</div>
 
         {token2Data.logo ? (
-          <Image alt="logo" src={token2Data.logo} width={54} height={54} />
+          <Image alt="logo" src={token2Data.logo} width={32} height={32} />
         ) : (
-          <BNBICon size={54} />
+          <BNBICon size={32} />
         )}
         <div>
           <div className="text-sm">Token</div>
-          <div className="text-[22px] flex items-center gap-2">
+          <div className="text-[20px] flex items-center gap-2">
             {token2Data.symbol}
           </div>
         </div>

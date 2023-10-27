@@ -379,7 +379,7 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     name: 'Binance Coin',
     address: '0xc1888F2Dc85A9C51F2f3f13fAaB5C06077bB235f',
     decimals: 8,
-    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png',
+    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png',
   },
   {
     symbol: 'FUSDC',

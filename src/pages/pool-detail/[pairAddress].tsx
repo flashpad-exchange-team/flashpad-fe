@@ -438,12 +438,12 @@ const PoolDetail = () => {
                     <Image
                       alt="logo"
                       src={token1Logo as any}
-                      width={40}
-                      height={40}
+                      width={32}
+                      height={32}
                       className="max-w-[unset]"
                     />
                   ) : (
-                    <BNBICon size="40" />
+                    <BNBICon size="32" />
                   )}
                 </div>
                 <div className="absolute left-[25px]">
@@ -451,12 +451,12 @@ const PoolDetail = () => {
                     <Image
                       alt="logo"
                       src={token2Logo as any}
-                      width={40}
-                      height={40}
+                      width={32}
+                      height={32}
                       className="max-w-[unset]"
                     />
                   ) : (
-                    <BNBICon size="40" />
+                    <BNBICon size="32" />
                   )}
                 </div>
               </div>
