@@ -610,6 +610,7 @@ const TradeForm = ({
         bnBalanceToken2={balanceToken2?.value! + ''}
         timeLock={timeLock}
         deadline={deadline}
+        slippage={slippage}
         nftPoolAddress={nftPoolAddress!}
       />
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:my-[96px] mx-auto py-4 px-[10px] md:px-[24px]">

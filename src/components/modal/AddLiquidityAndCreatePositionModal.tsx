@@ -50,6 +50,7 @@ export interface AddLiquidityAndCreatePositionModalProps {
   reserves: any[];
   timeLock: number;
   deadline: number;
+  slippage: number;
 }
 
 const AddLiquidityAndCreatePositionModal = ({
@@ -74,6 +75,7 @@ const AddLiquidityAndCreatePositionModal = ({
   nftPoolAddress,
   timeLock,
   deadline,
+  slippage,
 }: AddLiquidityAndCreatePositionModalProps) => {
   const { address: userAddress } = useAccount();
   const [token1Amount, setToken1Amount] = useState<string>('0');
@@ -155,33 +157,14 @@ const AddLiquidityAndCreatePositionModal = ({
       message: 'Confirming your transaction, please wait.',
     });
 
-    let reserve1, reserve2;
-    const reserveA = BigNumber(reserves ? (reserves as any)[0] : 0);
-    const reserveB = BigNumber(reserves ? (reserves as any)[1] : 0);
-    if (
-      !pairToken1 ||
-      (pairToken1 as string).toLowerCase() === token1Address.toLowerCase()
-    ) {
-      reserve1 = reserveA;
-      reserve2 = reserveB;
-    } else {
-      reserve1 = reserveB;
-      reserve2 = reserveA;
-    }
-
-    let token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    let token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    if (bnToken1Amount.isGreaterThan(token1AmountIn)) {
-      // token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_UP);
-      token2AmountIn = web3Helpers
-        .bnQuote(BigNumber(token1AmountIn), reserve1, reserve2)
-        .toFixed(0, BigNumber.ROUND_DOWN);
-    } else if (bnToken2Amount.isGreaterThan(token2AmountIn)) {
-      // token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_UP);
-      token1AmountIn = web3Helpers
-        .bnQuote(BigNumber(token2AmountIn), reserve2, reserve1)
-        .toFixed(0, BigNumber.ROUND_DOWN);
-    }
+    const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+    const token1AmountMin = bnToken1Amount
+      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+      .toFixed(0, BigNumber.ROUND_DOWN);
+    const token2AmountMin = bnToken2Amount
+      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+      .toFixed(0, BigNumber.ROUND_DOWN);
 
     if (token1Symbol != 'ETH') {
       const token1Allowance = (await erc20TokenContract.erc20Read(
@@ -254,8 +237,8 @@ const AddLiquidityAndCreatePositionModal = ({
         [
           token2Address,
           token2AmountIn,
-          token2AmountIn,
-          token1AmountIn,
+          token2AmountMin,
+          token1AmountMin,
           (timestamp as bigint) + minutesToSeconds(deadline) + '',
           daysToSeconds(timeLock) + '',
           userAddress,
@@ -273,8 +256,8 @@ const AddLiquidityAndCreatePositionModal = ({
         [
           token1Address,
           token1AmountIn,
-          token1AmountIn,
-          token2AmountIn,
+          token1AmountMin,
+          token2AmountMin,
           (timestamp as bigint) + minutesToSeconds(deadline) + '',
           daysToSeconds(timeLock) + '',
           userAddress,
@@ -294,8 +277,8 @@ const AddLiquidityAndCreatePositionModal = ({
           token2Address,
           token1AmountIn,
           token2AmountIn,
-          token1AmountIn,
-          token2AmountIn,
+          token1AmountMin,
+          token2AmountMin,
           (timestamp as bigint) + minutesToSeconds(deadline) + '',
           userAddress,
           nftPoolAddress,
