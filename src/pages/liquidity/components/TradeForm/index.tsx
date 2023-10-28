@@ -450,7 +450,7 @@ const TradeForm = ({
         amountETHMin: token1AmountMin,
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-        timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+        timeLock: daysToSeconds(timeLock) + '',
         startTime: startSwapTime,
       });
     } else if (token2.symbol == 'ETH') {
@@ -461,7 +461,7 @@ const TradeForm = ({
         amountETHMin: token2AmountMin,
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-        timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+        timeLock: daysToSeconds(timeLock) + '',
         startTime: startSwapTime,
       });
     } else {
@@ -474,7 +474,7 @@ const TradeForm = ({
         amountBMin: token2AmountMin,
         to: userAddress!,
         deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-        timeLock: (timestamp as bigint) + daysToSeconds(timeLock) + '',
+        timeLock: daysToSeconds(timeLock) + '',
         startTime: startSwapTime,
       });
     }

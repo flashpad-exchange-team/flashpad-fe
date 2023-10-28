@@ -20,7 +20,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
         const pairAddress = await factoryContract.getPairByIndex(i);
 
         const [
-          timeLock,
+          lockedUntil,
           lpTokenDecimals,
           userLpBalance,
           totalSupply,
@@ -28,7 +28,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           token2Address,
           reserves,
         ] = await Promise.all([
-          pairContract.read(pairAddress, 'timeLock', []),
+          pairContract.read(pairAddress, 'getTimeCanRemoveLiquidity', []),
           pairContract.read(pairAddress, 'decimals', []),
           userAddress
             ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
@@ -85,8 +85,8 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           .times(100)
           .toFixed(2);
         listPairs.push({
-          timeLock: web3Helpers.getDateFormat(timeLock),
-          locked: timestamp < timeLock,
+          timeLock: web3Helpers.getDateFormat(lockedUntil),
+          locked: timestamp < lockedUntil,
           token1: token1Symbol,
           token2: token2Symbol,
           token1Address,

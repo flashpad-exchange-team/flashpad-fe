@@ -257,7 +257,7 @@ const AddLiquidityAndCreatePositionModal = ({
           token2AmountIn,
           token1AmountIn,
           (timestamp as bigint) + minutesToSeconds(deadline) + '',
-          (timestamp as bigint) + daysToSeconds(timeLock) + '',
+          daysToSeconds(timeLock) + '',
           userAddress,
           nftPoolAddress,
           nLockDuration,
@@ -276,7 +276,7 @@ const AddLiquidityAndCreatePositionModal = ({
           token1AmountIn,
           token2AmountIn,
           (timestamp as bigint) + minutesToSeconds(deadline) + '',
-          (timestamp as bigint) + daysToSeconds(timeLock) + '',
+          daysToSeconds(timeLock) + '',
           userAddress,
           nftPoolAddress,
           nLockDuration,
@@ -300,7 +300,7 @@ const AddLiquidityAndCreatePositionModal = ({
           userAddress,
           nftPoolAddress,
           nLockDuration,
-          (timestamp as bigint) + daysToSeconds(timeLock) + '',
+          daysToSeconds(timeLock) + '',
           0,
         ]
       );
