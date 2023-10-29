@@ -32,6 +32,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { publicProvider } from 'wagmi/providers/public';
 import { Meta } from '@/layout/Meta';
 import { AppConfig } from '@/utils/AppConfig';
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 
 const { chains, publicClient } = configureChains(
   [lineaTestnet, polygonMumbai],
@@ -73,6 +74,26 @@ const config = createConfig({
   ],
   publicClient: publicClient({ chainId: APP_BASED_CHAIN.id }),
 });
+console.log({ config });
+
+const metadata = {
+  name: 'Web3Modal',
+  description: 'Web3Modal Example',
+  url: 'https://web3modal.com',
+  icons: ['https://avatars.githubusercontent.com/u/37784886'],
+};
+
+const chains2 = [lineaTestnet];
+const wagmiConfig = defaultWagmiConfig({
+  chains: chains2,
+  projectId: '14f71914de6c8aae8a6b49b7ba15522f',
+  metadata,
+});
+createWeb3Modal({
+  wagmiConfig,
+  projectId: '14f71914de6c8aae8a6b49b7ba15522f',
+  chains: chains2,
+});
 
 const openSans = Open_Sans({
   weight: ['400', '500', '600', '700', '800'],
@@ -82,7 +103,7 @@ const MyApp = ({ Component, pageProps }: any) => {
   const router = useRouter();
   const Layout: any = router.pathname === '/' ? HomeLayout : AppLayout;
   return (
-    <WagmiConfig config={config}>
+    <WagmiConfig config={wagmiConfig}>
       <Meta title={AppConfig.title} description={AppConfig.description} />
 
       <ModalProvider>
