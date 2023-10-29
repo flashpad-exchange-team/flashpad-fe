@@ -32,7 +32,7 @@ const PoolsComponent = ({}: PoolsComponentProps) => {
         </Button>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-5 h-[340px]">
         <Notification message="Coming soon." type="info" />
       </div>
     </div>

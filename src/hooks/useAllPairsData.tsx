@@ -41,7 +41,6 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           pairContract.read(pairAddress, 'totalSupply', []),
           pairContract.read(pairAddress, 'getReserves', []),
         ]);
-        const vol24h = pairData.tvl24h;
 
         // if (token1Address) {
         //   [token1Symbol, token2Symbol] = await Promise.all([
@@ -83,19 +82,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           .times(USD_PRICE)
           .plus(new BigNumber(token2Reserve).times(USD_PRICE))
           .toFixed(2);
-        const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
 
-        const feeShare = new BigNumber(vol24h).times(0.3).div(100);
-        const feeAPR = feeShare.times(365).div(TVL).times(100);
-        const masterPoolInfo = await arthurMasterContract.read(
-          ARTHUR_MASTER_ADDRESS as any,
-          'getPoolInfo',
-          [poolAddress as Address]
-        );
-        const dailyART = new BigNumber(masterPoolInfo?.poolEmissionRate)
-          .times(86400)
-          .div('1000000000000000000');
-        const farmBaseAPR = dailyART.times(365).div(TVL).times(100);
         const poolShare = BigNumber(userLpBalance)
           .div(totalSupply)
           .times(100)
@@ -113,8 +100,6 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           myPoolShare: poolShare,
           pairAddress,
           TVL,
-          feeAPR,
-          farmBaseAPR,
           userLpBalance:
             userLpBalance == 0
               ? '0.00'

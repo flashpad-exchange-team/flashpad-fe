@@ -30,8 +30,8 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
 
   return (
     <>
-      <div className="overflow-x-auto mt-8">
-        <table className="min-w-full bg-dark relative">
+      <div className="overflow-x-auto mt-8 bg-dark md:min-h-[320px]">
+        <table className="min-w-full relative">
           <thead>
             <tr>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
@@ -60,61 +60,60 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
             </tbody>
           ) : (
             <tbody>
-              {data
-                ?.map((item, index: number) => (
-                  <tr key={index} className="hover:bg-darkBlue cursor-pointer">
-                    <td
-                      className="py-4 text-sm px-4 border-b border-[#344054] text-left relative font-semibold"
-                      onClick={() => {
-                        router.push(`/pool-detail/${item.lpTokenAddress}`);
-                      }}
-                    >
-                      <div className="relative">
-                        <div className="absolute">
-                          {item.token1Logo ? (
+              {data?.map((item, index: number) => (
+                <tr key={index} className="hover:bg-darkBlue cursor-pointer">
+                  <td
+                    className="py-4 text-sm px-4 border-b border-[#344054] text-left relative font-semibold"
+                    onClick={() => {
+                      router.push(`/pool-detail/${item.lpTokenAddress}`);
+                    }}
+                  >
+                    <div className="relative">
+                      <div className="absolute">
+                        {item.token1Logo ? (
+                          <Image
+                            alt="logo"
+                            src={item.token1Logo}
+                            width={25}
+                            height={25}
+                          />
+                        ) : (
+                          <BNBICon />
+                        )}
+                      </div>
+                      <div className="absolute left-[15px]">
+                        {item.token1Logo != item.token2Logo &&
+                          (item.token2Logo ? (
                             <Image
                               alt="logo"
-                              src={item.token1Logo}
+                              src={item.token2Logo}
                               width={25}
                               height={25}
                             />
                           ) : (
                             <BNBICon />
-                          )}
-                        </div>
-                        <div className="absolute left-[15px]">
-                          {item.token1Logo != item.token2Logo &&
-                            (item.token2Logo ? (
-                              <Image
-                                alt="logo"
-                                src={item.token2Logo}
-                                width={25}
-                                height={25}
-                              />
-                            ) : (
-                              <BNBICon />
-                            ))}
-                        </div>
+                          ))}
                       </div>
-                      <div className="ml-16">
-                        {item.token1}
-                        {item.token1 != item.token2 && ' - ' + item.token2}
-                      </div>
-                    </td>
-                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                      ${item.TVL}
-                    </td>
-                    {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                    </div>
+                    <div className="ml-16">
+                      {item.token1}
+                      {item.token1 != item.token2 && ' - ' + item.token2}
+                    </div>
+                  </td>
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                    ${item.TVL}
+                  </td>
+                  {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     ${item.tvl}
                   </td> */}
-                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                      ${item.poolTVL}
-                    </td>
-                    <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                      {item.feeAPR.toFixed(2)}%
-                    </td>
-                  </tr>
-                ))}
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
+                    ${item.poolTVL}
+                  </td>
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
+                    {item.feeAPR.toFixed(2)}%
+                  </td>
+                </tr>
+              ))}
             </tbody>
           )}
         </table>

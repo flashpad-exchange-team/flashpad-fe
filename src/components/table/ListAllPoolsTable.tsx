@@ -35,8 +35,8 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
 
   return (
     <>
-      <div className="overflow-x-auto mt-8">
-        <table className="min-w-full bg-dark relative">
+      <div className="overflow-x-auto mt-8 bg-dark md:min-h-[320px]">
+        <table className="min-w-full relative">
           <thead>
             <tr>
               <th className="text-xs py-3 px-4  border-b border-[#344054] text-center">
