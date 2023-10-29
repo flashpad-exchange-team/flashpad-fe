@@ -21,6 +21,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
   const [isClick, setIsClick] = useState(false);
   const { isConnected } = useAccount();
   const { connectors } = useConfig();
+  console.log({ connectors });
   const { connect } = useConnect();
   useEffect(() => {
     if (isConnected && isClick) setTimeout(() => toggleOpen(), 1000);
