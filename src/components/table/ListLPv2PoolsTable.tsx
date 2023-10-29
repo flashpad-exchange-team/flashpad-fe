@@ -181,14 +181,14 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                           data-tooltip-id="lock"
                           data-tooltip-content={`Locked until: ${item.timeLock}`}
                         >
-                          <Button className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px]">
+                          <Button className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px] h-[36px]">
                             -
                           </Button>
                           <Tooltip id="lock" />
                         </div>
                       ) : (
                         <Button
-                          className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px]"
+                          className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px] h-[36px]"
                           onClick={() => {
                             openRemoveLiquidityModal(
                               item.pairAddress,
@@ -204,7 +204,7 @@ const ListLPv2PoolsTable: React.FC<ListLPv2PoolsTableProps> = ({
                         </Button>
                       )}
                       <Button
-                        className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px]"
+                        className="flex rounded-md text-[white] justify-center bg-blue-opacity-50 items-center rounded-[4px] w-[52px] h-[36px]"
                         onClick={() => {
                           router.push(
                             `/liquidity?token1=${item.token1Address}&token2=${item.token2Address}`
