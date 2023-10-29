@@ -411,12 +411,12 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     address: '0xb056CeD9d51eb4A9C366229921CAC57E8A7a17c3',
     decimals: 18,
   },
-  {
-    symbol: 'XART',
-    name: 'XArthur Token',
-    address: '0xF34BAEc8B153E2d14DCC99F0bA9b0bB539Bbe68d',
-    decimals: 18,
-  },
+  // {
+  //   symbol: 'XART',
+  //   name: 'XArthur Token',
+  //   address: '0xF34BAEc8B153E2d14DCC99F0bA9b0bB539Bbe68d',
+  //   decimals: 18,
+  // },
 ];
 
 export const MUMBAI_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [

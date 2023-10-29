@@ -43,11 +43,14 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
-                  setIsClick(true);
-                  connect({
-                    connector: connectors[2],
-                    chainId: lineaTestnet.id,
-                  });
+                  window.open(
+                    'https://metamask.app.link/dapp/arthur.exchange/'
+                  );
+                  // setIsClick(true);
+                  // connect({
+                  //   connector: connectors[2],
+                  //   chainId: lineaTestnet.id,
+                  // });
                 }}
               >
                 <Coinbase />
