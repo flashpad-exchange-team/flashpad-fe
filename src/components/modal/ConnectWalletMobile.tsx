@@ -12,6 +12,7 @@ interface ConnectWalletProps {
 }
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import Metamask from '@/icons/Metamask';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 const connectorWalletConnect = new WalletConnectConnector({
   chains: [lineaTestnet],
   options: {
@@ -23,7 +24,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
   const [isClick, setIsClick] = useState(false);
   const { isConnected } = useAccount();
   const { connectors } = useConfig();
-  console.log({ connectors });
+  const { open } = useWeb3Modal();
   const { connect } = useConnect();
   useEffect(() => {
     if (isConnected && isClick) setTimeout(() => toggleOpen(), 1000);
@@ -46,15 +47,17 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
+                  open({ view: 'All wallets' as any });
+
+                  // // window.open(
+                  // //   'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
+                  // // );
                   // window.open(
-                  //   'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
+                  //   'https://metamask.app.link/dapp/arthur.exchange/'
                   // );
-                  window.open(
-                    'https://metamask.app.link/dapp/arthur.exchange/'
-                  );
-                  connect({
-                    chainId: lineaTestnet.id,
-                  });
+                  // connect({
+                  //   chainId: lineaTestnet.id,
+                  // });
                 }}
               >
                 <Metamask />
