@@ -1,18 +1,19 @@
-import { fetchAllPairsAPI, fetchTotalVolumeByLpAPI } from '@/api';
+import { fetchAllPairsAPI } from '@/api';
+import * as arthurMasterContract from '@/utils/arthurMasterContract';
 import {
   ARTHUR_MASTER_ADDRESS,
   CHAINS_TOKENS_LIST,
   USD_PRICE,
 } from '@/utils/constants';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as pairContract from '@/utils/pairContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import BigNumber from 'bignumber.js';
 import useSWR from 'swr';
 import { Address, formatUnits } from 'viem';
-import * as arthurMasterContract from '@/utils/arthurMasterContract';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 
 export const allPairsKey = 'all-lp-pairs';
+export const allPairsKeyForAll = 'all-lp-pairs-all';
 
 const useAllPairsData = (userAddress: Address | undefined) => {
   const fetchAllPairs = async () => {
@@ -22,7 +23,6 @@ const useAllPairsData = (userAddress: Address | undefined) => {
       const allPairsData = await fetchAllPairsAPI();
 
       for (const pairData of allPairsData) {
-        console.log({ pairData });
         const pairAddress = pairData.address;
         const token1Address = pairData.token1_address;
         const token2Address = pairData.token2_address;
@@ -41,10 +41,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           pairContract.read(pairAddress, 'totalSupply', []),
           pairContract.read(pairAddress, 'getReserves', []),
         ]);
-        const vol24h = await fetchTotalVolumeByLpAPI({
-          lpAddress: pairAddress as string,
-          last24h: true,
-        });
+        const vol24h = pairData.tvl24h;
 
         // if (token1Address) {
         //   [token1Symbol, token2Symbol] = await Promise.all([
@@ -135,6 +132,125 @@ const useAllPairsData = (userAddress: Address | undefined) => {
 
   const { data, error, isLoading } = useSWR(
     [userAddress, allPairsKey],
+    fetchAllPairs,
+    {
+      revalidateIfStale: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+    }
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+  };
+};
+export const useAllPairsDataForAllPool = (userAddress: Address | undefined) => {
+  const fetchAllPairs = async (): Promise<Array<any>> => {
+    try {
+      const listPairs: Array<any> = [];
+      const allPairsData: Array<any> = await fetchAllPairsAPI();
+
+      const userLpBalancesPromises: Promise<any>[] = userAddress
+        ? allPairsData.map((pairData) =>
+            pairContract.read(pairData.address, 'balanceOf', [userAddress])
+          )
+        : Array(allPairsData.length).fill(0);
+
+      const [userLpBalances, totalSupplies, reserves] = await Promise.all([
+        Promise.all(userLpBalancesPromises),
+        Promise.all(
+          allPairsData.map((pairData) =>
+            pairContract.read(pairData.address, 'totalSupply', [])
+          )
+        ),
+        Promise.all(
+          allPairsData.map((pairData) =>
+            pairContract.read(pairData.address, 'getReserves', [])
+          )
+        ) as any,
+      ]);
+
+      const tokenDataMap: Map<string, any> = new Map();
+      for (const token of CHAINS_TOKENS_LIST) {
+        tokenDataMap.set(token.address, {
+          symbol:
+            token.symbol == 'WFTM' || token.symbol == 'WETH'
+              ? 'ETH'
+              : token.symbol,
+          logoURI: token.logoURI,
+          decimals: token.decimals || 8,
+        });
+      }
+
+      for (let i = 0; i < allPairsData.length; i++) {
+        const pairData: any = allPairsData[i];
+        const pairAddress: string = pairData.address;
+        const token1Data: any = tokenDataMap.get(pairData.token1_address);
+        const token2Data: any = tokenDataMap.get(pairData.token2_address);
+
+        const userBalance: any = userLpBalances[i];
+        const totalSupply: any = totalSupplies[i];
+        const [reserve1, reserve2]: any = (reserves as any)[i];
+
+        const token1Reserve: any = formatUnits(reserve1, token1Data.decimals);
+        const token2Reserve: any = formatUnits(reserve2, token2Data.decimals);
+        const TVL: any = new BigNumber(token1Reserve)
+          .times(USD_PRICE)
+          .plus(new BigNumber(token2Reserve).times(USD_PRICE))
+          .toFixed(2);
+
+        const poolAddress: any = await nftPoolFactoryContract.getPool(
+          pairAddress
+        );
+        const feeShare: any = new BigNumber(pairData.tvl24h)
+          .times(0.3)
+          .div(100);
+        const feeAPR: any = feeShare.times(365).div(TVL).times(100);
+
+        const masterPoolInfo: any = await arthurMasterContract.read(
+          ARTHUR_MASTER_ADDRESS as any,
+          'getPoolInfo',
+          [poolAddress]
+        );
+        const dailyART: any = new BigNumber(masterPoolInfo.poolEmissionRate)
+          .times(86400)
+          .div('1000000000000000000');
+        const farmBaseAPR: any = dailyART.times(365).div(TVL).times(100);
+
+        const poolShare: any = new BigNumber(userBalance)
+          .div(totalSupply)
+          .times(100)
+          .toFixed(2);
+
+        listPairs.push({
+          token1: token1Data.symbol,
+          token2: token2Data.symbol,
+          token1Address: pairData.token1_address,
+          token2Address: pairData.token2_address,
+          token1Logo: token1Data.logoURI,
+          token2Logo: token2Data.logoURI,
+          myPoolShare: poolShare,
+          pairAddress,
+          TVL,
+          feeAPR,
+          farmBaseAPR,
+          userLpBalance: new BigNumber(userBalance)
+            .div(new BigNumber(10).pow(18))
+            .toFixed(),
+        });
+      }
+      return listPairs;
+    } catch (error) {
+      console.log('fetchAllPairs error:', error);
+      return [];
+    }
+  };
+
+  const { data, error, isLoading } = useSWR(
+    [userAddress, allPairsKeyForAll],
     fetchAllPairs,
     {
       revalidateIfStale: true,

@@ -1,7 +1,7 @@
 import { Button } from '@/components/button/Button';
 import Notification from '@/components/notification/Notification';
 import ListAllPoolsTable from '@/components/table/ListAllPoolsTable';
-import useAllPairsData from '@/hooks/useAllPairsData';
+import { useAllPairsDataForAllPool } from '@/hooks/useAllPairsData';
 import Search from '@/icons/Search';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ const PoolsComponent = ({}: PoolsComponentProps) => {
   const router = useRouter();
 
   const { data: allPairsData, isLoading: isLoadingAllPairs } =
-    useAllPairsData(userAddress);
+    useAllPairsDataForAllPool(userAddress);
 
   return (
     <div className={clsx(['max-w-[1096px] w-full mx-auto my-20 px-2'])}>
