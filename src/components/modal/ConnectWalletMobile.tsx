@@ -70,7 +70,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
                 <Metamask />
                 Metamask
               </div>
-              <div
+              {/* <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
                   setIsClick(true);
@@ -95,7 +95,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               >
                 <WalletConnect />
                 WalletConnect
-              </div>
+              </div> */}
             </div>
             <div className="bg-[#FF160080]  rounded-md px-3 py-2 mt-4 ">
               <div className="text-sm flex items-center justify-between ">
