@@ -2,7 +2,7 @@ import CloseIcon from '@/icons/CloseIcon';
 import Coinbase from '@/icons/Coinbase';
 import ConnectSuccess from '@/icons/ConnectSuccess';
 import InfoIcon from '@/icons/InfoIcon';
-import WalletConnect from '@/icons/WalletConnect';
+// import WalletConnect from '@/icons/WalletConnect';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
@@ -10,13 +10,14 @@ import Notification from '../notification/Notification';
 interface ConnectWalletProps {
   toggleOpen: () => void;
 }
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-const connectorWalletConnect = new WalletConnectConnector({
-  chains: [lineaTestnet],
-  options: {
-    projectId: '14f71914de6c8aae8a6b49b7ba15522f',
-  },
-});
+// import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import Metamask from '@/icons/Metamask';
+// const connectorWalletConnect = new WalletConnectConnector({
+//   chains: [lineaTestnet],
+//   options: {
+//     projectId: '14f71914de6c8aae8a6b49b7ba15522f',
+//   },
+// });
 const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
   const [isClick, setIsClick] = useState(false);
   const { isConnected } = useAccount();
@@ -44,35 +45,34 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
+                  // window.open(
+                  //   'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
+                  // );
                   window.open(
-                    'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
+                    'https://metamask.app.link/dapp/arthur.exchange/'
                   );
                   connect({
                     chainId: lineaTestnet.id,
                   });
-                  // setIsClick(true);
                 }}
               >
-                <Coinbase />
-                Trus wallet
+                <Metamask />
+                Metamask
               </div>
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
-                  window.open(
-                    'https://metamask.app.link/dapp/arthur.exchange/'
-                  );
-                  // setIsClick(true);
-                  // connect({
-                  //   connector: connectors[2],
-                  //   chainId: lineaTestnet.id,
-                  // });
+                  setIsClick(true);
+                  connect({
+                    connector: connectors[2],
+                    chainId: lineaTestnet.id,
+                  });
                 }}
               >
                 <Coinbase />
-                Metamask
+                Coinbase
               </div>
-              <div
+              {/* <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
                   setIsClick(true);
@@ -84,7 +84,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               >
                 <WalletConnect />
                 WalletConnect
-              </div>
+              </div> */}
             </div>
             <div className="bg-[#FF160080]  rounded-md px-3 py-2 mt-4 ">
               <div className="text-sm flex items-center justify-between ">
