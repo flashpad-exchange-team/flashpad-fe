@@ -107,8 +107,12 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
                     ${item.TVL}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left flex gap-1 items-center">
-                    33.21%
-                    <ArrowRight /> <span className="text-primary">80.15%</span>
+                    {item.farmBaseAPR.plus(item.feeAPR).toFixed(2)}%
+                    <ArrowRight />{' '}
+                    <span className="text-primary">
+                      {' '}
+                      {item.farmBaseAPR.plus(item.feeAPR).times(3).toFixed(2)}%
+                    </span>
                     <QuestionIcon />
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">

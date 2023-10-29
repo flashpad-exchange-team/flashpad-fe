@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ARTHUR_API_URL } from '@/utils/constants';
 
-export const fetchTotalVolumeByLp = async (params: {
+export const fetchTotalVolumeByLpAPI = async (params: {
   lpAddress: string;
   last24h: boolean;
 }) => {
@@ -12,12 +12,43 @@ export const fetchTotalVolumeByLp = async (params: {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        // 'Access-Control-Allow-Headers': '"Origin, X-Requested-With, Content-Type, Accept"'
       },
     });
 
     return response.data.data;
   } catch (error) {
-    console.error('Error fetchTotalVolumeByLp:', error);
+    console.error('Error fetchTotalVolumeByLpAPI:', error);
+  }
+};
+
+export const fetchAllPairsAPI = async () => {
+  const url = `${ARTHUR_API_URL}/lp-pairs`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetchTotalVolumeByLpAPI:', error);
+  }
+};
+
+export const fetchPairByAddressAPI = async (params: { pairAddress: string }) => {
+  const url = `${ARTHUR_API_URL}/lp-pairs?address=${params.pairAddress}`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetchTotalVolumeByLpAPI:', error);
   }
 };

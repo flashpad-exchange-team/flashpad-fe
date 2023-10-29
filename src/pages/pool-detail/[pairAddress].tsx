@@ -1,4 +1,4 @@
-import { fetchTotalVolumeByLp } from '@/api';
+import { fetchTotalVolumeByLpAPI } from '@/api';
 import { Button } from '@/components/button/Button';
 import AddToPositionModal from '@/components/modal/AddToPositionModal';
 import ApyCalculatorModal from '@/components/modal/ApyCalculatorModal';
@@ -95,11 +95,7 @@ const PoolDetail = () => {
   };
 
   const getPoolInfo = async (pairAddress: Address) => {
-    const [
-      token1Address,
-      token2Address,
-      reserves,
-    ] = await Promise.all([
+    const [token1Address, token2Address, reserves] = await Promise.all([
       pairContract.read(pairAddress, 'token0', []),
       pairContract.read(pairAddress, 'token1', []),
       pairContract.read(pairAddress, 'getReserves', []),
@@ -149,7 +145,8 @@ const PoolDetail = () => {
       return;
     }
 
-    let token1Reserve = '0', token2Reserve = '0';
+    let token1Reserve = '0',
+      token2Reserve = '0';
     if (reserves && reserves.length) {
       token1Reserve = formatUnits(reserves[0], token1Data?.decimals || 8);
       token2Reserve = formatUnits(reserves[1], token2Data?.decimals || 8);
@@ -249,12 +246,7 @@ const PoolDetail = () => {
 
     getPoolInfo(pairAddress as Address);
     getUserStakedPositions();
-  }, [
-    router.isReady,
-    userAddress,
-    nftPoolAddress,
-    successful,
-  ]);
+  }, [router.isReady, userAddress, nftPoolAddress, successful]);
 
   const handleClickBtnContract = () => {
     if (nftPoolAddress !== ADDRESS_ZERO) {
@@ -324,7 +316,7 @@ const PoolDetail = () => {
   const [vol24h, setVol24h] = useState('0');
 
   const fetchData = async () => {
-    const response = await fetchTotalVolumeByLp({
+    const response = await fetchTotalVolumeByLpAPI({
       lpAddress: pairAddress as string,
       last24h: true,
     });

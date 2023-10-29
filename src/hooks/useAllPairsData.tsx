@@ -1,11 +1,16 @@
-import { CHAINS_TOKENS_LIST, USD_PRICE } from '@/utils/constants';
-import * as erc20Contract from '@/utils/erc20TokenContract';
-import * as factoryContract from '@/utils/factoryContract';
+import { fetchAllPairsAPI, fetchTotalVolumeByLpAPI } from '@/api';
+import {
+  ARTHUR_MASTER_ADDRESS,
+  CHAINS_TOKENS_LIST,
+  USD_PRICE,
+} from '@/utils/constants';
 import * as pairContract from '@/utils/pairContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import BigNumber from 'bignumber.js';
 import useSWR from 'swr';
 import { Address, formatUnits } from 'viem';
+import * as arthurMasterContract from '@/utils/arthurMasterContract';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 
 export const allPairsKey = 'all-lp-pairs';
 
@@ -13,19 +18,19 @@ const useAllPairsData = (userAddress: Address | undefined) => {
   const fetchAllPairs = async () => {
     try {
       const listPairs = [];
-      const nPairs = await factoryContract.allPairsLength();
       const { timestamp } = await web3Helpers.getBlock();
+      const allPairsData = await fetchAllPairsAPI();
 
-      for (let i = 0; i < nPairs; i++) {
-        const pairAddress = await factoryContract.getPairByIndex(i);
-
+      for (const pairData of allPairsData) {
+        console.log({ pairData });
+        const pairAddress = pairData.address;
+        const token1Address = pairData.token1_address;
+        const token2Address = pairData.token2_address;
         const [
           lockedUntil,
           lpTokenDecimals,
           userLpBalance,
           totalSupply,
-          token1Address,
-          token2Address,
           reserves,
         ] = await Promise.all([
           pairContract.read(pairAddress, 'getTimeCanRemoveLiquidity', []),
@@ -34,42 +39,43 @@ const useAllPairsData = (userAddress: Address | undefined) => {
             ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
             : 0,
           pairContract.read(pairAddress, 'totalSupply', []),
-          pairContract.read(pairAddress, 'token0', []),
-          pairContract.read(pairAddress, 'token1', []),
           pairContract.read(pairAddress, 'getReserves', []),
         ]);
+        const vol24h = await fetchTotalVolumeByLpAPI({
+          lpAddress: pairAddress as string,
+          last24h: true,
+        });
 
-        let token1Symbol = 'TOKEN1',
-          token2Symbol = 'TOKEN2';
-        if (token1Address) {
-          [token1Symbol, token2Symbol] = await Promise.all([
-            erc20Contract.erc20Read(token1Address, 'symbol', []),
-            erc20Contract.erc20Read(token2Address, 'symbol', []),
-          ]);
-        } else {
-          token1Symbol = await erc20Contract.erc20Read(
-            pairAddress,
-            'symbol',
-            []
-          );
-          token2Symbol = token1Symbol;
-        }
-
-        token1Symbol =
-          token1Symbol == 'WFTM' || token1Symbol == 'WETH'
-            ? 'ETH'
-            : token1Symbol;
-        token2Symbol =
-          token2Symbol == 'WFTM' || token2Symbol == 'WETH'
-            ? 'ETH'
-            : token2Symbol;
-
+        // if (token1Address) {
+        //   [token1Symbol, token2Symbol] = await Promise.all([
+        //     erc20Contract.erc20Read(token1Address, 'symbol', []),
+        //     erc20Contract.erc20Read(token2Address, 'symbol', []),
+        //   ]);
+        // } else {
+        //   token1Symbol = await erc20Contract.erc20Read(
+        //     pairAddress,
+        //     'symbol',
+        //     []
+        //   );
+        //   token2Symbol = token1Symbol;
+        // }
+        let token1Symbol: any = 'TOKEN1',
+          token2Symbol: any = 'TOKEN2';
         const token1 = CHAINS_TOKENS_LIST.find((e) => {
-          return e.symbol === token1Symbol;
+          return e.address === token1Address;
         });
         const token2 = CHAINS_TOKENS_LIST.find((e) => {
-          return e.symbol === token2Symbol;
+          return e.address === token2Address;
         });
+        token1Symbol =
+          token1?.symbol == 'WFTM' || token1?.symbol == 'WETH'
+            ? 'ETH'
+            : token1?.symbol;
+        token2Symbol =
+          token2?.symbol == 'WFTM' || token2?.symbol == 'WETH'
+            ? 'ETH'
+            : token2?.symbol;
+
         const token1Logo = token1?.logoURI;
         const token2Logo = token2?.logoURI;
 
@@ -80,6 +86,19 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           .times(USD_PRICE)
           .plus(new BigNumber(token2Reserve).times(USD_PRICE))
           .toFixed(2);
+        const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
+
+        const feeShare = new BigNumber(vol24h).times(0.3).div(100);
+        const feeAPR = feeShare.times(365).div(TVL).times(100);
+        const masterPoolInfo = await arthurMasterContract.read(
+          ARTHUR_MASTER_ADDRESS as any,
+          'getPoolInfo',
+          [poolAddress as Address]
+        );
+        const dailyART = new BigNumber(masterPoolInfo?.poolEmissionRate)
+          .times(86400)
+          .div('1000000000000000000');
+        const farmBaseAPR = dailyART.times(365).div(TVL).times(100);
         const poolShare = BigNumber(userLpBalance)
           .div(totalSupply)
           .times(100)
@@ -97,6 +116,8 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           myPoolShare: poolShare,
           pairAddress,
           TVL,
+          feeAPR,
+          farmBaseAPR,
           userLpBalance:
             userLpBalance == 0
               ? '0.00'
