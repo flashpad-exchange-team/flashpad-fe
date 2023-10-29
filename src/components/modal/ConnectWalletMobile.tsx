@@ -45,6 +45,21 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
                   window.open(
+                    'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
+                  );
+                  connect({
+                    chainId: lineaTestnet.id,
+                  });
+                  // setIsClick(true);
+                }}
+              >
+                <Coinbase />
+                Trus wallet
+              </div>
+              <div
+                className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
+                onClick={() => {
+                  window.open(
                     'https://metamask.app.link/dapp/arthur.exchange/'
                   );
                   // setIsClick(true);
@@ -55,7 +70,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
                 }}
               >
                 <Coinbase />
-                Coinbase
+                Metamask
               </div>
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
