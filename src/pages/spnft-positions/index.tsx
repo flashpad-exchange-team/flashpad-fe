@@ -25,7 +25,7 @@ const PoolList = ({}: PoolListProps) => {
         <div>
           <div className="font-bold">spNFT Positions</div>
           <div className="text-sm text-[#98A2B3] mt-2 font-semibold">
-            Create and manage all your staking positions.
+            Create and manage all your spNFT positions.
           </div>
         </div>
       </div>
