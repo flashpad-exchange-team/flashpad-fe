@@ -61,7 +61,6 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
           ) : (
             <tbody>
               {data
-                ?.filter((item) => item.poolTVL !== '0.0000')
                 ?.map((item, index: number) => (
                   <tr key={index} className="hover:bg-darkBlue cursor-pointer">
                     <td
