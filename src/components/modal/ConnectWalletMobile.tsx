@@ -47,17 +47,23 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
-                  open({ view: 'All wallets' as any });
-
+                  // open({ view: 'All wallets' as any });
+                  if (typeof window.ethereum !== 'undefined') {
+                    connect({
+                      connector: connectors[1],
+                      chainId: lineaTestnet.id,
+                    });
+                  } else {
+                    window.open(
+                      'https://metamask.app.link/dapp/arthur.exchange/'
+                    );
+                  }
                   // // window.open(
                   // //   'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
                   // // );
                   // window.open(
                   //   'https://metamask.app.link/dapp/arthur.exchange/'
                   // );
-                  // connect({
-                  //   chainId: lineaTestnet.id,
-                  // });
                 }}
               >
                 <Metamask />
