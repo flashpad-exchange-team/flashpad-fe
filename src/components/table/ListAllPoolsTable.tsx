@@ -18,7 +18,7 @@ interface ListAllPoolsTableProps {
     lpTokenDecimals: number;
     apr: string;
     totalStaked: string;
-    myPool: string;
+    myPoolShare: string;
     myStake: string;
     earnings: string;
     pairAddress: string;
@@ -112,7 +112,7 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
                     <QuestionIcon />
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
-                    {item.myPool === '0.00' ? 0 : item.myPool}%
+                    {item.myPoolShare === '0.00' ? 0 : item.myPoolShare}%
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                     {item.userLpBalance === '0.00' ? 0 : item.userLpBalance} LP
