@@ -85,8 +85,16 @@ const TradeForm = ({
   if (queryParams?.feat === 'spnft') {
     feat = 'STAKE POSITION';
   }
-  const initialToken1 = CHAINS_TOKENS_LIST.find((tk) => tk.address.toLowerCase() === (queryParams?.token1 as string)?.toLowerCase());
-  const initialToken2 = CHAINS_TOKENS_LIST.find((tk) => tk.address.toLowerCase() === (queryParams?.token2 as string)?.toLowerCase());
+  const initialToken1 = CHAINS_TOKENS_LIST.find(
+    (tk) =>
+      tk.address.toLowerCase() ===
+      (queryParams?.token1 as string)?.toLowerCase()
+  );
+  const initialToken2 = CHAINS_TOKENS_LIST.find(
+    (tk) =>
+      tk.address.toLowerCase() ===
+      (queryParams?.token2 as string)?.toLowerCase()
+  );
 
   const [feature, setFeature] = useState(feat);
   const { address: userAddress } = useAccount();
@@ -632,19 +640,18 @@ const TradeForm = ({
           </div>
         </div>
         <div className="flex bg-darkBlue mt-3 rounded-lg">
-          {Object.keys(FEATURE_PROPS)
-            .map((key: string) => (
-              <button
-                className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
-                  feature === key
-                    ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
-                    : ''
-                }`}
-                onClick={() => setFeature(FEATURE_PROPS[key].value)}
-              >
-                {FEATURE_PROPS[key].label}
-              </button>
-            ))}
+          {Object.keys(FEATURE_PROPS).map((key: string) => (
+            <button
+              className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
+                feature === key
+                  ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
+                  : ''
+              }`}
+              onClick={() => setFeature(FEATURE_PROPS[key].value)}
+            >
+              {FEATURE_PROPS[key].label}
+            </button>
+          ))}
         </div>
         <TokenForm
           openModal={() => {
@@ -670,6 +677,7 @@ const TradeForm = ({
           {dividerIcon}
         </div>
         <TokenForm
+          disabled
           openModal={() => {
             setTokenBeingSelected(2);
             toggleOpen();
@@ -682,8 +690,8 @@ const TradeForm = ({
           }}
           value={token2Amount}
           setTokenAmount={(value) => {
-            setToken2Amount(value);
-            autoAdjustToken1Amount(value);
+            // setToken2Amount(value);
+            // autoAdjustToken1Amount(value);
           }}
         />
         {userAddress && (
@@ -789,7 +797,8 @@ const TradeForm = ({
           className="mx-auto w-fit mt-4 mb-4 hover:underline cursor-pointer flex items-center gap-2 text-[#98A2B3]"
           onClick={handleViewPositions}
         >
-          <BackIcon /> View {feature === 'ADD LIQUIDITY' ? 'LP V2' : 'spNFT'} Positions
+          <BackIcon /> View {feature === 'ADD LIQUIDITY' ? 'LP V2' : 'spNFT'}{' '}
+          Positions
         </div>
         <Button
           onClick={() => {

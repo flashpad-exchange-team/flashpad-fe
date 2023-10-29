@@ -55,14 +55,13 @@ const TokenForm = ({
           <input
             className="text-base lg:text-xl font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none placeholder-[#667085]"
             defaultValue={'0.0'}
-            value={
-              tokenData?.amount && tokenData?.amount !== 'NaN'
-                ? tokenData?.amount
-                : '0'
-            }
+            value={tokenData?.amount}
             type="number"
             onChange={(event) => {
               setTokenAmount('' + event.target.value);
+            }}
+            onClick={() => {
+              if (tokenData?.amount == '0') setTokenAmount('');
             }}
           />
         </div>

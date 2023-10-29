@@ -13,6 +13,7 @@ export interface TokenFormProps {
   };
   value: string;
   setTokenAmount: (value: any) => void;
+  disabled?: boolean;
 }
 
 const TokenForm = ({
@@ -21,6 +22,7 @@ const TokenForm = ({
   tokenData,
   value,
   setTokenAmount,
+  disabled,
 }: TokenFormProps) => {
   const handleOpenSelectTokenModal = () => {
     openModal ? openModal() : void 0;
@@ -63,6 +65,11 @@ const TokenForm = ({
             onChange={(event) => {
               setTokenAmount('' + event.target.value);
             }}
+            onClick={() => {
+              if (value == '0') setTokenAmount('');
+            }}
+            disabled={disabled}
+            style={{ cursor: disabled ? 'not-allowed' : '' }}
           />
         </div>
       </div>
@@ -73,13 +80,14 @@ const TokenForm = ({
             ? `${tokenData.balance || 0} ${tokenData.symbol || ''}`
             : 0}
         </div>
-
-        <div
-          className="mt-2 md:mt-0 text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer"
-          onClick={() => setTokenAmount(tokenData.balance)}
-        >
-          Max
-        </div>
+        {disabled || (
+          <div
+            className="mt-2 md:mt-0 text-xs font-semibold text-[#0C111D] bg-[#FFAF1D] flex items-center justify-center w-[42px] h-[18px] cursor-pointer"
+            onClick={() => setTokenAmount(tokenData.balance)}
+          >
+            Max
+          </div>
+        )}
       </div>
     </div>
   );
