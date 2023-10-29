@@ -25,6 +25,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
   const { isConnected } = useAccount();
   const { connectors } = useConfig();
   const { open } = useWeb3Modal();
+  console.log(open);
   const { connect } = useConnect();
   useEffect(() => {
     if (isConnected && isClick) setTimeout(() => toggleOpen(), 1000);
