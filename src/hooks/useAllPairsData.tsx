@@ -27,7 +27,7 @@ const useAllPairsData = (userAddress: Address | undefined) => {
         const token1Address = pairData.token1_address;
         const token2Address = pairData.token2_address;
         const [
-          lockedUntil,
+          lockRemoveUntil,
           lpTokenDecimals,
           userLpBalance,
           totalSupply,
@@ -88,8 +88,8 @@ const useAllPairsData = (userAddress: Address | undefined) => {
           .times(100)
           .toFixed(2);
         listPairs.push({
-          timeLock: web3Helpers.getDateFormat(lockedUntil),
-          locked: timestamp < lockedUntil,
+          timeLock: web3Helpers.getDateFormat(lockRemoveUntil),
+          locked: timestamp < lockRemoveUntil,
           token1: token1Symbol,
           token2: token2Symbol,
           token1Address,
@@ -190,7 +190,7 @@ export const useAllPairsDataForAllPool = (userAddress: Address | undefined) => {
         const poolAddress: any = await nftPoolFactoryContract.getPool(
           pairAddress
         );
-        const feeShare: any = new BigNumber(pairData.tvl24h)
+        const feeShare: any = new BigNumber(pairData.vol24h)
           .times(0.3)
           .div(100);
         const feeAPR: any = feeShare.times(365).div(TVL).times(100);
