@@ -22,6 +22,10 @@ const Meta = (props: IMetaProps) => {
           content="width=device-width,initial-scale=1"
           key="viewport"
         />
+        <meta
+          name="google-site-verification"
+          content="oz7CZNIsOcroP2XMkWaIqkbDaAZemiEuJcPDHM6Rb9o"
+        />
         <link
           rel="apple-touch-icon"
           // href={`${router.basePath}/apple-touch-icon.png`}
@@ -54,6 +58,18 @@ const Meta = (props: IMetaProps) => {
           href="https://fonts.googleapis.com/css2?family=REM:wght@400;700&display=swap"
         />
       </Head>
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-5M3RGH282N"
+      ></script>
+      <script>
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-5M3RGH282N');
+          `}
+      </script>
       <NextSeo
         title={props.title}
         description={props.description}
