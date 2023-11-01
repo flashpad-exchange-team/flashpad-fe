@@ -21,7 +21,7 @@ import { Button } from '../button/Button';
 import customToast from '../notification/customToast';
 import CommonModal from './CommonModal';
 import { useSWRConfig } from 'swr';
-import { allPairsKey } from '@/hooks/useAllPairsData';
+import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 
 export interface RemoveLiquidityModalProps {
   toggleOpen: () => void;
@@ -216,7 +216,7 @@ const RemoveLiquidityModal = ({
     const txReceipt = await waitForTransaction({ hash });
     console.log({ txReceipt });
 
-    mutate(allPairsKey);
+    mutate(allPairsKey, allPairsKeyForAll);
     setSuccessful(true);
     stopLoadingTx();
     resetToDefault();

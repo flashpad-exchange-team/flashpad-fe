@@ -1,4 +1,5 @@
 import { Button } from '@/components/button/Button';
+import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 import LiquiditySettingModal, {
   ILiquiditySettings,
 } from '@/components/modal/LiquiditySettingModal';
@@ -8,6 +9,8 @@ import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
 import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
+import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 import BackIcon from '@/icons/BackIcon';
 import DividerDown from '@/icons/DividerDown';
 import LockManageIcon from '@/icons/LockManageIcon';
@@ -32,10 +35,14 @@ import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as factoryContract from '@/utils/factoryContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as routerContract from '@/utils/routerContract';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { Tooltip } from 'react-tooltip';
+import { useSWRConfig } from 'swr';
 import { Address } from 'viem';
 import {
   useAccount,
@@ -44,16 +51,9 @@ import {
   useNetwork,
   useSwitchNetwork,
 } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import { useRouter } from 'next/router';
-import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
-import { useSWRConfig } from 'swr';
-import { allPairsKey } from '@/hooks/useAllPairsData';
-import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
-import { Tooltip } from 'react-tooltip';
-import { lineaTestnet } from 'wagmi/chains';
-import handleSwitchNetwork from '@/utils/switchNetwork';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -508,7 +508,7 @@ const TradeForm = ({
       type: 'success',
     });
 
-    mutate(allPairsKey);
+    mutate(allPairsKey, allPairsKeyForAll);
     startSuccessTx(
       handleSuccessTxMessageActionWithPair({
         action: 'provided liquidity',

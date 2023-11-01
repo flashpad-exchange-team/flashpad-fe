@@ -5,7 +5,6 @@ import {
   CHAINS_TOKENS_LIST,
   USD_PRICE,
 } from '@/utils/constants';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as pairContract from '@/utils/pairContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import BigNumber from 'bignumber.js';
@@ -18,101 +17,96 @@ export const allPairsKeyForAll = 'all-lp-pairs-all';
 const useAllPairsData = (userAddress: Address | undefined) => {
   const fetchAllPairs = async () => {
     try {
-      const listPairs = [];
       const { timestamp } = await web3Helpers.getBlock();
       const allPairsData = await fetchAllPairsAPI();
 
-      for (const pairData of allPairsData) {
-        const pairAddress = pairData.address;
-        const token1Address = pairData.token1_address;
-        const token2Address = pairData.token2_address;
-        const [
-          lockRemoveUntil,
-          lpTokenDecimals,
-          userLpBalance,
-          totalSupply,
-          reserves,
-        ] = await Promise.all([
-          pairContract.read(pairAddress, 'getTimeCanRemoveLiquidity', []),
-          pairContract.read(pairAddress, 'decimals', []),
-          userAddress
-            ? await pairContract.read(pairAddress, 'balanceOf', [userAddress])
-            : 0,
-          pairContract.read(pairAddress, 'totalSupply', []),
-          pairContract.read(pairAddress, 'getReserves', []),
-        ]);
+      const listPairs = await Promise.all(
+        allPairsData.map(async (pairData: any) => {
+          const {
+            address: pairAddress,
+            token1_address,
+            token2_address,
+          } = pairData;
 
-        // if (token1Address) {
-        //   [token1Symbol, token2Symbol] = await Promise.all([
-        //     erc20Contract.erc20Read(token1Address, 'symbol', []),
-        //     erc20Contract.erc20Read(token2Address, 'symbol', []),
-        //   ]);
-        // } else {
-        //   token1Symbol = await erc20Contract.erc20Read(
-        //     pairAddress,
-        //     'symbol',
-        //     []
-        //   );
-        //   token2Symbol = token1Symbol;
-        // }
-        let token1Symbol: any = 'TOKEN1',
-          token2Symbol: any = 'TOKEN2';
-        const token1 = CHAINS_TOKENS_LIST.find((e) => {
-          return e.address === token1Address;
-        });
-        const token2 = CHAINS_TOKENS_LIST.find((e) => {
-          return e.address === token2Address;
-        });
-        token1Symbol =
-          token1?.symbol == 'WFTM' || token1?.symbol == 'WETH'
-            ? 'ETH'
-            : token1?.symbol;
-        token2Symbol =
-          token2?.symbol == 'WFTM' || token2?.symbol == 'WETH'
-            ? 'ETH'
-            : token2?.symbol;
+          const [
+            lockRemoveUntil,
+            lpTokenDecimals,
+            userLpBalance,
+            totalSupply,
+            [reserves0, reserves1],
+          ] = await Promise.all([
+            pairContract.read(pairAddress, 'getTimeCanRemoveLiquidity', []),
+            pairContract.read(pairAddress, 'decimals', []),
+            userAddress
+              ? pairContract.read(pairAddress, 'balanceOf', [userAddress])
+              : 0,
+            pairContract.read(pairAddress, 'totalSupply', []),
+            pairContract.read(pairAddress, 'getReserves', []),
+          ]);
 
-        const token1Logo = token1?.logoURI;
-        const token2Logo = token2?.logoURI;
+          const token1 = CHAINS_TOKENS_LIST.find(
+            (e) => e.address === token1_address
+          );
+          const token2 = CHAINS_TOKENS_LIST.find(
+            (e) => e.address === token2_address
+          );
 
-        const token1Reserve = formatUnits(reserves[0], token1?.decimals || 8);
-        const token2Reserve = formatUnits(reserves[1], token2?.decimals || 8);
+          const token1Symbol =
+            token1?.symbol === 'WFTM' || token1?.symbol === 'WETH'
+              ? 'ETH'
+              : token1?.symbol || 'UNKNOWN';
 
-        const TVL = new BigNumber(token1Reserve)
-          .times(USD_PRICE)
-          .plus(new BigNumber(token2Reserve).times(USD_PRICE))
-          .toFixed(2);
+          const token2Symbol =
+            token2?.symbol === 'WFTM' || token2?.symbol === 'WETH'
+              ? 'ETH'
+              : token2?.symbol || 'UNKNOWN';
 
-        const poolShare = BigNumber(userLpBalance)
-          .div(totalSupply)
-          .times(100)
-          .toFixed(2);
-        listPairs.push({
-          timeLock: web3Helpers.getDateFormat(lockRemoveUntil),
-          locked: timestamp < lockRemoveUntil,
-          token1: token1Symbol,
-          token2: token2Symbol,
-          token1Address,
-          token2Address,
-          lpTokenDecimals: Number(lpTokenDecimals),
-          token1Logo,
-          token2Logo,
-          myPoolShare: poolShare,
-          pairAddress,
-          TVL,
-          userLpBalance:
-            userLpBalance == 0
-              ? '0.00'
-              : BigNumber(userLpBalance)
-                  .div(new BigNumber(10).pow(18))
-                  .toFixed(),
-        });
-      }
+          const token1Logo = token1?.logoURI;
+          const token2Logo = token2?.logoURI;
+
+          const token1Reserve = formatUnits(reserves0, token1?.decimals || 8);
+          const token2Reserve = formatUnits(reserves1, token2?.decimals || 8);
+
+          const TVL = new BigNumber(token1Reserve)
+            .times(USD_PRICE)
+            .plus(new BigNumber(token2Reserve).times(USD_PRICE))
+            .toFixed(2);
+
+          const poolShare = BigNumber(userLpBalance)
+            .div(totalSupply)
+            .times(100)
+            .toFixed(2);
+
+          const locked = timestamp < lockRemoveUntil;
+
+          return {
+            timeLock: web3Helpers.getDateFormat(lockRemoveUntil),
+            locked,
+            token1: token1Symbol,
+            token2: token2Symbol,
+            token1Address: token1_address,
+            token2Address: token2_address,
+            lpTokenDecimals: Number(lpTokenDecimals),
+            token1Logo,
+            token2Logo,
+            myPoolShare: poolShare,
+            pairAddress,
+            TVL,
+            userLpBalance:
+              userLpBalance == 0
+                ? '0.00'
+                : new BigNumber(userLpBalance)
+                    .div(new BigNumber(10).pow(18))
+                    .toFixed(),
+          };
+        })
+      );
+
       return listPairs;
     } catch (error) {
       console.log('fetchAllPairs error:', error);
+      return [];
     }
-    return [];
   };
 
   const { data, error, isLoading } = useSWR(
@@ -187,9 +181,7 @@ export const useAllPairsDataForAllPool = (userAddress: Address | undefined) => {
           .plus(new BigNumber(token2Reserve).times(USD_PRICE))
           .toFixed(2);
 
-        const poolAddress: any = await nftPoolFactoryContract.getPool(
-          pairAddress
-        );
+        const poolAddress: any = pairData?.nft_pool?.address || '';
         const feeShare: any = new BigNumber(pairData.vol24h)
           .times(0.3)
           .div(100);
@@ -200,9 +192,10 @@ export const useAllPairsDataForAllPool = (userAddress: Address | undefined) => {
           'getPoolInfo',
           [poolAddress]
         );
-        const dailyART: any = new BigNumber(masterPoolInfo.poolEmissionRate)
-          .times(86400)
-          .div('1000000000000000000');
+        const dailyART: any =
+          new BigNumber(masterPoolInfo?.poolEmissionRate || 0)
+            .times(86400)
+            .div('1000000000000000000') || 0;
         const farmBaseAPR: any = dailyART.times(365).div(TVL).times(100);
 
         const poolShare: any = new BigNumber(userBalance)

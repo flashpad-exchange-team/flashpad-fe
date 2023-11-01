@@ -1,122 +1,103 @@
-import useSWR from 'swr';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
-import * as nftPoolContract from '@/utils/nftPoolContract';
-import * as erc20Contract from '@/utils/erc20TokenContract';
-import * as pairContract from '@/utils/pairContract';
+import { fetchAllPairsAPI } from '@/api';
 import { CHAINS_TOKENS_LIST, USD_PRICE } from '@/utils/constants';
-import { Address, formatUnits } from 'viem';
+import * as nftPoolContract from '@/utils/nftPoolContract';
+import * as pairContract from '@/utils/pairContract';
 import BigNumber from 'bignumber.js';
-import { fetchTotalVolumeByLpAPI } from '@/api';
+import useSWR from 'swr';
+import { Address, formatUnits } from 'viem';
 
 export const allNftPoolsKey = 'all-nft-pools';
+const tokenDataMap: Map<string, any> = new Map();
+for (const token of CHAINS_TOKENS_LIST) {
+  tokenDataMap.set(token.address, {
+    symbol:
+      token.symbol == 'WFTM' || token.symbol == 'WETH' ? 'ETH' : token.symbol,
+    logoURI: token.logoURI,
+    decimals: token.decimals || 8,
+  });
+}
 
 const useAllNftPoolsData = (userAddress: Address | undefined) => {
   const fetchAllPools = async () => {
     try {
-      const listPools = [];
-      const nPools = await nftPoolFactoryContract.poolsLength();
-      for (let i = 0; i < nPools; i++) {
-        const poolAddress = await nftPoolFactoryContract.getPoolByIndex(i);
+      const listPools: any[] = [];
+      const allPairsData: any[] = await fetchAllPairsAPI();
 
+      for (const pairData of allPairsData) {
+        const poolAddress = pairData?.nft_pool?.address;
         const poolInfoObj = await nftPoolContract.read(
           poolAddress as Address,
           'getPoolInfo',
           []
         );
+        const lpToken = pairData?.address;
+        const token1Data = tokenDataMap.get(pairData.token1_address);
+        const token2Data = tokenDataMap.get(pairData.token2_address);
+        // const [lpTokenDecimals] = await Promise.all([
+        //   pairContract.read(lpToken, 'decimals', []),
+        // ]);
 
-        const lpToken = poolInfoObj?.lpToken;
+        const token1Address = pairData.token1_address;
+        const token2Address = pairData.token2_address;
 
-        let [lpTokenDecimals, token1Address, token2Address] = await Promise.all(
-          [
-            pairContract.read(lpToken, 'decimals', []),
-            pairContract.read(lpToken, 'token0', []),
-            pairContract.read(lpToken, 'token1', []),
-          ]
-        );
-
-        let token1Symbol = 'TOKEN1',
-          token2Symbol = 'TOKEN2';
-        if (
-          lpToken.toLowerCase() ===
-          '0xb1f8a7c4fdaA4b79ad2052e09D8BBA5296e42090'.toLowerCase()
-        ) {
-          token1Symbol = await erc20Contract.erc20Read(lpToken, 'symbol', []);
-          token2Symbol = token1Symbol;
-        } else if (token1Address) {
-          [token1Symbol, token2Symbol] = await Promise.all([
-            erc20Contract.erc20Read(token1Address, 'symbol', []),
-            erc20Contract.erc20Read(token2Address, 'symbol', []),
-          ]);
-        } else if (lpTokenDecimals) {
-          token1Symbol = await erc20Contract.erc20Read(lpToken, 'symbol', []);
-          token2Symbol = token1Symbol;
-        }
-
-        token1Symbol =
-          token1Symbol == 'WFTM' || token1Symbol == 'WETH'
-            ? 'ETH'
-            : token1Symbol;
-        token2Symbol =
-          token2Symbol == 'WFTM' || token2Symbol == 'WETH'
-            ? 'ETH'
-            : token2Symbol;
-        const token1 = CHAINS_TOKENS_LIST.find((e) => {
-          return e.symbol === token1Symbol;
-        });
-        const token2 = CHAINS_TOKENS_LIST.find((e) => {
-          return e.symbol === token2Symbol;
-        });
-
-        const token1Logo = token1?.logoURI;
-        const token2Logo = token2?.logoURI;
-
+        const token1Logo = token1Data?.logoURI;
+        const token2Logo = token2Data?.logoURI;
         const [reserves] = await Promise.all([
           pairContract.read(lpToken, 'getReserves', []),
         ]);
         let poolTVL = '0';
         let TVL = '0';
+        let lpSupplyAmount = '0';
+
         if (reserves) {
-          const token1Reserve = formatUnits(reserves[0], token1?.decimals || 8);
-          const token2Reserve = formatUnits(reserves[1], token2?.decimals || 8);
+          const token1Reserve = formatUnits(
+            reserves[0],
+            token1Data?.decimals || 8
+          );
+          const token2Reserve = formatUnits(
+            reserves[1],
+            token2Data?.decimals || 8
+          );
 
           TVL = new BigNumber(token1Reserve)
             .times(USD_PRICE)
             .plus(new BigNumber(token2Reserve).times(USD_PRICE))
-            .toFixed(2); // lpSupply;
-          const lpSupplyAmount = formatUnits(poolInfoObj.lpSupply, 18);
+            .toFixed(2);
+          lpSupplyAmount = formatUnits(poolInfoObj?.lpSupply || 0, 18);
           poolTVL = new BigNumber(lpSupplyAmount)
             .times(new BigNumber(TVL))
             .toFixed(4);
         }
-        const vol24h = await fetchTotalVolumeByLpAPI({
-          lpAddress: lpToken,
-          last24h: true,
-        });
+
+        const vol24h = pairData?.vol24h || 0;
+
         const feeShare = new BigNumber(vol24h).times(0.3).div(100);
-        const feeAPR = feeShare.times(365).div(TVL).times(100);
+        const feeAPR = feeShare.times(365).div(new BigNumber(TVL)).times(100);
 
         listPools.push({
-          token1: token1Symbol,
-          token2: token2Symbol,
+          token1: token1Data?.symbol,
+          token2: token2Data?.symbol,
           token1Logo,
           token2Logo,
           token1Address,
           token2Address,
           lpTokenAddress: lpToken,
-          lpTokenDecimals: Number(lpTokenDecimals),
+          // lpTokenDecimals: Number(lpTokenDecimals),
+          lpTokenDecimals: 18,
           poolAddress,
           poolTVL,
           TVL,
           feeShare,
           feeAPR,
+          lpSupplyAmount,
         });
       }
 
-      return listPools;
+      return listPools.sort((a, b) => b.lpSupplyAmount - a.lpSupplyAmount);
     } catch (error) {
       console.log('fetchAllPools error:', error);
+      return [];
     }
-    return [];
   };
 
   const { data, error, isLoading } = useSWR(

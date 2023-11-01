@@ -44,7 +44,7 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                 Composition
               </th> */}
               {/* TODO */}
-              <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-right">
                 Deposits
               </th>
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-center">
@@ -106,8 +106,8 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                   {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                     ${item.tvl}
                   </td> */}
-                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    ${item.poolTVL}
+                  <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
+                    {item.lpSupplyAmount} LP
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                     {item.feeAPR.toFixed(2)}%

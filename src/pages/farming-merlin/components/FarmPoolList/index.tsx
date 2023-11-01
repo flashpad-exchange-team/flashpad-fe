@@ -1,76 +1,9 @@
 import { Button } from '@/components/button/Button';
-import AddIcon from '@/icons/AddIcon';
+import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
 import Menu from '@/icons/Menu';
 import Search from '@/icons/Search';
-import TableFarm from './TableFarm';
 import { useAccount } from 'wagmi';
-import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
-
-// const data = [
-//   {
-//     tvl: '482.85',
-//     incentivesToken: 'Token',
-//     incentivesLogo:
-//       'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token1: 'BNB',
-//     token2: 'FUSDC',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalDeposit: '0',
-//     pendingRewards: '0',
-//   },
-//   {
-//     tvl: '482.85',
-//     incentivesToken: 'Token',
-//     incentivesLogo:
-//       'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token1: 'BNB',
-//     token2: 'FDOGE',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalDeposit: '0',
-//     pendingRewards: '0',
-//   },
-//   {
-//     tvl: '482.85',
-//     incentivesToken: 'Token',
-//     incentivesLogo: null,
-//     token1: 'WETH',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalDeposit: '0',
-//     pendingRewards: '0',
-//   },
-//   {
-//     tvl: '482.85',
-//     incentivesToken: 'Token',
-//     incentivesLogo:
-//       'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token1: 'NEO',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalDeposit: '0',
-//     pendingRewards: '0',
-//   },
-//   {
-//     tvl: '482.85',
-//     incentivesToken: 'Token',
-//     incentivesLogo: null,
-//     token1: 'BNB',
-//     token2: 'UNI',
-//     token1Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/18876.png',
-//     token2Logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png',
-//     apr: '0,7748',
-//     totalDeposit: '0',
-//     pendingRewards: '0',
-//   },
-// ];
+import TableFarm from './TableFarm';
 
 const FarmPoolList = () => {
   const { address: userAddress } = useAccount();
@@ -87,10 +20,10 @@ const FarmPoolList = () => {
           </div>
         </div>
         <div className="flex gap-3 items-center order-3 md:order-2">
-          <Button className="px-2 h-[52px] w-[100%] mr-2 md:mr-0 md:w-[210px] flex justify-center">
+          {/* <Button className="px-2 h-[52px] w-[100%] mr-2 md:mr-0 md:w-[210px] flex justify-center">
             <AddIcon color="#0C111D" />
             Add Liquidity
-          </Button>
+          </Button> */}
         </div>
         <div className="flex mr-2 md:mr-4 mt-4 mb-2 md:mb-0 md:mr-0 items-center gap-3 order-2 md:order-3 md:w-full">
           <div className="w-full w-[300px] flex">

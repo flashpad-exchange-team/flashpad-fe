@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import InlineLoading from '../loading/InlineLoading';
+import { Tooltip } from 'react-tooltip';
 
 interface ListAllPoolsTableProps {
   data: {
@@ -113,7 +114,15 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
                       {' '}
                       {item.farmBaseAPR.plus(item.feeAPR).times(3).toFixed(2)}%
                     </span>
-                    <QuestionIcon />
+                    <div
+                      data-tooltip-id="apr"
+                      data-tooltip-html={`Farm Base APR : ${item.farmBaseAPR.toFixed(
+                        2
+                      )}% <br/> Fees APR : ${item.feeAPR.toFixed(2)}%`}
+                    >
+                      <QuestionIcon />
+                      <Tooltip id="apr" />
+                    </div>
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                     {item.myPoolShare === '0.00' ? 0 : item.myPoolShare}%

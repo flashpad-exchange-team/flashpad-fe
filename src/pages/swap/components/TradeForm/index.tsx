@@ -3,6 +3,7 @@ import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import customToast from '@/components/notification/customToast';
 import { handleSuccessTxMessageSwap } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
+import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 import DividerDown from '@/icons/DividerDown';
 import QuestionIcon from '@/icons/QuestionIcon';
 import ReloadIcon from '@/icons/ReloadIcon';
@@ -15,20 +16,20 @@ import {
   MAX_UINT256,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as factoryContract from '@/utils/factoryContract';
 import * as pairContract from '@/utils/pairContract';
 import * as routerContract from '@/utils/routerContract';
+import handleSwitchNetwork from '@/utils/switchNetwork';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import { Address } from 'viem';
-import { useAccount, useBalance, useSwitchNetwork } from 'wagmi';
+import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import { useNetwork } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
-import handleSwitchNetwork from '@/utils/switchNetwork';
-import * as factoryContract from '@/utils/factoryContract';
 
 interface TradeFormProps {
   title: string;
@@ -49,6 +50,7 @@ const TradeForm = ({
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
+  const { mutate } = useSWRConfig();
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
@@ -260,6 +262,7 @@ const TradeForm = ({
 
     const hash = txResult.hash;
     await waitForTransaction({ hash });
+    mutate(allPairsKey, allPairsKeyForAll);
 
     startSuccessTx(
       handleSuccessTxMessageSwap({

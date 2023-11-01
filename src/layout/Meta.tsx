@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 
 import { AppConfig } from '../utils/AppConfig';
+import Script from 'next/script';
 
 type IMetaProps = {
   title: string;
@@ -62,14 +63,16 @@ const Meta = (props: IMetaProps) => {
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-5M3RGH282N"
       ></script>
-      <script>
-        {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-5M3RGH282N');
-          `}
-      </script>
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-5M3RGH282N');
+              `,
+        }}
+      />
       <NextSeo
         title={props.title}
         description={props.description}
