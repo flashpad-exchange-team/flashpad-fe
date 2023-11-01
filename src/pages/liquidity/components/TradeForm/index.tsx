@@ -715,6 +715,7 @@ const TradeForm = ({
             }}
             token1Amount={token1Amount}
             token2Amount={token2Amount}
+            nftPoolAddress={nftPoolAddress}
           />
         )}
         {insufficient && (

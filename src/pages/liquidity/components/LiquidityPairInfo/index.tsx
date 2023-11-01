@@ -5,7 +5,6 @@ import { ADDRESS_ZERO } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import * as routerContract from '@/utils/routerContract';
 import * as pairContract from '@/utils/pairContract';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
 import BigNumber from 'bignumber.js';
@@ -27,6 +26,7 @@ interface LiquidityPairInfoProps {
   isSpNFT: boolean;
   reserves: any;
   pairToken1?: Address;
+  nftPoolAddress?: Address;
 }
 
 const LiquidityPairInfo = ({
@@ -38,6 +38,7 @@ const LiquidityPairInfo = ({
   token2Amount,
   reserves,
   pairToken1,
+  nftPoolAddress,
 }: LiquidityPairInfoProps) => {
   const token1Address = token1Data?.address;
   const token1Symbol = token1Data?.symbol;
@@ -51,7 +52,7 @@ const LiquidityPairInfo = ({
 
   const [open, setOpen] = useState<boolean>(false);
   const [lpAddress, setLPAddress] = useState<Address>(ADDRESS_ZERO);
-  const [nftPoolAddress, setNftPoolAddress] = useState<Address>(ADDRESS_ZERO);
+
   const [isStableSwap, setIsStableSwap] = useState(false);
 
   const [swapRate1To2, setSwapRate1To2] = useState('-');
@@ -95,8 +96,7 @@ const LiquidityPairInfo = ({
     if (!token1Address || !token2Address) return;
     const address = await routerContract.getPair(token1Address, token2Address);
     setLPAddress(address || ADDRESS_ZERO);
-    const spNftPool = await nftPoolFactoryContract.getPool(address!);
-    setNftPoolAddress(spNftPool || ADDRESS_ZERO);
+
     if (address && isFirstLP === false) {
       const stableSwap = await pairContract.read(address, 'stableSwap', []);
       setIsStableSwap(!!stableSwap);
@@ -231,7 +231,7 @@ const LiquidityPairInfo = ({
               </div>
               {isSpNFT && (
                 <div className="text-xs md:text-sm h-[36px] md:h-auto mt-1.5 text-right ">
-                  <CopyableText text={nftPoolAddress} />
+                  <CopyableText text={nftPoolAddress || ''} />
                 </div>
               )}
             </div>
