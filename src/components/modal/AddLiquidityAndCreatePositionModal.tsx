@@ -1,32 +1,34 @@
+import { useLoading } from '@/context/LoadingContext';
+import { useERC20TokenContractWrite } from '@/hooks/contract/useErc20TokenContract';
+import { usePositionHelperContractWrite } from '@/hooks/contract/userPositionHelperContract';
+import ArrowDown from '@/icons/ArrowDown';
+import ArrowUp from '@/icons/ArrowUp';
+import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { Button } from '../button/Button';
-import CommonModal from './CommonModal';
-import DividerDown from '@/icons/DividerDown';
-import BNBICon from '@/icons/BNBIcon';
-import ArrowDown from '@/icons/ArrowDown';
-import Image from 'next/image';
-import BigNumber from 'bignumber.js';
-import * as web3Helpers from '@/utils/web3Helpers';
-import { useEffect, useState } from 'react';
-import customToast from '../notification/customToast';
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import {
   MAX_UINT256,
   POSITION_HELPER_ADDRESS,
   daysToSeconds,
   minutesToSeconds,
 } from '@/utils/constants';
-import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
-import { Address } from 'viem';
-import { waitForTransaction } from '@wagmi/core';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
-import * as positionHelperContract from '@/utils/positionHelperContract';
-import ArrowUp from '@/icons/ArrowUp';
-import { lineaTestnet } from 'wagmi/chains';
+import { handleError } from '@/utils/handleError';
 import handleSwitchNetwork from '@/utils/switchNetwork';
+import * as web3Helpers from '@/utils/web3Helpers';
+import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { Address } from 'viem';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
+import CommonModal from './CommonModal';
 
 export interface AddLiquidityAndCreatePositionModalProps {
   isOpen: boolean;
@@ -102,218 +104,236 @@ const AddLiquidityAndCreatePositionModal = ({
   }, [initialToken1Amount, initialToken2Amount]);
 
   const handleAddLiquidityAndCreatePosition = async () => {
-    if (chain?.id !== lineaTestnet.id) {
-      handleSwitchNetwork(switchNetwork);
-      return;
-    }
-    const nLockDuration = Number(lockDuration);
-    if (
-      Number.isNaN(nLockDuration) ||
-      !Number.isInteger(nLockDuration) ||
-      nLockDuration < 0
-    ) {
-      customToast({
-        message: 'Please input valid lock duration',
-        type: 'error',
-      });
-      return;
-    }
+    try {
+      const { writeContract: writeERC20Contract, ABI: ERC20ABI } =
+        useERC20TokenContractWrite();
+      const {
+        writeContract: writePositionHelperContract,
+        ABI: PositionHelperABI,
+      } = usePositionHelperContractWrite();
 
-    const bnToken1Amount = BigNumber(10)
-      .pow(token1Decimals)
-      .times(BigNumber(token1Amount));
-
-    const bnToken2Amount = BigNumber(10)
-      .pow(token2Decimals!)
-      .times(BigNumber(token2Amount));
-
-    if (
-      bnToken1Amount.isNaN() ||
-      bnToken2Amount.isNaN() ||
-      bnToken1Amount.isLessThanOrEqualTo(0) ||
-      bnToken2Amount.isLessThanOrEqualTo(0)
-    ) {
-      customToast({
-        message: 'Please input valid amount!',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (
-      bnToken1Amount.isGreaterThan(BigNumber(bnBalanceToken1)) ||
-      bnToken2Amount.isGreaterThan(BigNumber(bnBalanceToken2))
-    ) {
-      customToast({
-        message: 'Insufficient balance!',
-        type: 'error',
-      });
-      return;
-    }
-
-    startLoadingTx({
-      tokenPairs: token1Symbol + ' - ' + token2Symbol,
-      title: 'Adding liquidity and creating position...',
-      message: 'Confirming your transaction, please wait.',
-    });
-
-    const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    const token1AmountMin = bnToken1Amount
-      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
-      .toFixed(0, BigNumber.ROUND_DOWN);
-    const token2AmountMin = bnToken2Amount
-      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
-      .toFixed(0, BigNumber.ROUND_DOWN);
-
-    if (token1Symbol != 'ETH') {
-      const token1Allowance = (await erc20TokenContract.erc20Read(
-        token1Address,
-        'allowance',
-        [userAddress, POSITION_HELPER_ADDRESS]
-      )) as bigint;
-
-      if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
-        startLoadingTx({
-          tokenPairs: token1Symbol,
-          title: `Approving ${token1Symbol} Token ...`,
-          message: 'Confirming your transaction, please wait.',
-        });
-        const approveRes = await erc20TokenContract.erc20Write(
-          userAddress!,
-          token1Address,
-          'approve',
-          [POSITION_HELPER_ADDRESS, MAX_UINT256]
-        );
-        if (!approveRes) {
-          stopLoadingTx();
-          return;
-        }
-
-        const hash = approveRes.hash;
-        const txReceipt = await waitForTransaction({ hash });
-        console.log({ txReceipt });
+      if (chain?.id !== lineaTestnet.id) {
+        handleSwitchNetwork(switchNetwork);
+        return;
       }
-    }
-
-    if (token2Symbol != 'ETH') {
-      const token2Allowance = (await erc20TokenContract.erc20Read(
-        token2Address,
-        'allowance',
-        [userAddress, POSITION_HELPER_ADDRESS]
-      )) as bigint;
-
-      if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
-        startLoadingTx({
-          tokenPairs: token2Symbol,
-          title: `Approving ${token2Symbol} Token ...`,
-          message: 'Confirming your transaction, please wait.',
+      const nLockDuration = Number(lockDuration);
+      if (
+        Number.isNaN(nLockDuration) ||
+        !Number.isInteger(nLockDuration) ||
+        nLockDuration < 0
+      ) {
+        customToast({
+          message: 'Please input valid lock duration',
+          type: 'error',
         });
-        const approveRes = await erc20TokenContract.erc20Write(
-          userAddress!,
-          token2Address,
-          'approve',
-          [POSITION_HELPER_ADDRESS, MAX_UINT256]
-        );
-        if (!approveRes) {
-          stopLoadingTx();
-          return;
-        }
-
-        const hash = approveRes.hash;
-        const txReceipt = await waitForTransaction({ hash });
-        console.log({ txReceipt });
+        return;
       }
-    }
 
-    let txResult: any;
-    const { timestamp } = await web3Helpers.getBlock();
+      const bnToken1Amount = BigNumber(10)
+        .pow(token1Decimals)
+        .times(BigNumber(token1Amount));
 
-    if (token1Symbol == 'ETH') {
-      txResult = await positionHelperContract.write(
-        userAddress!,
-        POSITION_HELPER_ADDRESS as Address,
-        'addLiquidityETHAndCreatePosition',
-        [
-          token2Address,
-          token2AmountIn,
-          token2AmountMin,
-          token1AmountMin,
-          (timestamp as bigint) + minutesToSeconds(deadline) + '',
-          daysToSeconds(timeLock) + '',
-          userAddress,
-          nftPoolAddress,
-          nLockDuration,
-          0,
-        ],
-        token1AmountIn
-      );
-    } else if (token2Symbol == 'ETH') {
-      txResult = await positionHelperContract.write(
-        userAddress!,
-        POSITION_HELPER_ADDRESS as Address,
-        'addLiquidityETHAndCreatePosition',
-        [
+      const bnToken2Amount = BigNumber(10)
+        .pow(token2Decimals!)
+        .times(BigNumber(token2Amount));
+
+      if (
+        bnToken1Amount.isNaN() ||
+        bnToken2Amount.isNaN() ||
+        bnToken1Amount.isLessThanOrEqualTo(0) ||
+        bnToken2Amount.isLessThanOrEqualTo(0)
+      ) {
+        customToast({
+          message: 'Please input valid amount!',
+          type: 'error',
+        });
+        return;
+      }
+
+      if (
+        bnToken1Amount.isGreaterThan(BigNumber(bnBalanceToken1)) ||
+        bnToken2Amount.isGreaterThan(BigNumber(bnBalanceToken2))
+      ) {
+        customToast({
+          message: 'Insufficient balance!',
+          type: 'error',
+        });
+        return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Symbol + ' - ' + token2Symbol,
+        title: 'Adding liquidity and creating position...',
+        message: 'Confirming your transaction, please wait.',
+      });
+
+      const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
+      const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+      const token1AmountMin = bnToken1Amount
+        .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+        .toFixed(0, BigNumber.ROUND_DOWN);
+      const token2AmountMin = bnToken2Amount
+        .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+        .toFixed(0, BigNumber.ROUND_DOWN);
+
+      if (token1Symbol != 'ETH') {
+        const token1Allowance = (await erc20TokenContract.erc20Read(
           token1Address,
-          token1AmountIn,
-          token1AmountMin,
-          token2AmountMin,
-          (timestamp as bigint) + minutesToSeconds(deadline) + '',
-          daysToSeconds(timeLock) + '',
-          userAddress,
-          nftPoolAddress,
-          nLockDuration,
-          0,
-        ],
-        token2AmountIn
-      );
-    } else {
-      txResult = await positionHelperContract.write(
-        userAddress!,
-        POSITION_HELPER_ADDRESS as Address,
-        'addLiquidityAndCreatePosition',
-        [
-          token1Address,
-          token2Address,
-          token1AmountIn,
-          token2AmountIn,
-          token1AmountMin,
-          token2AmountMin,
-          (timestamp as bigint) + minutesToSeconds(deadline) + '',
-          userAddress,
-          nftPoolAddress,
-          nLockDuration,
-          daysToSeconds(timeLock) + '',
-          0,
-        ]
-      );
-    }
+          'allowance',
+          [userAddress, POSITION_HELPER_ADDRESS]
+        )) as bigint;
 
-    if (!txResult) {
+        if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
+          startLoadingTx({
+            tokenPairs: token1Symbol,
+            title: `Approving ${token1Symbol} Token ...`,
+            message: 'Confirming your transaction, please wait.',
+          });
+          const { hash } = await writeERC20Contract({
+            address: token1Address,
+            abi: ERC20ABI,
+            functionName: 'approve',
+            args: [POSITION_HELPER_ADDRESS, MAX_UINT256],
+          });
+
+          if (!hash) {
+            stopLoadingTx();
+            // setSuccessful(false);
+            // setFailed(true);
+            return;
+          } else {
+            const txReceipt = await waitForTransaction({ hash });
+            stopLoadingTx();
+            console.log({ txReceipt });
+          }
+        }
+      }
+
+      if (token2Symbol != 'ETH') {
+        const token2Allowance = (await erc20TokenContract.erc20Read(
+          token2Address,
+          'allowance',
+          [userAddress, POSITION_HELPER_ADDRESS]
+        )) as bigint;
+
+        if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
+          startLoadingTx({
+            tokenPairs: token2Symbol,
+            title: `Approving ${token2Symbol} Token ...`,
+            message: 'Confirming your transaction, please wait.',
+          });
+          const { hash } = await writeERC20Contract({
+            address: token2Address,
+            abi: ERC20ABI,
+            functionName: 'approve',
+            args: [POSITION_HELPER_ADDRESS, MAX_UINT256],
+          });
+
+          if (!hash) {
+            stopLoadingTx();
+            // setSuccessful(false);
+            // setFailed(true);
+            return;
+          } else {
+            const txReceipt = await waitForTransaction({ hash });
+            stopLoadingTx();
+            console.log({ txReceipt });
+          }
+        }
+      }
+
+      let txResult: any;
+      const { timestamp } = await web3Helpers.getBlock();
+
+      if (token1Symbol == 'ETH') {
+        txResult = await writePositionHelperContract({
+          address: POSITION_HELPER_ADDRESS as Address,
+          abi: PositionHelperABI,
+          functionName: 'addLiquidityETHAndCreatePosition',
+          args: [
+            token2Address,
+            token2AmountIn,
+            token2AmountMin,
+            token1AmountMin,
+            (timestamp as bigint) + minutesToSeconds(deadline) + '',
+            daysToSeconds(timeLock) + '',
+            userAddress,
+            nftPoolAddress,
+            nLockDuration,
+            0,
+          ],
+          value: token1AmountIn as unknown as bigint,
+        });
+      } else if (token2Symbol == 'ETH') {
+        txResult = await writePositionHelperContract({
+          address: POSITION_HELPER_ADDRESS as Address,
+          abi: PositionHelperABI,
+          functionName: 'addLiquidityETHAndCreatePosition',
+          args: [
+            token1Address,
+            token1AmountIn,
+            token1AmountMin,
+            token2AmountMin,
+            (timestamp as bigint) + minutesToSeconds(deadline) + '',
+            daysToSeconds(timeLock) + '',
+            userAddress,
+            nftPoolAddress,
+            nLockDuration,
+            0,
+          ],
+          value: token2AmountIn as unknown as bigint,
+        });
+      } else {
+        txResult = await writePositionHelperContract({
+          address: POSITION_HELPER_ADDRESS as Address,
+          abi: PositionHelperABI,
+          functionName: 'addLiquidityAndCreatePosition',
+          args: [
+            token1Address,
+            token2Address,
+            token1AmountIn,
+            token2AmountIn,
+            token1AmountMin,
+            token2AmountMin,
+            (timestamp as bigint) + minutesToSeconds(deadline) + '',
+            userAddress,
+            nftPoolAddress,
+            nLockDuration,
+            daysToSeconds(timeLock) + '',
+            0,
+          ],
+        });
+      }
+
+      if (!txResult) {
+        stopLoadingTx();
+        return;
+      }
+
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      resetInput();
       stopLoadingTx();
-      return;
+      customToast({
+        message: 'Added liquidity successfully',
+        type: 'success',
+      });
+
+      startSuccessTx(
+        handleSuccessTxMessageActionWithPair({
+          action: 'provided liquidity',
+          token1: token1Symbol,
+          token2: token2Symbol,
+          txHash: hash,
+          usdValue: ` ${token1Amount} - ${token2Amount}`,
+        })
+      );
+      toggleOpen();
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    resetInput();
-    stopLoadingTx();
-    customToast({
-      message: 'Added liquidity successfully',
-      type: 'success',
-    });
-
-    startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
-        action: 'provided liquidity',
-        token1: token1Symbol,
-        token2: token2Symbol,
-        txHash: hash,
-        usdValue: ` ${token1Amount} - ${token2Amount}`,
-      })
-    );
-    toggleOpen();
   };
 
   const autoAdjustToken2Amount = async (token1Amount: any) => {

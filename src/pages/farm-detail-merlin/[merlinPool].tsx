@@ -1,27 +1,29 @@
 import { Button } from '@/components/button/Button';
+import customToast from '@/components/notification/customToast';
+import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
+import { useLoading } from '@/context/LoadingContext';
+import { useMerlinPoolContractWrite } from '@/hooks/contract/useMerlinPoolContract';
+import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
 import useWindowWidth from '@/hooks/useWindowWidth';
-import Image from 'next/image';
 import BNBICon from '@/icons/BNBIcon';
 import DownloadIcon from '@/icons/DownloadIcon';
 import LayerIcon from '@/icons/LayerIcon';
 import Link from '@/icons/Link';
 import SaleIcon from '@/icons/SaleIcon';
+import WalletIcon from '@/icons/WalletIcon';
+import { ADDRESS_ZERO, CHAIN_EXPLORER_URL } from '@/utils/constants';
+import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import { handleError } from '@/utils/handleError';
+import * as merlinPoolContract from '@/utils/merlinPoolContract';
+import * as nftPoolContract from '@/utils/nftPoolContract';
+import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Address, useAccount } from 'wagmi';
 import TableDetail from './components/TableDetail';
 import TableDetailSp from './components/TableDetailSp';
-import { useRouter } from 'next/router';
-import { Address, useAccount } from 'wagmi';
-import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
-import customToast from '@/components/notification/customToast';
-import { ADDRESS_ZERO, CHAIN_EXPLORER_URL } from '@/utils/constants';
-import { useEffect, useState } from 'react';
-import * as nftPoolContract from '@/utils/nftPoolContract';
-import * as merlinPoolContract from '@/utils/merlinPoolContract';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
-import BigNumber from 'bignumber.js';
-import WalletIcon from '@/icons/WalletIcon';
-import { useLoading } from '@/context/LoadingContext';
-import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 
 const FarmMerlinDetail = () => {
   const router = useRouter();
@@ -152,49 +154,58 @@ const FarmMerlinDetail = () => {
   };
 
   const handleHarvest = async () => {
-    if (merlinPoolAddress === ADDRESS_ZERO) return;
+    try {
+      if (merlinPoolAddress === ADDRESS_ZERO) return;
 
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Symbol + ' - ' + token2Symbol,
+        title: 'Harvesting staked position in Merlin pool...',
+        message: 'Confirming your transaction, please wait.',
       });
-      return;
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Symbol + ' - ' + token2Symbol,
-      title: 'Harvesting staked position in Merlin pool...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      const { writeContract: writeMerlinPoolContract, ABI } =
+        useMerlinPoolContractWrite();
 
-    const harvestTx = await merlinPoolContract.write(
-      userAddress as Address,
-      merlinPoolAddress,
-      'harvest',
-      []
-    );
+      const harvestTx = await writeMerlinPoolContract({
+        address: merlinPoolAddress,
+        abi: ABI,
+        functionName: 'harvest',
+        args: [],
+      });
 
-    if (!harvestTx) {
+      if (!harvestTx) {
+        stopLoadingTx();
+        return;
+      }
+
+      const txHash = harvestTx.hash;
+      const txReceipt = await waitForTransaction({ hash: txHash });
+      console.log({ txReceipt });
+
       stopLoadingTx();
-      return;
+
+      startSuccessTx(
+        handleSuccessTxMessageActionWithPair({
+          action: 'harvested position in Merlin pool',
+          token1: token1Symbol,
+          token2: token2Symbol,
+          txHash: txHash,
+          usdValue: `?`,
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+
+      handleError(error);
     }
-
-    const txHash = harvestTx.hash;
-    const txReceipt = await waitForTransaction({ hash: txHash });
-    console.log({ txReceipt });
-
-    stopLoadingTx();
-
-    startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
-        action: 'harvested position in Merlin pool',
-        token1: token1Symbol,
-        token2: token2Symbol,
-        txHash: txHash,
-        usdValue: `?`,
-      })
-    );
   };
 
   return (

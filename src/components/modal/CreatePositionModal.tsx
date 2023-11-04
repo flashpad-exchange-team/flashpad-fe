@@ -1,5 +1,7 @@
 import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
+import { useNftPoolContractWrite } from '@/hooks/contract/useNftPoolContract';
+import { usePairContractWrite } from '@/hooks/contract/userPairContract';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
@@ -10,7 +12,7 @@ import {
   MAX_UINT256,
   daysToSeconds,
 } from '@/utils/constants';
-import * as nftPoolContract from '@/utils/nftPoolContract';
+import { handleError } from '@/utils/handleError';
 import * as pairContract from '@/utils/pairContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import { waitForTransaction } from '@wagmi/core';
@@ -88,113 +90,125 @@ const CreatePositionModal = ({
   };
 
   const handleCreatePosition = async () => {
-    if (chain?.id !== lineaTestnet.id) {
-      handleSwitchNetwork(switchNetwork);
-      return;
-    }
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
+    try {
+      if (chain?.id !== lineaTestnet.id) {
+        handleSwitchNetwork(switchNetwork);
+        return;
+      }
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
 
-    if (!balanceLP) {
-      customToast({
-        message: 'Could not get LP balance info',
-        type: 'error',
-      });
-      // return;
-    }
+      if (!balanceLP) {
+        customToast({
+          message: 'Could not get LP balance info',
+          type: 'error',
+        });
+        // return;
+      }
 
-    let bnStakeAmount = BigNumber(stakeAmount);
-    const nLockTime = Number(lockTime);
-    if (bnStakeAmount.isGreaterThan(balanceLP?.formatted!)) {
-      customToast({
-        message: 'Not enough LP Balance. Please add liquidity first',
-        type: 'error',
-      });
-      return;
-    }
-    if (
-      bnStakeAmount.isNaN() ||
-      bnStakeAmount.isLessThanOrEqualTo(0) ||
-      Number.isNaN(nLockTime) ||
-      !Number.isInteger(nLockTime)
-      //  ||nLockTime <= 0
-    ) {
-      customToast({
-        message: 'Please input valid amount and lock time',
-        type: 'error',
-      });
-      return;
-    }
+      let bnStakeAmount = BigNumber(stakeAmount);
+      const nLockTime = Number(lockTime);
+      if (bnStakeAmount.isGreaterThan(balanceLP?.formatted!)) {
+        customToast({
+          message: 'Not enough LP Balance. Please add liquidity first',
+          type: 'error',
+        });
+        return;
+      }
+      if (
+        bnStakeAmount.isNaN() ||
+        bnStakeAmount.isLessThanOrEqualTo(0) ||
+        Number.isNaN(nLockTime) ||
+        !Number.isInteger(nLockTime)
+        //  ||nLockTime <= 0
+      ) {
+        customToast({
+          message: 'Please input valid amount and lock time',
+          type: 'error',
+        });
+        return;
+      }
 
-    const bnStakeAmountParsed = bnStakeAmount.times(
-      BigNumber(10).pow(balanceLP?.decimals!)
-    );
+      const bnStakeAmountParsed = bnStakeAmount.times(
+        BigNumber(10).pow(balanceLP?.decimals!)
+      );
 
-    const lpAllowance = (await pairContract.read(lpAddress!, 'allowance', [
-      userAddress,
-      nftPoolAddress,
-    ])) as bigint;
+      const lpAllowance = (await pairContract.read(lpAddress!, 'allowance', [
+        userAddress,
+        nftPoolAddress,
+      ])) as bigint;
 
-    if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmountParsed)) {
+      if (BigNumber(lpAllowance.toString()).isLessThan(bnStakeAmountParsed)) {
+        startLoadingTx({
+          tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+          title: 'Approving LP Token ...',
+          message: 'Confirming your transaction, please wait.',
+        });
+
+        const { writeContract: writePairContract, ABI } =
+          usePairContractWrite();
+
+        const approveRes = await writePairContract({
+          address: lpAddress!,
+          abi: ABI,
+          functionName: 'approve',
+          args: [nftPoolAddress, MAX_UINT256],
+        });
+        if (!approveRes) {
+          stopLoadingTx();
+          return;
+        }
+
+        const approveHash = approveRes.hash;
+        const txReceipt = await waitForTransaction({ hash: approveHash });
+        console.log({ txReceipt });
+      }
       startLoadingTx({
         tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-        title: 'Approving LP Token ...',
+        title: 'Creating Staked Position ...',
         message: 'Confirming your transaction, please wait.',
       });
-      const approveRes = await pairContract.write(
-        userAddress!,
-        lpAddress!,
-        'approve',
-        [nftPoolAddress, MAX_UINT256]
-      );
-      if (!approveRes) {
+
+      const { writeContract: writeNftPoolContract, ABI } =
+        useNftPoolContractWrite();
+
+      const txResult = await writeNftPoolContract({
+        address: nftPoolAddress!,
+        abi: ABI,
+        functionName: 'createPosition',
+        args: [bnStakeAmountParsed, daysToSeconds(nLockTime) + ''],
+      });
+
+      if (!txResult) {
         stopLoadingTx();
         return;
       }
 
-      const approveHash = approveRes.hash;
-      const txReceipt = await waitForTransaction({ hash: approveHash });
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
-    }
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Creating Staked Position ...',
-      message: 'Confirming your transaction, please wait.',
-    });
-
-    const txResult = await nftPoolContract.write(
-      userAddress,
-      nftPoolAddress!,
-      'createPosition',
-      [bnStakeAmountParsed, daysToSeconds(nLockTime) + '']
-    );
-
-    if (!txResult) {
+      refetchData();
+      resetInput();
       stopLoadingTx();
-      return;
+      toggleOpen();
+      startSuccessTx(
+        handleSuccessTxMessageActionWithPair({
+          action: 'created staked position',
+          token1: token1Data.symbol,
+          token2: token2Data.symbol,
+          txHash: hash,
+          usdValue: bnStakeAmount.toString(10),
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    refetchData();
-    resetInput();
-    stopLoadingTx();
-    toggleOpen();
-    startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
-        action: 'created staked position',
-        token1: token1Data.symbol,
-        token2: token2Data.symbol,
-        txHash: hash,
-        usdValue: bnStakeAmount.toString(10),
-      })
-    );
   };
 
   return (

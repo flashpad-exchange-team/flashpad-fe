@@ -1,24 +1,25 @@
-import DividerDown from '@/icons/DividerDown';
-import CloseIcon from '@/icons/CloseIcon';
-import { Button } from '../button/Button';
-import CommonModal from './CommonModal';
+import { useLoading } from '@/context/LoadingContext';
+import { useXARTContractWrite } from '@/hooks/contract/useXARTContract';
 import BNBICon from '@/icons/BNBIcon';
+import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
 import {
   MAX_UINT256,
   X_ARTHUR_TOKEN_ADDRESS,
   YIELD_BOOSTER_ADDRESS,
 } from '@/utils/constants';
-import { Address } from 'viem';
-import { useLoading } from '@/context/LoadingContext';
-import { useAccount, useBalance } from 'wagmi';
-import customToast from '../notification/customToast';
+import { handleError } from '@/utils/handleError';
 import * as xARTContract from '@/utils/xARTContract';
 import { waitForTransaction } from '@wagmi/core';
-import { handleSuccessTxMessageActionSingleToken } from '../successTxMessage';
-import { useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { encodeAbiParameters } from 'viem';
 import Image from 'next/image';
+import { useState } from 'react';
+import { Address, encodeAbiParameters } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import { handleSuccessTxMessageActionSingleToken } from '../successTxMessage';
+import CommonModal from './CommonModal';
 
 export interface BoostPositionModalProps {
   toggleOpen: () => void;
@@ -61,174 +62,195 @@ const BoostPositionModal = ({
   });
 
   const handleBoost = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
+    try {
+      const { writeContract: writeXARTContract, ABI: xARTABI } =
+        useXARTContractWrite();
 
-    if (!balanceXART) {
-      customToast({
-        message: 'Could not get LP balance info',
-        type: 'error',
-      });
-    }
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
 
-    if (amount == '0') {
-      customToast({
-        message: 'Please input valid amount',
-        type: 'warning',
-      });
-      return;
-    }
+      if (!balanceXART) {
+        customToast({
+          message: 'Could not get LP balance info',
+          type: 'error',
+        });
+      }
 
-    const amountParsed = BigNumber(amount).times(
-      BigNumber(10).pow((balanceXART as any)?.decimals!)
-    );
-    const usageAddress = YIELD_BOOSTER_ADDRESS;
+      if (amount == '0') {
+        customToast({
+          message: 'Please input valid amount',
+          type: 'warning',
+        });
+        return;
+      }
 
-    const usageAddressAllowance = (await xARTContract.read(
-      X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
-      'getUsageApproval',
-      [userAddress, usageAddress]
-    )) as bigint;
+      const amountParsed = BigNumber(amount).times(
+        BigNumber(10).pow((balanceXART as any)?.decimals!)
+      );
+      const usageAddress = YIELD_BOOSTER_ADDRESS;
 
-    if (BigNumber(usageAddressAllowance.toString()).isLessThan(amountParsed)) {
+      const usageAddressAllowance = (await xARTContract.read(
+        X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+        'getUsageApproval',
+        [userAddress, usageAddress]
+      )) as bigint;
+
+      if (
+        BigNumber(usageAddressAllowance.toString()).isLessThan(amountParsed)
+      ) {
+        startLoadingTx({
+          tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+          title: 'Approving Yield Booster ...',
+          message: 'Confirming your transaction, please wait.',
+        });
+
+        const approveRes = await writeXARTContract({
+          address: X_ARTHUR_TOKEN_ADDRESS as Address,
+          abi: xARTABI,
+          functionName: 'approveUsage',
+          args: [usageAddress, MAX_UINT256],
+        });
+
+        if (!approveRes) {
+          stopLoadingTx();
+          return;
+        }
+        const approveHash = approveRes.hash;
+        await waitForTransaction({ hash: approveHash });
+      }
+
       startLoadingTx({
         tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-        title: 'Approving Yield Booster ...',
+        title: 'Boosting your stake position ...',
         message: 'Confirming your transaction, please wait.',
       });
-      const approveRes = await xARTContract.write(
-        userAddress!,
-        X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
-        'approveUsage',
-        [usageAddress, MAX_UINT256]
-      );
-      if (!approveRes) {
+      const txResult = await writeXARTContract({
+        address: X_ARTHUR_TOKEN_ADDRESS as Address,
+        abi: xARTABI,
+        functionName: 'allocate',
+        args: [
+          usageAddress,
+          amountParsed.toString(),
+          encodeAbiParameters(
+            [
+              { name: 'poolAddress', type: 'address' },
+              { name: 'tokenId', type: 'uint256' },
+            ],
+            [nftPoolAddress as any, spNFTTokenId as any]
+          ),
+        ],
+      });
+
+      if (!txResult) {
         stopLoadingTx();
         return;
       }
-      const approveHash = approveRes.hash;
-      await waitForTransaction({ hash: approveHash });
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Boosting your stake position ...',
-      message: 'Confirming your transaction, please wait.',
-    });
-    const txResult = await xARTContract.write(
-      userAddress,
-      X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
-      'allocate',
-      [
-        usageAddress,
-        amountParsed.toString(),
-        encodeAbiParameters(
-          [
-            { name: 'poolAddress', type: 'address' },
-            { name: 'tokenId', type: 'uint256' },
-          ],
-          [nftPoolAddress as any, spNFTTokenId as any]
-        ),
-      ]
-    );
-
-    if (!txResult) {
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      refetchData();
       stopLoadingTx();
-      return;
+
+      startSuccessTx(
+        handleSuccessTxMessageActionSingleToken({
+          action: 'boost to position',
+          token: 'xART',
+          txHash: hash,
+          amount,
+        })
+      );
+      setAmount('0');
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    refetchData();
-    stopLoadingTx();
-
-    startSuccessTx(
-      handleSuccessTxMessageActionSingleToken({
-        action: 'boost to position',
-        token: 'xART',
-        txHash: hash,
-        amount,
-      })
-    );
-    setAmount('0');
   };
 
   const handleUnBoost = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
+    try {
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      if (!balanceXART) {
+        customToast({
+          message: 'Could not get LP balance info',
+          type: 'error',
+        });
+      }
+      if (amount == '0') {
+        customToast({
+          message: 'Please input valid amount',
+          type: 'error',
+        });
+        return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'UnBoosting your stake position ...',
+        message: 'Confirming your transaction, please wait.',
       });
-      return;
-    }
 
-    if (!balanceXART) {
-      customToast({
-        message: 'Could not get LP balance info',
-        type: 'error',
+      const usageAddress = YIELD_BOOSTER_ADDRESS;
+      const amountParsed = BigNumber(amount).times(
+        BigNumber(10).pow((balanceXART as any)?.decimals!)
+      );
+
+      const { writeContract: writeXARTContract, ABI: xARTABI } =
+        useXARTContractWrite();
+
+      const txResult = await writeXARTContract({
+        address: X_ARTHUR_TOKEN_ADDRESS as Address,
+        abi: xARTABI,
+        functionName: 'deallocate',
+        args: [
+          usageAddress,
+          amountParsed.toString(),
+          encodeAbiParameters(
+            [
+              { name: 'poolAddress', type: 'address' },
+              { name: 'tokenId', type: 'uint256' },
+            ],
+            [nftPoolAddress as any, spNFTTokenId as any]
+          ),
+        ],
       });
-    }
-    if (amount == '0') {
-      customToast({
-        message: 'Please input valid amount',
-        type: 'error',
-      });
-      return;
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'UnBoosting your stake position ...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      if (!txResult) {
+        stopLoadingTx();
+        return;
+      }
 
-    const usageAddress = YIELD_BOOSTER_ADDRESS;
-    const amountParsed = BigNumber(amount).times(
-      BigNumber(10).pow((balanceXART as any)?.decimals!)
-    );
-    const txResult = await xARTContract.write(
-      userAddress,
-      X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
-      'deallocate',
-      [
-        usageAddress,
-        amountParsed.toString(),
-        encodeAbiParameters(
-          [
-            { name: 'poolAddress', type: 'address' },
-            { name: 'tokenId', type: 'uint256' },
-          ],
-          [nftPoolAddress as any, spNFTTokenId as any]
-        ),
-      ]
-    );
-
-    if (!txResult) {
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      refetchData();
       stopLoadingTx();
-      return;
+
+      startSuccessTx(
+        handleSuccessTxMessageActionSingleToken({
+          action: 'unboost from position',
+          token: 'xART',
+          txHash: hash,
+          amount,
+        })
+      );
+      setAmount('0');
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    refetchData();
-    stopLoadingTx();
-
-    startSuccessTx(
-      handleSuccessTxMessageActionSingleToken({
-        action: 'unboost from position',
-        token: 'xART',
-        txHash: hash,
-        amount,
-      })
-    );
-    setAmount('0');
   };
 
   return (

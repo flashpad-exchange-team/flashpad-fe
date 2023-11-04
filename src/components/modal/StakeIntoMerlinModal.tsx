@@ -1,24 +1,25 @@
-import DividerDown from '@/icons/DividerDown';
-import CloseIcon from '@/icons/CloseIcon';
-import { Button } from '../button/Button';
-import CommonModal from './CommonModal';
-import BNBICon from '@/icons/BNBIcon';
-import CurrencyDollar from '@/icons/CurrencyDollar';
-import SaleIcon from '@/icons/SaleIcon';
-import CalendarIcon from '@/icons/CalendarIcon';
-import UnlockIcon from '@/icons/UnlockIcon';
-import Image from 'next/image';
-import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
-import { Address, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
-import { useEffect, useState } from 'react';
-import customToast from '../notification/customToast';
-import * as nftPoolContract from '@/utils/nftPoolContract';
-import { ADDRESS_ZERO } from '@/utils/constants';
-import { waitForTransaction } from '@wagmi/core';
 import { useLoading } from '@/context/LoadingContext';
-import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
-import { lineaTestnet } from 'wagmi/chains';
+import { useNftPoolContractWrite } from '@/hooks/contract/useNftPoolContract';
+import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
+import BNBICon from '@/icons/BNBIcon';
+import CalendarIcon from '@/icons/CalendarIcon';
+import CloseIcon from '@/icons/CloseIcon';
+import CurrencyDollar from '@/icons/CurrencyDollar';
+import DividerDown from '@/icons/DividerDown';
+import SaleIcon from '@/icons/SaleIcon';
+import UnlockIcon from '@/icons/UnlockIcon';
+import { ADDRESS_ZERO } from '@/utils/constants';
+import { handleError } from '@/utils/handleError';
 import handleSwitchNetwork from '@/utils/switchNetwork';
+import { waitForTransaction } from '@wagmi/core';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { Address, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
+import CommonModal from './CommonModal';
 
 export interface StakeIntoMerlinModalProps {
   toggleOpen: () => void;
@@ -85,55 +86,63 @@ const StakeIntoMerlinModal = ({
   }, [listMerlinPools, isLoading, isOpen]);
 
   const handleStakeToMerlinPool = async () => {
-    if (chain?.id !== lineaTestnet.id) {
-      handleSwitchNetwork(switchNetwork);
-      return;
-    }
+    try {
+      if (chain?.id !== lineaTestnet.id) {
+        handleSwitchNetwork(switchNetwork);
+        return;
+      }
 
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'Staking your spNFT into Merlin pool...',
+        message: 'Confirming your transaction, please wait.',
       });
-      return;
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Staking your spNFT into Merlin pool...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      const { writeContract: writeNftPoolContract, ABI } =
+        useNftPoolContractWrite();
 
-    const transferNftTx = await nftPoolContract.write(
-      userAddress as Address,
-      nftPoolAddress as Address,
-      'safeTransferFrom',
-      [userAddress, stakingMerlinPoolAddress, tokenId]
-    );
+      const transferNftTx = await writeNftPoolContract({
+        address: nftPoolAddress as Address,
+        abi: ABI,
+        functionName: 'safeTransferFrom',
+        args: [userAddress, stakingMerlinPoolAddress, tokenId],
+      });
 
-    if (!transferNftTx) {
+      if (!transferNftTx) {
+        stopLoadingTx();
+        return;
+      }
+
+      const txHash = transferNftTx.hash;
+      const txReceipt = await waitForTransaction({ hash: txHash });
+      console.log({ txReceipt });
+
+      toggleOpen();
+      togglePositionDetailModal();
       stopLoadingTx();
-      return;
+      refetchData();
+
+      startSuccessTx(
+        handleSuccessTxMessageActionWithPair({
+          action: 'staked into Merlin pool',
+          token1: token1Data?.symbol,
+          token2: token2Data?.symbol,
+          txHash: txHash,
+          usdValue: `?`,
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const txHash = transferNftTx.hash;
-    const txReceipt = await waitForTransaction({ hash: txHash });
-    console.log({ txReceipt });
-
-    toggleOpen();
-    togglePositionDetailModal();
-    stopLoadingTx();
-    refetchData();
-
-    startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
-        action: 'staked into Merlin pool',
-        token1: token1Data?.symbol,
-        token2: token2Data?.symbol,
-        txHash: txHash,
-        usdValue: `?`,
-      })
-    );
   };
 
   return (

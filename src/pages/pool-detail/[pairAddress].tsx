@@ -11,6 +11,7 @@ import WithdrawPositionModal from '@/components/modal/WithdrawPositionModal';
 import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
+import { userNftPoolFactoryContractWrite } from '@/hooks/contract/userNftPoolFactoryContract';
 import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import BNBICon from '@/icons/BNBIcon';
 import ChartLineIcon from '@/icons/ChartLineIcon';
@@ -26,12 +27,14 @@ import {
   CHAINS_TOKENS_LIST,
   CHAIN_EXPLORER_URL,
   MERLIN_POOL_FACTORY_ADDRESS,
+  NFT_POOL_FACTORY_ADDRESS,
   USD_PRICE,
 } from '@/utils/constants';
+import { handleError } from '@/utils/handleError';
 import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
-import * as pairContract from '@/utils/pairContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
+import * as pairContract from '@/utils/pairContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import Image from 'next/image';
@@ -261,54 +264,62 @@ const PoolDetail = () => {
   };
 
   const handleCreateStakingPosition = async () => {
-    if (isOpenCreatePosition) {
-      setOpenCreatePosition(false);
-      return;
-    }
-
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (nftPoolAddress === ADDRESS_ZERO) {
-      setSuccessful(undefined);
-      startLoadingTx({
-        tokenPairs: token1Symbol + ' - ' + token2Symbol,
-        title: 'Creating spNFT pool ...',
-        message: 'Confirming your transaction, please wait.',
-      });
-
-      const createPoolRes = await nftPoolFactoryContract.createPool(
-        userAddress,
-        {
-          lpTokenAddress: pairAddress as Address,
-        }
-      );
-
-      if (!createPoolRes) {
-        stopLoadingTx();
-        setSuccessful(false);
+    try {
+      if (isOpenCreatePosition) {
+        setOpenCreatePosition(false);
         return;
       }
 
-      const hash = createPoolRes.hash;
-      const txReceipt = await waitForTransaction({ hash });
-      console.log({ txReceipt });
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
 
-      setSuccessful(true);
-      mutate(allNftPoolsKey);
+      if (nftPoolAddress === ADDRESS_ZERO) {
+        setSuccessful(undefined);
+        startLoadingTx({
+          tokenPairs: token1Symbol + ' - ' + token2Symbol,
+          title: 'Creating spNFT pool ...',
+          message: 'Confirming your transaction, please wait.',
+        });
+
+        const { writeContract: writeNftPoolFactoryContract, ABI } =
+          userNftPoolFactoryContractWrite();
+
+        const createPoolRes = await writeNftPoolFactoryContract({
+          address: NFT_POOL_FACTORY_ADDRESS as Address,
+          abi: ABI,
+          functionName: 'createPool',
+          args: [pairAddress as Address],
+        });
+
+        if (!createPoolRes) {
+          stopLoadingTx();
+          setSuccessful(false);
+          return;
+        }
+
+        const hash = createPoolRes.hash;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
+
+        setSuccessful(true);
+        mutate(allNftPoolsKey);
+        stopLoadingTx();
+        customToast({
+          message: 'Initialized spNFT pool successfully',
+          type: 'success',
+        });
+      }
+
+      setOpenCreatePosition(true);
+    } catch (error) {
       stopLoadingTx();
-      customToast({
-        message: 'Initialized spNFT pool successfully',
-        type: 'success',
-      });
+      handleError(error);
     }
-
-    setOpenCreatePosition(true);
   };
 
   const isFirstSpMinter = nftPoolAddress === ADDRESS_ZERO;

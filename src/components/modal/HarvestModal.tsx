@@ -1,8 +1,9 @@
 import { useLoading } from '@/context/LoadingContext';
+import { useNftPoolContractWrite } from '@/hooks/contract/useNftPoolContract';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
-import * as nftPoolContract from '@/utils/nftPoolContract';
+import { handleError } from '@/utils/handleError';
 import { waitForTransaction } from '@wagmi/core';
 import Image from 'next/image';
 import { Address } from 'viem';
@@ -49,52 +50,60 @@ const HarvestModal = ({
     watch: true,
   });
   const handleHarvestPosition = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
+    try {
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      if (!balanceLP) {
+        customToast({
+          message: 'Could not get LP balance info',
+          type: 'error',
+        });
+        // return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'Harvesting your stake position ...',
+        message: 'Confirming your transaction, please wait.',
       });
-      return;
-    }
 
-    if (!balanceLP) {
-      customToast({
-        message: 'Could not get LP balance info',
-        type: 'error',
+      const { writeContract: writeNftPoolContract, ABI } =
+        useNftPoolContractWrite();
+
+      const txResult = await writeNftPoolContract({
+        address: nftPoolAddress!,
+        abi: ABI,
+        functionName: 'harvestPosition',
+        args: [spNFTTokenId],
       });
-      // return;
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Harvesting your stake position ...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      if (!txResult) {
+        stopLoadingTx();
+        return;
+      }
 
-    const txResult = await nftPoolContract.write(
-      userAddress,
-      nftPoolAddress!,
-      'harvestPosition',
-      [spNFTTokenId]
-    );
-
-    if (!txResult) {
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      refetchData();
       stopLoadingTx();
-      return;
+
+      startSuccessTx(
+        handleSuccessTxMessageActionWithNoValue({
+          action: 'harvest position',
+          txHash: hash,
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    refetchData();
-    stopLoadingTx();
-
-    startSuccessTx(
-      handleSuccessTxMessageActionWithNoValue({
-        action: 'harvest position',
-        txHash: hash,
-      })
-    );
   };
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">

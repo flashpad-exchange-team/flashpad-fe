@@ -1,4 +1,5 @@
 import { useLoading } from '@/context/LoadingContext';
+import { useMerlinPoolContractWrite } from '@/hooks/contract/useMerlinPoolContract';
 import BNBICon from '@/icons/BNBIcon';
 import ChartBreakoutIcon from '@/icons/ChartBreakoutIcon';
 import CloseIcon from '@/icons/CloseIcon';
@@ -8,7 +9,7 @@ import Eligibility from '@/icons/Eligibility';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
 import Lock from '@/icons/Lock';
 import WithdrawPositionIcon from '@/icons/StakeIcons/WithdrawPositionIcon';
-import * as merlinPoolContract from '@/utils/merlinPoolContract';
+import { handleError } from '@/utils/handleError';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -107,50 +108,58 @@ const PositionDetailModal = ({
   };
 
   const handleUnstakeFromMerlin = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
+    try {
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'Unstaking your spNFT from Merlin pool...',
+        message: 'Confirming your transaction, please wait.',
       });
-      return;
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Unstaking your spNFT from Merlin pool...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      const merlinPoolAddress = currentSPNFT.owner;
 
-    const merlinPoolAddress = currentSPNFT.owner;
+      const { writeContract: writeMerlinPoolContract, ABI } =
+        useMerlinPoolContractWrite();
 
-    const withdrawSpNftTx = await merlinPoolContract.write(
-      userAddress as Address,
-      merlinPoolAddress as Address,
-      'withdraw',
-      [currentSPNFT?.token_id]
-    );
+      const withdrawSpNftTx = await writeMerlinPoolContract({
+        address: merlinPoolAddress as Address,
+        abi: ABI,
+        functionName: 'withdraw',
+        args: [currentSPNFT?.token_id],
+      });
 
-    if (!withdrawSpNftTx) {
+      if (!withdrawSpNftTx) {
+        stopLoadingTx();
+        return;
+      }
+
+      const txHash = withdrawSpNftTx.hash;
+      const txReceipt = await waitForTransaction({ hash: txHash });
+      console.log({ txReceipt });
+
+      toggleOpen();
       stopLoadingTx();
-      return;
+      refetchData();
+
+      startSuccessTx(
+        handleSuccessTxMessageActionWithPair({
+          action: `unstaked position #ID-${spNFTTokenId} from Merlin pool`,
+          token1: token1Data?.symbol,
+          token2: token2Data?.symbol,
+          txHash: txHash,
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const txHash = withdrawSpNftTx.hash;
-    const txReceipt = await waitForTransaction({ hash: txHash });
-    console.log({ txReceipt });
-
-    toggleOpen();
-    stopLoadingTx();
-    refetchData();
-
-    startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
-        action: `unstaked position #ID-${spNFTTokenId} from Merlin pool`,
-        token1: token1Data?.symbol,
-        token2: token2Data?.symbol,
-        txHash: txHash,
-      })
-    );
   };
 
   return (

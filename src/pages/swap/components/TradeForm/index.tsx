@@ -3,6 +3,8 @@ import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import customToast from '@/components/notification/customToast';
 import { handleSuccessTxMessageSwap } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
+import { useERC20TokenContractWrite } from '@/hooks/contract/useErc20TokenContract';
+import { useRouterContractWrite } from '@/hooks/contract/useRouterContract';
 import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 import DividerDown from '@/icons/DividerDown';
 import QuestionIcon from '@/icons/QuestionIcon';
@@ -17,6 +19,7 @@ import {
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as factoryContract from '@/utils/factoryContract';
+import { handleError } from '@/utils/handleError';
 import * as pairContract from '@/utils/pairContract';
 import * as routerContract from '@/utils/routerContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
@@ -124,159 +127,180 @@ const TradeForm = ({
   };
 
   const handleSwap = async () => {
-    if (chain?.id !== lineaTestnet.id) {
-      handleSwitchNetwork(switchNetwork);
-      return;
-    }
-    const bnToken1Amount = BigNumber(10)
-      .pow(balanceToken1?.decimals!)
-      .times(new BigNumber(token1Amount));
-    const address: any = await routerContract.getPair(
-      token1.address,
-      token2.address
-    );
-    const startTime = await pairContract.read(address, 'startTime', []);
-    const { timestamp } = await web3Helpers.getBlock();
-
-    if (startTime > timestamp) {
-      customToast({
-        message:
-          'Token swapping is currently unavailable due to a pool lock. Please wait for the lock to be lifted until ' +
-          web3Helpers.getDateFormat(startTime),
-        type: 'error',
-      });
-      return;
-    }
-
-    // const bnToken2Amount = BigNumber(10)
-    //   .pow(balanceToken2?.decimals!)
-    //   .times(new BigNumber(token2Amount));
-    // const bnToken2Amount = BigNumber(10)
-    //   .pow(balanceToken1?.decimals!)
-    //   .times(new BigNumber(token1Amount))
-    //   .times(swapRate1To2);
-    const bnToken2Amount = new BigNumber(
-      await pairContract.read(address, 'getAmountOut', [
-        BigNumber(10)
-          .pow(balanceToken1?.decimals!)
-          .times(new BigNumber(token1Amount)),
+    try {
+      if (chain?.id !== lineaTestnet.id) {
+        handleSwitchNetwork(switchNetwork);
+        return;
+      }
+      const bnToken1Amount = BigNumber(10)
+        .pow(balanceToken1?.decimals!)
+        .times(new BigNumber(token1Amount));
+      const address: any = await routerContract.getPair(
         token1.address,
-      ])
-    );
-    if (
-      bnToken1Amount?.isNaN() ||
-      bnToken2Amount?.isNaN() ||
-      bnToken1Amount?.isZero() ||
-      bnToken2Amount?.isZero()
-    ) {
-      customToast({
-        message: 'Please input valid amount! ',
-        type: 'error',
-      });
-      return;
-    }
-    if (
-      bnToken1Amount.isGreaterThan(BigNumber(balanceToken1!.value.toString()))
-    ) {
-      customToast({
-        message: 'Insufficient balance! ',
-        type: 'error',
-      });
-      return;
-    }
-
-    const token1Allowance = (await erc20TokenContract.erc20Read(
-      token1.address,
-      'allowance',
-      [userAddress, ARTHUR_ROUTER_ADDRESS]
-    )) as bigint;
-
-    if (BigNumber(token1Allowance.toString()).isLessThan(bnToken1Amount)) {
-      startLoadingTx({
-        tokenPairs: token1?.symbol,
-        title: `Approving ${token1?.symbol} Token ...`,
-        message: 'Confirming your transaction, please wait.',
-      });
-      const approveRes = await erc20TokenContract.erc20Write(
-        userAddress!,
-        token1.address,
-        'approve',
-        [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
+        token2.address
       );
-      if (!approveRes) {
-        stopLoadingTx();
-        // setSuccessful(false);
-        // setFailed(true);
+      const startTime = await pairContract.read(address, 'startTime', []);
+      const { timestamp } = await web3Helpers.getBlock();
+
+      if (startTime > timestamp) {
+        customToast({
+          message:
+            'Token swapping is currently unavailable due to a pool lock. Please wait for the lock to be lifted until ' +
+            web3Helpers.getDateFormat(startTime),
+          type: 'error',
+        });
         return;
       }
 
-      const hash = approveRes.hash;
-      const txReceipt = await waitForTransaction({ hash });
-      stopLoadingTx();
-      console.log({ txReceipt });
-    }
-
-    startLoadingTx({
-      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-      title: 'Swapping tokens ...',
-      message: 'Confirming your transaction, please wait.',
-    });
-
-    let txResult = undefined;
-    if (token2?.symbol === 'ETH') {
-      txResult = await routerContract.swapTokensForETH(userAddress!, {
-        amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        path: [token1.address, token2.address],
-        to: userAddress!,
-        referrer: ADDRESS_ZERO,
-        deadline: timestamp + K_5_MIN + '',
-      });
-    } else if (token1?.symbol === 'ETH') {
-      txResult = await routerContract.swapETHForTokens(
-        userAddress!,
-        bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        {
-          amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-          path: [token1.address, token2.address],
-          to: userAddress!,
-          referrer: ADDRESS_ZERO,
-          deadline: timestamp + K_5_MIN + '',
-        }
+      // const bnToken2Amount = BigNumber(10)
+      //   .pow(balanceToken2?.decimals!)
+      //   .times(new BigNumber(token2Amount));
+      // const bnToken2Amount = BigNumber(10)
+      //   .pow(balanceToken1?.decimals!)
+      //   .times(new BigNumber(token1Amount))
+      //   .times(swapRate1To2);
+      const bnToken2Amount = new BigNumber(
+        await pairContract.read(address, 'getAmountOut', [
+          BigNumber(10)
+            .pow(balanceToken1?.decimals!)
+            .times(new BigNumber(token1Amount)),
+          token1.address,
+        ])
       );
-    } else {
-      txResult = await routerContract.swapTokensForTokens(userAddress!, {
-        amountIn: bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        amountOutMin: bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
-        path: [token1.address, token2.address],
-        to: userAddress!,
-        referrer: ADDRESS_ZERO,
-        deadline: timestamp + K_5_MIN + '',
+      if (
+        bnToken1Amount?.isNaN() ||
+        bnToken2Amount?.isNaN() ||
+        bnToken1Amount?.isZero() ||
+        bnToken2Amount?.isZero()
+      ) {
+        customToast({
+          message: 'Please input valid amount! ',
+          type: 'error',
+        });
+        return;
+      }
+      if (
+        bnToken1Amount.isGreaterThan(BigNumber(balanceToken1!.value.toString()))
+      ) {
+        customToast({
+          message: 'Insufficient balance! ',
+          type: 'error',
+        });
+        return;
+      }
+
+      const token1Allowance = (await erc20TokenContract.erc20Read(
+        token1.address,
+        'allowance',
+        [userAddress, ARTHUR_ROUTER_ADDRESS]
+      )) as bigint;
+
+      if (BigNumber(token1Allowance.toString()).isLessThan(bnToken1Amount)) {
+        startLoadingTx({
+          tokenPairs: token1?.symbol,
+          title: `Approving ${token1?.symbol} Token ...`,
+          message: 'Confirming your transaction, please wait.',
+        });
+        const { writeContract, ABI: ERC20ABI } =
+          useERC20TokenContractWrite();
+        const { hash } = await writeContract({
+          address: token1.address,
+          abi: ERC20ABI,
+          functionName: 'approve',
+          args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+        });
+        if (!hash) {
+          stopLoadingTx();
+          // setSuccessful(false);
+          // setFailed(true);
+          return;
+        } else {
+          const txReceipt = await waitForTransaction({ hash });
+          stopLoadingTx();
+          console.log({ txReceipt });
+        }
+      }
+
+      startLoadingTx({
+        tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+        title: 'Swapping tokens ...',
+        message: 'Confirming your transaction, please wait.',
       });
-    }
 
-    if (!txResult) {
+      let txResult = undefined;
+      const { writeContract, ABI } = useRouterContractWrite();
+      if (token2?.symbol === 'ETH') {
+        txResult = await writeContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: ABI,
+          functionName: 'swapExactTokensForETHSupportingFeeOnTransferTokens',
+          args: [
+            bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+            bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+            [token1.address, token2.address],
+            userAddress!,
+            ADDRESS_ZERO,
+            timestamp + K_5_MIN + '',
+          ],
+        });
+      } else if (token1?.symbol === 'ETH') {
+        txResult = await writeContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: ABI,
+          functionName: 'swapExactETHForTokensSupportingFeeOnTransferTokens',
+          args: [
+            bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+            [token1.address, token2.address],
+            userAddress!,
+            ADDRESS_ZERO,
+            timestamp + K_5_MIN + '',
+          ],
+          value: bnToken1Amount.toFixed(
+            0,
+            BigNumber.ROUND_DOWN
+          ) as unknown as bigint,
+        });
+      } else {
+        txResult = await writeContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: ABI,
+          functionName: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
+          args: [
+            bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN),
+            bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN),
+            [token1.address, token2.address],
+            userAddress!,
+            ADDRESS_ZERO,
+            timestamp + K_5_MIN + '',
+          ],
+        });
+      }
+
+      if (!txResult) {
+        stopLoadingTx();
+        return;
+      }
+
+      const hash = txResult.hash;
+      await waitForTransaction({ hash });
+      mutate(allPairsKey, allPairsKeyForAll);
+      startSuccessTx(
+        handleSuccessTxMessageSwap({
+          action: 'swapped',
+          token1: token1.symbol,
+          token2: token2.symbol,
+          token1Amount,
+          token2Amount,
+          txHash: hash,
+        })
+      );
+
+      resetInput();
       stopLoadingTx();
-      return;
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    await waitForTransaction({ hash });
-    mutate(allPairsKey, allPairsKeyForAll);
-
-    startSuccessTx(
-      handleSuccessTxMessageSwap({
-        action: 'swapped',
-        token1: token1.symbol,
-        token2: token2.symbol,
-        token1Amount,
-        token2Amount,
-        txHash: hash,
-      })
-    );
-
-    resetInput();
-    stopLoadingTx();
   };
 
   const handleSwitchPair = () => {

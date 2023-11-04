@@ -1,4 +1,5 @@
 import { useLoading } from '@/context/LoadingContext';
+import { useMerlinPoolFactoryContractWrite } from '@/hooks/contract/useMerlinPoolFactoryContract';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
@@ -7,8 +8,10 @@ import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
   CHAINS_TOKENS_LIST,
+  MERLIN_POOL_FACTORY_ADDRESS,
   daysToSeconds,
 } from '@/utils/constants';
+import { handleError } from '@/utils/handleError';
 import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -107,129 +110,138 @@ const CreateMerlinModal = ({
   };
 
   const handleCreateMerlinPool = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (!token1) {
-      customToast({
-        message: 'Please select at least 1 incentive token for Merlin pool',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (!startTime || !endTime) {
-      customToast({
-        message: 'Start time & end time are required!',
-        type: 'error',
-      });
-      return;
-    }
-
-    const rewardsToken1 = token1.address;
-    const rewardsToken2 = token2?.address || ADDRESS_ZERO;
-
-    const now = new Date();
-    let dStartTime = new Date(startTime.startDate);
-    if (isSameDay(now, dStartTime)) {
-      dStartTime = add(now, { minutes: 10 });
-    }
-    const tsStartTime = getUnixTime(dStartTime);
-    const tsEndTime = getUnixTime(new Date(endTime.startDate));
-
-    const tsHarvestStartTime = harvestStartTime?.startDate
-      ? getUnixTime(new Date(harvestStartTime.startDate))
-      : 0;
-    const tsDepositEndTime = depositEndTime?.startDate
-      ? getUnixTime(new Date(depositEndTime.startDate))
-      : 0;
-
-    const settings: merlinPoolFactoryContract.MerlinPoolSettingsParams = {
-      startTime: tsStartTime + '',
-      endTime: tsEndTime + '',
-      harvestStartTime: tsHarvestStartTime + '',
-      depositEndTime: tsDepositEndTime + '',
-      description,
-    };
-
-    if (showOptionalRequirements) {
-      const nMinLockDuration = Number(minLockDuration);
-      if (
-        Number.isNaN(nMinLockDuration) ||
-        !Number.isInteger(nMinLockDuration) ||
-        nMinLockDuration <= 0
-      ) {
+    try {
+      if (!userAddress) {
         customToast({
-          message: 'Please input valid min lock duration',
+          message: 'A wallet is not yet connected',
           type: 'error',
         });
         return;
       }
 
-      const nMinDepositAmount = Number(minDepositAmount);
-      if (Number.isNaN(nMinDepositAmount) || nMinDepositAmount < 0) {
+      if (!token1) {
         customToast({
-          message: 'Please input valid min deposit amount',
+          message: 'Please select at least 1 incentive token for Merlin pool',
           type: 'error',
         });
         return;
       }
 
-      const tsMinLockEndTime = minLockEndTime?.startDate
-        ? getUnixTime(new Date(minLockEndTime.startDate))
+      if (!startTime || !endTime) {
+        customToast({
+          message: 'Start time & end time are required!',
+          type: 'error',
+        });
+        return;
+      }
+
+      const rewardsToken1 = token1.address;
+      const rewardsToken2 = token2?.address || ADDRESS_ZERO;
+
+      const now = new Date();
+      let dStartTime = new Date(startTime.startDate);
+      if (isSameDay(now, dStartTime)) {
+        dStartTime = add(now, { minutes: 10 });
+      }
+      const tsStartTime = getUnixTime(dStartTime);
+      const tsEndTime = getUnixTime(new Date(endTime.startDate));
+
+      const tsHarvestStartTime = harvestStartTime?.startDate
+        ? getUnixTime(new Date(harvestStartTime.startDate))
+        : 0;
+      const tsDepositEndTime = depositEndTime?.startDate
+        ? getUnixTime(new Date(depositEndTime.startDate))
         : 0;
 
-      settings.lockDurationReq = daysToSeconds(nMinLockDuration) + '';
-      settings.lockEndReq = tsMinLockEndTime + '';
-      settings.depositAmountReq = BigNumber(nMinDepositAmount)
-        .times(BigNumber(10).pow(lpTokenDecimals))
-        .toString();
-      settings.whitelist = isWhitelist;
-    } else {
-      settings.lockDurationReq = '0';
-      settings.lockEndReq = '0';
-      settings.depositAmountReq = '0';
-      settings.whitelist = false;
-    }
+      const settings: merlinPoolFactoryContract.MerlinPoolSettingsParams = {
+        startTime: tsStartTime + '',
+        endTime: tsEndTime + '',
+        harvestStartTime: tsHarvestStartTime + '',
+        depositEndTime: tsDepositEndTime + '',
+        description,
+      };
 
-    startLoadingTx({
-      tokenPairs: token1Symbol + ' - ' + token2Symbol,
-      title: 'Creating Merlin Pool ...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      if (showOptionalRequirements) {
+        const nMinLockDuration = Number(minLockDuration);
+        if (
+          Number.isNaN(nMinLockDuration) ||
+          !Number.isInteger(nMinLockDuration) ||
+          nMinLockDuration <= 0
+        ) {
+          customToast({
+            message: 'Please input valid min lock duration',
+            type: 'error',
+          });
+          return;
+        }
 
-    const txResult = await merlinPoolFactoryContract.createMerlinPool(
-      userAddress,
-      {
-        nftPoolAddress: nftPoolAddress!,
-        rewardsToken1: rewardsToken1 as Address,
-        rewardsToken2: rewardsToken2 as Address,
-        settings,
+        const nMinDepositAmount = Number(minDepositAmount);
+        if (Number.isNaN(nMinDepositAmount) || nMinDepositAmount < 0) {
+          customToast({
+            message: 'Please input valid min deposit amount',
+            type: 'error',
+          });
+          return;
+        }
+
+        const tsMinLockEndTime = minLockEndTime?.startDate
+          ? getUnixTime(new Date(minLockEndTime.startDate))
+          : 0;
+
+        settings.lockDurationReq = daysToSeconds(nMinLockDuration) + '';
+        settings.lockEndReq = tsMinLockEndTime + '';
+        settings.depositAmountReq = BigNumber(nMinDepositAmount)
+          .times(BigNumber(10).pow(lpTokenDecimals))
+          .toString();
+        settings.whitelist = isWhitelist;
+      } else {
+        settings.lockDurationReq = '0';
+        settings.lockEndReq = '0';
+        settings.depositAmountReq = '0';
+        settings.whitelist = false;
       }
-    );
 
-    if (!txResult) {
+      startLoadingTx({
+        tokenPairs: token1Symbol + ' - ' + token2Symbol,
+        title: 'Creating Merlin Pool ...',
+        message: 'Confirming your transaction, please wait.',
+      });
+
+      const { writeContract, ABI } = useMerlinPoolFactoryContractWrite();
+
+      const txResult = await writeContract({
+        address: MERLIN_POOL_FACTORY_ADDRESS as Address,
+        abi: ABI,
+        functionName: 'createMerlinPool',
+        args: [
+          nftPoolAddress!,
+          rewardsToken1 as Address,
+          rewardsToken2 as Address,
+          settings,
+        ],
+      });
+
+      if (!txResult) {
+        stopLoadingTx();
+        return;
+      }
+
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      resetInput();
       stopLoadingTx();
-      return;
+
+      startSuccessTx(
+        handleSuccessTxMessageActionWithNoValue({
+          action: 'created a new merlin pool',
+          txHash: hash,
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    resetInput();
-    stopLoadingTx();
-
-    startSuccessTx(
-      handleSuccessTxMessageActionWithNoValue({
-        action: 'created a new merlin pool',
-        txHash: hash,
-      })
-    );
   };
 
   return (

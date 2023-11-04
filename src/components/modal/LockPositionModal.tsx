@@ -7,13 +7,14 @@ import { Button } from '../button/Button';
 import CommonModal from './CommonModal';
 
 import { useLoading } from '@/context/LoadingContext';
-import * as nftPoolContract from '@/utils/nftPoolContract';
+import { useNftPoolContractWrite } from '@/hooks/contract/useNftPoolContract';
+import { handleError } from '@/utils/handleError';
 import { waitForTransaction } from '@wagmi/core';
+import BigNumber from 'bignumber.js';
+import Image from 'next/image';
 import { useAccount, useBalance } from 'wagmi';
 import customToast from '../notification/customToast';
 import { handleSuccessTxMessageActionWithNoValue } from '../successTxMessage';
-import Image from 'next/image';
-import BigNumber from 'bignumber.js';
 export interface LockPositionModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
@@ -56,54 +57,62 @@ const LockPositionModal = ({
     watch: true,
   });
   const handleRenewLock = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
+    try {
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      if (!balanceLP) {
+        customToast({
+          message: 'Could not get LP balance info',
+          type: 'error',
+        });
+        // return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'Renewing the lock of your stake position ...',
+        message: 'Confirming your transaction, please wait.',
       });
-      return;
-    }
 
-    if (!balanceLP) {
-      customToast({
-        message: 'Could not get LP balance info',
-        type: 'error',
+      const { writeContract: writeNftPoolContract, ABI } =
+        useNftPoolContractWrite();
+
+      const txResult = await writeNftPoolContract({
+        address: nftPoolAddress!,
+        abi: ABI,
+        functionName: 'renewLockPosition',
+        args: [spNFTTokenId],
       });
-      // return;
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Renewing the lock of your stake position ...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      if (!txResult) {
+        stopLoadingTx();
+        return;
+      }
 
-    const txResult = await nftPoolContract.write(
-      userAddress,
-      nftPoolAddress!,
-      'renewLockPosition',
-      [spNFTTokenId]
-    );
-
-    if (!txResult) {
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      refetchData();
       stopLoadingTx();
-      return;
+      toggleOpen();
+      startSuccessTx(
+        handleSuccessTxMessageActionWithNoValue({
+          action: 'renew your lock',
+          token1: token1Data.symbol,
+          token2: token2Data.symbol,
+          txHash: hash,
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    refetchData();
-    stopLoadingTx();
-    toggleOpen();
-    startSuccessTx(
-      handleSuccessTxMessageActionWithNoValue({
-        action: 'renew your lock',
-        token1: token1Data.symbol,
-        token2: token2Data.symbol,
-        txHash: hash,
-      })
-    );
   };
 
   return (

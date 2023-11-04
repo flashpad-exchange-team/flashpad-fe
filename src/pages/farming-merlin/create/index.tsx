@@ -2,26 +2,32 @@ import { Button } from '@/components/button/Button';
 import CreateMerlinModal from '@/components/modal/CreateMerlinModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
+import customToast from '@/components/notification/customToast';
 import Select from '@/components/select';
+import { useLoading } from '@/context/LoadingContext';
+import { userNftPoolFactoryContractWrite } from '@/hooks/contract/userNftPoolFactoryContract';
+import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import BNBICon from '@/icons/BNBIcon';
 import DividerDown from '@/icons/DividerDown';
 import LiquidityIcon from '@/icons/LiquidityIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
+import {
+  ADDRESS_ZERO,
+  CHAINS_TOKENS_LIST,
+  NFT_POOL_FACTORY_ADDRESS,
+} from '@/utils/constants';
+import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import { handleError } from '@/utils/handleError';
+import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
+import * as routerContract from '@/utils/routerContract';
+import handleSwitchNetwork from '@/utils/switchNetwork';
+import { waitForTransaction } from '@wagmi/core';
 import Image from 'next/image';
-import { ADDRESS_ZERO, CHAINS_TOKENS_LIST } from '@/utils/constants';
 import { useEffect, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import { Address, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
-import * as routerContract from '@/utils/routerContract';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
-import customToast from '@/components/notification/customToast';
-import { useLoading } from '@/context/LoadingContext';
-import { waitForTransaction } from '@wagmi/core';
-import { useSWRConfig } from 'swr';
-import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
-import handleSwitchNetwork from '@/utils/switchNetwork';
 
 enum MerlinPoolTypes {
   LP_V2 = 0,
@@ -94,65 +100,73 @@ const CreateMerlinPool = () => {
   };
 
   const handleCreateMerlinPool = async () => {
-    if (chain?.id !== lineaTestnet.id) {
-      handleSwitchNetwork(switchNetwork);
-      return;
-    }
-
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (!lpAddress) {
-      customToast({
-        message: 'Staking token address for spNFT pool is undefined',
-        type: 'error',
-      });
-      return;
-    }
-
-    const nftPoolAddressOnFactory = await nftPoolFactoryContract.getPool(
-      lpAddress
-    );
-
-    if (nftPoolAddressOnFactory && nftPoolAddressOnFactory === ADDRESS_ZERO) {
-      startLoadingTx({
-        tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-        title: 'Creating spNFT pool ...',
-        message: 'Confirming your transaction, please wait.',
-      });
-
-      const createPoolRes = await nftPoolFactoryContract.createPool(
-        userAddress,
-        {
-          lpTokenAddress: lpAddress!,
-        }
-      );
-
-      if (!createPoolRes) {
-        stopLoadingTx();
-        setSuccessful(false);
+    try {
+      if (chain?.id !== lineaTestnet.id) {
+        handleSwitchNetwork(switchNetwork);
         return;
       }
 
-      const hash = createPoolRes.hash;
-      const txReceipt = await waitForTransaction({ hash });
-      console.log({ txReceipt });
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
 
-      mutate(allNftPoolsKey);
+      if (!lpAddress) {
+        customToast({
+          message: 'Staking token address for spNFT pool is undefined',
+          type: 'error',
+        });
+        return;
+      }
+
+      const nftPoolAddressOnFactory = await nftPoolFactoryContract.getPool(
+        lpAddress
+      );
+
+      if (nftPoolAddressOnFactory && nftPoolAddressOnFactory === ADDRESS_ZERO) {
+        startLoadingTx({
+          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+          title: 'Creating spNFT pool ...',
+          message: 'Confirming your transaction, please wait.',
+        });
+
+        const { writeContract: writeNftPoolFactoryContract, ABI } =
+          userNftPoolFactoryContractWrite();
+
+        const createPoolRes = await writeNftPoolFactoryContract({
+          address: NFT_POOL_FACTORY_ADDRESS as Address,
+          abi: ABI,
+          functionName: 'createPool',
+          args: [lpAddress!],
+        });
+
+        if (!createPoolRes) {
+          stopLoadingTx();
+          setSuccessful(false);
+          return;
+        }
+
+        const hash = createPoolRes.hash;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
+
+        mutate(allNftPoolsKey);
+        stopLoadingTx();
+        setSuccessful(true);
+        customToast({
+          message: 'Initialized spNFT pool successfully',
+          type: 'success',
+        });
+      }
+
+      setOpenCreateMerlinModal(true);
+    } catch (error) {
       stopLoadingTx();
-      setSuccessful(true);
-      customToast({
-        message: 'Initialized spNFT pool successfully',
-        type: 'success',
-      });
+      handleError(error);
     }
-
-    setOpenCreateMerlinModal(true);
   };
 
   const isFirstSpMinter = nftPoolAddress

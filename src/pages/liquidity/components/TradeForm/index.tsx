@@ -9,6 +9,9 @@ import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
 import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
+import { useERC20TokenContractWrite } from '@/hooks/contract/useErc20TokenContract';
+import { useRouterContractWrite } from '@/hooks/contract/useRouterContract';
+import { userNftPoolFactoryContractWrite } from '@/hooks/contract/userNftPoolFactoryContract';
 import { allNftPoolsKey } from '@/hooks/useAllNftPoolsData';
 import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 import BackIcon from '@/icons/BackIcon';
@@ -28,11 +31,13 @@ import {
   DEFAULT_SLIPPAGE,
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
+  NFT_POOL_FACTORY_ADDRESS,
   daysToSeconds,
   minutesToSeconds,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as factoryContract from '@/utils/factoryContract';
+import { handleError } from '@/utils/handleError';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as routerContract from '@/utils/routerContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
@@ -324,253 +329,294 @@ const TradeForm = ({
   };
 
   const handleAddLiquidity = async () => {
-    if (chain?.id !== lineaTestnet.id) {
-      handleSwitchNetwork(switchNetwork);
-      return;
-    }
-    setSuccessful(undefined);
-    const bnToken1Amount = BigNumber(10)
-      .pow(balanceToken1?.decimals!)
-      .times(BigNumber(token1Amount));
+    try {
+      const { writeContract: writeERC20Contract, ABI: ERC20ABI } =
+        useERC20TokenContractWrite();
+      const { writeContract: writeRouterContract, ABI: RouterABI } =
+        useRouterContractWrite();
 
-    const bnToken2Amount = BigNumber(10)
-      .pow(balanceToken2?.decimals!)
-      .times(BigNumber(token2Amount));
+      if (chain?.id !== lineaTestnet.id) {
+        handleSwitchNetwork(switchNetwork);
+        return;
+      }
+      setSuccessful(undefined);
+      const bnToken1Amount = BigNumber(10)
+        .pow(balanceToken1?.decimals!)
+        .times(BigNumber(token1Amount));
 
-    if (
-      bnToken1Amount.isNaN() ||
-      bnToken2Amount.isNaN() ||
-      bnToken1Amount.isLessThanOrEqualTo(0) ||
-      bnToken2Amount.isLessThanOrEqualTo(0)
-    ) {
-      customToast({
-        message: 'Please input valid amount! ',
-        type: 'error',
-      });
-      return;
-    }
+      const bnToken2Amount = BigNumber(10)
+        .pow(balanceToken2?.decimals!)
+        .times(BigNumber(token2Amount));
 
-    if (
-      bnToken1Amount.isGreaterThan(
-        BigNumber(balanceToken1!.value.toString())
-      ) ||
-      bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
-    ) {
-      customToast({
-        message: 'Insufficient balance!',
-        type: 'error',
-      });
-      setInsufficient(true);
-      return;
-    }
-    setInsufficient(false);
-
-    const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
-    const token1AmountMin = bnToken1Amount
-      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
-      .toFixed(0, BigNumber.ROUND_DOWN);
-    const token2AmountMin = bnToken2Amount
-      .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
-      .toFixed(0, BigNumber.ROUND_DOWN);
-
-    if (token1.symbol != 'ETH') {
-      const token1Allowance = (await erc20TokenContract.erc20Read(
-        token1.address,
-        'allowance',
-        [userAddress, ARTHUR_ROUTER_ADDRESS]
-      )) as bigint;
-
-      if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
-        startLoadingTx({
-          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-          title: `Approving ${token1?.symbol}...`,
-          message: 'Confirming your transaction, please wait.',
+      if (
+        bnToken1Amount.isNaN() ||
+        bnToken2Amount.isNaN() ||
+        bnToken1Amount.isLessThanOrEqualTo(0) ||
+        bnToken2Amount.isLessThanOrEqualTo(0)
+      ) {
+        customToast({
+          message: 'Please input valid amount! ',
+          type: 'error',
         });
+        return;
+      }
 
-        const approveRes = await erc20TokenContract.erc20Write(
-          userAddress!,
+      if (
+        bnToken1Amount.isGreaterThan(
+          BigNumber(balanceToken1!.value.toString())
+        ) ||
+        bnToken2Amount.isGreaterThan(BigNumber(balanceToken2!.value.toString()))
+      ) {
+        customToast({
+          message: 'Insufficient balance!',
+          type: 'error',
+        });
+        setInsufficient(true);
+        return;
+      }
+      setInsufficient(false);
+
+      const token1AmountIn = bnToken1Amount.toFixed(0, BigNumber.ROUND_DOWN);
+      const token2AmountIn = bnToken2Amount.toFixed(0, BigNumber.ROUND_DOWN);
+      const token1AmountMin = bnToken1Amount
+        .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+        .toFixed(0, BigNumber.ROUND_DOWN);
+      const token2AmountMin = bnToken2Amount
+        .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
+        .toFixed(0, BigNumber.ROUND_DOWN);
+
+      if (token1.symbol != 'ETH') {
+        const token1Allowance = (await erc20TokenContract.erc20Read(
           token1.address,
-          'approve',
-          [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
-        );
-        if (!approveRes) {
-          stopLoadingTx();
-          setSuccessful(false);
-          setFailed(true);
-          return;
+          'allowance',
+          [userAddress, ARTHUR_ROUTER_ADDRESS]
+        )) as bigint;
+
+        if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
+          startLoadingTx({
+            tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+            title: `Approving ${token1?.symbol}...`,
+            message: 'Confirming your transaction, please wait.',
+          });
+
+          const { hash } = await writeERC20Contract({
+            address: token1.address,
+            abi: ERC20ABI,
+            functionName: 'approve',
+            args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+          });
+
+          if (!hash) {
+            stopLoadingTx();
+            // setSuccessful(false);
+            // setFailed(true);
+            return;
+          } else {
+            const txReceipt = await waitForTransaction({ hash });
+            stopLoadingTx();
+            console.log({ txReceipt });
+          }
         }
-
-        const hash = approveRes.hash;
-        const txReceipt = await waitForTransaction({ hash });
-        console.log({ txReceipt });
       }
-    }
 
-    if (token2.symbol != 'ETH') {
-      const token2Allowance = (await erc20TokenContract.erc20Read(
-        token2.address,
-        'allowance',
-        [userAddress, ARTHUR_ROUTER_ADDRESS]
-      )) as bigint;
-
-      if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
-        startLoadingTx({
-          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-          title: `Approving ${token2?.symbol}...`,
-          message: 'Confirming your transaction, please wait.',
-        });
-
-        const approveRes = await erc20TokenContract.erc20Write(
-          userAddress!,
+      if (token2.symbol != 'ETH') {
+        const token2Allowance = (await erc20TokenContract.erc20Read(
           token2.address,
-          'approve',
-          [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
-        );
-        if (!approveRes) {
-          stopLoadingTx();
-          setSuccessful(false);
-          setFailed(true);
-          return;
+          'allowance',
+          [userAddress, ARTHUR_ROUTER_ADDRESS]
+        )) as bigint;
+
+        if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
+          startLoadingTx({
+            tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+            title: `Approving ${token2?.symbol}...`,
+            message: 'Confirming your transaction, please wait.',
+          });
+
+          const { hash } = await writeERC20Contract({
+            address: token2.address,
+            abi: ERC20ABI,
+            functionName: 'approve',
+            args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+          });
+
+          if (!hash) {
+            stopLoadingTx();
+            // setSuccessful(false);
+            // setFailed(true);
+            return;
+          } else {
+            const txReceipt = await waitForTransaction({ hash });
+            stopLoadingTx();
+            console.log({ txReceipt });
+          }
         }
-
-        const hash = approveRes.hash;
-        const txReceipt = await waitForTransaction({ hash });
-        console.log({ txReceipt });
       }
-    }
-    startLoadingTx({
-      tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-      title: 'Adding Liquidity ...',
-      message: 'Confirming your transaction, please wait.',
-    });
-
-    const { timestamp } = await web3Helpers.getBlock();
-    const startSwapTime =
-      (timestamp as bigint) + daysToSeconds(lockSwapDuration) + '';
-    let txResult: any;
-
-    if (token1.symbol == 'ETH') {
-      txResult = await routerContract.addLiquidityETH(userAddress!, {
-        token: token2.address,
-        amountTokenDesired: token2AmountIn,
-        amountTokenMin: token2AmountMin,
-        amountETHMin: token1AmountMin,
-        to: userAddress!,
-        deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-        timeLock: daysToSeconds(timeLock) + '',
-        startTime: startSwapTime,
-      });
-    } else if (token2.symbol == 'ETH') {
-      txResult = await routerContract.addLiquidityETH(userAddress!, {
-        token: token1.address,
-        amountTokenDesired: token1AmountIn,
-        amountTokenMin: token1AmountMin,
-        amountETHMin: token2AmountMin,
-        to: userAddress!,
-        deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-        timeLock: daysToSeconds(timeLock) + '',
-        startTime: startSwapTime,
-      });
-    } else {
-      txResult = await routerContract.addLiquidity(userAddress!, {
-        tokenA: token1.address,
-        tokenB: token2.address,
-        amountADesired: token1AmountIn,
-        amountBDesired: token2AmountIn,
-        amountAMin: token1AmountMin,
-        amountBMin: token2AmountMin,
-        to: userAddress!,
-        deadline: (timestamp as bigint) + minutesToSeconds(deadline) + '',
-        timeLock: daysToSeconds(timeLock) + '',
-        startTime: startSwapTime,
-      });
-    }
-
-    if (!txResult) {
-      stopLoadingTx();
-      setSuccessful(false);
-      setFailed(true);
-      return;
-    }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    const result = txResult.result;
-
-    resetInput();
-    stopLoadingTx();
-    setSuccessful(true);
-    setFailed(false);
-    customToast({
-      message: 'Added liquidity successfully',
-      type: 'success',
-    });
-
-    mutate(allPairsKey, allPairsKeyForAll);
-    startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
-        action: 'provided liquidity',
-        token1: token1.symbol,
-        token2: token2.symbol,
-        txHash: hash,
-        usdValue: result
-          ? new BigNumber(result[2]).div(new BigNumber(10).pow(18)).toString(10)
-          : '',
-      })
-    );
-  };
-
-  const handleAddLiquidityCreatePosition = async () => {
-    setSuccessful(undefined);
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (!nftPoolAddress || nftPoolAddress === ADDRESS_ZERO) {
       startLoadingTx({
         tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
-        title: 'Creating spNFT pool ...',
+        title: 'Adding Liquidity ...',
         message: 'Confirming your transaction, please wait.',
       });
-      const lpAddress = await routerContract.getPair(
-        token1.address,
-        token2.address
-      );
-      const createPoolRes = await nftPoolFactoryContract.createPool(
-        userAddress,
-        {
-          lpTokenAddress: lpAddress!,
-        }
-      );
 
-      if (!createPoolRes) {
+      const { timestamp } = await web3Helpers.getBlock();
+      const startSwapTime =
+        (timestamp as bigint) + daysToSeconds(lockSwapDuration) + '';
+      let txResult: any;
+
+      if (token1.symbol == 'ETH') {
+        txResult = await writeRouterContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: RouterABI,
+          functionName: 'addLiquidityETH',
+          args: [
+            token2.address,
+            token2AmountIn,
+            token2AmountMin,
+            token1AmountMin,
+            userAddress!,
+            (timestamp as bigint) + minutesToSeconds(deadline) + '',
+            daysToSeconds(timeLock) + '',
+            startSwapTime,
+          ],
+          value: token1AmountMin as unknown as bigint,
+        });
+      } else if (token2.symbol == 'ETH') {
+        txResult = await writeRouterContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: RouterABI,
+          functionName: 'addLiquidityETH',
+          args: [
+            token1.address,
+            token1AmountIn,
+            token1AmountMin,
+            token2AmountMin,
+            userAddress!,
+            (timestamp as bigint) + minutesToSeconds(deadline) + '',
+            daysToSeconds(timeLock) + '',
+            startSwapTime,
+          ],
+          value: token2AmountMin as unknown as bigint,
+        });
+      } else {
+        txResult = await writeRouterContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: RouterABI,
+          functionName: 'addLiquidity',
+          args: [
+            token1.address,
+            token2.address,
+            token1AmountIn,
+            token2AmountIn,
+            token1AmountMin,
+            token2AmountMin,
+            userAddress!,
+            (timestamp as bigint) + minutesToSeconds(deadline) + '',
+            daysToSeconds(timeLock) + '',
+            startSwapTime,
+          ],
+        });
+      }
+
+      if (!txResult) {
         stopLoadingTx();
         setSuccessful(false);
         setFailed(true);
         return;
       }
 
-      const hash = createPoolRes.hash;
+      const hash = txResult.hash;
       const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
+      const result = txResult.result;
 
+      resetInput();
       stopLoadingTx();
-      mutate(allNftPoolsKey);
-      customToast({
-        message: 'Initialized spNFT pool successfully',
-        type: 'success',
-      });
       setSuccessful(true);
       setFailed(false);
-    }
+      customToast({
+        message: 'Added liquidity successfully',
+        type: 'success',
+      });
 
-    setOpenAddLiquidityCreatePosition(true);
+      mutate(allPairsKey, allPairsKeyForAll);
+      startSuccessTx(
+        handleSuccessTxMessageActionWithPair({
+          action: 'provided liquidity',
+          token1: token1.symbol,
+          token2: token2.symbol,
+          txHash: hash,
+          usdValue: result
+            ? new BigNumber(result[2])
+                .div(new BigNumber(10).pow(18))
+                .toString(10)
+            : '',
+        })
+      );
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
+    }
+  };
+
+  const handleAddLiquidityCreatePosition = async () => {
+    try {
+      const {
+        writeContract: writeNftPoolFactoryContract,
+        ABI: NFTPoolFactoryABI,
+      } = userNftPoolFactoryContractWrite();
+      setSuccessful(undefined);
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      if (!nftPoolAddress || nftPoolAddress === ADDRESS_ZERO) {
+        startLoadingTx({
+          tokenPairs: token1?.symbol + ' - ' + token2?.symbol,
+          title: 'Creating spNFT pool ...',
+          message: 'Confirming your transaction, please wait.',
+        });
+        const lpAddress = await routerContract.getPair(
+          token1.address,
+          token2.address
+        );
+
+        const createPoolRes = await writeNftPoolFactoryContract({
+          address: NFT_POOL_FACTORY_ADDRESS as Address,
+          abi: NFTPoolFactoryABI,
+          functionName: 'createPool',
+          args: [lpAddress!],
+        });
+
+        if (!createPoolRes) {
+          stopLoadingTx();
+          setSuccessful(false);
+          setFailed(true);
+          return;
+        }
+
+        const hash = createPoolRes.hash;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
+
+        stopLoadingTx();
+        mutate(allNftPoolsKey);
+        customToast({
+          message: 'Initialized spNFT pool successfully',
+          type: 'success',
+        });
+        setSuccessful(true);
+        setFailed(false);
+      }
+
+      setOpenAddLiquidityCreatePosition(true);
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
+    }
   };
 
   const handleSwitchPair = () => {

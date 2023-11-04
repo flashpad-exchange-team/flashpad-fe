@@ -1,18 +1,19 @@
-import DividerDown from '@/icons/DividerDown';
-import CloseIcon from '@/icons/CloseIcon';
-import { Button } from '../button/Button';
-import CommonModal from './CommonModal';
-import BNBICon from '@/icons/BNBIcon';
-import { Address } from 'viem';
-import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
-import { waitForTransaction } from '@wagmi/core';
-import customToast from '../notification/customToast';
-import { useAccount, useBalance } from 'wagmi';
 import { useLoading } from '@/context/LoadingContext';
-import * as nftPoolContract from '@/utils/nftPoolContract';
-import { useState } from 'react';
+import { useNftPoolContractWrite } from '@/hooks/contract/useNftPoolContract';
+import BNBICon from '@/icons/BNBIcon';
+import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
+import { handleError } from '@/utils/handleError';
+import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import Image from 'next/image';
+import { useState } from 'react';
+import { Address } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
+import { Button } from '../button/Button';
+import customToast from '../notification/customToast';
+import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
+import CommonModal from './CommonModal';
 
 export interface WithdrawPositionModalProps {
   toggleOpen: () => void;
@@ -55,62 +56,70 @@ const WithdrawPositionModal = ({
     watch: true,
   });
   const handleWithdrawPosition = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'A wallet is not yet connected',
-        type: 'error',
+    try {
+      if (!userAddress) {
+        customToast({
+          message: 'A wallet is not yet connected',
+          type: 'error',
+        });
+        return;
+      }
+
+      if (!balanceLP) {
+        customToast({
+          message: 'Could not get LP balance info',
+          type: 'error',
+        });
+        // return;
+      }
+
+      startLoadingTx({
+        tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
+        title: 'Withdrawing your stake position ...',
+        message: 'Confirming your transaction, please wait.',
       });
-      return;
-    }
 
-    if (!balanceLP) {
-      customToast({
-        message: 'Could not get LP balance info',
-        type: 'error',
+      const withdrawAmountParse = BigNumber(withdrawAmount).times(
+        BigNumber(10).pow(balanceLP?.decimals!)
+      );
+
+      const { writeContract: writeNftPoolContract, ABI } =
+        useNftPoolContractWrite();
+
+      const txResult = await writeNftPoolContract({
+        address: nftPoolAddress!,
+        abi: ABI,
+        functionName: 'withdrawFromPosition',
+        args: [spNFTTokenId, withdrawAmountParse],
       });
-      // return;
-    }
 
-    startLoadingTx({
-      tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-      title: 'Withdrawing your stake position ...',
-      message: 'Confirming your transaction, please wait.',
-    });
+      if (!txResult) {
+        stopLoadingTx();
+        return;
+      }
 
-    const withdrawAmountParse = BigNumber(withdrawAmount).times(
-      BigNumber(10).pow(balanceLP?.decimals!)
-    );
-
-    const txResult = await nftPoolContract.write(
-      userAddress,
-      nftPoolAddress!,
-      'withdrawFromPosition',
-      [spNFTTokenId, withdrawAmountParse]
-    );
-
-    if (!txResult) {
+      const hash = txResult.hash;
+      const txReceipt = await waitForTransaction({ hash });
+      console.log({ txReceipt });
+      refetchData();
       stopLoadingTx();
-      return;
+
+      const usdValue = withdrawAmount;
+
+      startSuccessTx(
+        handleSuccessTxMessageActionWithPair({
+          action: 'withdraw position',
+          token1: token1Data.symbol,
+          token2: token2Data.symbol,
+          txHash: hash,
+          usdValue,
+        })
+      );
+      setWithdrawAmount('0');
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-    refetchData();
-    stopLoadingTx();
-
-    const usdValue = withdrawAmount;
-
-    startSuccessTx(
-      handleSuccessTxMessageActionWithPair({
-        action: 'withdraw position',
-        token1: token1Data.symbol,
-        token2: token2Data.symbol,
-        txHash: hash,
-        usdValue,
-      })
-    );
-    setWithdrawAmount('0');
   };
   const currentSPNFT = listSpNfts?.find(
     (item: any) => item.tokenId == spNFTTokenId

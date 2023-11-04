@@ -1,6 +1,9 @@
 import { useLoading } from '@/context/LoadingContext';
-import DividerDown from '@/icons/DividerDown';
+import { useRouterContractWrite } from '@/hooks/contract/useRouterContract';
+import { usePairContractWrite } from '@/hooks/contract/userPairContract';
+import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 import CloseIcon from '@/icons/CloseIcon';
+import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
@@ -10,18 +13,17 @@ import {
   minutesToSeconds,
 } from '@/utils/constants';
 import * as erc20Contract from '@/utils/erc20TokenContract';
+import { handleError } from '@/utils/handleError';
 import * as pairContract from '@/utils/pairContract';
-import * as routerContract from '@/utils/routerContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import { Address, useAccount } from 'wagmi';
 import { Button } from '../button/Button';
 import customToast from '../notification/customToast';
 import CommonModal from './CommonModal';
-import { useSWRConfig } from 'swr';
-import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 
 export interface RemoveLiquidityModalProps {
   toggleOpen: () => void;
@@ -77,153 +79,176 @@ const RemoveLiquidityModal = ({
   };
 
   const handleRemoveLiquidity = async () => {
-    if (!userAddress) {
-      customToast({
-        message: 'Please connect to a wallet',
-        type: 'error',
-      });
-      return;
-    }
-    setSuccessful(undefined);
+    try {
+      if (!userAddress) {
+        customToast({
+          message: 'Please connect to a wallet',
+          type: 'error',
+        });
+        return;
+      }
+      setSuccessful(undefined);
 
-    const nAmountToRemove = Number(amountToRemove);
-    const nDeadline = Number(deadline);
+      const nAmountToRemove = Number(amountToRemove);
+      const nDeadline = Number(deadline);
 
-    if (
-      Number.isNaN(nAmountToRemove) ||
-      nAmountToRemove <= 0 ||
-      Number.isNaN(nDeadline) ||
-      !Number.isInteger(nDeadline) ||
-      nDeadline <= 0
-    ) {
-      customToast({
-        message: 'Please input valid numbers',
-        type: 'error',
-      });
-      return;
-    }
+      if (
+        Number.isNaN(nAmountToRemove) ||
+        nAmountToRemove <= 0 ||
+        Number.isNaN(nDeadline) ||
+        !Number.isInteger(nDeadline) ||
+        nDeadline <= 0
+      ) {
+        customToast({
+          message: 'Please input valid numbers',
+          type: 'error',
+        });
+        return;
+      }
 
-    const bnAmountToRemove = BigNumber(10)
-      .pow(lpTokenDecimals)
-      .times(BigNumber(nAmountToRemove));
+      const bnAmountToRemove = BigNumber(10)
+        .pow(lpTokenDecimals)
+        .times(BigNumber(nAmountToRemove));
 
-    startLoadingTx({
-      tokenPairs: token1Symbol + ' - ' + token2Symbol,
-      title: 'Removing liquidity ...',
-      message: 'Confirming your transaction, please wait.',
-    });
-    const balance1 = await erc20Contract.erc20Read(
-      token1Address as Address,
-      'balanceOf',
-      [pairAddress]
-    );
-    const balance2 = await erc20Contract.erc20Read(
-      token2Address as Address,
-      'balanceOf',
-      [pairAddress]
-    );
-    const totalSupply = await pairContract.read(
-      pairAddress as Address,
-      'totalSupply',
-      []
-    );
-
-    const amount1 = bnAmountToRemove
-      .times(BigNumber(balance1))
-      .dividedToIntegerBy(BigNumber(totalSupply));
-    const amount2 = bnAmountToRemove
-      .times(BigNumber(balance2))
-      .dividedToIntegerBy(BigNumber(totalSupply));
-
-    const lpTokenAllowance = (await pairContract.read(
-      pairAddress as Address,
-      'allowance',
-      [userAddress, ARTHUR_ROUTER_ADDRESS]
-    )) as bigint;
-
-    if (BigNumber(lpTokenAllowance.toString()).isLessThan(bnAmountToRemove)) {
       startLoadingTx({
         tokenPairs: token1Symbol + ' - ' + token2Symbol,
-        title: `Approving LP Token ...`,
+        title: 'Removing liquidity ...',
         message: 'Confirming your transaction, please wait.',
       });
-      const approveRes = await pairContract.write(
-        userAddress!,
-        pairAddress as Address,
-        'approve',
-        [ARTHUR_ROUTER_ADDRESS, MAX_UINT256]
+      const balance1 = await erc20Contract.erc20Read(
+        token1Address as Address,
+        'balanceOf',
+        [pairAddress]
       );
-      if (!approveRes) {
+      const balance2 = await erc20Contract.erc20Read(
+        token2Address as Address,
+        'balanceOf',
+        [pairAddress]
+      );
+      const totalSupply = await pairContract.read(
+        pairAddress as Address,
+        'totalSupply',
+        []
+      );
+
+      const amount1 = bnAmountToRemove
+        .times(BigNumber(balance1))
+        .dividedToIntegerBy(BigNumber(totalSupply));
+      const amount2 = bnAmountToRemove
+        .times(BigNumber(balance2))
+        .dividedToIntegerBy(BigNumber(totalSupply));
+
+      const lpTokenAllowance = (await pairContract.read(
+        pairAddress as Address,
+        'allowance',
+        [userAddress, ARTHUR_ROUTER_ADDRESS]
+      )) as bigint;
+
+      if (BigNumber(lpTokenAllowance.toString()).isLessThan(bnAmountToRemove)) {
+        startLoadingTx({
+          tokenPairs: token1Symbol + ' - ' + token2Symbol,
+          title: `Approving LP Token ...`,
+          message: 'Confirming your transaction, please wait.',
+        });
+
+        const { writeContract: writePairContract, ABI } =
+          usePairContractWrite();
+
+        const approveRes = await writePairContract({
+          address: pairAddress as Address,
+          abi: ABI,
+          functionName: 'approve',
+          args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+        });
+
+        if (!approveRes) {
+          setSuccessful(false);
+          stopLoadingTx();
+          return;
+        }
+
+        const hash = approveRes.hash;
+        const txReceipt = await waitForTransaction({ hash });
+        console.log({ txReceipt });
+      }
+
+      const { timestamp } = await web3Helpers.getBlock();
+      let txResult: any;
+
+      const { writeContract: writeRouterContract, ABI: RouterABI } =
+        useRouterContractWrite();
+
+      if (
+        token1Symbol == 'WFTM' ||
+        token1Symbol == 'WETH' ||
+        token2Symbol == 'WFTM' ||
+        token2Symbol == 'WETH'
+      ) {
+        let tokenAddress;
+        let amountTokenMin;
+        let amountETHMin;
+        if (token1Symbol == 'WFTM' || token1Symbol == 'WETH') {
+          tokenAddress = token2Address;
+          amountTokenMin = amount2.toString();
+          amountETHMin = amount1.toString();
+        } else {
+          tokenAddress = token1Address;
+          amountTokenMin = amount1.toString();
+          amountETHMin = amount2.toString();
+        }
+
+        txResult = await writeRouterContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: RouterABI,
+          functionName: 'removeLiquidityETH',
+          args: [
+            tokenAddress,
+            bnAmountToRemove.toString(),
+            amountTokenMin,
+            amountETHMin,
+            userAddress,
+            (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
+          ],
+        });
+      } else {
+        txResult = await writeRouterContract({
+          address: ARTHUR_ROUTER_ADDRESS as Address,
+          abi: RouterABI,
+          functionName: 'removeLiquidity',
+          args: [
+            token1Address,
+            token2Address,
+            bnAmountToRemove.toString(),
+            amount1.toString(),
+            amount2.toString(),
+            userAddress,
+            (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
+          ],
+        });
+      }
+
+      if (!txResult) {
         setSuccessful(false);
         stopLoadingTx();
         return;
       }
 
-      const hash = approveRes.hash;
+      const hash = txResult.hash;
       const txReceipt = await waitForTransaction({ hash });
       console.log({ txReceipt });
-    }
 
-    const { timestamp } = await web3Helpers.getBlock();
-    let txResult: any;
-
-    if (
-      token1Symbol == 'WFTM' ||
-      token1Symbol == 'WETH' ||
-      token2Symbol == 'WFTM' ||
-      token2Symbol == 'WETH'
-    ) {
-      let tokenAddress;
-      let amountTokenMin;
-      let amountETHMin;
-      if (token1Symbol == 'WFTM' || token1Symbol == 'WETH') {
-        tokenAddress = token2Address;
-        amountTokenMin = amount2.toString();
-        amountETHMin = amount1.toString();
-      } else {
-        tokenAddress = token1Address;
-        amountTokenMin = amount1.toString();
-        amountETHMin = amount2.toString();
-      }
-
-      txResult = await routerContract.removeLiquidityETH(userAddress, {
-        token: tokenAddress,
-        liquidity: bnAmountToRemove.toString(),
-        amountTokenMin,
-        amountETHMin,
-        to: userAddress,
-        deadline: (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
-      });
-    } else {
-      txResult = await routerContract.removeLiquidity(userAddress, {
-        tokenA: token1Address,
-        tokenB: token2Address,
-        liquidity: bnAmountToRemove.toString(),
-        amountAMin: amount1.toString(),
-        amountBMin: amount2.toString(),
-        to: userAddress,
-        deadline: (timestamp as bigint) + minutesToSeconds(nDeadline) + '',
-      });
-    }
-
-    if (!txResult) {
-      setSuccessful(false);
+      mutate(allPairsKey, allPairsKeyForAll);
+      setSuccessful(true);
       stopLoadingTx();
-      return;
+      resetToDefault();
+      customToast({
+        message: 'Removed liquidity successfully',
+        type: 'success',
+      });
+    } catch (error) {
+      stopLoadingTx();
+      handleError(error);
     }
-
-    const hash = txResult.hash;
-    const txReceipt = await waitForTransaction({ hash });
-    console.log({ txReceipt });
-
-    mutate(allPairsKey, allPairsKeyForAll);
-    setSuccessful(true);
-    stopLoadingTx();
-    resetToDefault();
-    customToast({
-      message: 'Removed liquidity successfully',
-      type: 'success',
-    });
   };
 
   return (
