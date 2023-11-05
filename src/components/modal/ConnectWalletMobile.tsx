@@ -34,7 +34,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
     <div className="block ">
       <div className="px-1">
         <div className="mt-2 font-bold flex items-center justify-between">
-          {isConnected ? 'Connection Sucessful' : 'Available Wallets (3)'}
+          {isConnected ? 'Connection Sucessful' : 'Available Wallets (2)'}
 
           <div className="cursor-pointer" onClick={toggleOpen}>
             <CloseIcon />
@@ -45,7 +45,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
         ) : (
           <>
             <div className="block mt-4">
-              <div
+              {/* <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
                   // open({ view: 'All wallets' as any });
@@ -69,7 +69,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
               >
                 <Metamask />
                 Metamask
-              </div>
+              </div> */}
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
