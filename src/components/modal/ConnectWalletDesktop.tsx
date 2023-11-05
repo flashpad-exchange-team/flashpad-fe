@@ -76,7 +76,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                 className="border rounded-lg border-[#1D2939] w-[180px] flex items-center p-2 cursor-pointer flex"
                 onClick={() => {
                   open();
-                  // setIsClick(true);
+                  setIsClick(true);
                   // checkWalletInstalled('Metamask');
                   // connect({
                   //   connector: connectors[1],
@@ -93,7 +93,6 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                 onClick={() => {
                   setIsClick(true);
                   checkWalletInstalled('Coinbase');
-
                   connect({
                     connector: connectors[2],
                     chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,

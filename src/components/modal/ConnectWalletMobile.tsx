@@ -3,10 +3,10 @@ import Coinbase from '@/icons/Coinbase';
 import ConnectSuccess from '@/icons/ConnectSuccess';
 import InfoIcon from '@/icons/InfoIcon';
 import WalletConnect from '@/icons/WalletConnect';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { IS_LINEA } from '@/utils/constants';
 import { useEffect, useState } from 'react';
-import { useAccount, useConnect } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
+import { useAccount, useConfig, useConnect } from 'wagmi';
+import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import Notification from '../notification/Notification';
 interface ConnectWalletProps {
@@ -22,11 +22,13 @@ const connectorWalletConnect = new WalletConnectConnector({
 const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
   const [isClick, setIsClick] = useState(false);
   const { isConnected } = useAccount();
-  const { open } = useWeb3Modal();
   const { connect } = useConnect();
+  const { connectors } = useConfig();
+
   useEffect(() => {
     if (isConnected && isClick) setTimeout(() => toggleOpen(), 1000);
   }, [isConnected, isClick]);
+
   return (
     <div className="block ">
       <div className="px-1">
@@ -42,47 +44,18 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
         ) : (
           <>
             <div className="block mt-4">
-              {/* <div
-                className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
-                onClick={() => {
-                  // open({ view: 'All wallets' as any });
-                  if (typeof window.ethereum !== 'undefined') {
-                    connect({
-                      connector: connectors[1],
-                      chainId: lineaTestnet.id,
-                    });
-                  } else {
-                    window.open(
-                      'https://metamask.app.link/dapp/arthur.exchange/'
-                    );
-                  }
-                  // // window.open(
-                  // //   'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
-                  // // );
-                  // window.open(
-                  //   'https://metamask.app.link/dapp/arthur.exchange/'
-                  // );
-                }}
-              >
-                <Metamask />
-                Metamask
-              </div> */}
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
                 onClick={() => {
-                  if (typeof window.ethereum !== 'undefined') {
-                    connect({
-                      chainId: lineaTestnet.id,
-                    });
-                  } else {
-                    window.open(
-                      'https://link.trustwallet.com/open_url?coin_id=20000714&url=https://arthur.exchange/'
-                    );
-                  }
+                  setIsClick(true);
+                  connect({
+                    connector: connectors[2],
+                    chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
+                  });
                 }}
               >
                 <Coinbase />
-                Trust
+                Coinbase
               </div>
               <div
                 className="border rounded-lg border-[#1D2939] w-full mt-3 flex items-center p-2 cursor-pointer "
