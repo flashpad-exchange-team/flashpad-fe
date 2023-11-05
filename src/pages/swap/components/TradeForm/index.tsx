@@ -201,8 +201,7 @@ const TradeForm = ({
           title: `Approving ${token1?.symbol} Token ...`,
           message: 'Confirming your transaction, please wait.',
         });
-        const { writeContract, ABI: ERC20ABI } =
-          useERC20TokenContractWrite();
+        const { writeContract, ABI: ERC20ABI } = useERC20TokenContractWrite();
         const { hash } = await writeContract({
           address: token1.address,
           abi: ERC20ABI,
@@ -261,6 +260,7 @@ const TradeForm = ({
           ) as unknown as bigint,
         });
       } else {
+        console.log('trigger build');
         txResult = await writeContract({
           address: ARTHUR_ROUTER_ADDRESS as Address,
           abi: ABI,
