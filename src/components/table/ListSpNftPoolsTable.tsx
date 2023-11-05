@@ -65,15 +65,15 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                   <td
                     className="py-4 text-sm px-4 border-b border-[#344054] text-left relative font-semibold"
                     onClick={() => {
-                      router.push(`/pool-detail/${item.lpTokenAddress}`);
+                      router.push(`/pool-detail/${item?.lpTokenAddress}`);
                     }}
                   >
                     <div className="relative">
                       <div className="absolute">
-                        {item.token1Logo ? (
+                        {item?.token1Logo ? (
                           <Image
                             alt="logo"
-                            src={item.token1Logo}
+                            src={item?.token1Logo}
                             width={25}
                             height={25}
                           />
@@ -82,11 +82,11 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                         )}
                       </div>
                       <div className="absolute left-[15px]">
-                        {item.token1Logo != item.token2Logo &&
-                          (item.token2Logo ? (
+                        {item?.token1Logo != item?.token2Logo &&
+                          (item?.token2Logo ? (
                             <Image
                               alt="logo"
-                              src={item.token2Logo}
+                              src={item?.token2Logo}
                               width={25}
                               height={25}
                             />
@@ -96,21 +96,21 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                       </div>
                     </div>
                     <div className="ml-16">
-                      {item.token1}
-                      {item.token1 != item.token2 && ' - ' + item.token2}
+                      {item?.token1}
+                      {item?.token1 != item?.token2 && ' - ' + item?.token2}
                     </div>
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    ${item.TVL}
+                    ${item?.TVL}
                   </td>
                   {/* <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    ${item.tvl}
+                    ${item?.tvl}
                   </td> */}
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
-                    {item.lpSupplyAmount} LP
+                    {item?.lpSupplyAmount} LP
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    {item.feeAPR.toFixed(2)}%
+                    {item?.feeAPR?.toFixed(2)}%
                   </td>
                 </tr>
               ))}

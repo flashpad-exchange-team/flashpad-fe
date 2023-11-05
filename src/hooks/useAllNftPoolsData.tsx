@@ -93,7 +93,9 @@ const useAllNftPoolsData = (userAddress: Address | undefined) => {
         });
       }
 
-      return listPools.sort((a, b) => b.lpSupplyAmount - a.lpSupplyAmount);
+      return listPools
+        .filter((item) => item.lpSupplyAmount !== '0')
+        .sort((a, b) => b.lpSupplyAmount - a.lpSupplyAmount);
     } catch (error) {
       console.log('fetchAllPools error:', error);
       return [];
