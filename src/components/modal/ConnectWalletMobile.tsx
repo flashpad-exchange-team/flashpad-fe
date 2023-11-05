@@ -3,16 +3,15 @@ import Coinbase from '@/icons/Coinbase';
 import ConnectSuccess from '@/icons/ConnectSuccess';
 import InfoIcon from '@/icons/InfoIcon';
 import WalletConnect from '@/icons/WalletConnect';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useEffect, useState } from 'react';
-import { useAccount, useConfig, useConnect } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import Notification from '../notification/Notification';
 interface ConnectWalletProps {
   toggleOpen: () => void;
 }
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import Metamask from '@/icons/Metamask';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 const connectorWalletConnect = new WalletConnectConnector({
   chains: [lineaTestnet],
   options: {
@@ -23,9 +22,7 @@ const connectorWalletConnect = new WalletConnectConnector({
 const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
   const [isClick, setIsClick] = useState(false);
   const { isConnected } = useAccount();
-  const { connectors } = useConfig();
   const { open } = useWeb3Modal();
-  console.log(open);
   const { connect } = useConnect();
   useEffect(() => {
     if (isConnected && isClick) setTimeout(() => toggleOpen(), 1000);
