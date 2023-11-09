@@ -33,6 +33,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { Meta } from '@/layout/Meta';
 import { AppConfig } from '@/utils/AppConfig';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
+import { Analytics } from '@vercel/analytics/react';
 
 const { chains, publicClient } = configureChains(
   [lineaTestnet, polygonMumbai],
@@ -105,6 +106,7 @@ const MyApp = ({ Component, pageProps }: any) => {
   return (
     <WagmiConfig config={wagmiConfig}>
       <Meta title={AppConfig.title} description={AppConfig.description} />
+      <Analytics />
 
       <ModalProvider>
         <LoadingProvider>
