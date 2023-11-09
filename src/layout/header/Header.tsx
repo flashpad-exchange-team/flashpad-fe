@@ -1,6 +1,7 @@
 import { Button } from '@/components/button/Button';
 import ConnectWalletModal from '@/components/modal/ConnectWalletModal';
 import { useModal } from '@/context/ModalContext';
+import AddIcon from '@/icons/AddIcon';
 import ArrowDown from '@/icons/ArrowDown';
 import CrossSword from '@/icons/CrossSword';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
@@ -41,6 +42,12 @@ const MENU_ITEMS = [
         icon: <Liquidity width="18px" />,
       },
     ],
+  },
+  {
+    icon: <AddIcon />,
+    iconActive: <AddIcon active />,
+    name: 'Convert',
+    path: '/convert',
   },
   {
     icon: <LaunchPadIcon />,

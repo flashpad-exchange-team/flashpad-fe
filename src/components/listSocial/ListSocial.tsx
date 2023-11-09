@@ -16,7 +16,7 @@ const ListSocial = () => {
       <a href="https://twitter.com/ArthurExchange" target="_blank">
         <TwitterIcon />
       </a>
-      <a href="https://t.me/Athurexchange" target="_blank">
+      <a href="https://t.me/Arthurexchange" target="_blank">
         <TelegramIcon />
       </a>
       <MediumIcon />
