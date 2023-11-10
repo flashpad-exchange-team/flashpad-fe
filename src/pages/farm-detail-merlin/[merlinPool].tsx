@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react';
 import { Address, useAccount } from 'wagmi';
 import TableDetail from './components/TableDetail';
 import TableDetailSp from './components/TableDetailSp';
+import { getMerlinPoolInfo as getMerlinPoolInfoApi } from '@/api/merlin-pool';
 
 const FarmMerlinDetail = () => {
   const router = useRouter();
@@ -63,6 +64,8 @@ const FarmMerlinDetail = () => {
   const [pendingRewards2, setPendingRewards2] = useState('0');
   const [totalDeposited, setTotalDeposited] = useState('0');
   const [merlinPoolSettings, setMerlinPoolSettings] = useState<any>(undefined);
+  const [tvl, setTvl] = useState(0);
+  const [apr, setApr] = useState(0);
 
   const getMerlinPoolInfo = async () => {
     if (isLoading) return;
@@ -130,6 +133,12 @@ const FarmMerlinDetail = () => {
     setRewardsToken2Decimals(
       rwdToken2Decimals ? Number(rwdToken2Decimals) : 18
     );
+
+    const { data } = await getMerlinPoolInfoApi(merlinPool + '');
+    if (data.data) {
+      setTvl(data.data.tvl || 0);
+      setApr(data.data.apr || 0);
+    }
   };
 
   useEffect(() => {
@@ -263,8 +272,8 @@ const FarmMerlinDetail = () => {
       {isSmallScreen ? (
         <TableDetailSp
           data={{
-            tvl: '',
-            apr: '',
+            tvl: tvl.toString(),
+            apr: apr.toString(),
             rewardsToken1Info,
             rewardsToken2Info,
             rewardsToken1Symbol,
@@ -278,8 +287,8 @@ const FarmMerlinDetail = () => {
       ) : (
         <TableDetail
           data={{
-            tvl: '',
-            apr: '',
+            tvl: tvl.toString(),
+            apr: apr.toString(),
             rewardsToken1Info,
             rewardsToken2Info,
             rewardsToken1Symbol,

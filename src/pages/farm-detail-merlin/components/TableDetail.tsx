@@ -21,12 +21,12 @@ const TableDetail: React.FC<TableDetailProps> = ({ data }) => {
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
               <div className="text-xs text-lightGray">Total value locked</div>
-              <div>$482.58K</div>
+              <div>${data.tvl || 0}</div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
               <div className="text-xs text-lightGray">APR</div>
               <div className="flex gap-2 items-center justify-end">
-                0.7749% <QuestionIcon />
+                {data.apr || 0}% <QuestionIcon />
               </div>
             </td>
             <td className="py-4 text-sm px-4 border-b border-[#344054] text-right w-[200px]">
