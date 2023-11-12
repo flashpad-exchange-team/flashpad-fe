@@ -22,12 +22,12 @@ const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
             <div className="flex space-between text-xs text-lightGray">
               Total value locked
             </div>
-            <div>$482.58K</div>
+            <div>${data.tvl || 0}</div>
           </div>
           <div className="flex justify-between pt-2">
             <div className="text-xs text-lightGray">APR</div>
             <div className="flex gap-2 items-center justify-end">
-              0.7749% <QuestionIcon />
+            {data.apr || 0}% <QuestionIcon />
             </div>
           </div>
           <div className="flex justify-between pt-2">
