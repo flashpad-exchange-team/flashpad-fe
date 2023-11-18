@@ -77,7 +77,7 @@ const StakeIntoMerlinModal = ({
 
     const merlinPoolAddr = merlinPool.poolAddress;
     if (merlinPoolAddr) {
-      setStakingMerlinPoolAddress(merlinPoolAddr);
+      setStakingMerlinPoolAddress(merlinPoolAddr as Address);
     }
   };
 
