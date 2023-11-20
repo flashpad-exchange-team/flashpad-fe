@@ -8,7 +8,7 @@ const redRose = Red_Rose({
 });
 const Roadmap = () => {
   return (
-    <div className="w-full  mx-auto text-center mt-8">
+    <div className="w-full  mx-auto text-center mt-8 max-w-[1440px]">
       <div
         className={
           'text-primary text-[40px] font-semibold uppercase mt-5 mb-6 flex items-center gap-4 justify-center ' +
