@@ -1,6 +1,6 @@
 import { useLoading } from '@/context/LoadingContext';
-import Bg from 'public/assets/images/landing-pg.png'; // Import your image
 import { useEffect } from 'react';
+import BgGradient from 'public/assets/images/home-gradient.png'; // Import your image
 
 import { Landing } from './Landing';
 
@@ -16,8 +16,11 @@ const Base = () => {
   }, []);
   return (
     <div
-      className={`min-h-[104vh] flex flex-col  justify-between`}
-      style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
+      className={`min-h-[104vh] flex flex-col  justify-between relative z-0`}
+      style={{
+        backgroundImage: `url(${BgGradient.src})`,
+        backgroundSize: 'cover',
+      }}
     >
       <Landing />
     </div>

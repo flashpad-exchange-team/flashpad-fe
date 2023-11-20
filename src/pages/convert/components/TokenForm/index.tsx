@@ -13,6 +13,7 @@ export interface TokenFormProps {
     amount?: string;
   };
   setTokenAmount: (value: any) => void;
+  disabled?: boolean;
 }
 
 const ART_XART_LIST = CHAINS_TOKENS_LIST.filter(
@@ -24,6 +25,7 @@ const TokenForm = ({
   title,
   tokenData,
   setTokenAmount,
+  disabled,
 }: TokenFormProps) => {
   return (
     <div className="bg-darkBlue rounded-lg my-2 p-4">
@@ -57,6 +59,7 @@ const TokenForm = ({
             Amount
           </div>
           <input
+            disabled={disabled}
             className="text-base lg:text-xl font-bold bg-transparent w-[70px] lg:w-full text-right focus:outline-none placeholder-[#667085]"
             defaultValue={'0.0'}
             value={tokenData?.amount}

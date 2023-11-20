@@ -1,0 +1,110 @@
+import TitleLeft from '@/icons/TitleLeft';
+import TitleRight from '@/icons/TitleRight';
+import { Red_Rose } from 'next/font/google';
+
+const redRose = Red_Rose({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+});
+const Roadmap = () => {
+  return (
+    <div className="w-full  mx-auto text-center mt-8">
+      <div
+        className={
+          'text-primary text-[40px] font-semibold uppercase mt-5 mb-6 flex items-center gap-4 justify-center ' +
+          redRose.className
+        }
+      >
+        <TitleLeft />
+        ROADMAP
+        <TitleRight />
+      </div>
+      <div className="grid grid-cols-4 px-20 gap-x-4">
+        <div
+          className={
+            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            redRose.className
+          }
+        >
+          Q2 - 2023
+        </div>
+        <div
+          className={
+            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            redRose.className
+          }
+        >
+          Q3 - 2023
+        </div>{' '}
+        <div
+          className={
+            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            redRose.className
+          }
+        >
+          Q4 - 2023
+        </div>{' '}
+        <div
+          className={
+            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            redRose.className
+          }
+        >
+          Q1 - 2024
+        </div>
+        <div className="bg-primary h-[4px] w-full relative mb-10">
+          <div className="absolute left-0 w-[24px] h-[24px] bg-white border-2 border-solid border-[#FFAF1D] rounded-full top-[-10px]"></div>
+        </div>
+        <div className="bg-primary h-[4px] w-full relative mb-10">
+          <div className="absolute left-[-17px] w-[24px] h-[24px]  bg-white border-2 border-solid border-[#FFAF1D]  rounded-full top-[-10px]"></div>
+        </div>{' '}
+        <div className="bg-primary h-[4px] w-full relative mb-10">
+          <div className="absolute left-[-17px] w-[24px] h-[24px]  bg-white border-2 border-solid border-[#FFAF1D]  rounded-full top-[-10px]"></div>
+        </div>{' '}
+        <div className="bg-primary h-[4px] w-full relative mb-10">
+          <div className="absolute left-[-17px] w-[24px] h-[24px]  bg-white border-2 border-solid border-[#FFAF1D]  rounded-full top-[-10px]"></div>
+        </div>
+        <ul className="text-left block text-sm font-[500] list-disc pl-3">
+          <li>Research (visual, chain, marketing strategy, & partners)</li>
+          <li> UX & UI for DEX</li>
+          <li>Marketing Planning</li>
+          <li>Community Managing Planning</li>
+          <li> Social Channel Set-up</li>
+          <li>Partners List Collecting</li>
+          <li>Reach Out Linea</li>
+        </ul>
+        <ul className="text-left block text-sm font-[500] list-disc pl-3">
+          <li>Done with Swap Feature</li>
+          <li>Testing Feature</li>
+          <li>UX & UI for Launchpad</li>
+          <li>Official Meeting with Linea</li>
+          <li>Audit Research</li>
+          <li>Partners List Filtering</li>
+        </ul>
+        <ul className="text-left block text-sm font-[500] list-disc pl-3">
+          <li>Done with Add Liquidity Feature</li>
+          <li>Done with Staking & Farming Feature </li>
+          <li>Audit with Solidproof.io </li>
+          <li>Onboarding Linea Ecosystem </li>
+          <li>Community Expanding </li>
+          <li>Early Knight pools are published and open to deposits </li>
+          <li>
+            Early Knight pool rewards start being allocated to depositors{' '}
+          </li>
+          <li>Early Knight pools are closed to deposits </li>
+          <li>Token launch and farms open </li>
+          <li>Farming rewards start </li>
+          <li>Early Knight pool rewards can be harvested </li>
+        </ul>
+        <ul className="text-left block text-sm font-[500] list-disc pl-3">
+          <li>Community Boosting </li>
+          <li>Partners Collaboration Boosting </li>
+          <li>Public Sale Starts </li>
+          <li>Public Sale Ends </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default Roadmap;

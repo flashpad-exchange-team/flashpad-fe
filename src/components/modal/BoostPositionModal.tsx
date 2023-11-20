@@ -108,7 +108,6 @@ const BoostPositionModal = ({
           title: 'Approving Yield Booster ...',
           message: 'Confirming your transaction, please wait.',
         });
-
         const approveRes = await writeXARTContract({
           address: X_ARTHUR_TOKEN_ADDRESS as Address,
           abi: xARTABI,

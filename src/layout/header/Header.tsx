@@ -7,21 +7,24 @@ import CrossSword from '@/icons/CrossSword';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
 import Linea from '@/icons/Linea';
 import Liquidity from '@/icons/Liquidity';
+import LogoBlack from '@/icons/LogoBlack';
 import StackIcon from '@/icons/StackIcon';
 import Swap from '@/icons/Swap';
 import SwapIcon from '@/icons/SwapIcon';
 import TradeIcon from '@/icons/TradeIcon';
 import WalletIcon from '@/icons/WalletIcon';
 import { Menu, MenuItem } from '@szhsin/react-menu';
+import classNames from 'classnames';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router'; // Import the useRouter hook
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 
 type INavbarProps = {
   logo: ReactNode;
   mode?: string;
+  fixed?: boolean;
 };
 
 const MENU_ITEMS = [
@@ -134,6 +137,8 @@ const MENU_ITEMS = [
 const Header = (props: INavbarProps) => {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
+  const [scrolled, setScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const router = useRouter();
   const { isOpenConnectWallet, toggleConnectWallet } = useModal();
@@ -146,13 +151,32 @@ const Header = (props: INavbarProps) => {
     disconnect();
   };
   const currentPath = router.pathname;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 0;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
     <>
-      <ConnectWalletModal
-        isOpen={isOpenConnectWallet}
-        toggleOpen={toggleConnectWallet}
-      />
-      <div className="bg-dark h-[80px] items-center flex ">
+      <div
+        className={classNames(
+          'header h-[80px] items-center flex fixed w-full z-10 transition-all duration-100 ease-linear ',
+          scrolled || isHovered || !props.fixed
+            ? 'bg-[#0A071E]'
+            : 'bg-transparent hover:bg-[#0A071E]'
+        )}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="m-auto w-full flex flex-wrap items-center justify-between px-4 lg:px-20  max-w-[1440px]">
           <div
             className={clsx([
@@ -161,7 +185,11 @@ const Header = (props: INavbarProps) => {
             ])}
           >
             <Link href="/" className="lg:mr-2">
-              {props.logo}
+              {scrolled || isHovered || !props.fixed ? (
+                props.logo
+              ) : (
+                <LogoBlack />
+              )}
             </Link>
             {props.mode === 'app' &&
               MENU_ITEMS.map((menuItem: any) =>
@@ -257,6 +285,7 @@ const Header = (props: INavbarProps) => {
                   }}
                   icon={<CrossSword />}
                   className="hidden lg:!flex px-[42px]"
+                  style={{ visibility: scrolled || isHovered || 'hidden' }}
                 >
                   Launch App
                 </Button>
@@ -331,6 +360,10 @@ const Header = (props: INavbarProps) => {
           </div>
         </div>
       )}
+      <ConnectWalletModal
+        isOpen={isOpenConnectWallet}
+        toggleOpen={toggleConnectWallet}
+      />
     </>
   );
 };

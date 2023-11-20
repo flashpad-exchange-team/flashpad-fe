@@ -1,0 +1,76 @@
+import PullSword from '@/public/assets/images/pull-sword.png';
+import UpSword from '@/public/assets/images/up-sword.png';
+
+import { Button } from '@/components/button/Button';
+import CrossSword from '@/icons/CrossSword';
+import WhitePaperIcon from '@/icons/WhitePaperIcon';
+import { Red_Rose } from 'next/font/google';
+import Image from 'next/image';
+import Bg from 'public/assets/images/landing-pg.png'; // Import your image
+import { useRouter } from 'next/router';
+const redRose = Red_Rose({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+});
+const Banner = () => {
+  const router = useRouter();
+  return (
+    <div className="w-full z-0">
+      <div
+        className="block xl:grid grid-cols-2 h-[700px] px-7 xl:pl-20 m-auto mb-6 w-full max-w-[1440px] relative "
+        style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
+      >
+        <div className="relative w-full xl:w-auto pt-24 ">
+          <div
+            className={
+              'text-[48px] leading-[48px] font-bold mb-8 uppercase  xl:max-w-[700px] text-center xl:text-left text-[#0A071E] ' +
+              redRose.className
+            }
+          >
+            A Native DEX & Launchpad Combination On Linea{' '}
+          </div>
+
+          <div className="text-base xl:text-lg leading-6 xl:leading-7 font-[500] xl:max-w-[600px] text-center xl:text-left  text-[#0A071E]">
+            Seamless features and inspired by proven model.
+          </div>
+          <div className="text-base xl:text-lg leading-6 xl:leading-7 font-[500] xl:max-w-[600px] text-center xl:text-left  text-[#0A071E]">
+            Inspired by the great King Arthur image.
+          </div>
+
+          <div className="flex gap-4 items-center mt-8">
+            <Button
+              onClick={() => {
+                router.push('/swap');
+              }}
+              icon={<CrossSword color="#fff" />}
+              className="hidden lg:!flex px-[28px] !bg-[#0A071E] !text-white"
+            >
+              Launch App
+            </Button>
+            <Button
+              onClick={() => {
+                window.open('https://docs.arthur.exchange/');
+              }}
+              icon={<WhitePaperIcon color="#fff" />}
+              className="flex px-[28px] !bg-[#0A071E] !text-white"
+            >
+              Whitepaper
+            </Button>
+          </div>
+        </div>
+        <div className="flex items-end">
+          <Image
+            src={PullSword}
+            alt="pull-sword"
+            className=" hidden xl:!block"
+          />
+        </div>
+        <div className="absolute bottom-[-2px] z-1 left-0 h-[100px]">
+          <Image src={UpSword} alt="up-sword" className="" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Banner;
