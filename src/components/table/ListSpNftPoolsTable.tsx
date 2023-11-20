@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import InlineLoading from '../loading/InlineLoading';
+import BigNumber from 'bignumber.js';
 
 interface ListSpNftPoolsTableProps {
   data: {
@@ -110,7 +111,7 @@ const ListSpNftPoolsTable: React.FC<ListSpNftPoolsTableProps> = ({
                     {item?.lpSupplyAmount} LP
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
-                    {item?.feeAPR?.toFixed(2)}%
+                    {BigNumber(item?.feeAPR)?.toFixed(2)}%
                   </td>
                 </tr>
               ))}

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import InlineLoading from '../loading/InlineLoading';
 import { Tooltip } from 'react-tooltip';
+import BigNumber from 'bignumber.js';
 
 interface ListAllPoolsTableProps {
   data: {
@@ -108,17 +109,23 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
                     ${item.TVL}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left flex gap-1 items-center">
-                    {item.farmBaseAPR.plus(item.feeAPR).toFixed(2)}%
+                    {BigNumber(item.farmBaseAPR).plus(item.feeAPR).toFixed(2)}%
                     <ArrowRight />{' '}
                     <span className="text-primary">
                       {' '}
-                      {item.farmBaseAPR.plus(item.feeAPR).times(3).toFixed(2)}%
+                      {BigNumber(item.farmBaseAPR)
+                        .plus(item.feeAPR)
+                        .times(3)
+                        .toFixed(2)}
+                      %
                     </span>
                     <div
                       data-tooltip-id="apr"
-                      data-tooltip-html={`Farm Base APR : ${item.farmBaseAPR.toFixed(
-                        2
-                      )}% <br/> Fees APR : ${item.feeAPR.toFixed(2)}%`}
+                      data-tooltip-html={`Farm Base APR : ${BigNumber(
+                        item.farmBaseAPR
+                      ).toFixed(2)}% <br/> Fees APR : ${BigNumber(
+                        item.feeAPR
+                      ).toFixed(2)}%`}
                     >
                       <QuestionIcon />
                       <Tooltip id="apr" />
