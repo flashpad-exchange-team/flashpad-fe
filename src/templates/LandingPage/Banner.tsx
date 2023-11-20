@@ -17,10 +17,10 @@ const Banner = () => {
   return (
     <div className="w-full z-0">
       <div
-        className="block xl:grid grid-cols-2 h-[700px] px-7 xl:pl-20 m-auto mb-6 w-full max-w-[1440px] relative "
+        className="block xl:grid grid-cols-2 h-[700px] px-7 xl:pl-20 m-auto mb-6 w-full relative "
         style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
       >
-        <div className="relative w-full xl:w-auto pt-24 ">
+        <div className="relative w-full xl:w-auto pt-32 ml-auto mr-0">
           <div
             className={
               'text-[48px] leading-[48px] font-bold mb-8 uppercase  xl:max-w-[700px] text-center xl:text-left text-[#0A071E] ' +
@@ -66,7 +66,11 @@ const Banner = () => {
           />
         </div>
         <div className="absolute bottom-[-2px] z-1 left-0 h-[100px]">
-          <Image src={UpSword} alt="up-sword" className="" />
+          <Image
+            src={UpSword}
+            alt="up-sword"
+            className="w-[100vw] max-h-[190px]"
+          />
         </div>
       </div>
     </div>

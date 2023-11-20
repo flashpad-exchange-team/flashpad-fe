@@ -1,10 +1,9 @@
-import { Red_Rose } from 'next/font/google';
-import Image from 'next/image';
-import tokenomic1 from 'public/assets/images/tokenomic1.png';
-import tokenomic2 from 'public/assets/images/tokenomic2.png';
-import tokenomicChart from 'public/assets/images/tokenomic-chart.png';
 import TitleLeft from '@/icons/TitleLeft';
 import TitleRight from '@/icons/TitleRight';
+import Tokenomic1 from '@/icons/Tokenomic1';
+import Tokenomic2 from '@/icons/Tokenomic2';
+import TokenomicChart from '@/icons/TokenomicChart';
+import { Red_Rose } from 'next/font/google';
 
 const redRose = Red_Rose({
   weight: ['400', '500', '600', '700'],
@@ -24,14 +23,9 @@ const Tokenomic = () => {
         <TitleRight />
       </div>
       <div className="flex justify-center items-center cursor-pointer gap-7">
-        <Image src={tokenomic1.src} alt="token1" width={160} height={66} />{' '}
-        <Image
-          src={tokenomicChart.src}
-          alt="EbizBoom"
-          width={320}
-          height={320}
-        />
-        <Image src={tokenomic2.src} alt="token1" width={160} height={66} />{' '}
+        <Tokenomic1 />
+        <TokenomicChart />
+        <Tokenomic2 />
       </div>
     </div>
   );

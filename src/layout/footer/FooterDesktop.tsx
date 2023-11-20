@@ -5,7 +5,7 @@ import { Logo } from '@/templates/Logo';
 
 const FooterDesktop = () => {
   return (
-    <div className="min-h-[260px] h-[calc(100vh-756px)] bg-dark ">
+    <div className="min-h-[220px] h-[calc(100vh-756px)] bg-dark ">
       <div className="max-w-[1440px]  flex justify-between px-20 pt-12 mx-auto ">
         <div>
           <Logo xl className="mb-6" />
