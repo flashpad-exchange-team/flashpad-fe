@@ -11,10 +11,10 @@ const redRose = Red_Rose({
 });
 const Founder = () => {
   return (
-    <div className="w-full max-w-[1096px] mx-auto text-center h-[226px] bg-dark border-t-8 border-yellow-500 mt-16 pt-2 relative">
+    <div className="w-full max-w-[1096px] mx-auto text-center h-[240px] bg-dark border-t-8 border-yellow-500 mt-16 pt-2 relative">
       <div
         className={
-          'text-primary text-[40px] font-semibold uppercase mt-3 mb-10 flex items-center gap-4 justify-center ' +
+          'text-primary text-[40px] font-semibold uppercase mt-6 mb-10 flex items-center gap-4 justify-center ' +
           redRose.className
         }
       >
@@ -26,7 +26,7 @@ const Founder = () => {
         className="flex justify-center cursor-pointer"
         onClick={() => window.open('https://ebizworldsolutions.com/index.html')}
       >
-        <Image src={Ebiz.src} alt="EbizBoom" width={200} height={26} />
+        <Image src={Ebiz.src} alt="EbizBoom" width={240} height={36} />
       </div>
       <div className="absolute bottom-0 left-0">
         <LaurelLeftIcon />

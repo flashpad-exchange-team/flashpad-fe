@@ -8,10 +8,10 @@ const redRose = Red_Rose({
 });
 const Roadmap = () => {
   return (
-    <div className="w-full  mx-auto text-center mt-[192px] max-w-[1440px]">
+    <div className="w-full  mx-auto text-center mt-[192px] max-w-[1440px] mb-12">
       <div
         className={
-          'text-primary text-[40px] font-semibold uppercase mt-5 mb-12 flex items-center gap-4 justify-center ' +
+          'text-primary text-[40px] font-semibold uppercase mt-5 mb-14 flex items-center gap-4 justify-center ' +
           redRose.className
         }
       >

@@ -14,7 +14,7 @@ const Tokenomic = () => {
     <div className="w-full  mx-auto text-center mt-24">
       <div
         className={
-          'text-primary text-[40px] font-semibold uppercase mt-5 mb-6 flex items-center gap-4 justify-center ' +
+          'text-primary text-[40px] font-semibold uppercase mt-5 mb-8 flex items-center gap-4 justify-center ' +
           redRose.className
         }
       >
@@ -22,7 +22,7 @@ const Tokenomic = () => {
         TOKENOMICS
         <TitleRight />
       </div>
-      <div className="flex justify-center items-center cursor-pointer gap-7">
+      <div className="flex justify-center items-center cursor-pointer gap-8">
         <Tokenomic1 />
         <TokenomicChart />
         <Tokenomic2 />

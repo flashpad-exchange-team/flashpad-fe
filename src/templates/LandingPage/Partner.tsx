@@ -12,7 +12,7 @@ import AuditImg from '@/public/assets/images/audit.png';
 
 const Partner = () => {
   return (
-    <div className="w-full max-w-[1440px] mx-auto text-center pt-8 pb-12 bg-dark mt-24 ">
+    <div className="w-full max-w-[1440px] mx-auto text-center pt-[60px] pb-[72px] bg-dark mt-28 ">
       <div
         className={
           'text-white text-[40px] font-semibold uppercase text-center mb-10 ' +
@@ -21,7 +21,7 @@ const Partner = () => {
       >
         Partners
       </div>
-      <div className="flex justify-between px-20">
+      <div className="flex justify-between px-36">
         <div
           className="flex justify-center cursor-pointer"
           onClick={() => window.open('https://www.mises.site/')}

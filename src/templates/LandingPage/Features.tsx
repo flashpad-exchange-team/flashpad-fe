@@ -24,7 +24,7 @@ const Features = () => {
         <TitleRight />
       </div>
 
-      <div className="flex gap-5 mx-auto mb-8 uppercase">
+      <div className="flex gap-5 mx-auto mb-10 uppercase mt-5">
         <div
           onClick={() => {
             router.push('/');
