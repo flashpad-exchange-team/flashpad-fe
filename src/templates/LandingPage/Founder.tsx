@@ -1,3 +1,5 @@
+import LaurelLeftIcon from '@/icons/LaurelLefIcon';
+import LaurelRightIcon from '@/icons/LaurelRightIcon';
 import TitleLeft from '@/icons/TitleLeft';
 import TitleRight from '@/icons/TitleRight';
 import { Red_Rose } from 'next/font/google';
@@ -9,15 +11,15 @@ const redRose = Red_Rose({
 });
 const Founder = () => {
   return (
-    <div className="w-full max-w-[1096px] mx-auto text-center h-[246px] bg-dark border-t-8 border-yellow-500 mt-4 pt-2">
+    <div className="w-full max-w-[1096px] mx-auto text-center h-[226px] bg-dark border-t-8 border-yellow-500 mt-16 pt-2 relative">
       <div
         className={
-          'text-primary text-[40px] font-semibold uppercase mt-3 mb-6 flex items-center gap-4 justify-center ' +
+          'text-primary text-[40px] font-semibold uppercase mt-3 mb-10 flex items-center gap-4 justify-center ' +
           redRose.className
         }
       >
         <TitleLeft />
-        Founder
+        Founders
         <TitleRight />
       </div>
       <div
@@ -25,6 +27,13 @@ const Founder = () => {
         onClick={() => window.open('https://ebizworldsolutions.com/index.html')}
       >
         <Image src={Ebiz.src} alt="EbizBoom" width={200} height={26} />
+      </div>
+      <div className="absolute bottom-0 left-0">
+        <LaurelLeftIcon />
+      </div>
+      <div className="absolute bottom-0 right-0">
+        {' '}
+        <LaurelRightIcon />
       </div>
     </div>
   );

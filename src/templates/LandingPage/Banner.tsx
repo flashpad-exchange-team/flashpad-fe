@@ -20,7 +20,7 @@ const Banner = () => {
         className="block xl:grid grid-cols-2 h-[700px] px-7 xl:pl-20 m-auto mb-6 w-full relative "
         style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'cover' }}
       >
-        <div className="relative w-full xl:w-auto pt-32 ml-auto mr-0">
+        <div className="relative w-full xl:w-auto pt-36 ml-auto mr-0">
           <div
             className={
               'text-[48px] leading-[48px] font-bold mb-8 uppercase  xl:max-w-[700px] text-center xl:text-left text-[#0A071E] ' +

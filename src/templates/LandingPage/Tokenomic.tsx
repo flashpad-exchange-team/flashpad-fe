@@ -11,7 +11,7 @@ const redRose = Red_Rose({
 });
 const Tokenomic = () => {
   return (
-    <div className="w-full  mx-auto text-center mt-8">
+    <div className="w-full  mx-auto text-center mt-24">
       <div
         className={
           'text-primary text-[40px] font-semibold uppercase mt-5 mb-6 flex items-center gap-4 justify-center ' +
@@ -19,7 +19,7 @@ const Tokenomic = () => {
         }
       >
         <TitleLeft />
-        TOKENOMIC
+        TOKENOMICS
         <TitleRight />
       </div>
       <div className="flex justify-center items-center cursor-pointer gap-7">

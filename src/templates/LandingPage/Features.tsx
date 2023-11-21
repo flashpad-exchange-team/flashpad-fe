@@ -15,7 +15,7 @@ const Features = () => {
     <>
       <div
         className={
-          'text-primary text-[40px] font-semibold uppercase mt-3 mb-6 flex items-center gap-4 justify-center ' +
+          'text-primary text-[40px] font-semibold uppercase mt-16 mb-10 flex items-center gap-4 justify-center ' +
           redRose.className
         }
       >

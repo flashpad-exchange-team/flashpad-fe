@@ -8,10 +8,10 @@ const redRose = Red_Rose({
 });
 const Roadmap = () => {
   return (
-    <div className="w-full  mx-auto text-center mt-8 max-w-[1440px]">
+    <div className="w-full  mx-auto text-center mt-[192px] max-w-[1440px]">
       <div
         className={
-          'text-primary text-[40px] font-semibold uppercase mt-5 mb-6 flex items-center gap-4 justify-center ' +
+          'text-primary text-[40px] font-semibold uppercase mt-5 mb-12 flex items-center gap-4 justify-center ' +
           redRose.className
         }
       >
@@ -22,7 +22,7 @@ const Roadmap = () => {
       <div className="grid grid-cols-4 px-20 gap-x-4">
         <div
           className={
-            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            'text-[30px] text-primary font-bold mb-6 text-left ' +
             redRose.className
           }
         >
@@ -30,7 +30,7 @@ const Roadmap = () => {
         </div>
         <div
           className={
-            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            'text-[30px] text-primary font-bold mb-6 text-left ' +
             redRose.className
           }
         >
@@ -38,7 +38,7 @@ const Roadmap = () => {
         </div>{' '}
         <div
           className={
-            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            'text-[30px] text-primary font-bold mb-6 text-left ' +
             redRose.className
           }
         >
@@ -46,7 +46,7 @@ const Roadmap = () => {
         </div>{' '}
         <div
           className={
-            'text-[30px] text-primary font-bold mb-4 text-left ' +
+            'text-[30px] text-primary font-bold mb-6 text-left ' +
             redRose.className
           }
         >
@@ -58,11 +58,12 @@ const Roadmap = () => {
         <div className="bg-primary h-[4px] w-full relative mb-10">
           <div className="absolute left-[-17px] w-[24px] h-[24px]  bg-white border-2 border-solid border-[#FFAF1D]  rounded-full top-[-10px]"></div>
         </div>{' '}
-        <div className="bg-primary h-[4px] w-full relative mb-10">
+        <div className="bg-primary h-[4px] w-full relative mb-10 ">
           <div className="absolute left-[-17px] w-[24px] h-[24px]  bg-white border-2 border-solid border-[#FFAF1D]  rounded-full top-[-10px]"></div>
+          <div className="absolute z-1 bg-[#475467] h-[4px] right-0 w-[50%]"></div>
         </div>{' '}
-        <div className="bg-primary h-[4px] w-full relative mb-10">
-          <div className="absolute left-[-17px] w-[24px] h-[24px]  bg-white border-2 border-solid border-[#FFAF1D]  rounded-full top-[-10px]"></div>
+        <div className="bg-[#475467] h-[4px] w-full relative mb-10">
+          <div className="absolute left-[-17px] w-[24px] h-[24px]  bg-white border-2 border-solid border-[#475467]  rounded-full top-[-10px]"></div>
         </div>
         <ul className="text-left block text-sm font-[500] list-disc pl-3">
           <li>Research (visual, chain, marketing strategy, & partners)</li>
