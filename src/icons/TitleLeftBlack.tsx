@@ -6,6 +6,8 @@ const TitleLeftBlack = () => {
       viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMinYMin slice"
+      className="w-[20px] h-[20px] lg:w-[40px] lg:h-[40px]"
     >
       <path
         d="M40 21.4131C40 21.4131 22.9059 26.0565 23.1717 40.0002L17.912 33.8869C17.912 33.8869 19.0311 24.2259 40 21.4131Z"

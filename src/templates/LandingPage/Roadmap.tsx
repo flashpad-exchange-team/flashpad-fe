@@ -104,7 +104,7 @@ const Roadmap = () => {
           <li>Public Sale Ends </li>
         </ul>
       </div>
-      <div className="block lg:hidden grid-cols-4 px-20 gap-x-4">
+      <div className="block lg:hidden grid-cols-4 pl-28 pr-20 lg:px-20 gap-x-4 ">
         <div
           className={
             'text-[30px] text-primary font-bold mb-2 text-left ' +
