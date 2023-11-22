@@ -34,9 +34,11 @@ const Audit = () => {
         </div>
       </div>
       <Button
-        onClick={() => {
-          // router.push('/swap');
-        }}
+        onClick={() =>
+          window.open(
+            'https://docs.arthur.exchange/references/audits/phase-1-done'
+          )
+        }
         icon={<CrossSword />}
         className="flex  px-3 lg:px-[20px] h-[48px] mx-auto lg:mx-0"
       >

@@ -24,7 +24,7 @@ const Partner = () => {
       <div className="block lg:flex justify-between px-8 lg:px-36">
         <div
           className="flex justify-center cursor-pointer my-6 lg:my-0"
-          onClick={() => window.open('https://www.mises.site/')}
+          onClick={() => window.open('https://aws.amazon.com/')}
         >
           <AWSIcon />
         </div>
@@ -36,13 +36,13 @@ const Partner = () => {
         </div>
         <div
           className="flex justify-center cursor-pointer my-6 lg:my-0"
-          onClick={() => window.open('https://www.mises.site/')}
+          onClick={() => window.open('https://linea.build/')}
         >
           <LineaIcon />
         </div>
         <div
           className="flex justify-center cursor-pointer my-6 lg:my-0"
-          onClick={() => window.open('https://www.mises.site/')}
+          onClick={() => window.open('https://solidproof.io/')}
         >
           <Image
             src={AuditImg.src}
