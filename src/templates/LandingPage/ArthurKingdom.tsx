@@ -12,7 +12,7 @@ const ArthurKingdom = () => {
       <div className="mx-auto max-w-[1440px]">
         <div
           className={
-            'text-[#0A071E] text-[48px] font-semibold uppercase flex justify-center items-center gap-4 mt-12 leading-10  ' +
+            'text-[#0A071E] text-[24px] lg:text-[48px] font-semibold uppercase flex justify-center items-center gap-4 mt-12 leading-10  ' +
             redRose.className
           }
         >

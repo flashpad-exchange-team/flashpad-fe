@@ -172,7 +172,7 @@ const Header = (props: INavbarProps) => {
           'header h-[80px] items-center flex fixed w-full z-10 transition-all duration-100 ease-linear ',
           scrolled || isHovered || !props.fixed
             ? 'bg-[#0A071E]'
-            : 'bg-transparent hover:bg-[#0A071E]'
+            : 'bg-[#0A071E] lg:bg-transparent hover:bg-[#0A071E] '
         )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -184,7 +184,10 @@ const Header = (props: INavbarProps) => {
               props.mode === 'app' ? '' : 'mx-auto lg:mx-0',
             ])}
           >
-            <Link href="/" className="lg:mr-2">
+            <Link href="/" className="block lg:hidden lg:mr-2">
+              {props.logo}
+            </Link>
+            <Link href="/" className="hidden lg:block lg:mr-2">
               {scrolled || isHovered || !props.fixed ? (
                 props.logo
               ) : (

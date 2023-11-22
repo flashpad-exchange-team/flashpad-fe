@@ -1,5 +1,6 @@
-const Tokenomic2 = () => (
+const Tokenomic2 = ({ className }: any) => (
   <svg
+    className={className}
     width="191"
     height="86"
     viewBox="0 0 191 86"

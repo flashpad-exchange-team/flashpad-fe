@@ -11,7 +11,7 @@ const redRose = Red_Rose({
 
 const Audit = () => {
   return (
-    <div className="w-full max-w-[1096px] mx-auto text-center py-6 bg-dark  mt-32 flex items-center justify-between px-20">
+    <div className="w-full max-w-[1096px] mx-auto text-center py-6 bg-dark mt-8 lg:mt-32 block lg:flex items-center justify-center lg:justify-between px-20">
       <div className="mx-auto text-center lg:m-0 lg:text-left">
         <div
           className={
@@ -25,10 +25,10 @@ const Audit = () => {
           alt="Audit"
           width={150}
           height={19}
-          className="mx-auto mb-4 lg:m-0"
+          className="mx-auto mb-6 mt-4 lg:mt-0 lg:mb-4 lg:m-0"
         />
       </div>
-      <div className="relative w-[360px] h-[140px]">
+      <div className="relative w-[360px] h-[140px]  hidden lg:block">
         <div className="absolute top-[-80px]">
           <AuditShieldIcon />
         </div>
@@ -38,7 +38,7 @@ const Audit = () => {
           // router.push('/swap');
         }}
         icon={<CrossSword />}
-        className="hidden lg:!flex px-[20px]"
+        className="flex  px-3 lg:px-[20px] h-[48px] mx-auto lg:mx-0"
       >
         Read Report
       </Button>
