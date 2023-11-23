@@ -12,6 +12,7 @@ import InlineLoading from '@/components/loading/InlineLoading';
 import { secondsToDays } from '@/utils/constants';
 import { IMerlinPoolSettings } from '@/utils/merlinPoolContract';
 import BigNumber from 'bignumber.js';
+import { convertToInternationalCurrencySystem } from '@/utils/convert';
 
 interface TableFarmProps {
   data: {
@@ -166,7 +167,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
                   </div>
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
-                  ${item?.tvl}
+                  ${convertToInternationalCurrencySystem(item?.tvl || 0)}
                 </td>
                 <td className="py-4 text-sm px-4 border-b border-[#344054] text-right">
                   <div className="flex items-center gap-2 cursor-pointer justify-end">

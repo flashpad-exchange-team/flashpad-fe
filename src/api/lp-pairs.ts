@@ -25,3 +25,12 @@ export const getAllPairsDataForAllPool = async (userAddress = '') => {
     console.error('Error getAllPairsDataForPositionAPI:', error);
   }
 };
+
+export const getAllPoolsInfo = async () => {
+  try {
+    const { data } = await axios.get('/lp-pairs/all-pools-info');
+    return data;
+  } catch (error) {
+    console.error('Error getAllPoolsInfo:', error);
+  }
+};

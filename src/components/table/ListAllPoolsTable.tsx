@@ -7,6 +7,7 @@ import React from 'react';
 import InlineLoading from '../loading/InlineLoading';
 import { Tooltip } from 'react-tooltip';
 import BigNumber from 'bignumber.js';
+import { convertToInternationalCurrencySystem } from '@/utils/convert';
 
 interface ListAllPoolsTableProps {
   data: {
@@ -106,7 +107,7 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
                     </div>
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
-                    ${item.TVL}
+                    ${convertToInternationalCurrencySystem(item.TVL)}
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left flex gap-1 items-center">
                     {BigNumber(item.farmBaseAPR).plus(item.feeAPR).toFixed(2)}%

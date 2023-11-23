@@ -4,6 +4,7 @@ import FileIcon from '@/icons/FileIcon';
 import LiquidityLockIcon from '@/icons/LiquidityLockIcon';
 import QuestionIcon from '@/icons/QuestionIcon';
 import TokenIcon from '@/icons/TokenIcon';
+import { convertToInternationalCurrencySystem } from '@/utils/convert';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -92,7 +93,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data }) => {
                 </div>
               </td>
               <td className="py-4 text-sm px-4 border-b border-[#344054] text-right relative">
-                ${item?.tvl}
+                ${convertToInternationalCurrencySystem(item?.tvl || 0)}
               </td>
               <td className="py-4 text-sm px-4 border-b border-[#344054] text-center">
                 {item?.incentivesLogo ? (
