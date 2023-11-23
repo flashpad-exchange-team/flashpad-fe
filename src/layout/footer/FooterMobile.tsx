@@ -3,9 +3,13 @@ import ListSocial from '@/components/listSocial/ListSocial';
 import ArrowDown from '@/icons/ArrowDown';
 import ArthurSmallIcon from '@/icons/ArthurSmallIcon';
 import { Logo } from '@/templates/Logo';
+import { convertToInternationalCurrencySystem } from '@/utils/convert';
 import { useState } from 'react';
+interface FooterInterface {
+  info: Record<string, any>;
+}
 
-const FooterMobile = () => {
+const FooterMobile = ({ info }: FooterInterface) => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
@@ -21,10 +25,10 @@ const FooterMobile = () => {
       <div>
         <Button className="w-full mb-2 text-bold flex items-center justify-center">
           <ArthurSmallIcon />
-          $111.111.1
+          {convertToInternationalCurrencySystem(111111.1)}
         </Button>
         <Button className="w-full text-bold flex items-center justify-center">
-          TVL : 12M$
+          TVL : {convertToInternationalCurrencySystem(info?.totalTVL) || 0}$
         </Button>
       </div>
       <div>
