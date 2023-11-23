@@ -4,7 +4,11 @@ import ArthurSmallIcon from '@/icons/ArthurSmallIcon';
 import { Logo } from '@/templates/Logo';
 import { convertToInternationalCurrencySystem } from '@/utils/convert';
 
-const FooterDesktop = ({ info }) => {
+interface FooterInterface {
+  info: Record<string, any>;
+}
+
+const FooterDesktop = ({ info }: FooterInterface) => {
   return (
     <div className="min-h-[220px] h-[calc(100vh-756px)] bg-dark ">
       <div className="max-w-[1440px]  flex justify-between px-20 pt-12 mx-auto ">
@@ -67,8 +71,7 @@ const FooterDesktop = ({ info }) => {
         </div>
         <div>
           <Button className="w-[200px] mb-2 text-bold flex items-center justify-center">
-            <ArthurSmallIcon />$
-            {convertToInternationalCurrencySystem(111111.1)}
+            <ArthurSmallIcon />${convertToInternationalCurrencySystem(111111.1)}
           </Button>
           <Button className="w-[200px] text-bold flex items-center justify-center">
             TVL : {convertToInternationalCurrencySystem(info?.totalTVL) || 0}$

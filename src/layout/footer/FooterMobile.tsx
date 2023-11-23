@@ -5,8 +5,11 @@ import ArthurSmallIcon from '@/icons/ArthurSmallIcon';
 import { Logo } from '@/templates/Logo';
 import { convertToInternationalCurrencySystem } from '@/utils/convert';
 import { useState } from 'react';
+interface FooterInterface {
+  info: Record<string, any>;
+}
 
-const FooterMobile = ({ info }) => {
+const FooterMobile = ({ info }: FooterInterface) => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
