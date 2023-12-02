@@ -17,7 +17,7 @@ const ArthurKingdom = () => {
           }
         >
           <TitleLeftBlack />
-          Arthur Kingdom
+          FLASHY WORLD
           <TitleRightBlack />
         </div>
         <div className="text-center ">
@@ -33,7 +33,7 @@ const ArthurKingdom = () => {
             <ListSocialBlack />
           </div>
           <div className="text-[#0A071E] font-semibold">
-            Business Contact: contact@arthur.exchange
+            Business Contact: contact@flashpad.io
           </div>
         </div>
       </div>

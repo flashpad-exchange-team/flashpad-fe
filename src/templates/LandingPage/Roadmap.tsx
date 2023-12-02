@@ -88,14 +88,12 @@ const Roadmap = () => {
           <li>Audit with Solidproof.io </li>
           <li>Onboarding Linea Ecosystem </li>
           <li>Community Expanding </li>
-          <li>Early Knight pools are published and open to deposits </li>
-          <li>
-            Early Knight pool rewards start being allocated to depositors{' '}
-          </li>
-          <li>Early Knight pools are closed to deposits </li>
+          <li>Lightningpools are published and open to deposits </li>
+          <li>Lightningpool rewards start being allocated to depositors </li>
+          <li>Lightningpools are closed to deposits </li>
           <li>Token launch and farms open </li>
           <li>Farming rewards start </li>
-          <li>Early Knight pool rewards can be harvested </li>
+          <li>Lightningpool rewards can be harvested </li>
         </ul>
         <ul className="text-left block text-sm font-[500] list-disc pl-3">
           <li>Community Boosting </li>
@@ -152,14 +150,12 @@ const Roadmap = () => {
           <li>Audit with Solidproof.io </li>
           <li>Onboarding Linea Ecosystem </li>
           <li>Community Expanding </li>
-          <li>Early Knight pools are published and open to deposits </li>
-          <li>
-            Early Knight pool rewards start being allocated to depositors{' '}
-          </li>
-          <li>Early Knight pools are closed to deposits </li>
+          <li>Lightningpools are published and open to deposits </li>
+          <li>Lightningpool rewards start being allocated to depositors </li>
+          <li>Lightningpools are closed to deposits </li>
           <li>Token launch and farms open </li>
           <li>Farming rewards start </li>
-          <li>Early Knight pool rewards can be harvested </li>
+          <li>Lightningpool rewards can be harvested </li>
         </ul>
         <div
           className={

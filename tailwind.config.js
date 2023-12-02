@@ -13,7 +13,11 @@ module.exports = {
       '5xl': '3rem',
       '6xl': '4rem',
     },
+
     extend: {
+      screens: {
+        '2k': '2560px',
+      },
       colors: {
         primary: "#FFAF1D",
         secondary:'#667085',

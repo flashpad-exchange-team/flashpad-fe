@@ -30,14 +30,14 @@ const Features = () => {
             router.push('/');
           }}
           className={
-            'h-[180px] lg:h-[228px] mt-4 lg:mt-0 w-full lg:w-[200px] bg-primary text-[#0A071E] text-lg lg:text-xl font-bold rounded-md pt-3 lg:pt-10 text-center cursor-pointer hover:shadow-gray-500 hover:shadow-md hover:mt-[-4px] ' +
+            'h-[180px] lg:h-[228px] mt-4 lg:mt-0 w-full lg:w-[200px] px-2 bg-primary text-[#0A071E] text-lg lg:text-xl font-bold rounded-md pt-3 lg:pt-10 text-center cursor-pointer hover:shadow-gray-500 hover:shadow-md hover:mt-[-4px] ' +
             redRose.className
           }
         >
           <div className="flex justify-center mb-4">
             <CrossSword size="xl" />
           </div>
-          <div>Early Knights Pools</div>
+          <div>Lightning Pools</div>
         </div>
         <div
           onClick={() => {

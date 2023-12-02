@@ -3,8 +3,8 @@ import ConnectWalletModal from '@/components/modal/ConnectWalletModal';
 import { useModal } from '@/context/ModalContext';
 import AddIcon from '@/icons/AddIcon';
 import ArrowDown from '@/icons/ArrowDown';
-import CrossSword from '@/icons/CrossSword';
 import LaunchPadIcon from '@/icons/LaunchpadIcon';
+import { LightningLeft, LightningRight } from '@/icons/Lightning';
 import Linea from '@/icons/Linea';
 import Liquidity from '@/icons/Liquidity';
 import LogoBlack from '@/icons/LogoBlack';
@@ -169,7 +169,7 @@ const Header = (props: INavbarProps) => {
     <>
       <div
         className={classNames(
-          'header h-[80px] items-center flex fixed w-full z-10 transition-all duration-100 ease-linear ',
+          'header h-[80px] items-center flex fixed w-full z-10 transition-all duration-100 easeLinear ',
           scrolled || isHovered || !props.fixed
             ? 'bg-[#0A071E]'
             : 'bg-[#0A071E] lg:bg-transparent hover:bg-[#0A071E] '
@@ -286,11 +286,10 @@ const Header = (props: INavbarProps) => {
                   onClick={() => {
                     router.push('/swap');
                   }}
-                  icon={<CrossSword />}
                   className="hidden lg:!flex px-[42px]"
                   style={{ visibility: scrolled || isHovered || 'hidden' }}
                 >
-                  Launch App
+                  <LightningLeft /> Launch App <LightningRight />
                 </Button>
               )}
             </ul>

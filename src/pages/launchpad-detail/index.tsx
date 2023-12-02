@@ -16,7 +16,7 @@ const Launchpad = () => {
   return (
     <div className="max-w-[1096px] w-full mx-auto p-6 md:p-0">
       <header className="text-primary text-[36px] mt-20 font-bold">
-        Arthur Exchange Launchpad
+        Flashpad Launchpad
       </header>
       <div className="text-[#FCFCFD] text-base">
         Contrary to popular belief, Lorem Ipsum is not simply random text. It

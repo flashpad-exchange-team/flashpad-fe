@@ -1,6 +1,6 @@
 import { Button } from '@/components/button/Button';
 import AuditShieldIcon from '@/icons/AuditShieldIcon';
-import CrossSword from '@/icons/CrossSword';
+import ReadIcon from '@/icons/Read';
 import AuditImg from '@/public/assets/images/audit.png';
 import { Red_Rose } from 'next/font/google';
 import Image from 'next/image';
@@ -28,8 +28,8 @@ const Audit = () => {
           className="mx-auto mb-6 mt-4 lg:mt-0 lg:mb-4 lg:m-0"
         />
       </div>
-      <div className="relative w-[360px] h-[140px]  hidden lg:block">
-        <div className="absolute top-[-80px]">
+      <div className="relative w-[222px] h-[120px]  hidden lg:block">
+        <div className="absolute top-[-50px]">
           <AuditShieldIcon />
         </div>
       </div>
@@ -39,7 +39,7 @@ const Audit = () => {
             'https://docs.arthur.exchange/references/audits/phase-1-done'
           )
         }
-        icon={<CrossSword />}
+        icon={<ReadIcon />}
         className="flex  px-3 lg:px-[20px] h-[48px] mx-auto lg:mx-0"
       >
         Read Report
