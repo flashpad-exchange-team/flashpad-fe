@@ -54,7 +54,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
         </div>
         <div className="mt-2 mb-2 text-sm font-semibold">
           {isConnected
-            ? 'Your wallet is now connected to Arthur DEX'
+            ? 'Your wallet is now connected to Flashpad DEX'
             : 'Connecting your wallet is like “logging in” to Web3. Select your wallet form the options to get started.'}
         </div>
         <Notification message="I don't have a wallet" type="info" />

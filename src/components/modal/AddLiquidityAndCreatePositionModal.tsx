@@ -407,7 +407,7 @@ const AddLiquidityAndCreatePositionModal = ({
         </div>
       </div>
       <div className="text-[#98A2B3] text-sm mb-2 font-semibold ">
-        Deposit assets on Arthur and start earning yield.
+        Deposit assets on Flashpad and start earning yield.
       </div>
       <div className="p-2 flex items-center gap-4 text-[12px]">
         <div className="mb-5">

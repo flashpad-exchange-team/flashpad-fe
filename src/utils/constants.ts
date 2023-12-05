@@ -406,14 +406,14 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
 
   },
   {
-    symbol: 'ART',
-    name: 'Arthur Token',
+    symbol: 'FLASH',
+    name: 'FLASH',
     address: '0xb056CeD9d51eb4A9C366229921CAC57E8A7a17c3',
     decimals: 18,
   },
   {
-    symbol: 'xART',
-    name: 'XArthur Token',
+    symbol: 'xFLASH',
+    name: 'xFLASH',
     address: '0xF34BAEc8B153E2d14DCC99F0bA9b0bB539Bbe68d',
     decimals: 18,
   },
@@ -453,13 +453,13 @@ export const MUMBAI_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png',
   },
   {
-    symbol: 'ART',
+    symbol: 'FLASH',
     name: 'Arthur Token',
     address: '0x9F423958b0e02d6C60D1714a37bc627C23C7d048',
     decimals: 18,
   },
   {
-    symbol: 'XART',
+    symbol: 'xFLASH',
     name: 'XArthur Token',
     address: '0xB0B291F942C0f71F6E9b02fd038BC4e8cEac3965',
     decimals: 18,

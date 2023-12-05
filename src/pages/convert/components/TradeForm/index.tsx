@@ -18,15 +18,15 @@ import { lineaTestnet } from 'wagmi/chains';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 
 const FEATURE_PROPS: { [k: string]: any } = {
-  'Get xART': {
-    value: 'Get xART',
-    label: 'Get xART',
-    buttonName: 'Get xART',
+  'Get xFLASH': {
+    value: 'Get xFLASH',
+    label: 'Get xFLASH',
+    buttonName: 'Get xFLASH',
   },
-  'Redeem ART': {
-    value: 'Redeem ART',
-    label: 'Redeem ART',
-    buttonName: 'Redeem ART',
+  'Redeem FLASH': {
+    value: 'Redeem FLASH',
+    label: 'Redeem FLASH',
+    buttonName: 'Redeem FLASH',
   },
 };
 
@@ -44,9 +44,11 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
-  const ART_TOKEN = CHAINS_TOKENS_LIST.find((token) => token.symbol === 'ART');
+  const ART_TOKEN = CHAINS_TOKENS_LIST.find(
+    (token) => token.symbol === 'FLASH'
+  );
   const XART_TOKEN = CHAINS_TOKENS_LIST.find(
-    (token) => token.symbol === 'xART'
+    (token) => token.symbol === 'xFLASH'
   );
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
@@ -129,8 +131,8 @@ const TradeForm = ({
       }
 
       startLoadingTx({
-        tokenPairs: 'ART - xART',
-        title: 'Converting ART to xART',
+        tokenPairs: 'FLASH - xFLASH',
+        title: 'Converting FLASH to xFLASH',
         message: 'Confirming your transaction, please wait.',
       });
 
@@ -159,7 +161,7 @@ const TradeForm = ({
       startSuccessTx(
         handleSuccessTxMessageActionSingleToken({
           action: 'convert',
-          token: 'xART',
+          token: 'xFLASH',
           txHash: hash,
           amount: token1Amount,
         })
@@ -177,14 +179,14 @@ const TradeForm = ({
     setToken1Amount('');
     setToken2Amount('');
   };
-  const [feature, setFeature] = useState('Get xART');
+  const [feature, setFeature] = useState('Get xFLASH');
 
   return (
     <>
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto  my-[50px] lg:mt-[116px] lg:mb-[40px] mx-auto py-4 px-[24px]">
         <div className="text-2xl font-bold mx-auto  w-fit flex items-center gap-3">
           <SwapLeftIcon />
-          Convert xART/ART
+          Convert xFLASH/FLASH
           <SwapRightIcon />
         </div>
         <div className="flex bg-darkBlue mt-3 rounded-lg">
@@ -206,9 +208,9 @@ const TradeForm = ({
         </div>
 
         <div className="text-sm mt-4 pb-3">
-          {feature === 'Get xART'
-            ? 'Unlock bonus rewards and exclusive benefits by converting your ART to xART.'
-            : 'Redeem your xART back into ART over a vesting period of 15 days (1:0.5 ratio) to 6 months (1:1 ratio).'}
+          {feature === 'Get xFLASH'
+            ? 'Unlock bonus rewards and exclusive benefits by converting your FLASH to xFLASH.'
+            : 'Redeem your xFLASH back into FLASH over a vesting period of 15 days (1:0.5 ratio) to 6 months (1:1 ratio).'}
         </div>
         <TokenForm
           openModal={() => {
@@ -239,7 +241,7 @@ const TradeForm = ({
           disabled
         />
         <div className="bg-darkBlue rounded-lg my-2 mb-3 p-4 text-sm">
-          The current rate for xART/ART is 1:1
+          The current rate for xFLASH/FLASH is 1:1
         </div>
 
         <Button

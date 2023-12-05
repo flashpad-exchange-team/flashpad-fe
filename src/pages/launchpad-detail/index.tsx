@@ -60,7 +60,7 @@ const Launchpad = () => {
           <Error />
         </div>
         <div className="ml-2">
-          No matter when you participate, everyone will get $ART tokens at the
+          No matter when you participate, everyone will get $FLASH tokens at the
           same final price.
         </div>
       </div>
@@ -69,9 +69,9 @@ const Launchpad = () => {
           <Error />
         </div>
         <div className="ml-2">
-          Your allocation will be made up of $ART, a receipt token made up of
-          30% $ART and 70% $xART. $ART will be automatically converted to $ART
-          and $xART 24h after the claims open.
+          Your allocation will be made up of $FLASH, a receipt token made up of
+          30% $FLASH and 70% $xFLASH. $FLASH will be automatically converted to
+          $FLASH and $xFLASH 24h after the claims open.
         </div>
       </div>
 
@@ -193,10 +193,10 @@ const Launchpad = () => {
             </div>
           </div>
           <div className="text-[#98A2B3]">
-            You can contribute with USDC in exchange for $ART tokens, which are
-            to be claimed 24h after the end of the sale. The tokens you will
+            You can contribute with USDC in exchange for $FLASH tokens, which
+            are to be claimed 24h after the end of the sale. The tokens you will
             receive will have the exact same USDC value than your contribution.
-            1,200,000 $ART, worth 360,000 $ART and 840,000 $xART (out of a
+            1,200,000 $FLASH, worth 360,000 $FLASH and 840,000 $xFLASH (out of a
             10,000,000 total supply) will be allocated to the sale. The final
             price will therefore be:
           </div>
@@ -233,10 +233,10 @@ const Launchpad = () => {
             The public sale will last until July 3rd @ 12pm UTC. Shortly after
             (exact date TBA), the purchased tokens will be entirely and directly
             claimable from this same page. In order to align the long-term
-            objectives of the protocol, the sale will be distributed in $ART ,
-            worth 30% of $ART and 70% of $xART. The claimed $ART will be
-            automatically converted to $ART directly from your wallet on July
-            4th @ 12pm UTC, at the same time as $ART liquidity is seeded and
+            objectives of the protocol, the sale will be distributed in $FLASH ,
+            worth 30% of $FLASH and 70% of $xFLASH. The claimed $FLASH will be
+            automatically converted to $FLASH directly from your wallet on July
+            4th @ 12pm UTC, at the same time as $FLASH liquidity is seeded and
             trading opens.
           </div>
         </div>

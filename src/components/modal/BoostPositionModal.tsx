@@ -159,7 +159,7 @@ const BoostPositionModal = ({
       startSuccessTx(
         handleSuccessTxMessageActionSingleToken({
           action: 'boost to position',
-          token: 'xART',
+          token: 'xFLASH',
           txHash: hash,
           amount,
         })
@@ -240,7 +240,7 @@ const BoostPositionModal = ({
       startSuccessTx(
         handleSuccessTxMessageActionSingleToken({
           action: 'unboost from position',
-          token: 'xART',
+          token: 'xFLASH',
           txHash: hash,
           amount,
         })
@@ -299,7 +299,7 @@ const BoostPositionModal = ({
         <span className="text-[#E6B300] font-bold">Boost</span> your position
       </div>
       <div className="text-center text-secondary mb-5 text-[12px]">
-        Allocate xART to your spNFT for more yield
+        Allocate xFLASH to your spNFT for more yield
       </div>
       <div className="block lg:flex items-center gap-2">
         <Button

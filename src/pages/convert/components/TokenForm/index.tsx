@@ -17,7 +17,7 @@ export interface TokenFormProps {
 }
 
 const ART_XART_LIST = CHAINS_TOKENS_LIST.filter(
-  (token) => token.symbol === 'xART' || token.symbol === 'ART'
+  (token) => token.symbol === 'xFLASH' || token.symbol === 'FLASH'
 );
 
 const TokenForm = ({
