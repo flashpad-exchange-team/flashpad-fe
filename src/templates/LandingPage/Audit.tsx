@@ -35,9 +35,7 @@ const Audit = () => {
       </div>
       <Button
         onClick={() =>
-          window.open(
-            'https://docs.arthur.exchange/references/audits/phase-1-done'
-          )
+          window.open('https://docs.flashpad.io/references/audits/phase-1-done')
         }
         icon={<ReadIcon />}
         className="flex  px-3 lg:px-[20px] h-[48px] mx-auto lg:mx-0"

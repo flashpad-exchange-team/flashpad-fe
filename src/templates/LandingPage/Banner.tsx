@@ -46,7 +46,7 @@ const Banner = () => {
             </Button>
             <Button
               onClick={() => {
-                window.open('https://docs.arthur.exchange/');
+                window.open('https://docs.flashpad.io/');
               }}
               icon={<WhitePaperIcon color="#fff" />}
               className="flex px-[28px] !bg-[#0A071E] !text-white my-3 mx-auto lg:m-0 w-full lg:w-auto justify-center"

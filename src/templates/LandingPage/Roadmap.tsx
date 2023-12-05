@@ -88,12 +88,12 @@ const Roadmap = () => {
           <li>Audit with Solidproof.io </li>
           <li>Onboarding Linea Ecosystem </li>
           <li>Community Expanding </li>
-          <li>Lightningpools are published and open to deposits </li>
-          <li>Lightningpool rewards start being allocated to depositors </li>
-          <li>Lightningpools are closed to deposits </li>
+          <li>Lightning pools are published and open to deposits </li>
+          <li>Lightning pool rewards start being allocated to depositors </li>
+          <li>Lightning pools are closed to deposits </li>
           <li>Token launch and farms open </li>
           <li>Farming rewards start </li>
-          <li>Lightningpool rewards can be harvested </li>
+          <li>Lightning pool rewards can be harvested </li>
         </ul>
         <ul className="text-left block text-sm font-[500] list-disc pl-3">
           <li>Community Boosting </li>
@@ -150,12 +150,12 @@ const Roadmap = () => {
           <li>Audit with Solidproof.io </li>
           <li>Onboarding Linea Ecosystem </li>
           <li>Community Expanding </li>
-          <li>Lightningpools are published and open to deposits </li>
-          <li>Lightningpool rewards start being allocated to depositors </li>
-          <li>Lightningpools are closed to deposits </li>
+          <li>Lightning pools are published and open to deposits </li>
+          <li>Lightning pool rewards start being allocated to depositors </li>
+          <li>Lightning pools are closed to deposits </li>
           <li>Token launch and farms open </li>
           <li>Farming rewards start </li>
-          <li>Lightningpool rewards can be harvested </li>
+          <li>Lightning pool rewards can be harvested </li>
         </ul>
         <div
           className={

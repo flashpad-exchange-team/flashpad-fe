@@ -19,28 +19,28 @@ const FooterDesktop = ({ info }: FooterInterface) => {
         <div>
           <div className="text-primary text-base mb-[5px] ">Resources</div>
           <a
-            // href="https://docs.arthur.exchange/present-to-the-king-all-link"
+            // href="https://docs.flashpad.io/present-to-the-king-all-link"
             target="_blank"
             className="block text-base mb-[4px]"
           >
             Audit
           </a>
           <a
-            href="https://docs.arthur.exchange/present-to-the-king-all-link"
+            href="https://docs.flashpad.io/present-to-the-king-all-link"
             target="_blank"
             className="block text-base mb-[4px]"
           >
             Contact us
           </a>
           <a
-            href="https://docs.arthur.exchange/contract-info/"
+            href="https://docs.flashpad.io/contract-info/"
             target="_blank"
             className="block text-base mb-[4px]"
           >
             Contracts
           </a>
           <a
-            href="https://docs.arthur.exchange/"
+            href="https://docs.flashpad.io/"
             target="_blank"
             className="block text-base mb-[4px]"
           >
@@ -50,14 +50,14 @@ const FooterDesktop = ({ info }: FooterInterface) => {
         <div>
           <div className="text-primary text-base mb-[5px] ">Help</div>
           <a
-            href="https://docs.arthur.exchange/let-arthur-guide-you/"
+            href="https://docs.flashpad.io/let-arthur-guide-you/"
             target="_blank"
             className="block text-base mb-[4px]"
           >
             FAQ
           </a>{' '}
           <a
-            href="https://docs.arthur.exchange/practice-on-dex/"
+            href="https://docs.flashpad.io/practice-on-dex/"
             target="_blank"
             className="block text-base mb-[4px]"
           >
