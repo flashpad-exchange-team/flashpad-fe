@@ -30,7 +30,7 @@ const Banner = () => {
             Seamless features and inspired by proven model.
           </div>
           <div className="text-[17px] xl:text-lg leading-6 xl:leading-7 font-[500] xl:max-w-[600px] text-center xl:text-left  text-[#0A071E]">
-            Inspired by the great power of thunder and lightning, with all
+            Inspired by the great power of thunder and Thunder, with all
             utilities running like a Flash
           </div>
 

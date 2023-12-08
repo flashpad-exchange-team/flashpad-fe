@@ -15,12 +15,10 @@ const ListSocial = () => {
       <a href="#">
         <DiscordIcon />
       </a>
-      {/* <a href="https://twitter.com/ArthurExchange" target="_blank"> */}
-      <a href="#">
+      <a href="https://twitter.com/flashpad_io" target="_blank">
         <TwitterIcon />
       </a>
-      {/* <a href="https://t.me/Arthurexchange" target="_blank"> */}
-      <a href="#">
+      <a href="https://t.me/flashpad" target="_blank">
         <TelegramIcon />
       </a>
       <MediumIcon />

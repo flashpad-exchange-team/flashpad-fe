@@ -191,7 +191,7 @@ const CreateMerlinPool = () => {
       <div className="max-w-[648px] w-[calc(100%-26px)] bg-dark rounded-lg h-auto my-[50px] lg:mt-[116px] lg:mb-[40px] mx-auto py-4 px-[24px]">
         <div className="text-2xl font-bold mx-auto w-fit flex items-center gap-3">
           <SwapLeftIcon />
-          Create Merlin Pool
+          Create Thunder Pool
           <SwapRightIcon />
         </div>
         <div className="text-[#98A2B3] text-sm mt-3 mb-2 font-semibold text-center">
@@ -322,7 +322,7 @@ const CreateMerlinPool = () => {
             (type === MerlinPoolTypes.LP_V2 ? !token1 || !token2 : !token1)
           }
         >
-          {isFirstSpMinter ? 'Initialize' : 'Create Merlin'}
+          {isFirstSpMinter ? 'Initialize' : 'Create Thunder'}
         </Button>
         <DividerDown />
       </div>

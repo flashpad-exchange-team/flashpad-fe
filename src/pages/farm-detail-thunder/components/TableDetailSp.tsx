@@ -15,7 +15,7 @@ const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
       <div className="min-w-full bg-dark pt-3">
         <div
           className="py-4 px-4 cursor-pointer"
-          onClick={() => router.push('/farm-detail-merlin')}
+          onClick={() => router.push('/farm-detail-thunder')}
         >
           <p className="text-sm font-bold text-left w-[120px] ">Pool</p>
           <div className="flex justify-between pt-2">
@@ -27,7 +27,7 @@ const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
           <div className="flex justify-between pt-2">
             <div className="text-xs text-lightGray">APR</div>
             <div className="flex gap-2 items-center justify-end">
-            {data.apr || 0}% <QuestionIcon />
+              {data.apr || 0}% <QuestionIcon />
             </div>
           </div>
           <div className="flex justify-between pt-2">
@@ -40,7 +40,7 @@ const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
         </div>
         <div
           className="py-1 px-4 cursor-pointer"
-          onClick={() => router.push('/farm-detail-merlin')}
+          onClick={() => router.push('/farm-detail-thunder')}
         >
           <p className="text-sm font-bold text-left w-[120px] ">Status</p>
           <div className="flex justify-between pt-2">
@@ -58,7 +58,7 @@ const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
         </div>
         <div
           className="py-1 px-4 cursor-pointer"
-          onClick={() => router.push('/farm-detail-merlin')}
+          onClick={() => router.push('/farm-detail-thunder')}
         >
           <p className="text-sm font-bold text-left w-[120px] ">
             Authorizations
@@ -78,7 +78,7 @@ const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {
         </div>
         <div
           className="py-1 px-4 "
-          onClick={() => router.push('/farm-detail-merlin')}
+          onClick={() => router.push('/farm-detail-thunder')}
         >
           <p className="text-sm font-bold text-left w-[120px] ">Requirements</p>
           <div className="flex justify-between pt-2">

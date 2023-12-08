@@ -157,7 +157,7 @@ const HarvestModal = ({
       <div className="p-2 bg-blue-opacity-50">
         <div className="">All Rewards</div>
         <div className="text-secondary text-sm py-2">
-          Harvest farming and Merlin rewards
+          Harvest farming and Thunder rewards
         </div>
       </div>
 
@@ -165,7 +165,7 @@ const HarvestModal = ({
         <div>
           <div className="">spNFT Rewards</div>
           <div className="text-secondary text-sm py-2">
-            Harvest farming and Merlin rewards
+            Harvest farming and Thunder rewards
           </div>
         </div>
         <div className="text-[#E6B300]">

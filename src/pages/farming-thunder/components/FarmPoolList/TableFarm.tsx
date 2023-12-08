@@ -70,7 +70,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
         {loading ? (
           <tbody className="bg-[transparent] h-[260px]">
             <div className="flex items-center justify-center absolute w-[210px] left-[40%] top-[40%]">
-              <InlineLoading message="Fetching Merlin Pools list" />
+              <InlineLoading message="Fetching Thunder Pools list" />
             </div>
           </tbody>
         ) : (
@@ -81,7 +81,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
                   className="py-4 text-sm px-4 border-b border-[#344054] text-left"
                   onClick={() => {
                     if (item?.poolAddress) {
-                      router.push(`/farm-detail-merlin/${item.poolAddress}`);
+                      router.push(`/farm-detail-thunder/${item.poolAddress}`);
                     }
                   }}
                 >
@@ -123,7 +123,7 @@ const TableFarm: React.FC<TableFarmProps> = ({ data, loading }) => {
                   className=" py-4 text-sm px-4 border-b border-[#344054] text-center"
                   onClick={() => {
                     if (item?.poolAddress) {
-                      router.push(`/farm-detail-merlin/${item.poolAddress}`);
+                      router.push(`/farm-detail-thunder/${item.poolAddress}`);
                     }
                   }}
                 >

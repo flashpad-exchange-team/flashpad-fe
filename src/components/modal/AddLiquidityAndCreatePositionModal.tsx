@@ -533,7 +533,7 @@ const AddLiquidityAndCreatePositionModal = ({
 
       <div className="p-2 flex justify-between bg-blue-opacity-50">
         <div>
-          <div className="text-md">Merlin auto-staking</div>
+          <div className="text-md">Thunder auto-staking</div>
           <div className="text-secondary text-sm">
             Auto unbind your underlying LP tokens
           </div>

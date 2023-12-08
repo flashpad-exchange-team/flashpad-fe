@@ -64,7 +64,7 @@ const SuccessTx = () => {
                     router.push('/lp-positions');
                   else if (spNFTActions.includes(successTxInfo.action))
                     router.push('/spnft-positions');
-                  else router.push('/farming-merlin');
+                  else router.push('/farming-thunder');
                 }
                 stopSuccessTx();
               }}

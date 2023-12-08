@@ -205,7 +205,7 @@ const Launchpad = () => {
 
   return (
     <>
-      <div className="max-w-[768px] p-8 md:p-0 w-full mx-auto">
+      <div className="max-w-[768px] p-8 md:p-0 w-full mx-auto mt-28">
         <form className="my-10 bg-dark px-4 pt-8 pb-4">
           <div className="text-lg md:text-xl text-bold mx-auto w-full flex items-center gap-3 justify-center text-center">
             <SwapLeftIcon />

@@ -156,7 +156,7 @@ const FarmMerlinDetail = () => {
       window.open(`${CHAIN_EXPLORER_URL}/address/${merlinPoolAddress}`);
     } else {
       customToast({
-        message: 'The Merlin pool contract address is undefined',
+        message: 'The Thunder pool contract address is undefined',
         type: 'warning',
       });
     }
@@ -176,7 +176,7 @@ const FarmMerlinDetail = () => {
 
       startLoadingTx({
         tokenPairs: token1Symbol + ' - ' + token2Symbol,
-        title: 'Harvesting staked position in Merlin pool...',
+        title: 'Harvesting staked position in Thunder pool...',
         message: 'Confirming your transaction, please wait.',
       });
 
@@ -218,7 +218,7 @@ const FarmMerlinDetail = () => {
   };
 
   return (
-    <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
+    <div className="max-w-[1096px] w-full mx-auto mb-20 mt-28 px-2">
       <div className="flex flex-col md:flex-row text-2xl font-bold gap-4 justify-between">
         <div>
           <div className="relative">

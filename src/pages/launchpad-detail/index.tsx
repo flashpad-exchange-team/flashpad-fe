@@ -14,8 +14,8 @@ import LaunchpadChart from 'public/assets/images/launchpad-chart.png';
 
 const Launchpad = () => {
   return (
-    <div className="max-w-[1096px] w-full mx-auto p-6 md:p-0">
-      <header className="text-primary text-[36px] mt-20 font-bold">
+    <div className="max-w-[1096px] w-full mx-auto p-6 md:p-0 ">
+      <header className="text-primary text-[36px] mt-28 font-bold">
         Flashpad Launchpad
       </header>
       <div className="text-[#FCFCFD] text-base">

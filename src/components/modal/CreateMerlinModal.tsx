@@ -121,7 +121,7 @@ const CreateMerlinModal = ({
 
       if (!token1) {
         customToast({
-          message: 'Please select at least 1 incentive token for Merlin pool',
+          message: 'Please select at least 1 incentive token for Thunder pool',
           type: 'error',
         });
         return;
@@ -203,7 +203,7 @@ const CreateMerlinModal = ({
 
       startLoadingTx({
         tokenPairs: token1Symbol + ' - ' + token2Symbol,
-        title: 'Creating Merlin Pool ...',
+        title: 'Creating Thunder Pool ...',
         message: 'Confirming your transaction, please wait.',
       });
 
@@ -255,7 +255,7 @@ const CreateMerlinModal = ({
         <div className="flex items-center justify-between w-full">
           <div className="text-2xl text-bold mx-auto  w-fit flex items-center gap-3 justify-start ml-0 mr-auto mb-4">
             <SwapLeftIcon />
-            Create Merlin Pool
+            Create Thunder Pool
             <SwapRightIcon />
           </div>
           <div className="cursor-pointer" onClick={toggleOpen}>

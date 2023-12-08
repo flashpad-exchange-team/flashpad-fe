@@ -18,7 +18,7 @@ interface TableLaunchpadProps {
 const TableLaunchpad: React.FC<TableLaunchpadProps> = ({ data }) => {
   const router = useRouter();
   return (
-    <div className="overflow-x-auto my-10">
+    <div className="overflow-x-auto my-10 mt-24">
       <div className="w-full text-lg py-3 text-center md:text-left">
         Launchpad
       </div>

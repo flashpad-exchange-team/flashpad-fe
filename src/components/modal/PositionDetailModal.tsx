@@ -119,7 +119,7 @@ const PositionDetailModal = ({
 
       startLoadingTx({
         tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-        title: 'Unstaking your spNFT from Merlin pool...',
+        title: 'Unstaking your spNFT from Thunder pool...',
         message: 'Confirming your transaction, please wait.',
       });
 
@@ -150,7 +150,7 @@ const PositionDetailModal = ({
 
       startSuccessTx(
         handleSuccessTxMessageActionWithPair({
-          action: `unstaked position #ID-${spNFTTokenId} from Merlin pool`,
+          action: `unstaked position #ID-${spNFTTokenId} from Thunder pool`,
           token1: token1Data?.symbol,
           token2: token2Data?.symbol,
           txHash: txHash,
@@ -248,7 +248,7 @@ const PositionDetailModal = ({
                 <WithdrawPositionIcon
                   message={
                     isSpNFTStakedToMerlin
-                      ? 'This position is being staked in a Merlin Pool. Please withdraw it from the Merlin Pool first.'
+                      ? 'This position is being staked in a Thunder Pool. Please withdraw it from the Thunder Pool first.'
                       : 'Withdraw position'
                   }
                   strokeColor={isSpNFTStakedToMerlin ? '#475467' : ''}
@@ -288,7 +288,7 @@ const PositionDetailModal = ({
             >
               <div
                 className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
-                title="Stake into Merlin"
+                title="Stake into Thunder"
               >
                 {publishedMerlinPoolsCount > 0 ? (
                   isSpNFTStakedToMerlin ? (
@@ -305,9 +305,9 @@ const PositionDetailModal = ({
               <div className="text-xs mt-2 text-center">
                 {publishedMerlinPoolsCount > 0
                   ? isSpNFTStakedToMerlin
-                    ? 'Unstake from Merlin'
-                    : 'Stake into Merlin'
-                  : 'No Merlin pools available'}
+                    ? 'Unstake from Thunder'
+                    : 'Stake into Thunder'
+                  : 'No Thunder pools available'}
               </div>
             </div>
           </div>
@@ -407,7 +407,7 @@ const PositionDetailModal = ({
                   <div className="w-[30px]">
                     <Eligibility />
                   </div>
-                  <div className="pl-2">Staked in a Merlin pool </div>
+                  <div className="pl-2">Staked in a Thunder pool </div>
                 </div>
                 <div>-</div>
               </>
@@ -415,7 +415,7 @@ const PositionDetailModal = ({
               <>
                 <div className="flex items-center">
                   <CloseIcon />
-                  <div className="pl-2">Not staked in a Merlin pool </div>
+                  <div className="pl-2">Not staked in a Thunder pool </div>
                 </div>
                 <div>-</div>
               </>

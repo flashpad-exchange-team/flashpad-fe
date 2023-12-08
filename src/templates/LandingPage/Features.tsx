@@ -37,7 +37,7 @@ const Features = () => {
           <div className="flex justify-center mb-4">
             <CrossSword size="xl" />
           </div>
-          <div>Lightning Pools</div>
+          <div>Thunder Pools</div>
         </div>
         <div
           onClick={() => {

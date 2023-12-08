@@ -227,7 +227,7 @@ const Staked: React.FC<PoolDetailStakedProps> = ({
                       <WithdrawPositionIcon
                         message={
                           isStakedToMerlin
-                            ? 'This position is being staked in a Merlin Pool. Please withdraw it from the Merlin Pool first.'
+                            ? 'This position is being staked in a Thunder Pool. Please withdraw it from the Thunder Pool first.'
                             : 'Withdraw position'
                         }
                         strokeColor={isStakedToMerlin ? '#475467' : ''}

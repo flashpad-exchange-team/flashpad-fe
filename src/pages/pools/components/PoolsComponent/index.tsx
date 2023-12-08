@@ -19,7 +19,7 @@ const PoolsComponent = ({}: PoolsComponentProps) => {
     useAllPairsDataForAllPool(userAddress);
 
   return (
-    <div className={clsx(['max-w-[1096px] w-full mx-auto my-20 px-2'])}>
+    <div className={clsx(['max-w-[1096px] w-full mx-auto mb-20 mt-28 px-2'])}>
       <div className="block lg:flex items-center justify-between">
         <div>
           <div className="font-bold">Pools</div>

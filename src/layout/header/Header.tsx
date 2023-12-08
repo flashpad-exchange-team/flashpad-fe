@@ -79,8 +79,8 @@ const MENU_ITEMS = [
         icon: <StackIcon width="18" height="18px" />,
       },
       {
-        name: 'Merlin Pools',
-        path: '/farming-merlin',
+        name: 'Thunder Pools',
+        path: '/farming-thunder',
         icon: <Liquidity width="18px" />,
       },
     ],

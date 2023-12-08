@@ -12,7 +12,7 @@ const FarmDetail = () => {
   const isSmallScreen = windowWidth < 768;
 
   return (
-    <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
+    <div className="max-w-[1096px] w-full mx-auto mb-20 mt-28 px-2">
       <div className="flex  text-2xl font-bold gap-4">
         <div className="relative">
           <div className="absolute">

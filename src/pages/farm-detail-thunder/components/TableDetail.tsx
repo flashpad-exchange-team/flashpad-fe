@@ -63,7 +63,7 @@ const TableDetail: React.FC<TableDetailProps> = ({ data }) => {
           </tr>
           <tr
             className="hover:bg-darkBlue cursor-pointer"
-            onClick={() => router.push('/farm-detail-merlin')}
+            onClick={() => router.push('/farm-detail-thunder')}
           >
             <td className="py-4 text-sm font-bold px-4 border-b border-[#344054] text-left">
               Status
@@ -85,7 +85,7 @@ const TableDetail: React.FC<TableDetailProps> = ({ data }) => {
           </tr>
           <tr
             className="hover:bg-darkBlue cursor-pointer"
-            onClick={() => router.push('/farm-detail-merlin')}
+            onClick={() => router.push('/farm-detail-thunder')}
           >
             <td className="py-4 text-sm font-bold px-4 border-b border-[#344054] text-left">
               Authorizations
@@ -107,7 +107,7 @@ const TableDetail: React.FC<TableDetailProps> = ({ data }) => {
           </tr>
           <tr
             className="hover:bg-darkBlue cursor-pointer"
-            onClick={() => router.push('/farm-detail-merlin')}
+            onClick={() => router.push('/farm-detail-thunder')}
           >
             <td className="py-4 text-sm font-bold px-4 border-b border-[#344054] text-left">
               Requirements

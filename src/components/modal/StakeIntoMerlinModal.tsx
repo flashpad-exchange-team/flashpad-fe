@@ -69,7 +69,7 @@ const StakeIntoMerlinModal = ({
 
     if (!merlinPool) {
       customToast({
-        message: 'No Merlin pool for this spNFT pool found!',
+        message: 'No Thunder pool for this spNFT pool found!',
         type: 'error',
       });
       return;
@@ -102,7 +102,7 @@ const StakeIntoMerlinModal = ({
 
       startLoadingTx({
         tokenPairs: token1Data?.symbol + ' - ' + token2Data?.symbol,
-        title: 'Staking your spNFT into Merlin pool...',
+        title: 'Staking your spNFT into Thunder pool...',
         message: 'Confirming your transaction, please wait.',
       });
 
@@ -132,7 +132,7 @@ const StakeIntoMerlinModal = ({
 
       startSuccessTx(
         handleSuccessTxMessageActionWithPair({
-          action: 'staked into Merlin pool',
+          action: 'staked into Thunder pool',
           token1: token1Data?.symbol,
           token2: token2Data?.symbol,
           txHash: txHash,
@@ -153,7 +153,7 @@ const StakeIntoMerlinModal = ({
         </div>
       </div>
       <div className="text-[15px] text-center text-2xl">
-        <span className="text-[#E6B300] font-bold">Stake</span> into a Merlin
+        <span className="text-[#E6B300] font-bold">Stake</span> into a Thunder
         pool
       </div>
       <div className="text-center text-secondary mb-3">

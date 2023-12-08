@@ -75,8 +75,8 @@ const ApyCalculatorModal = ({
       </div>
 
       <div className="p-2 bg-blue-opacity-50 flex justify-between mt-2">
-        <div>Merlin pool</div>
-        <div className="text-secondary">No compatible Merlin</div>
+        <div>Thunder pool</div>
+        <div className="text-secondary">No compatible Thunder</div>
       </div>
 
       <div className="my-2">Estimates</div>
@@ -98,7 +98,7 @@ const ApyCalculatorModal = ({
         <div>5.88%</div>
       </div>
       <div className="flex justify-between mb-2">
-        <div>Merlin APR</div>
+        <div>Thunder APR</div>
         <div>5.88%</div>
       </div>
       <div className="flex justify-between mb-2">

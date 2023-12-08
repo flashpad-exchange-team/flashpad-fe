@@ -11,10 +11,10 @@ const FarmPoolList = () => {
   const { data, isLoading } = useAllMerlinPoolsData(userAddress);
 
   return (
-    <div className="max-w-[1096px] w-full mx-auto my-20 px-2">
+    <div className="max-w-[1096px] w-full mx-auto mb-20 mt-28 px-2">
       <div className="flex flex-col md:flex-wrap md:flex-row md:items-center md:justify-between md:mb-4">
         <div className="order-1">
-          <div className="font-bold">Merlin Pools </div>
+          <div className="font-bold">Thunder Pools </div>
           <div className="text-sm text-[#98A2B3] mt-2 font-semibold">
             Custom-built infrastructure for Linea native public sales
           </div>
