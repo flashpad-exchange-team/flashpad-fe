@@ -21,7 +21,9 @@ const ListSocial = () => {
       <a href="https://t.me/flashpad" target="_blank">
         <TelegramIcon />
       </a>
-      <MediumIcon />
+      <a href="https://medium.com/@flashpad.io" target="_blank">
+        <MediumIcon />
+      </a>{' '}
     </div>
   );
 };
