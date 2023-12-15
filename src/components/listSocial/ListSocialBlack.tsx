@@ -17,7 +17,7 @@ const ListSocialBlack = () => {
       <a href="https://twitter.com/flashpad_io" target="_blank">
         <TwitterIcon xl />
       </a>
-      <a href="https://t.me/flashpad" target="_blank">
+      <a href="https://t.me/flashpadportal" target="_blank">
         <TelegramIcon xl />
       </a>
       <a href="https://medium.com/@flashpad.io" target="_blank">

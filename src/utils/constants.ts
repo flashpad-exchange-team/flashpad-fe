@@ -298,25 +298,25 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
       rootAddress: '0x41E5E6045f91B61AACC99edca0967D518fB44CFB',
     },
   },
-  {
-    chainId: 59140,
-    chainURI: 'https://goerli.lineascan.build/block/0',
-    tokenId:
-      'https://goerli.lineascan.build/token/0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
-    tokenType: ['bridged'],
-    address: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
-    name: 'USD Coin',
-    symbol: 'USDC',
-    decimals: 18,
-    createdAt: '2023-06-23',
-    updatedAt: '2023-06-23',
-    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
-    extension: {
-      rootChainId: 5,
-      rootChainURI: 'https://goerli.etherscan.io/block/0',
-      rootAddress: '0xd35cceead182dcee0f148ebac9447da2c4d449c4',
-    },
-  },
+  // {
+  //   chainId: 59140,
+  //   chainURI: 'https://goerli.lineascan.build/block/0',
+  //   tokenId:
+  //     'https://goerli.lineascan.build/token/0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
+  //   tokenType: ['bridged'],
+  //   address: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
+  //   name: 'USD Coin',
+  //   symbol: 'USDC',
+  //   decimals: 18,
+  //   createdAt: '2023-06-23',
+  //   updatedAt: '2023-06-23',
+  //   logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
+  //   extension: {
+  //     rootChainId: 5,
+  //     rootChainURI: 'https://goerli.etherscan.io/block/0',
+  //     rootAddress: '0xd35cceead182dcee0f148ebac9447da2c4d449c4',
+  //   },
+  // },
   {
     chainId: 59140,
     chainURI: 'https://goerli.lineascan.build/block/0',
@@ -396,12 +396,12 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png',
   },
   {
-    symbol: 'FSHIB',
-    name: 'Shiba Coin',
+    symbol: 'USDC',
+    name: 'USDC',
     address: '0x8B57916D9C0a6D97422590eF545Dd721cF46734b',
     decimals: 8,
     // logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png',
-    logoURI: 'https://cryptologos.cc/logos/shiba-inu-shib-logo.png',
+    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
 
 
   },
@@ -410,12 +410,15 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     name: 'FLASH',
     address: '0xb056CeD9d51eb4A9C366229921CAC57E8A7a17c3',
     decimals: 18,
+    logoURI: 'https://miro.medium.com/v2/resize:fill:176:176/1*SofrInDrWUdEp91z7iv28w.png'
   },
   {
     symbol: 'xFLASH',
     name: 'xFLASH',
     address: '0xF34BAEc8B153E2d14DCC99F0bA9b0bB539Bbe68d',
     decimals: 18,
+    logoURI: 'https://miro.medium.com/v2/resize:fill:176:176/1*SofrInDrWUdEp91z7iv28w.png'
+
   },
 ];
 

@@ -10,7 +10,7 @@ module.exports = withBundleAnalyzer({
     dirs: ['.'],
   },
   images: {
-    domains: ['s2.coinmarketcap.com','cryptologos.cc'], // Add other domains if needed
+    domains: ['s2.coinmarketcap.com','cryptologos.cc','miro.medium.com','*'], // Add other domains if needed
   },
   poweredByHeader: false,
   trailingSlash: true,

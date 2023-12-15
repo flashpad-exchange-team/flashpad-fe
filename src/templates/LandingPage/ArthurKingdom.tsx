@@ -33,7 +33,7 @@ const ArthurKingdom = () => {
             <ListSocialBlack />
           </div>
           <div className="text-[#0A071E] font-semibold">
-            Business Contact: contact@flashpad.io
+            Business Contact: support@flashpad.io
           </div>
         </div>
       </div>
