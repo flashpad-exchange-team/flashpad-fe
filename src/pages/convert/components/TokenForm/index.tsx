@@ -16,7 +16,7 @@ export interface TokenFormProps {
   disabled?: boolean;
 }
 
-const ART_XART_LIST = CHAINS_TOKENS_LIST.filter(
+const FLASH_XFLASH_LIST = CHAINS_TOKENS_LIST.filter(
   (token) => token.symbol === 'xFLASH' || token.symbol === 'FLASH'
 );
 
@@ -37,7 +37,7 @@ const TokenForm = ({
           <div className="w-[40px]">{title}</div>
 
           <Select
-            options={ART_XART_LIST}
+            options={FLASH_XFLASH_LIST}
             icon={
               tokenData?.logo ? (
                 <Image

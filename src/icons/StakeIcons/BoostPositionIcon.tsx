@@ -5,7 +5,7 @@ const BoostPositionIcon = ({ onClick, active, amount }: any) => {
     <div
       data-tooltip-id="my-tooltip"
       data-tooltip-content={
-        active ? `Boosted ${amount} xART` : `No active boost`
+        active ? `Boosted ${amount} xFlash` : `No active boost`
       }
     >
       <svg

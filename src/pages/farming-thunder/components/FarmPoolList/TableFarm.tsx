@@ -10,7 +10,7 @@ import { Tooltip } from 'react-tooltip';
 import { useRouter } from 'next/router';
 import InlineLoading from '@/components/loading/InlineLoading';
 import { secondsToDays } from '@/utils/constants';
-import { IMerlinPoolSettings } from '@/utils/merlinPoolContract';
+import { IThunderPoolSettings } from '@/utils/thunderPoolContract';
 import BigNumber from 'bignumber.js';
 import { convertToInternationalCurrencySystem } from '@/utils/convert';
 
@@ -31,7 +31,7 @@ interface TableFarmProps {
     totalDeposit: string;
     pendingRewards: { pending1: any; pending2: any };
     poolAddress: string;
-    settings: IMerlinPoolSettings;
+    settings: IThunderPoolSettings;
     [k: string]: any;
   }[];
   loading: boolean;

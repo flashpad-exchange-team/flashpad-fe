@@ -1,6 +1,6 @@
 import { writeContract } from '@wagmi/core';
-import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
+import { abi as FlashpadPairABI } from '@/resources/abis/FlashpadPair.json';
 
 export const usePairContractWrite = () => {
-  return { writeContract, ABI: ArthurPairABI };
+  return { writeContract, ABI: FlashpadPairABI };
 };

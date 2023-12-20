@@ -81,7 +81,7 @@ const FooterMobile = ({ info }: FooterInterface) => {
         {show2 && (
           <>
             <a
-              href="https://docs.flashpad.io/let-arthur-guide-you/"
+              href="https://docs.flashpad.io/flashing-guide/linea-learning"
               target="_blank"
               className="block text-base mb-[4px]"
             >

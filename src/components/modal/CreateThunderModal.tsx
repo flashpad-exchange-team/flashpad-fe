@@ -1,5 +1,5 @@
 import { useLoading } from '@/context/LoadingContext';
-import { useMerlinPoolFactoryContractWrite } from '@/hooks/contract/useMerlinPoolFactoryContract';
+import { useThunderPoolFactoryContractWrite } from '@/hooks/contract/useThunderPoolFactoryContract';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
@@ -8,11 +8,11 @@ import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
   CHAINS_TOKENS_LIST,
-  MERLIN_POOL_FACTORY_ADDRESS,
+  THUNDER_POOL_FACTORY_ADDRESS,
   daysToSeconds,
 } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
-import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
+import * as thunderPoolFactoryContract from '@/utils/thunderPoolFactoryContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { add, getUnixTime, isSameDay } from 'date-fns';
@@ -29,7 +29,7 @@ import Switch from '../switch/Switch';
 import CommonModal from './CommonModal';
 import SelectTokenModal from './SelectTokenModal';
 
-export interface CreateMerlinModalProps {
+export interface CreateThunderModalProps {
   toggleOpen: () => void;
   isOpen: boolean;
   nftPoolAddress?: Address;
@@ -38,14 +38,14 @@ export interface CreateMerlinModalProps {
   lpTokenDecimals: number;
 }
 
-const CreateMerlinModal = ({
+const CreateThunderModal = ({
   toggleOpen,
   isOpen,
   nftPoolAddress,
   token1Symbol,
   token2Symbol,
   lpTokenDecimals,
-}: CreateMerlinModalProps) => {
+}: CreateThunderModalProps) => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
 
@@ -109,7 +109,7 @@ const CreateMerlinModal = ({
     setWhitelist(false);
   };
 
-  const handleCreateMerlinPool = async () => {
+  const handleCreateThunderPool = async () => {
     try {
       if (!userAddress) {
         customToast({
@@ -153,7 +153,7 @@ const CreateMerlinModal = ({
         ? getUnixTime(new Date(depositEndTime.startDate))
         : 0;
 
-      const settings: merlinPoolFactoryContract.MerlinPoolSettingsParams = {
+      const settings: thunderPoolFactoryContract.ThunderPoolSettingsParams = {
         startTime: tsStartTime + '',
         endTime: tsEndTime + '',
         harvestStartTime: tsHarvestStartTime + '',
@@ -207,12 +207,12 @@ const CreateMerlinModal = ({
         message: 'Confirming your transaction, please wait.',
       });
 
-      const { writeContract, ABI } = useMerlinPoolFactoryContractWrite();
+      const { writeContract, ABI } = useThunderPoolFactoryContractWrite();
 
       const txResult = await writeContract({
-        address: MERLIN_POOL_FACTORY_ADDRESS as Address,
+        address: THUNDER_POOL_FACTORY_ADDRESS as Address,
         abi: ABI,
-        functionName: 'createMerlinPool',
+        functionName: 'createThunderPool',
         args: [
           nftPoolAddress!,
           rewardsToken1 as Address,
@@ -234,7 +234,7 @@ const CreateMerlinModal = ({
 
       startSuccessTx(
         handleSuccessTxMessageActionWithNoValue({
-          action: 'created a new merlin pool',
+          action: 'created a new Thunder pool',
           txHash: hash,
         })
       );
@@ -481,7 +481,7 @@ const CreateMerlinModal = ({
           </Button>
           <Button
             className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
-            onClick={handleCreateMerlinPool}
+            onClick={handleCreateThunderPool}
             disabled={!userAddress || !token1 || !startTime || !endTime}
           >
             Create
@@ -494,4 +494,4 @@ const CreateMerlinModal = ({
   );
 };
 
-export default CreateMerlinModal;
+export default CreateThunderModal;

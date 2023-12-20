@@ -1,5 +1,5 @@
 import { Button } from '@/components/button/Button';
-import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
+import useAllThunderPoolsData from '@/hooks/useAllThunderPoolsData';
 import Menu from '@/icons/Menu';
 import Search from '@/icons/Search';
 import { useAccount } from 'wagmi';
@@ -8,7 +8,7 @@ import TableFarm from './TableFarm';
 const FarmPoolList = () => {
   const { address: userAddress } = useAccount();
 
-  const { data, isLoading } = useAllMerlinPoolsData(userAddress);
+  const { data, isLoading } = useAllThunderPoolsData(userAddress);
 
   return (
     <div className="max-w-[1096px] w-full mx-auto mb-20 mt-28 px-2">

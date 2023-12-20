@@ -8,6 +8,7 @@ import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
+  APP_BASE_CHAIN,
   DEFAULT_TIME_LOCK,
   MAX_UINT256,
   daysToSeconds,
@@ -21,7 +22,6 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { Address } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 import { Button } from '../button/Button';
 import customToast from '../notification/customToast';
 import CommonModal from './CommonModal';
@@ -91,7 +91,7 @@ const CreatePositionModal = ({
 
   const handleCreatePosition = async () => {
     try {
-      if (chain?.id !== lineaTestnet.id) {
+      if (chain?.id !== APP_BASE_CHAIN.id) {
         handleSwitchNetwork(switchNetwork);
         return;
       }

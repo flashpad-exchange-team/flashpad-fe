@@ -1,5 +1,5 @@
 import { Button } from '@/components/button/Button';
-import CreateMerlinModal from '@/components/modal/CreateMerlinModal';
+import CreateThunderModal from '@/components/modal/CreateThunderModal';
 import SelectTokenModal from '@/components/modal/SelectTokenModal';
 import Notification from '@/components/notification/Notification';
 import customToast from '@/components/notification/customToast';
@@ -14,6 +14,7 @@ import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
+  APP_BASE_CHAIN,
   CHAINS_TOKENS_LIST,
   NFT_POOL_FACTORY_ADDRESS,
 } from '@/utils/constants';
@@ -27,24 +28,23 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { Address, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 
-enum MerlinPoolTypes {
+enum ThunderPoolTypes {
   LP_V2 = 0,
   SINGLE_ASSET = 1,
 }
 
-const CreateMerlinPool = () => {
+const CreateThunderPool = () => {
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx } = useLoading();
   const { mutate } = useSWRConfig();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
 
-  const [type, setType] = useState<MerlinPoolTypes>(MerlinPoolTypes.LP_V2);
-  const [openCreateMerlinModal, setOpenCreateMerlinModal] = useState(false);
-  const toggleOpenCreateMerlinModal = () =>
-    setOpenCreateMerlinModal(!openCreateMerlinModal);
+  const [type, setType] = useState<ThunderPoolTypes>(ThunderPoolTypes.LP_V2);
+  const [openCreateThunderModal, setOpenCreateThunderModal] = useState(false);
+  const toggleOpenCreateThunderModal = () =>
+    setOpenCreateThunderModal(!openCreateThunderModal);
 
   const [isOpenSelectTokenModal, setOpenSelectTokenModal] = useState(false);
   const toggleOpenSelectTokenModal = () =>
@@ -64,7 +64,7 @@ const CreateMerlinPool = () => {
 
   const getPoolAddress = async () => {
     let lpAddress;
-    if (type === MerlinPoolTypes.LP_V2) {
+    if (type === ThunderPoolTypes.LP_V2) {
       if (!token1 || !token2) return;
       lpAddress = await routerContract.getPair(token1.address, token2.address);
       if (!lpAddress) return;
@@ -99,9 +99,9 @@ const CreateMerlinPool = () => {
     }
   };
 
-  const handleCreateMerlinPool = async () => {
+  const handleCreateThunderPool = async () => {
     try {
-      if (chain?.id !== lineaTestnet.id) {
+      if (chain?.id !== APP_BASE_CHAIN.id) {
         handleSwitchNetwork(switchNetwork);
         return;
       }
@@ -162,7 +162,7 @@ const CreateMerlinPool = () => {
         });
       }
 
-      setOpenCreateMerlinModal(true);
+      setOpenCreateThunderModal(true);
     } catch (error) {
       stopLoadingTx();
       handleError(error);
@@ -175,9 +175,9 @@ const CreateMerlinPool = () => {
 
   return (
     <>
-      <CreateMerlinModal
-        isOpen={openCreateMerlinModal}
-        toggleOpen={toggleOpenCreateMerlinModal}
+      <CreateThunderModal
+        isOpen={openCreateThunderModal}
+        toggleOpen={toggleOpenCreateThunderModal}
         nftPoolAddress={nftPoolAddress}
         token1Symbol={token1?.symbol}
         token2Symbol={token2?.symbol}
@@ -200,27 +200,27 @@ const CreateMerlinPool = () => {
         <div className="flex bg-darkBlue mt-3 rounded-lg">
           <button
             className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
-              type === MerlinPoolTypes.LP_V2
+              type === ThunderPoolTypes.LP_V2
                 ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
                 : ''
             }`}
-            onClick={() => setType(MerlinPoolTypes.LP_V2)}
+            onClick={() => setType(ThunderPoolTypes.LP_V2)}
           >
             LP V2
           </button>
           <button
             className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
-              type === MerlinPoolTypes.SINGLE_ASSET
+              type === ThunderPoolTypes.SINGLE_ASSET
                 ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
                 : ''
             }`}
-            onClick={() => setType(MerlinPoolTypes.SINGLE_ASSET)}
+            onClick={() => setType(ThunderPoolTypes.SINGLE_ASSET)}
           >
             Single Asset
           </button>
         </div>
         <div className="flex gap-4 items-center mt-5">
-          {type === MerlinPoolTypes.LP_V2 ? (
+          {type === ThunderPoolTypes.LP_V2 ? (
             <>
               <div
                 className="w-full justify-between lg:w-[260px]  rounded-md bg-[#150E39] px-2 py-2 flex items-center gap-2 text-sm lg:text-base "
@@ -315,11 +315,11 @@ const CreateMerlinPool = () => {
           />
         )}
         <Button
-          onClick={handleCreateMerlinPool}
+          onClick={handleCreateThunderPool}
           className="w-full justify-center mt-4 mb-2 px-[42px]"
           disabled={
             !userAddress ||
-            (type === MerlinPoolTypes.LP_V2 ? !token1 || !token2 : !token1)
+            (type === ThunderPoolTypes.LP_V2 ? !token1 || !token2 : !token1)
           }
         >
           {isFirstSpMinter ? 'Initialize' : 'Create Thunder'}
@@ -330,4 +330,4 @@ const CreateMerlinPool = () => {
   );
 };
 
-export default CreateMerlinPool;
+export default CreateThunderPool;

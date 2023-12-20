@@ -20,18 +20,18 @@ import FeeIcon from '@/icons/FeeIcon';
 import FlowIcon from '@/icons/FlowIcon';
 import Link from '@/icons/Link';
 import * as covalentApiService from '@/services/covalentApi.service';
-import * as arthurMasterContract from '@/utils/arthurMasterContract';
+import * as flashpadMasterContract from '@/utils/flashpadMasterContract';
 import {
   ADDRESS_ZERO,
-  ARTHUR_MASTER_ADDRESS,
+  FLASHPAD_MASTER_ADDRESS,
   CHAINS_TOKENS_LIST,
   CHAIN_EXPLORER_URL,
-  MERLIN_POOL_FACTORY_ADDRESS,
+  THUNDER_POOL_FACTORY_ADDRESS,
   NFT_POOL_FACTORY_ADDRESS,
   USD_PRICE,
 } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
-import * as merlinPoolFactoryContract from '@/utils/merlinPoolFactoryContract';
+import * as thunderPoolFactoryContract from '@/utils/thunderPoolFactoryContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
 import * as pairContract from '@/utils/pairContract';
@@ -60,7 +60,8 @@ const PoolDetail = () => {
   const [masterPoolInfo, setMasterPoolInfo] = useState({} as any);
   const [successful, setSuccessful] = useState<boolean | undefined>(undefined);
   const [nftPoolAddress, setNftPoolAddress] = useState<Address>(ADDRESS_ZERO);
-  const [publishedMerlinPoolsCount, setPublishedMerlinPoolsCount] = useState(0);
+  const [publishedThunderPoolsCount, setPublishedThunderPoolsCount] =
+    useState(0);
   const [token1Symbol, setToken1Symbol] = useState<string>('');
   const [token2Symbol, setToken2Symbol] = useState<string>('');
   const [token1Logo, setToken1Logo] = useState<string>('');
@@ -175,8 +176,8 @@ const PoolDetail = () => {
         'getPoolInfo',
         []
       );
-      const masterPoolInfoRes = await arthurMasterContract.read(
-        ARTHUR_MASTER_ADDRESS as any,
+      const masterPoolInfoRes = await flashpadMasterContract.read(
+        FLASHPAD_MASTER_ADDRESS as any,
         'getPoolInfo',
         [poolAddress as Address]
       );
@@ -193,23 +194,23 @@ const PoolDetail = () => {
       nftPoolAddress
     );
 
-    const nPublishedMerlinPools = await merlinPoolFactoryContract.read(
-      MERLIN_POOL_FACTORY_ADDRESS as Address,
-      'nftPoolPublishedMerlinPoolsLength',
+    const nPublishedThunderPools = await thunderPoolFactoryContract.read(
+      THUNDER_POOL_FACTORY_ADDRESS as Address,
+      'nftPoolPublishedThunderPoolsLength',
       [nftPoolAddress]
     );
 
-    setPublishedMerlinPoolsCount(Number(nPublishedMerlinPools || 0));
+    setPublishedThunderPoolsCount(Number(nPublishedThunderPools || 0));
 
-    for (let i = 0; i < Number(nPublishedMerlinPools); i++) {
-      const publishedMerlinPoolAddr = await merlinPoolFactoryContract.read(
-        MERLIN_POOL_FACTORY_ADDRESS as Address,
-        'getNftPoolPublishedMerlinPool',
+    for (let i = 0; i < Number(nPublishedThunderPools); i++) {
+      const publishedThunderPoolAddr = await thunderPoolFactoryContract.read(
+        THUNDER_POOL_FACTORY_ADDRESS as Address,
+        'getNftPoolPublishedThunderPool',
         [nftPoolAddress, i]
       );
       const stakedInMerlinSpNfts =
         await covalentApiService.getNFTsOwnedByAddress(
-          publishedMerlinPoolAddr,
+          publishedThunderPoolAddr,
           nftPoolAddress
         );
 
@@ -343,10 +344,10 @@ const PoolDetail = () => {
   const feeShare = new BigNumber(vol24h).times(0.3).div(100);
   const feeAPR = feeShare.times(365).div(TVL).times(100);
 
-  const dailyART = new BigNumber(masterPoolInfo?.poolEmissionRate)
+  const dailyFLASH = new BigNumber(masterPoolInfo?.poolEmissionRate)
     .times(86400)
     .div('1000000000000000000');
-  const farmBaseAPR = dailyART.times(365).div(TVL).times(100);
+  const farmBaseAPR = dailyFLASH.times(365).div(TVL).times(100);
 
   return (
     <>
@@ -373,7 +374,7 @@ const PoolDetail = () => {
         toggleBoostPosition={toggleBoostPosition}
         toggleHarvestPosition={toggleHarvestPosition}
         poolInfo={poolInfo}
-        publishedMerlinPoolsCount={publishedMerlinPoolsCount}
+        publishedThunderPoolsCount={publishedThunderPoolsCount}
         farmBaseAPR={farmBaseAPR}
         feeAPR={feeAPR}
       />
@@ -593,7 +594,7 @@ const PoolDetail = () => {
           <NotStaked
             toggleOpenCreatePosition={handleCreateStakingPosition}
             isFirstSpMinter={isFirstSpMinter}
-            dailyART={dailyART}
+            dailyFLASH={dailyFLASH}
             feeAPR={feeAPR}
             farmBaseAPR={farmBaseAPR}
           />

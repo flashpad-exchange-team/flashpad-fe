@@ -7,7 +7,7 @@ import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
-  ARTHUR_ROUTER_ADDRESS,
+  FLASHPAD_ROUTER_ADDRESS,
   DEFAULT_DEADLINE,
   MAX_UINT256,
   minutesToSeconds,
@@ -141,7 +141,7 @@ const RemoveLiquidityModal = ({
       const lpTokenAllowance = (await pairContract.read(
         pairAddress as Address,
         'allowance',
-        [userAddress, ARTHUR_ROUTER_ADDRESS]
+        [userAddress, FLASHPAD_ROUTER_ADDRESS]
       )) as bigint;
 
       if (BigNumber(lpTokenAllowance.toString()).isLessThan(bnAmountToRemove)) {
@@ -158,7 +158,7 @@ const RemoveLiquidityModal = ({
           address: pairAddress as Address,
           abi: ABI,
           functionName: 'approve',
-          args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+          args: [FLASHPAD_ROUTER_ADDRESS, MAX_UINT256],
         });
 
         if (!approveRes) {
@@ -198,7 +198,7 @@ const RemoveLiquidityModal = ({
         }
 
         txResult = await writeRouterContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'removeLiquidityETH',
           args: [
@@ -212,7 +212,7 @@ const RemoveLiquidityModal = ({
         });
       } else {
         txResult = await writeRouterContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'removeLiquidity',
           args: [

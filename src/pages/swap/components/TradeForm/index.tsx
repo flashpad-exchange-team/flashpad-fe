@@ -13,7 +13,8 @@ import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
   ADDRESS_ZERO,
-  ARTHUR_ROUTER_ADDRESS,
+  APP_BASE_CHAIN,
+  FLASHPAD_ROUTER_ADDRESS,
   K_5_MIN,
   MAX_UINT256,
 } from '@/utils/constants';
@@ -30,7 +31,6 @@ import { useEffect, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { Address } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 
@@ -128,7 +128,7 @@ const TradeForm = ({
 
   const handleSwap = async () => {
     try {
-      if (chain?.id !== lineaTestnet.id) {
+      if (chain?.id !== APP_BASE_CHAIN.id) {
         handleSwitchNetwork(switchNetwork);
         return;
       }
@@ -192,7 +192,7 @@ const TradeForm = ({
       const token1Allowance = (await erc20TokenContract.erc20Read(
         token1.address,
         'allowance',
-        [userAddress, ARTHUR_ROUTER_ADDRESS]
+        [userAddress, FLASHPAD_ROUTER_ADDRESS]
       )) as bigint;
 
       if (BigNumber(token1Allowance.toString()).isLessThan(bnToken1Amount)) {
@@ -206,7 +206,7 @@ const TradeForm = ({
           address: token1.address,
           abi: ERC20ABI,
           functionName: 'approve',
-          args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+          args: [FLASHPAD_ROUTER_ADDRESS, MAX_UINT256],
         });
         if (!hash) {
           stopLoadingTx();
@@ -230,7 +230,7 @@ const TradeForm = ({
       const { writeContract, ABI } = useRouterContractWrite();
       if (token2?.symbol === 'ETH') {
         txResult = await writeContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: ABI,
           functionName: 'swapExactTokensForETHSupportingFeeOnTransferTokens',
           args: [
@@ -244,7 +244,7 @@ const TradeForm = ({
         });
       } else if (token1?.symbol === 'ETH') {
         txResult = await writeContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: ABI,
           functionName: 'swapExactETHForTokensSupportingFeeOnTransferTokens',
           args: [
@@ -262,7 +262,7 @@ const TradeForm = ({
       } else {
         console.log('trigger build');
         txResult = await writeContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: ABI,
           functionName: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
           args: [

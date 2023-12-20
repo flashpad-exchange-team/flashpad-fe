@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { ARTHUR_API_URL } from '@/utils/constants';
+import { FLASHPAD_API_URL } from '@/utils/constants';
 
 export const fetchTotalVolumeByLpAPI = async (params: {
   lpAddress: string;
   last24h: boolean;
 }) => {
   const { lpAddress, last24h } = params;
-  const url = `${ARTHUR_API_URL}/total-volume/lp?address=${lpAddress}&last24h=${last24h}`;
+  const url = `${FLASHPAD_API_URL}/total-volume/lp?address=${lpAddress}&last24h=${last24h}`;
   try {
     const response = await axios.get(url, {
       headers: {
@@ -22,7 +22,7 @@ export const fetchTotalVolumeByLpAPI = async (params: {
 };
 
 export const fetchAllPairsAPI = async () => {
-  const url = `${ARTHUR_API_URL}/lp-pairs`;
+  const url = `${FLASHPAD_API_URL}/lp-pairs`;
   try {
     const response = await axios.get(url, {
       headers: {
@@ -37,8 +37,10 @@ export const fetchAllPairsAPI = async () => {
   }
 };
 
-export const fetchPairByAddressAPI = async (params: { pairAddress: string }) => {
-  const url = `${ARTHUR_API_URL}/lp-pairs?address=${params.pairAddress}`;
+export const fetchPairByAddressAPI = async (params: {
+  pairAddress: string;
+}) => {
+  const url = `${FLASHPAD_API_URL}/lp-pairs?address=${params.pairAddress}`;
   try {
     const response = await axios.get(url, {
       headers: {

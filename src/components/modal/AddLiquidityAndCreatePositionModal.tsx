@@ -9,6 +9,7 @@ import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import {
+  APP_BASE_CHAIN,
   MAX_UINT256,
   POSITION_HELPER_ADDRESS,
   daysToSeconds,
@@ -24,7 +25,6 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 import { Button } from '../button/Button';
 import customToast from '../notification/customToast';
 import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
@@ -112,7 +112,7 @@ const AddLiquidityAndCreatePositionModal = ({
         ABI: PositionHelperABI,
       } = usePositionHelperContractWrite();
 
-      if (chain?.id !== lineaTestnet.id) {
+      if (chain?.id !== APP_BASE_CHAIN.id) {
         handleSwitchNetwork(switchNetwork);
         return;
       }

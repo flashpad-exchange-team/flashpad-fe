@@ -1,3 +1,3 @@
-import MerlinPoolDetail from './[merlinPool]';
+import ThunderPoolDetail from './[thunderPool]';
 
-export default MerlinPoolDetail;
+export default ThunderPoolDetail;

@@ -1,6 +1,6 @@
 import FarmPoolList from './components/FarmPoolList';
-const FarmingMerlin = () => {
+const FarmingThunder = () => {
   return <FarmPoolList />;
 };
 
-export default FarmingMerlin;
+export default FarmingThunder;

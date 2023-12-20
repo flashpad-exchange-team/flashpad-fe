@@ -50,7 +50,7 @@ const FooterDesktop = ({ info }: FooterInterface) => {
         <div>
           <div className="text-primary text-base mb-[5px] ">Help</div>
           <a
-            href="https://docs.flashpad.io/let-arthur-guide-you/"
+            href="https://docs.flashpad.io/flashing-guide/linea-learning"
             target="_blank"
             className="block text-base mb-[4px]"
           >

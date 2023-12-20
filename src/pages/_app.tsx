@@ -16,7 +16,7 @@ import AppLayout from '@/layout/layouts/AppLayout';
 import HomeLayout from '@/layout/layouts/HomeLayout';
 import {
   ALCHEMY_MUMBAI_API_KEY,
-  APP_BASED_CHAIN,
+  APP_BASE_CHAIN,
   INFURA_API_KEY,
 } from '@/utils/constants';
 import { alchemyProvider } from '@wagmi/core/providers/alchemy';
@@ -24,7 +24,6 @@ import { infuraProvider } from '@wagmi/core/providers/infura';
 import { Open_Sans } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -36,7 +35,7 @@ import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { Analytics } from '@vercel/analytics/react';
 
 const { chains, publicClient } = configureChains(
-  [lineaTestnet, polygonMumbai],
+  [APP_BASE_CHAIN],
   [
     publicProvider(),
     alchemyProvider({
@@ -73,7 +72,7 @@ const config = createConfig({
       },
     }),
   ],
-  publicClient: publicClient({ chainId: APP_BASED_CHAIN.id }),
+  publicClient: publicClient({ chainId: APP_BASE_CHAIN.id }),
 });
 console.log({ config });
 
@@ -84,7 +83,7 @@ const metadata = {
   icons: ['https://avatars.githubusercontent.com/u/37784886'],
 };
 
-const chains2 = [lineaTestnet];
+const chains2 = [APP_BASE_CHAIN];
 const wagmiConfig = defaultWagmiConfig({
   chains: chains2,
   projectId: '14f71914de6c8aae8a6b49b7ba15522f',

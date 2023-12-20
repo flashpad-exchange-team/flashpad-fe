@@ -2,8 +2,8 @@ import { Button } from '@/components/button/Button';
 import customToast from '@/components/notification/customToast';
 import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
-import { useMerlinPoolContractWrite } from '@/hooks/contract/useMerlinPoolContract';
-import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
+import { useThunderPoolContractWrite } from '@/hooks/contract/useThunderPoolContract';
+import useAllThunderPoolsData from '@/hooks/useAllThunderPoolsData';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import BNBICon from '@/icons/BNBIcon';
 import DownloadIcon from '@/icons/DownloadIcon';
@@ -14,7 +14,7 @@ import WalletIcon from '@/icons/WalletIcon';
 import { ADDRESS_ZERO, CHAIN_EXPLORER_URL } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import { handleError } from '@/utils/handleError';
-import * as merlinPoolContract from '@/utils/merlinPoolContract';
+import * as thunderPoolContract from '@/utils/thunderPoolContract';
 import * as nftPoolContract from '@/utils/nftPoolContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -24,24 +24,24 @@ import { useEffect, useState } from 'react';
 import { Address, useAccount } from 'wagmi';
 import TableDetail from './components/TableDetail';
 import TableDetailSp from './components/TableDetailSp';
-import { getMerlinPoolInfo as getMerlinPoolInfoApi } from '@/api/merlin-pool';
+import { getThunderPoolInfo as getThunderPoolInfoApi } from '@/api/thunder-pool';
 
-const FarmMerlinDetail = () => {
+const FarmThunderDetail = () => {
   const router = useRouter();
   const {
-    merlinPool,
+    thunderPool,
     //...queryParams,
   } = router.query;
 
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
-  const { data: allMerlinPools, isLoading } =
-    useAllMerlinPoolsData(userAddress);
+  const { data: allThunderPools, isLoading } =
+    useAllThunderPoolsData(userAddress);
 
   const windowWidth = useWindowWidth();
   const isSmallScreen = windowWidth < 768;
 
-  const [merlinPoolAddress, setMerlinPoolAddress] = useState(ADDRESS_ZERO);
+  const [thunderPoolAddress, setThunderPoolAddress] = useState(ADDRESS_ZERO);
   const [lpTokenAddress, setLpTokenAddress] = useState(ADDRESS_ZERO);
 
   const [token1Symbol, setToken1Symbol] = useState('');
@@ -63,23 +63,23 @@ const FarmMerlinDetail = () => {
   const [pendingRewards1, setPendingRewards1] = useState('0');
   const [pendingRewards2, setPendingRewards2] = useState('0');
   const [totalDeposited, setTotalDeposited] = useState('0');
-  const [merlinPoolSettings, setMerlinPoolSettings] = useState<any>(undefined);
+  const [thunderPoolSettings, setThunderPoolSettings] = useState<any>(undefined);
   const [tvl, setTvl] = useState(0);
   const [apr, setApr] = useState(0);
 
-  const getMerlinPoolInfo = async () => {
+  const getThunderPoolInfo = async () => {
     if (isLoading) return;
 
-    const merlinPoolData = allMerlinPools?.find(
-      (p) => p.poolAddress.toLowerCase() === (merlinPool + '').toLowerCase()
+    const thunderPoolData = allThunderPools?.find(
+      (p) => p.poolAddress.toLowerCase() === (thunderPool + '').toLowerCase()
     );
-    if (!merlinPoolData) {
+    if (!thunderPoolData) {
       router.push('/not-found');
       return;
     }
 
-    setMerlinPoolAddress(merlinPool as Address);
-    const nftPoolAddr = merlinPoolData.nftPoolAddress;
+    setThunderPoolAddress(thunderPool as Address);
+    const nftPoolAddr = thunderPoolData.nftPoolAddress;
     if (nftPoolAddr) {
       const nftPoolInfo = await nftPoolContract.read(
         nftPoolAddr,
@@ -92,32 +92,32 @@ const FarmMerlinDetail = () => {
       }
     }
 
-    setToken1Symbol(merlinPoolData.token1);
-    setToken2Symbol(merlinPoolData.token2);
-    setToken1Logo(merlinPoolData.token1Logo);
-    setToken2Logo(merlinPoolData.token2Logo);
+    setToken1Symbol(thunderPoolData.token1);
+    setToken2Symbol(thunderPoolData.token2);
+    setToken1Logo(thunderPoolData.token1Logo);
+    setToken2Logo(thunderPoolData.token2Logo);
 
-    setRewardsToken1Info(merlinPoolData.rewardsToken1Info);
-    setRewardsToken2Info(merlinPoolData.rewardsToken2Info);
-    setRewardsToken1Symbol(merlinPoolData.rewardsToken1Symbol);
-    setRewardsToken2Symbol(merlinPoolData.rewardsToken2Symbol);
-    setRewardsToken1Logo(merlinPoolData.rewardsToken1Logo);
-    setRewardsToken2Logo(merlinPoolData.rewardsToken2Logo);
+    setRewardsToken1Info(thunderPoolData.rewardsToken1Info);
+    setRewardsToken2Info(thunderPoolData.rewardsToken2Info);
+    setRewardsToken1Symbol(thunderPoolData.rewardsToken1Symbol);
+    setRewardsToken2Symbol(thunderPoolData.rewardsToken2Symbol);
+    setRewardsToken1Logo(thunderPoolData.rewardsToken1Logo);
+    setRewardsToken2Logo(thunderPoolData.rewardsToken2Logo);
 
-    setPendingRewards1(merlinPoolData.pendingRewards?.pending1 || '0');
-    setPendingRewards2(merlinPoolData.pendingRewards?.pending2 || '0');
+    setPendingRewards1(thunderPoolData.pendingRewards?.pending1 || '0');
+    setPendingRewards2(thunderPoolData.pendingRewards?.pending2 || '0');
 
-    setMerlinPoolSettings(merlinPoolData.settings);
+    setThunderPoolSettings(thunderPoolData.settings);
 
     const [userInfo, rwdToken1Decimals, rwdToken2Decimals] = await Promise.all([
-      merlinPoolContract.read(merlinPool as Address, 'userInfo', [userAddress]),
+      thunderPoolContract.read(thunderPool as Address, 'userInfo', [userAddress]),
       erc20TokenContract.erc20Read(
-        merlinPoolData.rewardsToken1Info.token,
+        thunderPoolData.rewardsToken1Info.token,
         'decimals',
         []
       ),
       erc20TokenContract.erc20Read(
-        merlinPoolData.rewardsToken2Info.token,
+        thunderPoolData.rewardsToken2Info.token,
         'decimals',
         []
       ),
@@ -134,7 +134,7 @@ const FarmMerlinDetail = () => {
       rwdToken2Decimals ? Number(rwdToken2Decimals) : 18
     );
 
-    const { data } = await getMerlinPoolInfoApi(merlinPool + '');
+    const { data } = await getThunderPoolInfoApi(thunderPool + '');
     if (data.data) {
       setTvl(data.data.tvl || 0);
       setApr(data.data.apr || 0);
@@ -143,17 +143,17 @@ const FarmMerlinDetail = () => {
 
   useEffect(() => {
     if (!router.isReady) return;
-    if (!merlinPool) {
+    if (!thunderPool) {
       router.push('/not-found');
       return;
     }
 
-    getMerlinPoolInfo();
-  }, [allMerlinPools, isLoading]);
+    getThunderPoolInfo();
+  }, [allThunderPools, isLoading]);
 
   const handleClickBtnContract = () => {
-    if (merlinPoolAddress !== ADDRESS_ZERO) {
-      window.open(`${CHAIN_EXPLORER_URL}/address/${merlinPoolAddress}`);
+    if (thunderPoolAddress !== ADDRESS_ZERO) {
+      window.open(`${CHAIN_EXPLORER_URL}/address/${thunderPoolAddress}`);
     } else {
       customToast({
         message: 'The Thunder pool contract address is undefined',
@@ -164,7 +164,7 @@ const FarmMerlinDetail = () => {
 
   const handleHarvest = async () => {
     try {
-      if (merlinPoolAddress === ADDRESS_ZERO) return;
+      if (thunderPoolAddress === ADDRESS_ZERO) return;
 
       if (!userAddress) {
         customToast({
@@ -180,11 +180,11 @@ const FarmMerlinDetail = () => {
         message: 'Confirming your transaction, please wait.',
       });
 
-      const { writeContract: writeMerlinPoolContract, ABI } =
-        useMerlinPoolContractWrite();
+      const { writeContract: writeThunderPoolContract, ABI } =
+        useThunderPoolContractWrite();
 
-      const harvestTx = await writeMerlinPoolContract({
-        address: merlinPoolAddress,
+      const harvestTx = await writeThunderPoolContract({
+        address: thunderPoolAddress,
         abi: ABI,
         functionName: 'harvest',
         args: [],
@@ -203,7 +203,7 @@ const FarmMerlinDetail = () => {
 
       startSuccessTx(
         handleSuccessTxMessageActionWithPair({
-          action: 'harvested position in Merlin pool',
+          action: 'harvested position in Thunder pool',
           token1: token1Symbol,
           token2: token2Symbol,
           txHash: txHash,
@@ -281,7 +281,7 @@ const FarmMerlinDetail = () => {
             rewardsToken1Decimals,
             rewardsToken2Decimals,
             totalDeposited,
-            settings: merlinPoolSettings,
+            settings: thunderPoolSettings,
           }}
         />
       ) : (
@@ -296,7 +296,7 @@ const FarmMerlinDetail = () => {
             rewardsToken1Decimals,
             rewardsToken2Decimals,
             totalDeposited,
-            settings: merlinPoolSettings,
+            settings: thunderPoolSettings,
           }}
         />
       )}
@@ -406,4 +406,4 @@ const FarmMerlinDetail = () => {
   );
 };
 
-export default FarmMerlinDetail;
+export default FarmThunderDetail;
