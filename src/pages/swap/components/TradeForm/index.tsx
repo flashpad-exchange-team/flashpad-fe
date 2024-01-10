@@ -18,11 +18,11 @@ import {
   K_5_MIN,
   MAX_UINT256,
 } from '@/utils/constants';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
-import * as factoryContract from '@/utils/factoryContract';
+import * as erc20TokenContract from '@/utils/contract/erc20TokenContract';
+import * as factoryContract from '@/utils/contract/factoryContract';
 import { handleError } from '@/utils/handleError';
-import * as pairContract from '@/utils/pairContract';
-import * as routerContract from '@/utils/routerContract';
+import * as pairContract from '@/utils/contract/pairContract';
+import * as routerContract from '@/utils/contract/routerContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';

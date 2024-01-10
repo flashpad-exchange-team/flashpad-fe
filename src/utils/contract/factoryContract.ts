@@ -1,9 +1,9 @@
 import { Address, getContract } from 'viem';
 import { abi as FlashpadFactoryABI } from '@/resources/abis/FlashpadFactory.json';
-import { publicClient, walletClient } from './web3Clients';
+import { publicClient, walletClient } from '../web3Clients';
 import {
   FLASHPAD_FACTORY_ADDRESS,
-} from './constants';
+} from '../constants';
 
 const factoryContract: any = getContract({
   address: FLASHPAD_FACTORY_ADDRESS as Address,

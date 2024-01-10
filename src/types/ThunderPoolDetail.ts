@@ -1,4 +1,4 @@
-import { IThunderPoolSettings } from '@/utils/thunderPoolContract';
+import { IThunderPoolSettings } from '@/utils/contract/thunderPoolContract';
 
 export default interface ThunderPoolDetailProps {
   tvl: string;

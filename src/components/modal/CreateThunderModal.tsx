@@ -12,7 +12,7 @@ import {
   daysToSeconds,
 } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
-import * as thunderPoolFactoryContract from '@/utils/thunderPoolFactoryContract';
+import * as thunderPoolFactoryContract from '@/utils/contract/thunderPoolFactoryContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import { add, getUnixTime, isSameDay } from 'date-fns';

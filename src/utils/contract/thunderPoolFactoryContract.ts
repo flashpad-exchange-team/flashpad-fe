@@ -1,8 +1,8 @@
 import { Address } from 'viem';
 import { abi as ThunderPoolFactoryABI } from '@/resources/abis/ThunderPoolFactory.json';
-import { publicClient, walletClient } from './web3Clients';
-import { handleError } from './handleError';
-import { THUNDER_POOL_FACTORY_ADDRESS } from './constants';
+import { publicClient, walletClient } from '../web3Clients';
+import { handleError } from '../handleError';
+import { THUNDER_POOL_FACTORY_ADDRESS } from '../constants';
 
 export interface ThunderPoolSettingsParams {
   startTime: string;

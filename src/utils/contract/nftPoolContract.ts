@@ -1,7 +1,7 @@
 import { Address } from 'viem';
 import { abi as NFTPoolABI } from '@/resources/abis/NFTPool.json';
-import { publicClient, walletClient } from './web3Clients';
-import { handleError } from './handleError';
+import { publicClient, walletClient } from '../web3Clients';
+import { handleError } from '../handleError';
 
 export const read = async (
   address: Address,

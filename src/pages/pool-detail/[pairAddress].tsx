@@ -20,7 +20,7 @@ import FeeIcon from '@/icons/FeeIcon';
 import FlowIcon from '@/icons/FlowIcon';
 import Link from '@/icons/Link';
 import * as covalentApiService from '@/services/covalentApi.service';
-import * as flashpadMasterContract from '@/utils/flashpadMasterContract';
+import * as flashpadMasterContract from '@/utils/contract/flashpadMasterContract';
 import {
   ADDRESS_ZERO,
   FLASHPAD_MASTER_ADDRESS,
@@ -31,10 +31,10 @@ import {
   USD_PRICE,
 } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
-import * as thunderPoolFactoryContract from '@/utils/thunderPoolFactoryContract';
-import * as nftPoolContract from '@/utils/nftPoolContract';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
-import * as pairContract from '@/utils/pairContract';
+import * as thunderPoolFactoryContract from '@/utils/contract/thunderPoolFactoryContract';
+import * as nftPoolContract from '@/utils/contract/nftPoolContract';
+import * as nftPoolFactoryContract from '@/utils/contract/nftPoolFactoryContract';
+import * as pairContract from '@/utils/contract/pairContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import Image from 'next/image';

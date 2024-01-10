@@ -1,10 +1,10 @@
 import { Address, getContract } from 'viem';
 import { abi as NFTPoolFactoryABI } from '@/resources/abis/NFTPoolFactory.json';
-import { publicClient, walletClient } from './web3Clients';
+import { publicClient, walletClient } from '../web3Clients';
 import {
   NFT_POOL_FACTORY_ADDRESS
-} from './constants';
-import { handleError } from './handleError';
+} from '../constants';
+import { handleError } from '../handleError';
 
 const nftPoolFactoryContract: any = getContract({
   address: NFT_POOL_FACTORY_ADDRESS as Address,

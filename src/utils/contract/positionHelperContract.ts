@@ -1,7 +1,7 @@
-import { abi as xFlashABI } from '@/resources/abis/XFlashToken.json';
-import { publicClient, walletClient } from './web3Clients';
 import { Address } from 'viem';
-import { handleError } from './handleError';
+import { abi as PositionHelperABI } from '@/resources/abis/PositionHelper.json';
+import { publicClient, walletClient } from '../web3Clients';
+import { handleError } from '../handleError';
 
 export const read = async (
   address: Address,
@@ -11,14 +11,13 @@ export const read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: xFlashABI,
+      abi: PositionHelperABI,
       functionName,
       args,
     });
     return result;
   } catch (err: any) {
     handleError(err);
-
     return undefined;
   }
 };
@@ -27,15 +26,17 @@ export const write = async (
   account: Address,
   address: Address,
   functionName: string,
-  args: any[]
+  args: any[],
+  value?: string,
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: xFlashABI,
+      abi: PositionHelperABI,
       functionName,
       args,
+      value,
     });
     const hash = await walletClient.writeContract(request);
     return { hash, result };

@@ -1,6 +1,6 @@
 import { useLoading } from '@/context/LoadingContext';
 import { useRouterContractWrite } from '@/hooks/contract/useRouterContract';
-import { usePairContractWrite } from '@/hooks/contract/userPairContract';
+import { usePairContractWrite } from '@/hooks/contract/usePairContract';
 import { allPairsKey, allPairsKeyForAll } from '@/hooks/useAllPairsData';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
@@ -12,9 +12,9 @@ import {
   MAX_UINT256,
   minutesToSeconds,
 } from '@/utils/constants';
-import * as erc20Contract from '@/utils/erc20TokenContract';
+import * as erc20Contract from '@/utils/contract/erc20TokenContract';
 import { handleError } from '@/utils/handleError';
-import * as pairContract from '@/utils/pairContract';
+import * as pairContract from '@/utils/contract/pairContract';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
