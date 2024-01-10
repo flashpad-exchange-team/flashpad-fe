@@ -33,7 +33,9 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-
+import { Swap as Swing } from '@swing.xyz/ui';
+import '@swing.xyz/ui/theme.css';
+import { useRouter } from 'next/router';
 interface TradeFormProps {
   title: string;
   buttonName: string;
@@ -41,7 +43,18 @@ interface TradeFormProps {
   inputTitle2: string;
   dividerIcon: React.ReactNode;
 }
-
+const FEATURE_PROPS: { [k: string]: any } = {
+  'ADD LIQUIDITY': {
+    value: 'ADD LIQUIDITY',
+    label: 'Swap',
+    buttonName: 'Add Liquidity',
+  },
+  'STAKE POSITION': {
+    value: 'STAKE POSITION',
+    label: 'Swing.xyz',
+    buttonName: 'Create Position',
+  },
+};
 const TradeForm = ({
   title,
   buttonName,
@@ -49,12 +62,19 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
+  const router = useRouter();
+  const queryParams = router.query;
+  let feat = 'ADD LIQUIDITY';
+  if (queryParams?.feat === 'spnft') {
+    feat = 'STAKE POSITION';
+  }
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const { mutate } = useSWRConfig();
 
+  const [feature, setFeature] = useState(feat);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [tokenBeingSelected, setTokenBeingSelected] = useState<number>(0);
   const [token1, setToken1] = useState<any>();
@@ -359,7 +379,31 @@ const TradeForm = ({
           {title}
           <SwapRightIcon />
         </div>
-        <div className=" flex items-center gap-2 mt-8 justify-between">
+
+    <div className="flex bg-darkBlue mt-6 rounded-lg">
+          {Object.keys(FEATURE_PROPS).map((key: string) => (
+            <button
+              className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
+                feature === key
+                  ? 'bg-[#FFAF1D] border border-[#FFAF1D] text-black'
+                  : ''
+              }`}
+              onClick={() => setFeature(FEATURE_PROPS[key].value)}
+            >
+              {FEATURE_PROPS[key].label}
+            </button>
+          ))}
+        </div>
+        {
+          feature === 'STAKE POSITION' &&
+          
+          <div className='mt-8 mb-4'> <Swing projectId="flashpad" />
+            </div>
+
+         
+        }
+     {
+          feature === 'ADD LIQUIDITY' && <>  <div className=" flex items-center gap-2 mt-8 justify-between">
           <div className="text-primary font-semibold flex items-center gap-2 text-sm lg:text-base ">
             V2 MODE
             <QuestionIcon />
@@ -437,7 +481,9 @@ const TradeForm = ({
         >
           {buttonName}
         </Button>
-        <DividerDown />
+        <DividerDown /></>
+        }
+      
       </div>
     </>
   );

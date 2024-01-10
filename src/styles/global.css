@@ -107,3 +107,6 @@ svg {
     margin: 0;
   }
 }
+#swing > div {
+  max-width:unset!important;
+}

@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@covalenthq/client-sdk": "^0.2.9",
+    "@swing.xyz/ui": "^0.47.6",
     "@szhsin/react-menu": "^4.0.2",
     "@types/react-modal": "^3.16.0",
     "@types/uuid": "^9.0.4",

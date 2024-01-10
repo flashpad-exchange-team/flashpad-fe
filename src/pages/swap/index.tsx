@@ -7,6 +7,8 @@ const TradeForm: any = dynamic(() => import('./components/TradeForm'), {
 
 const Swap = () => {
   return (
+    <>
+    <div className='mt-[100px]'/>
     <TradeForm
       title="SWAP"
       buttonName="Swap"
@@ -14,6 +16,8 @@ const Swap = () => {
       inputTitle2="To"
       dividerIcon={<SwapIcon />}
     />
+    </>
+    
   );
 };
 
