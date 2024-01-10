@@ -403,12 +403,12 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png',
   },
   {
-    symbol: 'USDC',
-    name: 'USDC',
+    symbol: 'FSHIB',
+    name: 'Shiba Coin',
     address: '0x8B57916D9C0a6D97422590eF545Dd721cF46734b',
     decimals: 8,
-    // logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png',
-    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
+    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png',
+    // logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
   },
   {
     symbol: 'FLASH',
