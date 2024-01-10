@@ -465,6 +465,7 @@ const TradeForm = ({
 
       if (token1.symbol == 'ETH') {
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidityETH',
@@ -482,6 +483,7 @@ const TradeForm = ({
         });
       } else if (token2.symbol == 'ETH') {
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidityETH',
@@ -499,6 +501,7 @@ const TradeForm = ({
         });
       } else {
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidity',
@@ -516,6 +519,8 @@ const TradeForm = ({
           ],
         });
       }
+
+      console.log({ txResult });
 
       if (!txResult) {
         stopLoadingTx();
