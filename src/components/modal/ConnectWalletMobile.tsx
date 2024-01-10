@@ -3,7 +3,7 @@ import Coinbase from '@/icons/Coinbase';
 import ConnectSuccess from '@/icons/ConnectSuccess';
 import InfoIcon from '@/icons/InfoIcon';
 import WalletConnect from '@/icons/WalletConnect';
-import { APP_BASE_CHAIN, IS_LINEA } from '@/utils/constants';
+import { APP_BASE_CHAIN } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
