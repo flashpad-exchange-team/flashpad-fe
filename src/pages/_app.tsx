@@ -9,6 +9,7 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-tooltip/dist/react-tooltip.css';
+import '@swing.xyz/ui/theme.css';
 
 import LoadingTx from '@/components/loading/LoadingTx';
 import SuccessTx from '@/components/loading/SuccessTx';

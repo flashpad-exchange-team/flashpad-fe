@@ -44,6 +44,11 @@ const MENU_ITEMS = [
         path: '/liquidity',
         icon: <Liquidity width="18px" />,
       },
+      {
+        name: 'Bridge',
+        path: '/swap?feat=bridge',
+        icon: <Liquidity width="18px" />,
+      },
     ],
   },
   {

@@ -34,7 +34,6 @@ import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import { Swap as Swing } from '@swing.xyz/ui';
-import '@swing.xyz/ui/theme.css';
 import { useRouter } from 'next/router';
 interface TradeFormProps {
   title: string;
@@ -44,15 +43,13 @@ interface TradeFormProps {
   dividerIcon: React.ReactNode;
 }
 const FEATURE_PROPS: { [k: string]: any } = {
-  'ADD LIQUIDITY': {
-    value: 'ADD LIQUIDITY',
+  'Swap': {
+    value: 'Swap',
     label: 'Swap',
-    buttonName: 'Add Liquidity',
   },
-  'STAKE POSITION': {
-    value: 'STAKE POSITION',
-    label: 'Swing.xyz',
-    buttonName: 'Create Position',
+  'Bridge': {
+    value: 'Bridge',
+    label: 'Bridge to Linea',
   },
 };
 const TradeForm = ({
@@ -64,9 +61,9 @@ const TradeForm = ({
 }: TradeFormProps) => {
   const router = useRouter();
   const queryParams = router.query;
-  let feat = 'ADD LIQUIDITY';
-  if (queryParams?.feat === 'spnft') {
-    feat = 'STAKE POSITION';
+  let feat = 'Swap';
+  if (queryParams?.feat === 'bridge') {
+    feat = 'Bridge';
   }
   const { address: userAddress } = useAccount();
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
@@ -395,7 +392,7 @@ const TradeForm = ({
           ))}
         </div>
         {
-          feature === 'STAKE POSITION' &&
+          feature === 'Bridge' &&
           
           <div className='mt-8 mb-4'> <Swing projectId="flashpad" />
             </div>
@@ -403,7 +400,7 @@ const TradeForm = ({
          
         }
      {
-          feature === 'ADD LIQUIDITY' && <>  <div className=" flex items-center gap-2 mt-8 justify-between">
+          feature === 'Swap' && <>  <div className=" flex items-center gap-2 mt-8 justify-between">
           <div className="text-primary font-semibold flex items-center gap-2 text-sm lg:text-base ">
             V2 MODE
             <QuestionIcon />

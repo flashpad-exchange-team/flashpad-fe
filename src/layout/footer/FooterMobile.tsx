@@ -4,6 +4,7 @@ import ArrowDown from '@/icons/ArrowDown';
 import ArthurSmallIcon from '@/icons/ArthurSmallIcon';
 import { Logo } from '@/templates/Logo';
 import { convertToInternationalCurrencySystem } from '@/utils/convert';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 interface FooterInterface {
   info: Record<string, any>;
@@ -16,6 +17,7 @@ const FooterMobile = ({ info }: FooterInterface) => {
   const toggleShow1 = () => setShow1(!show1);
   const toggleShow2 = () => setShow2(!show2);
   const toggleShow3 = () => setShow3(!show3);
+  const router = useRouter()
 
   return (
     <div className="bg-dark mb-[75px] h-100% min-h-[450px]  px-4 pt-4 text  pb-10">
@@ -107,7 +109,8 @@ const FooterMobile = ({ info }: FooterInterface) => {
         {show3 && (
           <>
             <div className=" text-base mb-[4px] mt-4">Analytics</div>
-            <div className=" text-base mb-[4px]">Bridge</div>
+            <div className=" text-base mb-[4px]"           onClick={()=>router.push('/swap?feat=bridge')}
+>Bridge</div>
           </>
         )}
       </div>
