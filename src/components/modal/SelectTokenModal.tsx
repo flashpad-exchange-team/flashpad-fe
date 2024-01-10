@@ -8,7 +8,7 @@ import DividerDown from '@/icons/DividerDown';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { CHAINS_TOKENS_LIST, IERC20TokenMetadata } from '@/utils/constants';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as erc20TokenContract from '@/utils/contract/erc20TokenContract';
 import { getBalance } from '@/utils/web3Helpers';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';

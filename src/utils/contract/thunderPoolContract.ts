@@ -1,7 +1,7 @@
 import { Address } from 'viem';
 import { abi as ThunderPoolABI } from '@/resources/abis/ThunderPool.json';
-import { publicClient, walletClient } from './web3Clients';
-import { handleError } from './handleError';
+import { publicClient, walletClient } from '../web3Clients';
+import { handleError } from '../handleError';
 
 export interface IThunderPoolSettings {
   startTime: BigInt;

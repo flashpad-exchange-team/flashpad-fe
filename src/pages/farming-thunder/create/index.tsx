@@ -18,10 +18,10 @@ import {
   CHAINS_TOKENS_LIST,
   NFT_POOL_FACTORY_ADDRESS,
 } from '@/utils/constants';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as erc20TokenContract from '@/utils/contract/erc20TokenContract';
 import { handleError } from '@/utils/handleError';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
-import * as routerContract from '@/utils/routerContract';
+import * as nftPoolFactoryContract from '@/utils/contract/nftPoolFactoryContract';
+import * as routerContract from '@/utils/contract/routerContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import { waitForTransaction } from '@wagmi/core';
 import Image from 'next/image';

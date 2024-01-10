@@ -1,9 +1,9 @@
 import { abi as RouterABI } from '@/resources/abis/FlashpadRouter.json';
 import BigNumber from 'bignumber.js';
 import { Address, getContract } from 'viem';
-import { FLASHPAD_ROUTER_ADDRESS } from './constants';
-import { handleError } from './handleError';
-import { publicClient, walletClient } from './web3Clients';
+import { FLASHPAD_ROUTER_ADDRESS } from '../constants';
+import { handleError } from '../handleError';
+import { publicClient, walletClient } from '../web3Clients';
 
 const routerContract: any = getContract({
   address: FLASHPAD_ROUTER_ADDRESS as Address,

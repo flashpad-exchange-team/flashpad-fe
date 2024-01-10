@@ -1,7 +1,7 @@
 import { Address } from 'viem';
 import { abi as FlashpadMasterABI } from '@/resources/abis/FlashpadMaster.json';
-import { publicClient, walletClient } from './web3Clients';
-import { handleError } from './handleError';
+import { publicClient, walletClient } from '../web3Clients';
+import { handleError } from '../handleError';
 
 export const read = async (
   address: Address,

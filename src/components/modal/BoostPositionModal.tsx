@@ -9,7 +9,7 @@ import {
   YIELD_BOOSTER_ADDRESS,
 } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
-import * as xFlashContract from '@/utils/xFlashContract';
+import * as xFlashContract from '@/utils/contract/xFlashContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import Image from 'next/image';

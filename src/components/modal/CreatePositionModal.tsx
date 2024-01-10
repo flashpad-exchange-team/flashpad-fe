@@ -1,7 +1,7 @@
 import { handleSuccessTxMessageActionWithPair } from '@/components/successTxMessage';
 import { useLoading } from '@/context/LoadingContext';
 import { useNftPoolContractWrite } from '@/hooks/contract/useNftPoolContract';
-import { usePairContractWrite } from '@/hooks/contract/userPairContract';
+import { usePairContractWrite } from '@/hooks/contract/usePairContract';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
@@ -14,7 +14,7 @@ import {
   daysToSeconds,
 } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
-import * as pairContract from '@/utils/pairContract';
+import * as pairContract from '@/utils/contract/pairContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';

@@ -1,7 +1,7 @@
 import { abi as FlashpadPairABI } from '@/resources/abis/FlashpadPair.json';
-import { publicClient, walletClient } from './web3Clients';
+import { publicClient, walletClient } from '../web3Clients';
 import { Address } from 'viem';
-import { handleError } from './handleError';
+import { handleError } from '../handleError';
 
 export const read = async (
   address: Address,

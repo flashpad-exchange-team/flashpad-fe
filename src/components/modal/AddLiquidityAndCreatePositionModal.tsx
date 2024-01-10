@@ -15,7 +15,7 @@ import {
   daysToSeconds,
   minutesToSeconds,
 } from '@/utils/constants';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
+import * as erc20TokenContract from '@/utils/contract/erc20TokenContract';
 import { handleError } from '@/utils/handleError';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import * as web3Helpers from '@/utils/web3Helpers';

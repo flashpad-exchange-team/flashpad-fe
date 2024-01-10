@@ -36,11 +36,11 @@ import {
   minutesToSeconds,
   APP_BASE_CHAIN,
 } from '@/utils/constants';
-import * as erc20TokenContract from '@/utils/erc20TokenContract';
-import * as factoryContract from '@/utils/factoryContract';
+import * as erc20TokenContract from '@/utils/contract/erc20TokenContract';
+import * as factoryContract from '@/utils/contract/factoryContract';
 import { handleError } from '@/utils/handleError';
-import * as nftPoolFactoryContract from '@/utils/nftPoolFactoryContract';
-import * as routerContract from '@/utils/routerContract';
+import * as nftPoolFactoryContract from '@/utils/contract/nftPoolFactoryContract';
+import * as routerContract from '@/utils/contract/routerContract';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
@@ -465,6 +465,7 @@ const TradeForm = ({
 
       if (token1.symbol == 'ETH') {
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidityETH',
@@ -482,6 +483,7 @@ const TradeForm = ({
         });
       } else if (token2.symbol == 'ETH') {
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidityETH',
@@ -499,6 +501,7 @@ const TradeForm = ({
         });
       } else {
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidity',
@@ -516,6 +519,8 @@ const TradeForm = ({
           ],
         });
       }
+
+      console.log({ txResult });
 
       if (!txResult) {
         stopLoadingTx();

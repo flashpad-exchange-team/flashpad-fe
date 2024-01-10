@@ -1,9 +1,9 @@
-import { abi as ERC20ABI } from '@/resources/abis/ERC20.json';
-import { publicClient, walletClient } from './web3Clients';
+import { abi as xFlashABI } from '@/resources/abis/XFlashToken.json';
+import { publicClient, walletClient } from '../web3Clients';
 import { Address } from 'viem';
-import { handleError } from './handleError';
+import { handleError } from '../handleError';
 
-export const erc20Read = async (
+export const read = async (
   address: Address,
   functionName: string,
   args: any[]
@@ -11,18 +11,19 @@ export const erc20Read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: ERC20ABI,
+      abi: xFlashABI,
       functionName,
       args,
     });
     return result;
   } catch (err: any) {
-    console.log(err);
+    handleError(err);
+
     return undefined;
   }
 };
 
-export const erc20Write = async (
+export const write = async (
   account: Address,
   address: Address,
   functionName: string,
@@ -32,7 +33,7 @@ export const erc20Write = async (
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: ERC20ABI,
+      abi: xFlashABI,
       functionName,
       args,
     });
@@ -40,7 +41,6 @@ export const erc20Write = async (
     return { hash, result };
   } catch (err: any) {
     handleError(err);
-
     return undefined;
   }
 };

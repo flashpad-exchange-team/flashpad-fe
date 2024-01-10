@@ -1,9 +1,9 @@
+import { abi as ERC20ABI } from '@/resources/abis/ERC20.json';
+import { publicClient, walletClient } from '../web3Clients';
 import { Address } from 'viem';
-import { abi as PositionHelperABI } from '@/resources/abis/PositionHelper.json';
-import { publicClient, walletClient } from './web3Clients';
-import { handleError } from './handleError';
+import { handleError } from '../handleError';
 
-export const read = async (
+export const erc20Read = async (
   address: Address,
   functionName: string,
   args: any[]
@@ -11,37 +11,36 @@ export const read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: PositionHelperABI,
+      abi: ERC20ABI,
       functionName,
       args,
     });
     return result;
   } catch (err: any) {
-    handleError(err);
+    console.log(err);
     return undefined;
   }
 };
 
-export const write = async (
+export const erc20Write = async (
   account: Address,
   address: Address,
   functionName: string,
-  args: any[],
-  value?: string,
+  args: any[]
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: PositionHelperABI,
+      abi: ERC20ABI,
       functionName,
       args,
-      value,
     });
     const hash = await walletClient.writeContract(request);
     return { hash, result };
   } catch (err: any) {
     handleError(err);
+
     return undefined;
   }
 };
