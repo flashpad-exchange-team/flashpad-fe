@@ -1,12 +1,12 @@
-import { abi as RouterABI } from '@/resources/abis/ArthurRouter.json';
+import { abi as RouterABI } from '@/resources/abis/FlashpadRouter.json';
 import BigNumber from 'bignumber.js';
 import { Address, getContract } from 'viem';
-import { ARTHUR_ROUTER_ADDRESS } from './constants';
+import { FLASHPAD_ROUTER_ADDRESS } from './constants';
 import { handleError } from './handleError';
 import { publicClient, walletClient } from './web3Clients';
 
 const routerContract: any = getContract({
-  address: ARTHUR_ROUTER_ADDRESS as Address,
+  address: FLASHPAD_ROUTER_ADDRESS as Address,
   abi: RouterABI,
   publicClient,
   walletClient,
@@ -42,7 +42,7 @@ export const addLiquidity = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS as Address,
+      address: FLASHPAD_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'addLiquidity',
       args: Object.values(params),
@@ -63,7 +63,7 @@ export const addLiquidityETH = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS as Address,
+      address: FLASHPAD_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'addLiquidityETH',
       args: Object.values(params),
@@ -95,7 +95,7 @@ export const removeLiquidity = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS as Address,
+      address: FLASHPAD_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'removeLiquidity',
       args: Object.values(params),
@@ -126,7 +126,7 @@ export const removeLiquidityETH = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS as Address,
+      address: FLASHPAD_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'removeLiquidityETH',
       args: Object.values(params),
@@ -240,7 +240,7 @@ export const swapTokensForTokens = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS as Address,
+      address: FLASHPAD_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
       args: Object.values(params),
@@ -261,7 +261,7 @@ export const swapTokensForETH = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS as Address,
+      address: FLASHPAD_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'swapExactTokensForETHSupportingFeeOnTransferTokens',
       args: Object.values(params),
@@ -291,7 +291,7 @@ export const swapETHForTokens = async (
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: ARTHUR_ROUTER_ADDRESS as Address,
+      address: FLASHPAD_ROUTER_ADDRESS as Address,
       abi: RouterABI,
       functionName: 'swapExactETHForTokensSupportingFeeOnTransferTokens',
       args: Object.values(params),

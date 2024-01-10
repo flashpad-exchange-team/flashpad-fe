@@ -22,10 +22,10 @@ import ReloadIcon from '@/icons/ReloadIcon';
 import SettingIcon from '@/icons/SettingIcon';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
+import { abi as FlashpadPairABI } from '@/resources/abis/FlashpadPair.json';
 import {
   ADDRESS_ZERO,
-  ARTHUR_ROUTER_ADDRESS,
+  FLASHPAD_ROUTER_ADDRESS,
   CHAINS_TOKENS_LIST,
   DEFAULT_DEADLINE,
   DEFAULT_SLIPPAGE,
@@ -34,6 +34,7 @@ import {
   NFT_POOL_FACTORY_ADDRESS,
   daysToSeconds,
   minutesToSeconds,
+  APP_BASE_CHAIN,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/erc20TokenContract';
 import * as factoryContract from '@/utils/factoryContract';
@@ -56,7 +57,6 @@ import {
   useNetwork,
   useSwitchNetwork,
 } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 
@@ -169,13 +169,13 @@ const TradeForm = ({
 
   const { data: reserves } = useContractRead({
     address: pairAddress,
-    abi: ArthurPairABI,
+    abi: FlashpadPairABI,
     functionName: 'getReserves',
   });
 
   const { data: pairToken1 } = useContractRead({
     address: pairAddress,
-    abi: ArthurPairABI,
+    abi: FlashpadPairABI,
     functionName: 'token0',
   });
 
@@ -335,7 +335,7 @@ const TradeForm = ({
       const { writeContract: writeRouterContract, ABI: RouterABI } =
         useRouterContractWrite();
 
-      if (chain?.id !== lineaTestnet.id) {
+      if (chain?.id !== APP_BASE_CHAIN.id) {
         handleSwitchNetwork(switchNetwork);
         return;
       }
@@ -389,7 +389,7 @@ const TradeForm = ({
         const token1Allowance = (await erc20TokenContract.erc20Read(
           token1.address,
           'allowance',
-          [userAddress, ARTHUR_ROUTER_ADDRESS]
+          [userAddress, FLASHPAD_ROUTER_ADDRESS]
         )) as bigint;
 
         if (BigNumber(token1Allowance.toString()).isLessThan(token1AmountIn)) {
@@ -403,7 +403,7 @@ const TradeForm = ({
             address: token1.address,
             abi: ERC20ABI,
             functionName: 'approve',
-            args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+            args: [FLASHPAD_ROUTER_ADDRESS, MAX_UINT256],
           });
 
           if (!hash) {
@@ -423,7 +423,7 @@ const TradeForm = ({
         const token2Allowance = (await erc20TokenContract.erc20Read(
           token2.address,
           'allowance',
-          [userAddress, ARTHUR_ROUTER_ADDRESS]
+          [userAddress, FLASHPAD_ROUTER_ADDRESS]
         )) as bigint;
 
         if (BigNumber(token2Allowance.toString()).isLessThan(token2AmountIn)) {
@@ -437,7 +437,7 @@ const TradeForm = ({
             address: token2.address,
             abi: ERC20ABI,
             functionName: 'approve',
-            args: [ARTHUR_ROUTER_ADDRESS, MAX_UINT256],
+            args: [FLASHPAD_ROUTER_ADDRESS, MAX_UINT256],
           });
 
           if (!hash) {
@@ -465,7 +465,7 @@ const TradeForm = ({
 
       if (token1.symbol == 'ETH') {
         txResult = await writeRouterContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidityETH',
           args: [
@@ -482,7 +482,7 @@ const TradeForm = ({
         });
       } else if (token2.symbol == 'ETH') {
         txResult = await writeRouterContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidityETH',
           args: [
@@ -499,7 +499,7 @@ const TradeForm = ({
         });
       } else {
         txResult = await writeRouterContract({
-          address: ARTHUR_ROUTER_ADDRESS as Address,
+          address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'addLiquidity',
           args: [

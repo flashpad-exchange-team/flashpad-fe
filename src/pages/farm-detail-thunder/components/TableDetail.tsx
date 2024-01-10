@@ -1,11 +1,11 @@
 import React from 'react';
 import QuestionIcon from '@/icons/QuestionIcon';
 import { useRouter } from 'next/router';
-import MerlinPoolDetailProps from '../../../types/MerlinPoolDetail';
+import ThunderPoolDetailProps from '../../../types/ThunderPoolDetail';
 import BigNumber from 'bignumber.js';
 
 interface TableDetailProps {
-  data: MerlinPoolDetailProps;
+  data: ThunderPoolDetailProps;
 }
 
 const TableDetail: React.FC<TableDetailProps> = ({ data }) => {

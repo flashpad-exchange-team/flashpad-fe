@@ -1,9 +1,9 @@
 import { Address } from 'viem';
-import { abi as MerlinPoolABI } from '@/resources/abis/MerlinPool.json';
+import { abi as ThunderPoolABI } from '@/resources/abis/ThunderPool.json';
 import { publicClient, walletClient } from './web3Clients';
 import { handleError } from './handleError';
 
-export interface IMerlinPoolSettings {
+export interface IThunderPoolSettings {
   startTime: BigInt;
   endTime: BigInt;
   harvestStartTime?: BigInt;
@@ -23,7 +23,7 @@ export const read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: MerlinPoolABI,
+      abi: ThunderPoolABI,
       functionName,
       args,
     });
@@ -39,13 +39,13 @@ export const write = async (
   address: Address,
   functionName: string,
   args: any[],
-  value?: string,
+  value?: string
 ) => {
   try {
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: MerlinPoolABI,
+      abi: ThunderPoolABI,
       functionName,
       args,
       value,
@@ -65,10 +65,7 @@ const rewardsTokenResultKeys = [
   'accRewardsPerShare',
 ];
 
-const pendingRewardsResultKeys = [
-  'pending1',
-  'pending2',
-];
+const pendingRewardsResultKeys = ['pending1', 'pending2'];
 
 const settingsResultKeys = [
   'startTime',
@@ -88,14 +85,14 @@ const userInfoResultKeys = [
   'rewardDebtToken2',
   'pendingRewardsToken1',
   'pendingRewardsToken2',
-]
+];
 
 const functionResultKeysMap: { [k: string]: string[] } = {
-  'rewardsToken1': rewardsTokenResultKeys,
-  'rewardsToken2': rewardsTokenResultKeys,
-  'pendingRewards': pendingRewardsResultKeys,
-  'settings': settingsResultKeys,
-  'userInfo': userInfoResultKeys,
+  rewardsToken1: rewardsTokenResultKeys,
+  rewardsToken2: rewardsTokenResultKeys,
+  pendingRewards: pendingRewardsResultKeys,
+  settings: settingsResultKeys,
+  userInfo: userInfoResultKeys,
 };
 
 const mapResultArrayToObj = (functionName: string, result: any) => {

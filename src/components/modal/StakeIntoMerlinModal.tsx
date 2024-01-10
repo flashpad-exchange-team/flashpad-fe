@@ -1,6 +1,6 @@
 import { useLoading } from '@/context/LoadingContext';
 import { useNftPoolContractWrite } from '@/hooks/contract/useNftPoolContract';
-import useAllMerlinPoolsData from '@/hooks/useAllMerlinPoolsData';
+import useAllThunderPoolsData from '@/hooks/useAllThunderPoolsData';
 import BNBICon from '@/icons/BNBIcon';
 import CalendarIcon from '@/icons/CalendarIcon';
 import CloseIcon from '@/icons/CloseIcon';
@@ -8,14 +8,13 @@ import CurrencyDollar from '@/icons/CurrencyDollar';
 import DividerDown from '@/icons/DividerDown';
 import SaleIcon from '@/icons/SaleIcon';
 import UnlockIcon from '@/icons/UnlockIcon';
-import { ADDRESS_ZERO } from '@/utils/constants';
+import { ADDRESS_ZERO, APP_BASE_CHAIN } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import { waitForTransaction } from '@wagmi/core';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Address, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 import { Button } from '../button/Button';
 import customToast from '../notification/customToast';
 import { handleSuccessTxMessageActionWithPair } from '../successTxMessage';
@@ -51,8 +50,8 @@ const StakeIntoMerlinModal = ({
   togglePositionDetailModal,
 }: StakeIntoMerlinModalProps) => {
   const { address: userAddress } = useAccount();
-  const { data: listMerlinPools, isLoading } =
-    useAllMerlinPoolsData(userAddress);
+  const { data: listThunderPools, isLoading } =
+    useAllThunderPoolsData(userAddress);
   const { startLoadingTx, stopLoadingTx, startSuccessTx } = useLoading();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
@@ -63,7 +62,7 @@ const StakeIntoMerlinModal = ({
   const getMerlinPoolInfo = async () => {
     if (isLoading || !isOpen) return;
 
-    const merlinPool = listMerlinPools?.find(
+    const merlinPool = listThunderPools?.find(
       (p) => p.nftPoolAddress.toLowerCase() === nftPoolAddress?.toLowerCase()
     );
 
@@ -83,11 +82,11 @@ const StakeIntoMerlinModal = ({
 
   useEffect(() => {
     getMerlinPoolInfo();
-  }, [listMerlinPools, isLoading, isOpen]);
+  }, [listThunderPools, isLoading, isOpen]);
 
   const handleStakeToMerlinPool = async () => {
     try {
-      if (chain?.id !== lineaTestnet.id) {
+      if (chain?.id !== APP_BASE_CHAIN.id) {
         handleSwitchNetwork(switchNetwork);
         return;
       }

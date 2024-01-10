@@ -1,5 +1,5 @@
 import { useLoading } from '@/context/LoadingContext';
-import { useMerlinPoolContractWrite } from '@/hooks/contract/useMerlinPoolContract';
+import { useThunderPoolContractWrite } from '@/hooks/contract/useThunderPoolContract';
 import BNBICon from '@/icons/BNBIcon';
 import ChartBreakoutIcon from '@/icons/ChartBreakoutIcon';
 import CloseIcon from '@/icons/CloseIcon';
@@ -49,7 +49,7 @@ export interface PositionDetailModalProps {
   toggleBoostPosition: () => void;
   toggleHarvestPosition: () => void;
   poolInfo: any;
-  publishedMerlinPoolsCount: number;
+  publishedThunderPoolsCount: number;
   feeAPR: BigNumber;
   farmBaseAPR: BigNumber;
 }
@@ -69,7 +69,7 @@ const PositionDetailModal = ({
   toggleHarvestPosition,
   nftPoolAddress,
   refetchData,
-  publishedMerlinPoolsCount,
+  publishedThunderPoolsCount,
   feeAPR,
   farmBaseAPR,
 }: PositionDetailModalProps) => {
@@ -125,10 +125,10 @@ const PositionDetailModal = ({
 
       const merlinPoolAddress = currentSPNFT.owner;
 
-      const { writeContract: writeMerlinPoolContract, ABI } =
-        useMerlinPoolContractWrite();
+      const { writeContract: writeThunderPoolContract, ABI } =
+        useThunderPoolContractWrite();
 
-      const withdrawSpNftTx = await writeMerlinPoolContract({
+      const withdrawSpNftTx = await writeThunderPoolContract({
         address: merlinPoolAddress as Address,
         abi: ABI,
         functionName: 'withdraw',
@@ -276,7 +276,7 @@ const PositionDetailModal = ({
             </div>
             <div
               onClick={() => {
-                if (!publishedMerlinPoolsCount) {
+                if (!publishedThunderPoolsCount) {
                   return;
                 }
                 if (!isSpNFTStakedToMerlin) {
@@ -290,7 +290,7 @@ const PositionDetailModal = ({
                 className="px-5 py-4 flex justify-center bg-blue-opacity-50 rounded-md h-[54px] items-center"
                 title="Stake into Thunder"
               >
-                {publishedMerlinPoolsCount > 0 ? (
+                {publishedThunderPoolsCount > 0 ? (
                   isSpNFTStakedToMerlin ? (
                     //TODO: unstake icon
                     <ChartBreakoutIcon stroke="#FFAF1D" />
@@ -303,7 +303,7 @@ const PositionDetailModal = ({
                 )}
               </div>
               <div className="text-xs mt-2 text-center">
-                {publishedMerlinPoolsCount > 0
+                {publishedThunderPoolsCount > 0
                   ? isSpNFTStakedToMerlin
                     ? 'Unstake from Thunder'
                     : 'Stake into Thunder'
@@ -396,7 +396,7 @@ const PositionDetailModal = ({
               {currentSPNFT?.stakingPosition?.boostPoints > 0
                 ? new BigNumber(currentSPNFT?.stakingPosition?.boostPoints || 0)
                     .div(new BigNumber(10).pow(18))
-                    .toString(10) + ' xART'
+                    .toString(10) + ' xFlash'
                 : '-'}
             </div>
           </div>

@@ -5,7 +5,7 @@ import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
 import customToast from '../notification/customToast';
 import { useSwitchNetwork } from 'wagmi';
-import { APP_BASED_CHAIN } from '@/utils/constants';
+import { APP_BASE_CHAIN } from '@/utils/constants';
 
 interface SwitchNetworkModalProps {
   isOpen: boolean;
@@ -20,12 +20,12 @@ const SwitchNetworkModal = ({
   const handleSwitchNetwork = async () => {
     if (!switchNetworkAsync) {
       customToast({
-        message: `Please switch to ${APP_BASED_CHAIN.name} on your browser wallet`,
+        message: `Please switch to ${APP_BASE_CHAIN.name} on your browser wallet`,
         type: 'error',
       });
     } else {
       try {
-        await switchNetworkAsync(APP_BASED_CHAIN.id);
+        await switchNetworkAsync(APP_BASE_CHAIN.id);
       } catch (error: any) {
         customToast({
           message: error.message,
@@ -50,7 +50,7 @@ const SwitchNetworkModal = ({
         </div>
       </div>
       <div className="text-[14px] text-center">
-        You need to switch to {APP_BASED_CHAIN.name} network to continue using
+        You need to switch to {APP_BASE_CHAIN.name} network to continue using
         <br />
         Flashpad
       </div>
@@ -59,7 +59,7 @@ const SwitchNetworkModal = ({
           onClick={handleSwitchNetwork}
           className="w-full justify-center mt-2 mb-2 h-[52px] text-base px-[42px]"
         >
-          Switch To {APP_BASED_CHAIN.name}
+          Switch To {APP_BASE_CHAIN.name}
         </Button>
       </div>
     </CommonModal>

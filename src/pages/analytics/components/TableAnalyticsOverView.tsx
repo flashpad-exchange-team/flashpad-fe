@@ -18,7 +18,7 @@ const TableAnalyticsOverview: React.FC<TableAnalyticsOverviewProps> = ({
 }) => {
   return (
     <div className="w-full my-4">
-      <div className="px-4 text-[24px]">Arthur Analytics</div>
+      <div className="px-4 text-[24px]">Flashpad Analytics</div>
       <div className="w-full text-sm text-[#98A2B3] pb-3 px-4 text-left mt-4">
         <div className="w-full flex">
           <input

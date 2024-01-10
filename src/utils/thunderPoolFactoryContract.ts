@@ -1,10 +1,10 @@
 import { Address } from 'viem';
-import { abi as MerlinPoolFactoryABI } from '@/resources/abis/MerlinPoolFactory.json';
+import { abi as ThunderPoolFactoryABI } from '@/resources/abis/ThunderPoolFactory.json';
 import { publicClient, walletClient } from './web3Clients';
 import { handleError } from './handleError';
-import { MERLIN_POOL_FACTORY_ADDRESS } from './constants';
+import { THUNDER_POOL_FACTORY_ADDRESS } from './constants';
 
-export interface MerlinPoolSettingsParams {
+export interface ThunderPoolSettingsParams {
   startTime: string;
   endTime: string;
   harvestStartTime?: string;
@@ -24,7 +24,7 @@ export const read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: MerlinPoolFactoryABI,
+      abi: ThunderPoolFactoryABI,
       functionName,
       args,
     });
@@ -46,7 +46,7 @@ export const write = async (
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: MerlinPoolFactoryABI,
+      abi: ThunderPoolFactoryABI,
       functionName,
       args,
       value,
@@ -59,23 +59,23 @@ export const write = async (
   }
 };
 
-export interface ICreateMerlinPoolParams {
+export interface ICreateThunderPoolParams {
   nftPoolAddress: Address;
   rewardsToken1: Address;
   rewardsToken2: Address;
-  settings: MerlinPoolSettingsParams;
+  settings: ThunderPoolSettingsParams;
 }
 
-export const createMerlinPool = async (
+export const createThunderPool = async (
   account: Address,
-  params: ICreateMerlinPoolParams
+  params: ICreateThunderPoolParams
 ) => {
   const { nftPoolAddress, rewardsToken1, rewardsToken2, settings } = params;
   try {
     const { request, result } = await publicClient.simulateContract({
-      address: MERLIN_POOL_FACTORY_ADDRESS as Address,
-      abi: MerlinPoolFactoryABI,
-      functionName: 'createMerlinPool',
+      address: THUNDER_POOL_FACTORY_ADDRESS as Address,
+      abi: ThunderPoolFactoryABI,
+      functionName: 'createThunderPool',
       args: [nftPoolAddress, rewardsToken1, rewardsToken2, settings],
       account,
     });

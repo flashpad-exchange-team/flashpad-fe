@@ -8,7 +8,7 @@ import BigNumber from 'bignumber.js';
 interface PoolDetailNotStakedProps {
   toggleOpenCreatePosition: () => void;
   isFirstSpMinter: boolean;
-  dailyART: BigNumber;
+  dailyFLASH: BigNumber;
   feeAPR: BigNumber;
   farmBaseAPR: BigNumber;
 }
@@ -16,7 +16,7 @@ interface PoolDetailNotStakedProps {
 const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
   toggleOpenCreatePosition,
   isFirstSpMinter,
-  dailyART,
+  dailyFLASH,
   feeAPR,
   farmBaseAPR,
 }) => {
@@ -49,7 +49,7 @@ const NotStaked: React.FC<PoolDetailNotStakedProps> = ({
             </td>
             <td className="py-4 text-sm font-semibold px-4 border-b border-[#344054] text-right w-[200px]">
               <div className="text-lightGray">Daily Emissions</div>
-              <div>{dailyART.toFixed(2)} ART</div>
+              <div>{dailyFLASH.toFixed(2)} FLASH</div>
             </td>
             {/* <td className="py-4 text-sm font-semibold px-4 border-b border-[#344054] text-right w-[200px]">
               <div className="text-lightGray">TOKENB/XTOPKEN</div>

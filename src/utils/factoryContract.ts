@@ -1,22 +1,18 @@
 import { Address, getContract } from 'viem';
-import { abi as ArthurFactoryABI } from '@/resources/abis/ArthurFactory.json';
+import { abi as FlashpadFactoryABI } from '@/resources/abis/FlashpadFactory.json';
 import { publicClient, walletClient } from './web3Clients';
 import {
-  // ARTHUR_FACTORY_ADDRESS_LINEA_TESTNET,
-  ARTHUR_FACTORY_ADDRESS
+  FLASHPAD_FACTORY_ADDRESS,
 } from './constants';
 
 const factoryContract: any = getContract({
-  address: ARTHUR_FACTORY_ADDRESS as Address,
-  abi: ArthurFactoryABI,
+  address: FLASHPAD_FACTORY_ADDRESS as Address,
+  abi: FlashpadFactoryABI,
   publicClient,
   walletClient,
 });
 
-export const getPair = async (
-  token1Address: string,
-  token2Address: string,
-) => {
+export const getPair = async (token1Address: string, token2Address: string) => {
   try {
     const pairAddress = await factoryContract.read.getPair!([
       token1Address,
@@ -28,7 +24,7 @@ export const getPair = async (
     console.log(err);
     return undefined;
   }
-}
+};
 
 export const getPairByIndex = async (index: number) => {
   try {
@@ -39,7 +35,7 @@ export const getPairByIndex = async (index: number) => {
     console.log('getPairByIndex err:', err);
     return undefined;
   }
-}
+};
 
 export const allPairsLength = async () => {
   try {
@@ -50,4 +46,4 @@ export const allPairsLength = async () => {
     console.log(err);
     return 0;
   }
-}
+};

@@ -14,7 +14,7 @@ const PoolsComponent = ({}: PoolsComponentProps) => {
         <div>
           <div className="font-bold">Pools</div>
           <div className="text-sm text-[#98A2B3] mt-2 font-semibold">
-            Create positions into pools to earn swap fees and ART.
+            Create positions into pools to earn swap fees and FLASH.
           </div>
         </div>
       </div>

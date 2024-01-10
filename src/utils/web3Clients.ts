@@ -1,19 +1,18 @@
 import { createPublicClient, createWalletClient, custom, http } from 'viem';
-import { lineaTestnet, polygonMumbai } from 'viem/chains';
 import {
-  IS_LINEA,
+  APP_BASE_CHAIN,
   RPC_URL,
 } from './constants';
 
 const publicClient: any = createPublicClient({
-  chain: IS_LINEA ? lineaTestnet : polygonMumbai,
+  chain: APP_BASE_CHAIN,
   transport: http(RPC_URL),
 });
 
 const getWalletClient = () => {
   try {
     return createWalletClient({
-      chain: IS_LINEA ? lineaTestnet : polygonMumbai,
+      chain: APP_BASE_CHAIN,
       transport:
         typeof window !== 'undefined'
           ? custom((window as any).ethereum)

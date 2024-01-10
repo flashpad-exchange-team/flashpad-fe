@@ -3,17 +3,16 @@ import Coinbase from '@/icons/Coinbase';
 import ConnectSuccess from '@/icons/ConnectSuccess';
 import InfoIcon from '@/icons/InfoIcon';
 import WalletConnect from '@/icons/WalletConnect';
-import { IS_LINEA } from '@/utils/constants';
+import { APP_BASE_CHAIN } from '@/utils/constants';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
-import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import Notification from '../notification/Notification';
 interface ConnectWalletProps {
   toggleOpen: () => void;
 }
 const connectorWalletConnect = new WalletConnectConnector({
-  chains: [lineaTestnet],
+  chains: [APP_BASE_CHAIN],
   options: {
     projectId: '14f71914de6c8aae8a6b49b7ba15522f',
   },
@@ -50,7 +49,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
                   setIsClick(true);
                   connect({
                     connector: connectors[2],
-                    chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
+                    chainId: APP_BASE_CHAIN.id,
                   });
                 }}
               >
@@ -63,7 +62,7 @@ const ConnectWalletMobile = ({ toggleOpen }: ConnectWalletProps) => {
                   setIsClick(true);
                   connect({
                     connector: connectorWalletConnect,
-                    chainId: lineaTestnet.id,
+                    chainId: APP_BASE_CHAIN.id,
                   });
                 }}
               >

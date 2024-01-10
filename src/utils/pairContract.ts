@@ -1,4 +1,4 @@
-import { abi as ArthurPairABI } from '@/resources/abis/ArthurPair.json';
+import { abi as FlashpadPairABI } from '@/resources/abis/FlashpadPair.json';
 import { publicClient, walletClient } from './web3Clients';
 import { Address } from 'viem';
 import { handleError } from './handleError';
@@ -11,7 +11,7 @@ export const read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: ArthurPairABI,
+      abi: FlashpadPairABI,
       functionName,
       args,
     });
@@ -32,7 +32,7 @@ export const write = async (
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: ArthurPairABI,
+      abi: FlashpadPairABI,
       functionName,
       args,
     });

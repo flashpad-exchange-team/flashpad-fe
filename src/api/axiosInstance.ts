@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { ARTHUR_API_URL } from '@/utils/constants';
+import { FLASHPAD_API_URL } from '@/utils/constants';
 
 const instance = axios.create({
-  baseURL: ARTHUR_API_URL,
+  baseURL: FLASHPAD_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

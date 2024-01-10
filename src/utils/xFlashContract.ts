@@ -1,4 +1,4 @@
-import { abi as xARTABI } from '@/resources/abis/XArtToken.json';
+import { abi as xFlashABI } from '@/resources/abis/XFlashToken.json';
 import { publicClient, walletClient } from './web3Clients';
 import { Address } from 'viem';
 import { handleError } from './handleError';
@@ -11,7 +11,7 @@ export const read = async (
   try {
     const result = await publicClient.readContract({
       address,
-      abi: xARTABI,
+      abi: xFlashABI,
       functionName,
       args,
     });
@@ -33,7 +33,7 @@ export const write = async (
     const { request, result } = await publicClient.simulateContract({
       account,
       address,
-      abi: xARTABI,
+      abi: xFlashABI,
       functionName,
       args,
     });

@@ -1,15 +1,15 @@
 import { useLoading } from '@/context/LoadingContext';
-import { useXARTContractWrite } from '@/hooks/contract/useXARTContract';
+import { useXFlashContractWrite } from '@/hooks/contract/useXFlashContract';
 import BNBICon from '@/icons/BNBIcon';
 import CloseIcon from '@/icons/CloseIcon';
 import DividerDown from '@/icons/DividerDown';
 import {
   MAX_UINT256,
-  X_ARTHUR_TOKEN_ADDRESS,
+  X_FLASH_TOKEN_ADDRESS,
   YIELD_BOOSTER_ADDRESS,
 } from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
-import * as xARTContract from '@/utils/xARTContract';
+import * as xFlashContract from '@/utils/xFlashContract';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
 import Image from 'next/image';
@@ -55,16 +55,16 @@ const BoostPositionModal = ({
   const [isBoost, setIsBoost] = useState(true);
   const toggleBoost = () => setIsBoost(!isBoost);
 
-  const { data: balanceXART } = useBalance({
+  const { data: balanceXFlash } = useBalance({
     address: isOpen ? userAddress : undefined,
-    token: X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+    token: X_FLASH_TOKEN_ADDRESS as `0x${string}`,
     watch: true,
   });
 
   const handleBoost = async () => {
     try {
-      const { writeContract: writeXARTContract, ABI: xARTABI } =
-        useXARTContractWrite();
+      const { writeContract: writeXFlashContract, ABI: xFlashABI } =
+        useXFlashContractWrite();
 
       if (!userAddress) {
         customToast({
@@ -74,7 +74,7 @@ const BoostPositionModal = ({
         return;
       }
 
-      if (!balanceXART) {
+      if (!balanceXFlash) {
         customToast({
           message: 'Could not get LP balance info',
           type: 'error',
@@ -90,12 +90,12 @@ const BoostPositionModal = ({
       }
 
       const amountParsed = BigNumber(amount).times(
-        BigNumber(10).pow((balanceXART as any)?.decimals!)
+        BigNumber(10).pow((balanceXFlash as any)?.decimals!)
       );
       const usageAddress = YIELD_BOOSTER_ADDRESS;
 
-      const usageAddressAllowance = (await xARTContract.read(
-        X_ARTHUR_TOKEN_ADDRESS as `0x${string}`,
+      const usageAddressAllowance = (await xFlashContract.read(
+        X_FLASH_TOKEN_ADDRESS as `0x${string}`,
         'getUsageApproval',
         [userAddress, usageAddress]
       )) as bigint;
@@ -108,9 +108,9 @@ const BoostPositionModal = ({
           title: 'Approving Yield Booster ...',
           message: 'Confirming your transaction, please wait.',
         });
-        const approveRes = await writeXARTContract({
-          address: X_ARTHUR_TOKEN_ADDRESS as Address,
-          abi: xARTABI,
+        const approveRes = await writeXFlashContract({
+          address: X_FLASH_TOKEN_ADDRESS as Address,
+          abi: xFlashABI,
           functionName: 'approveUsage',
           args: [usageAddress, MAX_UINT256],
         });
@@ -128,9 +128,9 @@ const BoostPositionModal = ({
         title: 'Boosting your stake position ...',
         message: 'Confirming your transaction, please wait.',
       });
-      const txResult = await writeXARTContract({
-        address: X_ARTHUR_TOKEN_ADDRESS as Address,
-        abi: xARTABI,
+      const txResult = await writeXFlashContract({
+        address: X_FLASH_TOKEN_ADDRESS as Address,
+        abi: xFlashABI,
         functionName: 'allocate',
         args: [
           usageAddress,
@@ -181,7 +181,7 @@ const BoostPositionModal = ({
         return;
       }
 
-      if (!balanceXART) {
+      if (!balanceXFlash) {
         customToast({
           message: 'Could not get LP balance info',
           type: 'error',
@@ -203,15 +203,15 @@ const BoostPositionModal = ({
 
       const usageAddress = YIELD_BOOSTER_ADDRESS;
       const amountParsed = BigNumber(amount).times(
-        BigNumber(10).pow((balanceXART as any)?.decimals!)
+        BigNumber(10).pow((balanceXFlash as any)?.decimals!)
       );
 
-      const { writeContract: writeXARTContract, ABI: xARTABI } =
-        useXARTContractWrite();
+      const { writeContract: writeXFlashContract, ABI: xFlashABI } =
+        useXFlashContractWrite();
 
-      const txResult = await writeXARTContract({
-        address: X_ARTHUR_TOKEN_ADDRESS as Address,
-        abi: xARTABI,
+      const txResult = await writeXFlashContract({
+        address: X_FLASH_TOKEN_ADDRESS as Address,
+        abi: xFlashABI,
         functionName: 'deallocate',
         args: [
           usageAddress,
@@ -333,11 +333,11 @@ const BoostPositionModal = ({
         </div>
         <div className="flex justify-between items-center">
           <div className="text-[#fff]">
-            Balance: {balanceXART?.formatted} xART
+            Balance: {balanceXFlash?.formatted} xFLASH
           </div>
           <Button
             className="w-[50px] h-[10px] rounded-none flex justify-center items-center text-xs"
-            onClick={() => setAmount(balanceXART?.formatted || '0')}
+            onClick={() => setAmount(balanceXFlash?.formatted || '0')}
           >
             Max
           </Button>

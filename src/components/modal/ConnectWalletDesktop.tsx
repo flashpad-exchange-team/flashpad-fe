@@ -6,12 +6,11 @@ import Metamask from '@/icons/Metamask';
 import ProgressBar from '@/icons/ProgressBar';
 import WalletConnect from '@/icons/WalletConnect';
 import { LogoVertical } from '@/templates/LogoVertical';
-import { lineaTestnet, polygonMumbai } from 'wagmi/chains';
 import Notification from '../notification/Notification';
 import { useEffect, useState } from 'react';
 import { useAccount, useConfig, useConnect } from 'wagmi';
 import customToast from '../notification/customToast';
-import { IS_LINEA } from '@/utils/constants';
+import { APP_BASE_CHAIN } from '@/utils/constants';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 
 interface ConnectWalletProps {
@@ -80,8 +79,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                   // checkWalletInstalled('Metamask');
                   // connect({
                   //   connector: connectors[1],
-                  //   // chainId: lineaTestnet.id,
-                  //   chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
+                  //   chainId: APP_BASE_CHAIN.id,
                   // });
                 }}
               >
@@ -95,7 +93,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                   checkWalletInstalled('Coinbase');
                   connect({
                     connector: connectors[2],
-                    chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
+                    chainId: APP_BASE_CHAIN.id,
                   });
                 }}
               >
@@ -108,7 +106,7 @@ const ConnectWalletDesktop = ({ toggleOpen }: ConnectWalletProps) => {
                   setIsClick(true);
                   connect({
                     connector: connectors[3],
-                    chainId: IS_LINEA ? lineaTestnet.id : polygonMumbai.id,
+                    chainId: APP_BASE_CHAIN.id,
                   });
                 }}
               >

@@ -1,11 +1,15 @@
 import { Button } from '@/components/button/Button';
 import customToast from '@/components/notification/customToast';
 import { useLoading } from '@/context/LoadingContext';
-import { useXARTContractWrite } from '@/hooks/contract/useXARTContract';
+import { useXFlashContractWrite } from '@/hooks/contract/useXFlashContract';
 import DividerDown from '@/icons/DividerDown';
 import SwapLeftIcon from '@/icons/SwapLeft';
 import SwapRightIcon from '@/icons/SwapRight';
-import { CHAINS_TOKENS_LIST, X_ARTHUR_TOKEN_ADDRESS } from '@/utils/constants';
+import {
+  APP_BASE_CHAIN,
+  CHAINS_TOKENS_LIST,
+  X_FLASH_TOKEN_ADDRESS,
+} from '@/utils/constants';
 import { handleError } from '@/utils/handleError';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
@@ -14,7 +18,6 @@ import { Address } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import TokenForm from '../TokenForm';
 import { handleSuccessTxMessageActionSingleToken } from '@/components/successTxMessage';
-import { lineaTestnet } from 'wagmi/chains';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 
 const FEATURE_PROPS: { [k: string]: any } = {
@@ -44,10 +47,10 @@ const TradeForm = ({
   inputTitle2,
   dividerIcon,
 }: TradeFormProps) => {
-  const ART_TOKEN = CHAINS_TOKENS_LIST.find(
+  const FLASH_TOKEN = CHAINS_TOKENS_LIST.find(
     (token) => token.symbol === 'FLASH'
   );
-  const XART_TOKEN = CHAINS_TOKENS_LIST.find(
+  const XFLASH_TOKEN = CHAINS_TOKENS_LIST.find(
     (token) => token.symbol === 'xFLASH'
   );
   const { address: userAddress } = useAccount();
@@ -56,8 +59,8 @@ const TradeForm = ({
   const { switchNetwork } = useSwitchNetwork();
 
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [token1, setToken1] = useState<any>(ART_TOKEN);
-  const [token2, setToken2] = useState<any>(XART_TOKEN);
+  const [token1, setToken1] = useState<any>(FLASH_TOKEN);
+  const [token2, setToken2] = useState<any>(XFLASH_TOKEN);
   const [token1Amount, setToken1Amount] = useState<string>('0');
   const [token2Amount, setToken2Amount] = useState<string>('0');
 
@@ -110,7 +113,7 @@ const TradeForm = ({
 
   const handleConvert = async () => {
     try {
-      if (chain?.id !== lineaTestnet.id) {
+      if (chain?.id !== APP_BASE_CHAIN.id) {
         handleSwitchNetwork(switchNetwork);
         return;
       }
@@ -138,12 +141,12 @@ const TradeForm = ({
 
       const amountParsed = BigNumber(token1Amount).times(BigNumber(10).pow(18));
 
-      const { writeContract: writeXARTContract, ABI: xARTABI } =
-        useXARTContractWrite();
+      const { writeContract: writeXFlashContract, ABI: xFlashABI } =
+        useXFlashContractWrite();
 
-      const txResult = await writeXARTContract({
-        address: X_ARTHUR_TOKEN_ADDRESS as Address,
-        abi: xARTABI,
+      const txResult = await writeXFlashContract({
+        address: X_FLASH_TOKEN_ADDRESS as Address,
+        abi: xFlashABI,
         functionName: 'convert',
         args: [amountParsed.toString()],
       });

@@ -1,10 +1,10 @@
 import QuestionIcon from '@/icons/QuestionIcon';
 import { useRouter } from 'next/router';
 import React from 'react';
-import MerlinPoolDetailProps from '../../../types/MerlinPoolDetail';
+import ThunderPoolDetailProps from '../../../types/ThunderPoolDetail';
 
 interface TableDetailSpProps {
-  data: MerlinPoolDetailProps;
+  data: ThunderPoolDetailProps;
 }
 
 const TableDetailSp: React.FC<TableDetailSpProps> = ({ data }) => {

@@ -1,6 +1,6 @@
-import { IMerlinPoolSettings } from '@/utils/merlinPoolContract';
+import { IThunderPoolSettings } from '@/utils/thunderPoolContract';
 
-export default interface MerlinPoolDetailProps {
+export default interface ThunderPoolDetailProps {
   tvl: string;
   apr: string;
   // token1?: string;
@@ -16,7 +16,7 @@ export default interface MerlinPoolDetailProps {
   // rewardsToken1Logo?: string;
   // rewardsToken2Logo?: string;
   totalDeposited: string;
-  settings: IMerlinPoolSettings;
+  settings: IThunderPoolSettings;
 }
 
 export interface TableFarmDataInterface {
@@ -35,6 +35,6 @@ export interface TableFarmDataInterface {
   totalDeposit: string;
   pendingRewards: { pending1: any; pending2: any };
   poolAddress: string;
-  settings: IMerlinPoolSettings;
+  settings: IThunderPoolSettings;
   [k: string]: any;
 }
