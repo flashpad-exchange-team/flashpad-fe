@@ -86,9 +86,11 @@ const SelectTokenModal = ({
     const text = e.target.value;
     setSearch(text);
     if (text) {
+      const lowercased = text.toLowerCase();
       setTokensListFiltered(
         tokensList.filter(
-          (item: any) => item.symbol.includes(text) || item.name.includes(text)
+          (item: any) => item.symbol.toLowerCase().includes(lowercased)
+            || item.name.toLowerCase().includes(lowercased)
         )
       );
     } else {
