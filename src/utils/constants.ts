@@ -210,7 +210,7 @@ export interface IERC20TokenMetadata {
   [key: string]: any;
 }
 
-export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
+export const LINEA_TOKENS_LIST: IERC20TokenMetadata[] = [
   {
     chainId: 59140,
     chainURI: 'https://goerli.lineascan.build/block/0',
@@ -232,8 +232,8 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
       'https://goerli.lineascan.build/token/0x5471ea8f739dd37E9B81Be9c5c77754D8AA953E4',
     tokenType: ['native'],
     address: '0x5471ea8f739dd37E9B81Be9c5c77754D8AA953E4',
-    name: 'BNB',
-    symbol: 'BNB',
+    name: 'Test BNB',
+    symbol: 'tBNB',
     decimals: 18,
     createdAt: '2023-06-23',
     updatedAt: '2023-06-23',
@@ -246,8 +246,8 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
       'https://goerli.lineascan.build/token/0xeEfF322f4590A1A84BB3486d4BA0038669A811aD',
     tokenType: ['native'],
     address: '0xeEfF322f4590A1A84BB3486d4BA0038669A811aD',
-    name: 'DOGE',
-    symbol: 'DOGE',
+    name: 'Test DOGE',
+    symbol: 'tDOGE',
     decimals: 18,
     createdAt: '2023-06-27',
     updatedAt: '2023-06-27',
@@ -305,25 +305,25 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
       rootAddress: '0x41E5E6045f91B61AACC99edca0967D518fB44CFB',
     },
   },
-  // {
-  //   chainId: 59140,
-  //   chainURI: 'https://goerli.lineascan.build/block/0',
-  //   tokenId:
-  //     'https://goerli.lineascan.build/token/0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
-  //   tokenType: ['bridged'],
-  //   address: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
-  //   name: 'USD Coin',
-  //   symbol: 'USDC',
-  //   decimals: 18,
-  //   createdAt: '2023-06-23',
-  //   updatedAt: '2023-06-23',
-  //   logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
-  //   extension: {
-  //     rootChainId: 5,
-  //     rootChainURI: 'https://goerli.etherscan.io/block/0',
-  //     rootAddress: '0xd35cceead182dcee0f148ebac9447da2c4d449c4',
-  //   },
-  // },
+  {
+    chainId: 59140,
+    chainURI: 'https://goerli.lineascan.build/block/0',
+    tokenId:
+      'https://goerli.lineascan.build/token/0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
+    tokenType: ['bridged'],
+    address: '0xf56dc6695cF1f5c364eDEbC7Dc7077ac9B586068',
+    name: 'Test USD Coin',
+    symbol: 'tUSDC',
+    decimals: 18,
+    createdAt: '2023-06-23',
+    updatedAt: '2023-06-23',
+    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
+    extension: {
+      rootChainId: 5,
+      rootChainURI: 'https://goerli.etherscan.io/block/0',
+      rootAddress: '0xd35cceead182dcee0f148ebac9447da2c4d449c4',
+    },
+  },
   {
     chainId: 59140,
     chainURI: 'https://goerli.lineascan.build/block/0',
@@ -331,8 +331,8 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
       'https://goerli.lineascan.build/token/0x1990BC6dfe2ef605Bfc08f5A23564dB75642Ad73',
     tokenType: ['bridged'],
     address: '0x1990BC6dfe2ef605Bfc08f5A23564dB75642Ad73',
-    name: 'USD Tether',
-    symbol: 'USDT',
+    name: 'Test USD Tether',
+    symbol: 'tUSDT',
     decimals: 6,
     createdAt: '2023-06-27',
     updatedAt: '2023-06-27',
@@ -343,6 +343,25 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
       rootAddress: '0xfad6367E97217cC51b4cd838Cc086831f81d38C2',
     },
   },
+  {
+		chainId: 59140,
+		chainURI: 'https://goerli.lineascan.build/block/0',
+		tokenId:
+			'https://goerli.lineascan.build/token/0x347b29EFca2f921fFc776Cdc01AF785f043368c6',
+		tokenType: ['bridged'],
+		address: '0x347b29EFca2f921fFc776Cdc01AF785f043368c6',
+		name: 'USD Tether',
+		symbol: 'USDT',
+		decimals: 6,
+		createdAt: '2023-06-27',
+		updatedAt: '2023-06-27',
+		logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
+		extension: {
+			rootChainId: 5,
+			rootChainURI: 'https://goerli.etherscan.io/block/0',
+			rootAddress: '0xfad6367E97217cC51b4cd838Cc086831f81d38C2',
+		},
+	},
   {
     chainId: 59140,
     chainURI: 'https://goerli.lineascan.build/block/0',
@@ -382,28 +401,28 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
   },
   {
-    symbol: 'FBNB',
+    symbol: 'BNB',
     name: 'Binance Coin',
     address: '0xc1888F2Dc85A9C51F2f3f13fAaB5C06077bB235f',
     decimals: 8,
     logoURI: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png',
   },
   {
-    symbol: 'FUSDC',
+    symbol: 'USDC',
     name: 'USD Coin',
     address: '0xEc6BC0023a2607B88D8E0F3A67a5210d7BDb7534',
     decimals: 8,
     logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
   },
   {
-    symbol: 'FDOGE',
+    symbol: 'DOGE',
     name: 'DOGE Coin',
     address: '0x42472dB3d10d5AA6dE423F876CA555f803eF8ADD',
     decimals: 8,
     logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png',
   },
   {
-    symbol: 'FSHIB',
+    symbol: 'SHIB',
     name: 'Shiba Coin',
     address: '0x8B57916D9C0a6D97422590eF545Dd721cF46734b',
     decimals: 8,
@@ -428,7 +447,7 @@ export const LINEA_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
   },
 ];
 
-export const MUMBAI_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
+export const MUMBAI_TOKENS_LIST: IERC20TokenMetadata[] = [
   {
     chainId: 80001,
     tokenType: ['native'],
@@ -474,8 +493,8 @@ export const MUMBAI_TESTNET_TOKENS_LIST: IERC20TokenMetadata[] = [
 ];
 
 export const CHAINS_TOKENS_LIST = IS_LINEA
-  ? LINEA_TESTNET_TOKENS_LIST
-  : MUMBAI_TESTNET_TOKENS_LIST;
+  ? LINEA_TOKENS_LIST
+  : MUMBAI_TOKENS_LIST;
 
 export const RESERVOIR_MUMBAI_API_BASE_URL =
   process.env.NEXT_PUBLIC_RESERVOIR_MUMBAI_API_BASE_URL ||
