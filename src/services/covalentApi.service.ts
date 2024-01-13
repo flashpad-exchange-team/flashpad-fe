@@ -8,7 +8,7 @@ export const getNFTsOwnedByAddress = async (
   address: string,
   erc721Contract: string,
 ) => {
-  let chain;
+  let chain: Chains;
   switch (APP_BASE_CHAIN.id) {
     case 80001:
       chain = 'matic-mumbai';
@@ -23,7 +23,7 @@ export const getNFTsOwnedByAddress = async (
 
   try {
     const response = await covalentClient.NftService.getNftsForAddress(
-      chain as Chains,
+      chain,
       address,
       {
         noNftAssetMetadata: false,
