@@ -1,5 +1,6 @@
 import { Client } from '@covalenthq/client-sdk';
-import { COVALENT_API_KEY, IS_LINEA } from '@/utils/constants';
+import { APP_BASE_CHAIN, COVALENT_API_KEY } from '@/utils/constants';
+import { Chains } from '@covalenthq/client-sdk/dist/services/Client';
 
 export const covalentClient = new Client(COVALENT_API_KEY);
 
@@ -7,10 +8,22 @@ export const getNFTsOwnedByAddress = async (
   address: string,
   erc721Contract: string,
 ) => {
-  const chain = IS_LINEA ? 'linea-testnet' : 'matic-mumbai';
+  let chain;
+  switch (APP_BASE_CHAIN.id) {
+    case 80001:
+      chain = 'matic-mumbai';
+      break;
+    case 59144:
+      chain = 'linea-mainnet';
+      break;
+    case 59140:
+    default:
+      chain = 'linea-testnet';
+  }
+
   try {
     const response = await covalentClient.NftService.getNftsForAddress(
-      chain,
+      chain as Chains,
       address,
       {
         noNftAssetMetadata: false,
