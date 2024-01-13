@@ -198,6 +198,7 @@ const RemoveLiquidityModal = ({
         }
 
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'removeLiquidityETH',
@@ -212,6 +213,7 @@ const RemoveLiquidityModal = ({
         });
       } else {
         txResult = await writeRouterContract({
+          account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
           abi: RouterABI,
           functionName: 'removeLiquidity',
