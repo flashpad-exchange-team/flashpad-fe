@@ -14,8 +14,7 @@ export const MAX_UINT256 =
 export const FLASHPAD_API_URL =
   process.env.NEXT_PUBLIC_FLASHPAD_API_URL || 'https://testnet-api.flashpad.io';
 
-// export const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-export const INFURA_API_KEY = process.env.NEXT_PUBLIC_LINEA_INFURA_RPC;
+export const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 
 export const ALCHEMY_MUMBAI_API_KEY =
