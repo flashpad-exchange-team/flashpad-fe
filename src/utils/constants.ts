@@ -492,6 +492,7 @@ export const MUMBAI_TOKENS_LIST: IERC20TokenMetadata[] = [
     decimals: 18,
   },
 ];
+
 export const LINEA_MAINNET_TOKENS_LIST: IERC20TokenMetadata[] = [
 
   // {
@@ -1431,11 +1432,11 @@ export const LINEA_MAINNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     }
   }
 ]
-// export const CHAINS_TOKENS_LIST = IS_LINEA
-//   ? LINEA_TESTNET_TOKENS_LIST
-//   : MUMBAI_TESTNET_TOKENS_LIST;
+
 export const CHAINS_TOKENS_LIST = IS_LINEA
-  ? LINEA_MAINNET_TOKENS_LIST
+  ? ENVIRONMENT === 'production' 
+    ? LINEA_MAINNET_TOKENS_LIST
+    : LINEA_TOKENS_LIST
   : MUMBAI_TOKENS_LIST;
 
 export const RESERVOIR_MUMBAI_API_BASE_URL =
