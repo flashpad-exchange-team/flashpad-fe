@@ -27,7 +27,6 @@ const TokenForm = ({
   const handleOpenSelectTokenModal = () => {
     openModal ? openModal() : void 0;
   };
-
   return (
     <div className="bg-darkBlue rounded-lg my-2 p-4">
       <div className="block lg:flex items-start w-full">

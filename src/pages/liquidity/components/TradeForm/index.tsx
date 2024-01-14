@@ -148,7 +148,7 @@ const TradeForm = ({
       setInsufficient(false);
     }, 5000);
   }, [insufficient, failed, successful]);
-
+  console.log(token1);
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
     token:
@@ -630,7 +630,6 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
-
   return (
     <>
       <SelectTokenModal
