@@ -42,7 +42,7 @@ export const APP_BASE_CHAIN = IS_LINEA
     ? linea
     : lineaTestnet
   : polygonMumbai;
-console.log({ APP_BASE_CHAIN, IS_LINEA, ENVIRONMENT })
+
 // Linea network
 export const FLASHPAD_ROUTER_ADDRESS_LINEA =
   process.env.NEXT_PUBLIC_FLASHPAD_ROUTER_ADDRESS_LINEA ||
