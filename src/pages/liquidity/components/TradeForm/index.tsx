@@ -630,6 +630,7 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
+
   return (
     <>
       <SelectTokenModal
@@ -727,7 +728,7 @@ const TradeForm = ({
           {dividerIcon}
         </div>
         <TokenForm
-          disabled={!isFirstLP || !isFirstSpMinter}
+          disabled={!isFirstLP}
           openModal={() => {
             setTokenBeingSelected(2);
             toggleOpen();
@@ -740,7 +741,8 @@ const TradeForm = ({
           }}
           value={token2Amount}
           setTokenAmount={(value) => {
-            if (!isFirstLP || !isFirstSpMinter) {
+            // if (!isFirstLP || !isFirstSpMinter) {
+            if (!isFirstLP) {
             } else {
               setToken2Amount(value);
               autoAdjustToken1Amount(value);
