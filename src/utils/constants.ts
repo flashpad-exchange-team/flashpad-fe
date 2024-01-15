@@ -16,7 +16,6 @@ export const FLASHPAD_API_URL =
 
 export const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
-
 export const ALCHEMY_MUMBAI_API_KEY =
   process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_API_KEY;
 
@@ -1371,6 +1370,16 @@ export const LINEA_MAINNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     "createdAt": "2023-08-08",
     "updatedAt": "2023-08-08",
     "logoURI": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png"
+  },
+  {
+    "chainId": 59140,
+    "chainURI": 'https://lineascan.build/block/0',
+    "tokenType": ['native'],
+    "address": WETH_ADDRESS_LINEA as Address,
+    "name": 'Linea Ethereum',
+    "symbol": 'ETH',
+    "decimals": 18,
+    "logoURI": 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
   },
   {
     "chainId": 59144,
