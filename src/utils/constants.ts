@@ -1372,6 +1372,16 @@ export const LINEA_MAINNET_TOKENS_LIST: IERC20TokenMetadata[] = [
     "logoURI": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png"
   },
   {
+    "chainId": 59140,
+    "chainURI": 'https://lineascan.build/block/0',
+    "tokenType": ['native'],
+    "address": WETH_ADDRESS_LINEA as Address,
+    "name": 'Linea Ethereum',
+    "symbol": 'ETH',
+    "decimals": 18,
+    "logoURI": 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+  },
+  {
     "chainId": 59144,
     "chainURI": "https://lineascan.build/block/0",
     "tokenId": "https://lineascan.build/address/0xB5beDd42000b71FddE22D3eE8a79Bd49A568fC8F",
