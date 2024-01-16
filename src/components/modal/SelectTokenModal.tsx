@@ -15,6 +15,7 @@ import BigNumber from 'bignumber.js';
 import InlineLoading from '../loading/InlineLoading';
 import { getTokensList, importToken } from '@/api/tokens-list';
 import { Tooltip } from 'react-tooltip';
+import { formatUnits } from 'viem';
 
 export interface SelectTokenModalProps {
   toggleOpen: () => void;
@@ -40,6 +41,7 @@ const SelectTokenModal = ({
         name: e.name,
         curBalance: 0,
         id: e.id,
+        logo_uri: e.logo_uri,
       };
     })
   );
@@ -66,12 +68,13 @@ const SelectTokenModal = ({
                     [userAddress]
                   ),
             ]);
+
             resolve({
               ...token,
               curBalance:
-                BigNumber(balance || '0')
-                  .div(BigNumber(10).pow(decimals))
-                  .toFixed(2) || '0.00',
+                token.symbol === 'ETH'
+                  ? formatUnits(balance, 18)
+                  : formatUnits(balance, decimals),
             });
           } catch (error) {
             console.error(error);

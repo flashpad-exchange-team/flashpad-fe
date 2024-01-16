@@ -223,7 +223,7 @@ const TradeForm = ({
           tokenData={{
             symbol: token1 ? token1?.symbol! : '',
             balance: token1 ? balanceToken1?.formatted! : '?',
-            logo: token1 ? token1?.logoURI : '',
+            logo: token1 ? token1?.logo_uri : '',
             amount: token1Amount,
           }}
           setTokenAmount={(value) => setToken1Amount(value)}
@@ -237,7 +237,7 @@ const TradeForm = ({
           tokenData={{
             symbol: token2 ? token2?.symbol! : '',
             balance: token2 ? balanceToken2?.formatted! : '?',
-            logo: token2 ? token2?.logoURI : '',
+            logo: token2 ? token2?.logo_uri : '',
             amount: token2Amount,
           }}
           setTokenAmount={(value) => setToken2Amount(value)}

@@ -233,10 +233,10 @@ const CreateThunderPool = () => {
                   options={CHAINS_TOKENS_LIST}
                   value={{ value: token1?.address, label: token1?.symbol }}
                   icon={
-                    token1?.logoURI ? (
+                    token1?.logo_uri ? (
                       <Image
                         alt="logo"
-                        src={token1.logoURI}
+                        src={token1.logo_uri}
                         width={24}
                         height={24}
                       />
@@ -264,10 +264,10 @@ const CreateThunderPool = () => {
                   options={CHAINS_TOKENS_LIST}
                   value={{ value: token2?.address, label: token2?.symbol }}
                   icon={
-                    token2?.logoURI ? (
+                    token2?.logo_uri ? (
                       <Image
                         alt="logo"
-                        src={token2.logoURI}
+                        src={token2.logo_uri}
                         width={24}
                         height={24}
                       />
@@ -291,10 +291,10 @@ const CreateThunderPool = () => {
                 options={CHAINS_TOKENS_LIST}
                 value={{ value: token1?.address, label: token1?.symbol }}
                 icon={
-                  token1?.logoURI ? (
+                  token1?.logo_uri ? (
                     <Image
                       alt="logo"
-                      src={token1.logoURI}
+                      src={token1.logo_uri}
                       width={24}
                       height={24}
                     />

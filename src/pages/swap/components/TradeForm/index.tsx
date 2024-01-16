@@ -43,11 +43,11 @@ interface TradeFormProps {
   dividerIcon: React.ReactNode;
 }
 const FEATURE_PROPS: { [k: string]: any } = {
-  'Swap': {
+  Swap: {
     value: 'Swap',
     label: 'Swap',
   },
-  'Bridge': {
+  Bridge: {
     value: 'Bridge',
     label: 'Bridge to Linea',
   },
@@ -352,7 +352,9 @@ const TradeForm = ({
         token1Address,
       ]);
       setSwapRate1To2(
-        BigNumber(amount2Out).div(amount2In).toFixed(balanceToken2?.decimals!)
+        BigNumber(amount2Out)
+          .div(amount2In)
+          .toFixed(balanceToken2?.decimals!)
       );
 
       const amount1Out = await pairContract.read(address, 'getAmountOut', [
@@ -360,7 +362,9 @@ const TradeForm = ({
         token2Address,
       ]);
       setSwapRate2To1(
-        BigNumber(amount1Out).div(amount1In).toFixed(balanceToken1?.decimals!)
+        BigNumber(amount1Out)
+          .div(amount1In)
+          .toFixed(balanceToken1?.decimals!)
       );
     }
     setIsFetchingRate(false);
@@ -380,7 +384,7 @@ const TradeForm = ({
           <SwapRightIcon />
         </div>
 
-    <div className="flex bg-darkBlue mt-6 rounded-lg">
+        <div className="flex bg-darkBlue mt-6 rounded-lg">
           {Object.keys(FEATURE_PROPS).map((key: string) => (
             <button
               className={`w-1/2 text-center py-3  rounded-md focus:outline-none font-semibold ${
@@ -394,96 +398,99 @@ const TradeForm = ({
             </button>
           ))}
         </div>
-        {
-          feature === 'Bridge' &&
-          
-          <div className='mt-8 mb-4'> <Swing projectId="flashpad" />
-            </div>
-
-         
-        }
-     {
-          feature === 'Swap' && <>  <div className=" flex items-center gap-2 mt-8 justify-between">
-          <div className="text-primary font-semibold flex items-center gap-2 text-sm lg:text-base ">
-            V2 MODE
-            <QuestionIcon />
+        {feature === 'Bridge' && (
+          <div className="mt-8 mb-4">
+            {' '}
+            <Swing projectId="flashpad" />
           </div>
-
-          <div className="flex items-center gap-6 cursor-pointer">
-            <ReloadIcon onClick={() => resetInput(true)} />
-          </div>
-        </div>
-        <TokenForm
-          openModal={() => {
-            setTokenBeingSelected(1);
-            toggleOpen();
-          }}
-          title={inputTitle1}
-          tokenData={{
-            symbol: token1 ? token1?.symbol! : '',
-            balance: token1 ? balanceToken1?.formatted! : '?',
-            logo: token1 ? token1?.logoURI : '',
-            amount: token1Amount,
-          }}
-          setTokenAmount={(value) => setToken1Amount(value)}
-        />
-        <div
-          className="mx-auto w-fit cursor-pointer"
-          onClick={handleSwitchPair}
-        >
-          {dividerIcon}
-        </div>
-        <TokenForm
-          openModal={() => {
-            setTokenBeingSelected(2);
-            toggleOpen();
-          }}
-          title={inputTitle2}
-          tokenData={{
-            symbol: token2 ? token2?.symbol! : '',
-            balance: token2 ? balanceToken2?.formatted! : '?',
-            logo: token2 ? token2?.logoURI : '',
-            amount: token2Amount,
-          }}
-          setTokenAmount={(value) => setToken2Amount(value)}
-        />
-        {isFirstLP ? (
-          <div className="bg-darkBlue rounded-lg my-2 mb-3 p-4 text-sm">
-            There is currently no liquidity pool for the selected pair
-          </div>
-        ) : (
-          <LiquidityPairInfo
-            swapRate1To2={swapRate1To2}
-            swapRate2To1={swapRate2To1}
-            isStableSwap={isStableSwap}
-            isFetchingRate={isFetchingRate}
-            token1Data={{
-              address: token1?.address,
-              symbol: token1?.symbol,
-              amountIn: token1Amount,
-              decimals: balanceToken1?.decimals,
-            }}
-            token2Data={{
-              address: token2?.address,
-              symbol: token2?.symbol,
-              amountIn: token2Amount,
-              decimals: balanceToken2?.decimals,
-            }}
-          />
         )}
+        {feature === 'Swap' && (
+          <>
+            {' '}
+            <div className=" flex items-center gap-2 mt-8 justify-between">
+              <div className="text-primary font-semibold flex items-center gap-2 text-sm lg:text-base ">
+                V2 MODE
+                <QuestionIcon />
+              </div>
 
-        <Button
-          onClick={() => handleSwap()}
-          className="w-full justify-center mb-2 px-[42px]"
-          disabled={
-            !userAddress || !token1 || !token2 || !token1Amount || !token2Amount
-          }
-        >
-          {buttonName}
-        </Button>
-        <DividerDown /></>
-        }
-      
+              <div className="flex items-center gap-6 cursor-pointer">
+                <ReloadIcon onClick={() => resetInput(true)} />
+              </div>
+            </div>
+            <TokenForm
+              openModal={() => {
+                setTokenBeingSelected(1);
+                toggleOpen();
+              }}
+              title={inputTitle1}
+              tokenData={{
+                symbol: token1 ? token1?.symbol! : '',
+                balance: token1 ? balanceToken1?.formatted! : '?',
+                logo: token1 ? token1?.logo_uri : '',
+                amount: token1Amount,
+              }}
+              setTokenAmount={(value) => setToken1Amount(value)}
+            />
+            <div
+              className="mx-auto w-fit cursor-pointer"
+              onClick={handleSwitchPair}
+            >
+              {dividerIcon}
+            </div>
+            <TokenForm
+              openModal={() => {
+                setTokenBeingSelected(2);
+                toggleOpen();
+              }}
+              title={inputTitle2}
+              tokenData={{
+                symbol: token2 ? token2?.symbol! : '',
+                balance: token2 ? balanceToken2?.formatted! : '?',
+                logo: token2 ? token2?.logo_uri : '',
+                amount: token2Amount,
+              }}
+              setTokenAmount={(value) => setToken2Amount(value)}
+            />
+            {isFirstLP ? (
+              <div className="bg-darkBlue rounded-lg my-2 mb-3 p-4 text-sm">
+                There is currently no liquidity pool for the selected pair
+              </div>
+            ) : (
+              <LiquidityPairInfo
+                swapRate1To2={swapRate1To2}
+                swapRate2To1={swapRate2To1}
+                isStableSwap={isStableSwap}
+                isFetchingRate={isFetchingRate}
+                token1Data={{
+                  address: token1?.address,
+                  symbol: token1?.symbol,
+                  amountIn: token1Amount,
+                  decimals: balanceToken1?.decimals,
+                }}
+                token2Data={{
+                  address: token2?.address,
+                  symbol: token2?.symbol,
+                  amountIn: token2Amount,
+                  decimals: balanceToken2?.decimals,
+                }}
+              />
+            )}
+            <Button
+              onClick={() => handleSwap()}
+              className="w-full justify-center mb-2 px-[42px]"
+              disabled={
+                !userAddress ||
+                !token1 ||
+                !token2 ||
+                !token1Amount ||
+                !token2Amount
+              }
+            >
+              {buttonName}
+            </Button>
+            <DividerDown />
+          </>
+        )}
       </div>
     </>
   );

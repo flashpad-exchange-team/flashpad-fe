@@ -164,8 +164,8 @@ const PoolDetail = () => {
     setTVL(TVL);
     setToken1Symbol(token1Data?.symbol || '');
     setToken2Symbol(token2Data?.symbol || '');
-    setToken1Logo(token1Data?.logoURI || '');
-    setToken2Logo(token2Data?.logoURI || '');
+    setToken1Logo(token1Data?.logo_uri || '');
+    setToken2Logo(token2Data?.logo_uri || '');
 
     const poolAddress = await nftPoolFactoryContract.getPool(pairAddress);
 
