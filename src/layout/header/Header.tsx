@@ -44,12 +44,13 @@ const MENU_ITEMS = [
         path: '/liquidity',
         icon: <Liquidity width="18px" />,
       },
-      {
-        name: 'Bridge',
-        path: '/swap?feat=bridge',
-        icon: <Liquidity width="18px" />,
-      },
     ],
+  },
+  {
+    icon: <LaunchPadIcon />,
+    iconActive: <LaunchPadIcon active />,
+    name: 'Bridge',
+    path: '/swap?feat=bridge',
   },
   {
     icon: <AddIcon />,
