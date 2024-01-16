@@ -208,6 +208,7 @@ export interface IERC20TokenMetadata {
   updatedAt?: string;
   logoURI?: string;
   [key: string]: any;
+  id?: string
 }
 
 export const LINEA_TOKENS_LIST: IERC20TokenMetadata[] = [
@@ -1443,7 +1444,7 @@ export const LINEA_MAINNET_TOKENS_LIST: IERC20TokenMetadata[] = [
 ]
 
 export const CHAINS_TOKENS_LIST = IS_LINEA
-  ? ENVIRONMENT === 'production' 
+  ? ENVIRONMENT === 'production'
     ? LINEA_MAINNET_TOKENS_LIST
     : LINEA_TOKENS_LIST
   : MUMBAI_TOKENS_LIST;

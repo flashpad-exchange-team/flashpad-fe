@@ -14,6 +14,7 @@ import Image from 'next/image';
 import BigNumber from 'bignumber.js';
 import InlineLoading from '../loading/InlineLoading';
 import { getTokensList, importToken } from '@/api/tokens-list';
+import { Tooltip } from 'react-tooltip';
 
 export interface SelectTokenModalProps {
   toggleOpen: () => void;
@@ -30,7 +31,6 @@ const SelectTokenModal = ({
   const [search, setSearch] = useState<string>('');
   const [newToken, setNewToken] = useState<any>({});
   const [loadingSearch, setLoadingSearch] = useState<boolean>(false);
-
   const [tokensList, setTokensList] = useState<IERC20TokenMetadata[]>(
     CHAINS_TOKENS_LIST.map((e) => {
       return {
@@ -39,6 +39,7 @@ const SelectTokenModal = ({
         symbol: e.symbol,
         name: e.name,
         curBalance: 0,
+        id: e.id,
       };
     })
   );
@@ -89,15 +90,17 @@ const SelectTokenModal = ({
 
   const fetchTokensList = async () => {
     const res = await getTokensList();
-    fetchTokenBalances(res.data);
+    fetchTokenBalances(res?.data);
   };
   useEffect(() => {
     setLoadingSearch(true);
     fetchTokensList();
     setLoadingSearch(false);
   }, [userAddress, isOpen]);
+
   const onSearchChange = async (e: any) => {
     const text = e.target.value;
+
     setSearch(text);
 
     if (text) {
@@ -153,6 +156,7 @@ const SelectTokenModal = ({
             address: text,
           };
           setNewToken({ ...newTokenToImport, curBalance });
+          setTokensListFiltered([{ ...newTokenToImport, curBalance }]);
         } else setNewToken({});
         setLoadingSearch(false);
       } else setNewToken({});
@@ -191,7 +195,6 @@ const SelectTokenModal = ({
         onChange={onSearchChange}
       />
       <div className="max-h-[450px] overflow-y-auto pr-3">
-        {' '}
         {search ? null : (
           <>
             {' '}
@@ -211,22 +214,31 @@ const SelectTokenModal = ({
                   }}
                 >
                   <div
-                    className={`flex gap-1 items-center hover:bg-[#1D2939]  cursor-pointer rounded-md px-1 py-2 w-[90px]  ${
-                      index % 2 == 1 ? 'mr-0 ml-auto' : ''
-                    } lg:mr-0 lg:ml-0`}
-                    onClick={toggleOpen}
+                    data-tooltip-id={`token${item?.id}`}
+                    data-tooltip-html={`<span class="text-sm">${item?.address?.slice(
+                      0,
+                      6
+                    )}...${item?.address?.slice(37, 42)}</span>`}
                   >
-                    {item.logo_uri ? (
-                      <Image
-                        alt="logo"
-                        src={item.logo_uri}
-                        width={25}
-                        height={25}
-                      />
-                    ) : (
-                      <BNBICon />
-                    )}
-                    {item.symbol}
+                    <div
+                      className={`flex gap-1 items-center hover:bg-[#1D2939]  cursor-pointer rounded-md px-1 py-2 w-[90px]  ${
+                        index % 2 == 1 ? 'mr-0 ml-auto' : ''
+                      } lg:mr-0 lg:ml-0`}
+                      onClick={toggleOpen}
+                    >
+                      {item.logo_uri ? (
+                        <Image
+                          alt="logo"
+                          src={item.logo_uri}
+                          width={25}
+                          height={25}
+                        />
+                      ) : (
+                        <BNBICon />
+                      )}
+                      {item.symbol}
+                    </div>
+                    <Tooltip id={`token${item?.id}`} />
                   </div>
                 </div>
               ))}
@@ -252,7 +264,6 @@ const SelectTokenModal = ({
                     setNewToken({});
                     setSearch('');
                   }
-                  fetchTokenBalances(tokensList);
                   toggleOpen();
                 }}
               >
@@ -273,46 +284,56 @@ const SelectTokenModal = ({
                 </div>
               </div>
             )}
-            {!newToken.name &&
-              tokensListFiltered
-                .sort((a: any, b: any) => b.curBalance - a.curBalance)
-                .map((item: any) => (
-                  <div
-                    className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2  cursor-pointer"
-                    key={item.symbol}
-                    onClick={() => {
-                      if (selectValue) {
-                        setSearch('');
-                        setNewToken({});
-                        selectValue(item);
-                      }
-                      toggleOpen();
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      {item.logo_uri ? (
-                        <Image
-                          alt="logo"
-                          src={item.logo_uri}
-                          width={25}
-                          height={25}
-                        />
-                      ) : (
-                        <BNBICon />
-                      )}
-
-                      <div>
-                        <div className="text-sm">{item.symbol}</div>
-                        <div className="text-xs text-[#475467]">
-                          {item.name}
+            {!newToken.name
+              ? tokensListFiltered
+                  .sort((a: any, b: any) => b.curBalance - a.curBalance)
+                  .map((item: any) => (
+                    <div
+                      className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2  cursor-pointer"
+                      key={item.id || 'New'}
+                      onClick={() => {
+                        if (selectValue) {
+                          setSearch('');
+                          setNewToken({});
+                          selectValue(item);
+                        }
+                        toggleOpen();
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="flex items-center gap-2"
+                          data-tooltip-id={`token${item?.id}`}
+                          data-tooltip-html={`<span class="text-sm">${item?.address?.slice(
+                            0,
+                            6
+                          )}...${item?.address?.slice(37, 42)}</span>`}
+                        >
+                          {item.logo_uri ? (
+                            <Image
+                              alt="logo"
+                              src={item.logo_uri}
+                              width={25}
+                              height={25}
+                            />
+                          ) : (
+                            <BNBICon />
+                          )}
+                          <div>
+                            <div className="text-sm">{item.symbol}</div>
+                            <div className="text-xs text-[#475467]">
+                              {item.name}
+                            </div>
+                          </div>
+                          <Tooltip id={`token${item?.id}`} />
                         </div>
                       </div>
+                      <div className="text-sm md:text-lg pr-2 break-all pl-16 md:pl-0">
+                        {item.curBalance !== 'NaN' ? item.curBalance : '0.00'}
+                      </div>
                     </div>
-                    <div className="text-sm md:text-lg pr-2 break-all pl-16 md:pl-0">
-                      {item.curBalance !== 'NaN' ? item.curBalance : '0.00'}
-                    </div>
-                  </div>
-                ))}
+                  ))
+              : null}
           </>
         )}
       </div>
