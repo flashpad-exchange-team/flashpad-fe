@@ -2,13 +2,11 @@ import AWSIcon from '@/icons/AWSIcon';
 import LineaIcon from '@/icons/LineaIcon';
 import Mises from '@/icons/Mises';
 import { Red_Rose } from 'next/font/google';
-import Image from 'next/image';
 
 const redRose = Red_Rose({
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
 });
-import AuditImg from '@/public/assets/images/audit.png';
 
 const Partner = () => {
   return (
