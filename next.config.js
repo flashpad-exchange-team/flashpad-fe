@@ -16,7 +16,7 @@ module.exports = withBundleAnalyzer({
         hostname: "*",
       },
     ],
-    domains: ['s2.coinmarketcap.com','cryptologos.cc','miro.medium.com','*','assets.coingecko.com'], // Add other domains if needed
+    domains: ['s2.coinmarketcap.com','s3.coinmarketcap.com','cryptologos.cc','miro.medium.com','*','assets.coingecko.com'], // Add other domains if needed
   },
   poweredByHeader: false,
   trailingSlash: true,
