@@ -13,6 +13,7 @@ import { getBalance } from '@/utils/web3Helpers';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
 import InlineLoading from '../loading/InlineLoading';
+import { getTokensList, importToken } from '@/api/tokens-list';
 
 export interface SelectTokenModalProps {
   toggleOpen: () => void;
@@ -41,13 +42,17 @@ const SelectTokenModal = ({
       };
     })
   );
-  const [tokensListFiltered, setTokensListFiltered] = useState(tokensList);
+  const [tokensListFiltered, setTokensListFiltered] = useState(
+    [] as IERC20TokenMetadata[]
+  );
 
-  const fetchTokenBalances = async () => {
+  const fetchTokenBalances = async (
+    tokenListFromAPI: IERC20TokenMetadata[]
+  ) => {
     if (!userAddress || !isOpen) return;
 
     const tokensListWithBalances: any[] = await Promise.all(
-      tokensList.map((token) => {
+      tokenListFromAPI.map((token) => {
         return new Promise(async (resolve) => {
           try {
             const [decimals, balance] = await Promise.all([
@@ -81,8 +86,15 @@ const SelectTokenModal = ({
     setTokensList(tokensListWithBalances);
     setTokensListFiltered(tokensListWithBalances);
   };
+
+  const fetchTokensList = async () => {
+    const res = await getTokensList();
+    fetchTokenBalances(res.data);
+  };
   useEffect(() => {
-    fetchTokenBalances();
+    setLoadingSearch(true);
+    fetchTokensList();
+    setLoadingSearch(false);
   }, [userAddress, isOpen]);
   const onSearchChange = async (e: any) => {
     const text = e.target.value;
@@ -119,21 +131,31 @@ const SelectTokenModal = ({
             'name',
             []
           )) as string;
-          setNewToken({
-            decimals: tokenDecimals,
+          const [decimals, balance] = await Promise.all([
+            erc20TokenContract.erc20Read(text, 'decimals', []),
+            tokenSymbol === 'ETH'
+              ? await getBalance({
+                  address: userAddress as any,
+                  blockTag: 'latest',
+                })
+              : await erc20TokenContract.erc20Read(text, 'balanceOf', [
+                  userAddress,
+                ]),
+          ]);
+          const curBalance =
+            BigNumber(balance || '0')
+              .div(BigNumber(10).pow(decimals))
+              .toFixed(2) || '0.00';
+          const newTokenToImport = {
+            decimals: +tokenDecimals?.toString(),
             name: tokenName,
             symbol: tokenSymbol,
             address: text,
-          });
-          setTokensList([
-            ...tokensList,
-            {
-              decimals: +tokenDecimals.toString(),
-              name: tokenName,
-              symbol: tokenSymbol,
-              address: text,
-            },
-          ]);
+          };
+          setNewToken({ ...newTokenToImport, curBalance });
+          await importToken(newTokenToImport);
+          await getTokensList();
+          fetchTokensList();
         } else setNewToken({});
         setLoadingSearch(false);
       } else setNewToken({});
@@ -161,6 +183,7 @@ const SelectTokenModal = ({
         onChange={onSearchChange}
       />
       <div className="max-h-[450px] overflow-y-auto pr-3">
+        {' '}
         {search ? null : (
           <>
             {' '}
@@ -185,10 +208,10 @@ const SelectTokenModal = ({
                     } lg:mr-0 lg:ml-0`}
                     onClick={toggleOpen}
                   >
-                    {item.logoURI ? (
+                    {item.logo_uri ? (
                       <Image
                         alt="logo"
-                        src={item.logoURI}
+                        src={item.logo_uri}
                         width={25}
                         height={25}
                       />
@@ -202,7 +225,6 @@ const SelectTokenModal = ({
             </div>
           </>
         )}
-
         <div className="text-lg font-semibold my-2">Tokens list</div>
         {loadingSearch ? (
           <div className="ml-2 mb-3">
@@ -221,7 +243,7 @@ const SelectTokenModal = ({
                     setNewToken({});
                     setSearch('');
                   }
-                  fetchTokenBalances();
+                  fetchTokenBalances(tokensList);
                   toggleOpen();
                 }}
               >
@@ -238,14 +260,13 @@ const SelectTokenModal = ({
                   </div>
                 </div>
                 <div className="text-sm md:text-lg pr-2 break-all pl-16 md:pl-0">
-                  {/* {item.curBalance !== 'NaN' ? item.curBalance : '0.00'} */}
-                  0.00
+                  {newToken.curBalance !== 'NaN' ? newToken.curBalance : '0.00'}
                 </div>
               </div>
             )}
             {!newToken.name &&
               tokensListFiltered
-                .sort((a, b) => b.curBalance - a.curBalance)
+                .sort((a: any, b: any) => b.curBalance - a.curBalance)
                 .map((item: any) => (
                   <div
                     className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2  cursor-pointer"
@@ -260,10 +281,10 @@ const SelectTokenModal = ({
                     }}
                   >
                     <div className="flex items-center gap-2">
-                      {item.logoURI ? (
+                      {item.logo_uri ? (
                         <Image
                           alt="logo"
-                          src={item.logoURI}
+                          src={item.logo_uri}
                           width={25}
                           height={25}
                         />
