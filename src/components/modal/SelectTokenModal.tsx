@@ -153,15 +153,23 @@ const SelectTokenModal = ({
             address: text,
           };
           setNewToken({ ...newTokenToImport, curBalance });
-          await importToken(newTokenToImport);
-          await getTokensList();
-          fetchTokensList();
         } else setNewToken({});
         setLoadingSearch(false);
       } else setNewToken({});
     } else {
       setTokensListFiltered(tokensList);
     }
+  };
+  const handleImportToken = async () => {
+    const newTokenToImport = {
+      decimals: newToken.decimals,
+      name: newToken.name,
+      symbol: newToken.symbol,
+      address: newToken.address,
+    };
+    await importToken(newTokenToImport);
+    await getTokensList();
+    fetchTokensList();
   };
   return (
     <CommonModal isOpen={isOpen} onRequestClose={toggleOpen} width="550px">
@@ -237,8 +245,9 @@ const SelectTokenModal = ({
               <div
                 className="flex justify-between items-center my-2 hover:bg-[#1D2939] rounded-md px-1 py-2 cursor-pointer"
                 key={newToken.symbol}
-                onClick={() => {
+                onClick={async () => {
                   if (selectValue) {
+                    await handleImportToken();
                     selectValue(newToken);
                     setNewToken({});
                     setSearch('');
