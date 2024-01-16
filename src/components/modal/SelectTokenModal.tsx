@@ -109,7 +109,7 @@ const SelectTokenModal = ({
         (item: any) =>
           item.symbol.toLowerCase().includes(lowercased) ||
           item.name.toLowerCase().includes(lowercased) ||
-          item.address.includes(text)
+          item.address?.toLowerCase().includes(lowercased)
       );
       setTokensListFiltered(listAfterFilter);
       if (listAfterFilter.length === 0) {
