@@ -643,7 +643,12 @@ const TradeForm = ({
     setToken2Amount('0');
   };
 
-  console.log({ token1, initialToken1 });
+  useEffect(() => {
+    setToken1(initialToken1);
+  }, [initialToken1]);
+  useEffect(() => {
+    setToken2(initialToken2);
+  }, [initialToken2]);
   return (
     <>
       <SelectTokenModal
