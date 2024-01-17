@@ -1,6 +1,6 @@
 import Select from '@/components/select';
 import BNBICon from '@/icons/BNBIcon';
-import { CHAINS_TOKENS_LIST } from '@/utils/constants';
+import { IERC20TokenMetadata } from '@/utils/constants';
 import Image from 'next/image';
 
 export interface TokenFormProps {
@@ -13,6 +13,7 @@ export interface TokenFormProps {
     amount?: string;
   };
   setTokenAmount: (value: any) => void;
+  tokensList: IERC20TokenMetadata[];
 }
 
 const TokenForm = ({
@@ -20,6 +21,7 @@ const TokenForm = ({
   title,
   tokenData,
   setTokenAmount,
+  tokensList,
 }: TokenFormProps) => {
   return (
     <div className="bg-darkBlue rounded-lg my-2 p-4">
@@ -31,7 +33,7 @@ const TokenForm = ({
           <div className="w-[40px]">{title}</div>
 
           <Select
-            options={CHAINS_TOKENS_LIST}
+            options={tokensList}
             icon={
               tokenData?.logo ? (
                 <Image

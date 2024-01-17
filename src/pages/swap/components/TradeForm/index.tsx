@@ -15,6 +15,7 @@ import {
   ADDRESS_ZERO,
   APP_BASE_CHAIN,
   FLASHPAD_ROUTER_ADDRESS,
+  IERC20TokenMetadata,
   K_5_MIN,
   MAX_UINT256,
 } from '@/utils/constants';
@@ -35,6 +36,7 @@ import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
 import { Swap as Swing } from '@swing.xyz/ui';
 import { useRouter } from 'next/router';
+import { getTokensList } from '@/api/tokens-list';
 interface TradeFormProps {
   title: string;
   buttonName: string;
@@ -83,7 +85,15 @@ const TradeForm = ({
   const [swapRate2To1, setSwapRate2To1] = useState('-');
   const [isFetchingRate, setIsFetchingRate] = useState<boolean>(false);
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
+  const [tokensList, setTokensList] = useState<IERC20TokenMetadata[]>([]);
 
+  const fetchTokensList = async () => {
+    const res = await getTokensList();
+    setTokensList(res?.data);
+  };
+  useEffect(() => {
+    fetchTokensList();
+  }, []);
   useEffect(() => {
     setToken2Amount('' + +token1Amount * +swapRate1To2);
   }, [token1Amount]);
@@ -422,6 +432,7 @@ const TradeForm = ({
                 setTokenBeingSelected(1);
                 toggleOpen();
               }}
+              tokensList={tokensList}
               title={inputTitle1}
               tokenData={{
                 symbol: token1 ? token1?.symbol! : '',
@@ -442,6 +453,7 @@ const TradeForm = ({
                 setTokenBeingSelected(2);
                 toggleOpen();
               }}
+              tokensList={tokensList}
               title={inputTitle2}
               tokenData={{
                 symbol: token2 ? token2?.symbol! : '',

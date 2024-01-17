@@ -1,13 +1,14 @@
 import ArrowRight from '@/icons/ArrowRight';
 import BNBICon from '@/icons/BNBIcon';
 import QuestionIcon from '@/icons/QuestionIcon';
+import { convertToInternationalCurrencySystem } from '@/utils/convert';
+import BigNumber from 'bignumber.js';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
-import InlineLoading from '../loading/InlineLoading';
 import { Tooltip } from 'react-tooltip';
-import BigNumber from 'bignumber.js';
-import { convertToInternationalCurrencySystem } from '@/utils/convert';
+import { Button } from '../button/Button';
+import InlineLoading from '../loading/InlineLoading';
 
 interface ListAllPoolsTableProps {
   data: {
@@ -58,6 +59,7 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
               <th className="text-xs py-3 px-4 border-b border-[#344054] text-left">
                 Your Deposits
               </th>
+              <th className="text-xs py-3 px-4 border-b border-[#344054] text-left"></th>
             </tr>
           </thead>
           {loading ? (
@@ -137,6 +139,18 @@ const ListAllPoolsTable: React.FC<ListAllPoolsTableProps> = ({
                   </td>
                   <td className="py-4 text-sm px-4 border-b border-[#344054] text-left">
                     {item.userLpBalance === '0.00' ? 0 : item.userLpBalance} LP
+                  </td>
+                  <td className="text-sm px-2 border-b border-[#344054] text-left">
+                    <Button
+                      className="px-2 h-[36px] w-[100%] mr-2 md:mr-0 md:w-[120px] flex justify-center text-sm"
+                      onClick={() => {
+                        router.push(
+                          `/liquidity?token1=${item.token1Address}&token2=${item.token2Address}`
+                        );
+                      }}
+                    >
+                      Add Liquidity
+                    </Button>
                   </td>
                 </tr>
               ))}

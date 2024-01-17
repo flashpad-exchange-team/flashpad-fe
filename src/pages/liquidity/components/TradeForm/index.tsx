@@ -1,3 +1,4 @@
+import { getTokensList } from '@/api/tokens-list';
 import { Button } from '@/components/button/Button';
 import AddLiquidityAndCreatePositionModal from '@/components/modal/AddLiquidityAndCreatePositionModal';
 import LiquiditySettingModal, {
@@ -25,28 +26,30 @@ import SwapRightIcon from '@/icons/SwapRight';
 import { abi as FlashpadPairABI } from '@/resources/abis/FlashpadPair.json';
 import {
   ADDRESS_ZERO,
-  FLASHPAD_ROUTER_ADDRESS,
-  CHAINS_TOKENS_LIST,
+  APP_BASE_CHAIN,
   DEFAULT_DEADLINE,
   DEFAULT_SLIPPAGE,
   DEFAULT_TIME_LOCK,
+  FLASHPAD_ROUTER_ADDRESS,
+  IERC20TokenMetadata,
   MAX_UINT256,
   NFT_POOL_FACTORY_ADDRESS,
   daysToSeconds,
   minutesToSeconds,
-  APP_BASE_CHAIN,
 } from '@/utils/constants';
 import * as erc20TokenContract from '@/utils/contract/erc20TokenContract';
 import * as factoryContract from '@/utils/contract/factoryContract';
-import { handleError } from '@/utils/handleError';
 import * as nftPoolFactoryContract from '@/utils/contract/nftPoolFactoryContract';
 import * as routerContract from '@/utils/contract/routerContract';
+import { handleError } from '@/utils/handleError';
 import handleSwitchNetwork from '@/utils/switchNetwork';
 import * as web3Helpers from '@/utils/web3Helpers';
 import { waitForTransaction } from '@wagmi/core';
 import BigNumber from 'bignumber.js';
+import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Datetime from 'react-datetime';
 import { Tooltip } from 'react-tooltip';
 import { useSWRConfig } from 'swr';
 import { Address } from 'viem';
@@ -59,8 +62,6 @@ import {
 } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
-import Datetime from 'react-datetime';
-import moment from 'moment';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -92,12 +93,13 @@ const TradeForm = ({
   if (queryParams?.feat === 'spnft') {
     feat = 'STAKE POSITION';
   }
-  const initialToken1 = CHAINS_TOKENS_LIST.find(
+  const [tokensList, setTokensList] = useState<IERC20TokenMetadata[]>([]);
+  const initialToken1 = tokensList.find(
     (tk) =>
       tk.address.toLowerCase() ===
       (queryParams?.token1 as string)?.toLowerCase()
   );
-  const initialToken2 = CHAINS_TOKENS_LIST.find(
+  const initialToken2 = tokensList.find(
     (tk) =>
       tk.address.toLowerCase() ===
       (queryParams?.token2 as string)?.toLowerCase()
@@ -144,6 +146,13 @@ const TradeForm = ({
 
   const [lockDate, setLockDate] = useState<any>(new Date());
 
+  const fetchTokensList = async () => {
+    const res = await getTokensList();
+    setTokensList(res?.data);
+  };
+  useEffect(() => {
+    fetchTokensList();
+  }, []);
   useEffect(() => {
     setTimeout(() => {
       setSuccessful(false);
@@ -151,7 +160,6 @@ const TradeForm = ({
       setInsufficient(false);
     }, 5000);
   }, [insufficient, failed, successful]);
-  console.log(token1);
   const { data: balanceToken1 } = useBalance({
     address: userAddress,
     token:
@@ -634,6 +642,8 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
+
+  console.log({ token1, initialToken1 });
   return (
     <>
       <SelectTokenModal
@@ -712,6 +722,7 @@ const TradeForm = ({
             setTokenBeingSelected(1);
             toggleOpen();
           }}
+          tokensList={tokensList}
           title={inputTitle1}
           tokenData={{
             symbol: token1 ? token1.symbol! : '',
@@ -736,6 +747,7 @@ const TradeForm = ({
             setTokenBeingSelected(2);
             toggleOpen();
           }}
+          tokensList={tokensList}
           title={inputTitle2}
           tokenData={{
             symbol: token2 ? token2.symbol! : '',

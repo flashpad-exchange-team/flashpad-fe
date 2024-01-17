@@ -1,6 +1,6 @@
 import Select from '@/components/select';
 import BNBICon from '@/icons/BNBIcon';
-import { CHAINS_TOKENS_LIST } from '@/utils/constants';
+import { IERC20TokenMetadata } from '@/utils/constants';
 import Image from 'next/image';
 
 export interface TokenFormProps {
@@ -14,6 +14,7 @@ export interface TokenFormProps {
   value: string;
   setTokenAmount: (value: any) => void;
   disabled?: boolean;
+  tokensList: IERC20TokenMetadata[];
 }
 
 const TokenForm = ({
@@ -23,6 +24,7 @@ const TokenForm = ({
   value,
   setTokenAmount,
   disabled,
+  tokensList,
 }: TokenFormProps) => {
   const handleOpenSelectTokenModal = () => {
     openModal ? openModal() : void 0;
@@ -36,7 +38,7 @@ const TokenForm = ({
         >
           <div className="w-[90px]">{title}</div>
           <Select
-            options={CHAINS_TOKENS_LIST}
+            options={tokensList}
             icon={
               tokenData?.logo ? (
                 <Image
