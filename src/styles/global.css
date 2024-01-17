@@ -67,7 +67,9 @@ body {
 .hoverItem:hover svg path {
   stroke: #ffc700;
 }
-.active svg path, .active svg circle, .active svg ellipse {
+.active svg path,
+.active svg circle,
+.active svg ellipse {
   stroke: #ffc700;
 }
 
@@ -108,5 +110,44 @@ svg {
   }
 }
 #swing > div {
-  max-width:unset!important;
+  max-width: unset !important;
+}
+
+/* DATE TIME PICKER */
+.rdt > input {
+  background: #150e39;
+  font-size: 15px;
+  border-radius: 6px;
+  width: 100%;
+  padding: 16px;
+  margin-top: 12px;
+}
+.rdt {
+  margin-bottom: 12px;
+}
+.rdtPicker {
+  background: #150e39 !important;
+  font-size: 15px !important;
+  border-radius: 6px !important;
+  border-color: transparent !important;
+  width: 350px !important;
+}
+.rdtCounter .rdtBtn:hover {
+  color: #cdb321 !important;
+  background: transparent !important;
+}
+.rdtPicker td.rdtDay:hover,
+.rdtPicker td.rdtHour:hover,
+.rdtPicker td.rdtMinute:hover,
+.rdtPicker td.rdtSecond:hover {
+  background: #221853 !important;
+}
+.rdtPicker .rdtTimeToggle:hover,
+.rdtPicker thead tr:first-of-type th:hover {
+  background: transparent !important;
+}
+
+.rdtPicker td.rdtActive,
+.rdtPicker td.rdtActive:hover {
+  background-color: #428bca !important;
 }

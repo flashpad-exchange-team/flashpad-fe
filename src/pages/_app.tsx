@@ -34,6 +34,7 @@ import { Meta } from '@/layout/Meta';
 import { AppConfig } from '@/utils/AppConfig';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { Analytics } from '@vercel/analytics/react';
+import 'react-datetime/css/react-datetime.css';
 
 const { chains, publicClient } = configureChains(
   [APP_BASE_CHAIN],

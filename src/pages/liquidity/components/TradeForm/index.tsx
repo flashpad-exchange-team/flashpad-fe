@@ -59,6 +59,8 @@ import {
 } from 'wagmi';
 import LiquidityPairInfo from '../LiquidityPairInfo';
 import TokenForm from '../TokenForm';
+import Datetime from 'react-datetime';
+import moment from 'moment';
 
 const FEATURE_PROPS: { [k: string]: any } = {
   'ADD LIQUIDITY': {
@@ -139,7 +141,8 @@ const TradeForm = ({
   const [deadline, setDeadline] = useState<number>(Number(DEFAULT_DEADLINE));
   const [slippage, setSlippage] = useState<number>(Number(DEFAULT_SLIPPAGE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
-  const [lockSwapDuration, setLockSwapDuration] = useState<number>(0);
+
+  const [lockDate, setLockDate] = useState<any>(new Date());
 
   useEffect(() => {
     setTimeout(() => {
@@ -347,7 +350,6 @@ const TradeForm = ({
       const bnToken2Amount = BigNumber(10)
         .pow(balanceToken2?.decimals!)
         .times(BigNumber(token2Amount));
-
       if (
         bnToken1Amount.isNaN() ||
         bnToken2Amount.isNaN() ||
@@ -459,8 +461,10 @@ const TradeForm = ({
       });
 
       const { timestamp } = await web3Helpers.getBlock();
-      const startSwapTime =
-        (timestamp as bigint) + daysToSeconds(lockSwapDuration) + '';
+
+      const secondsDifference = lockDate.diff(moment(), 'seconds');
+      const startSwapTime = BigInt(secondsDifference) + timestamp + '';
+
       let txResult: any;
 
       if (token1.symbol == 'ETH') {
@@ -630,7 +634,6 @@ const TradeForm = ({
     setToken1Amount('0');
     setToken2Amount('0');
   };
-
   return (
     <>
       <SelectTokenModal
@@ -799,11 +802,11 @@ const TradeForm = ({
         {isFirstLP && feature === 'ADD LIQUIDITY' && (
           <>
             <div className="text-sm mt-4 flex gap-2 items-center">
-              Swap Lockup Period (days)
+              Swap Lockup Until:
               <div
                 data-tooltip-id="swapLockup"
                 data-tooltip-content={
-                  'The duration which users must wait before they can start swapping their tokens.'
+                  'The time which users must wait before they can start swapping their tokens.'
                 }
                 data-tooltip-place="right-start"
               >
@@ -811,16 +814,7 @@ const TradeForm = ({
                 <Tooltip id="swapLockup" />
               </div>
             </div>
-            <input
-              className="w-full bg-[#150E39]  h-[52px] pl-4 text-sm mb-3 mt-3 rounded-md focus:outline-none placeholder-[#667085]"
-              placeholder="Enter lockup period (days)"
-              type="number"
-              min={0}
-              value={lockSwapDuration}
-              onChange={(event) =>
-                setLockSwapDuration(Number(event.target.value) || 0)
-              }
-            />
+            <Datetime value={lockDate} onChange={(date) => setLockDate(date)} />
           </>
         )}
 
