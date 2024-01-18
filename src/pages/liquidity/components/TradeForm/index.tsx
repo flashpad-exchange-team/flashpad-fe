@@ -144,7 +144,7 @@ const TradeForm = ({
   const [slippage, setSlippage] = useState<number>(Number(DEFAULT_SLIPPAGE));
   const [timeLock, setTimeLock] = useState<number>(Number(DEFAULT_TIME_LOCK));
 
-  const [lockDate, setLockDate] = useState<any>(new Date());
+  const [lockDate, setLockDate] = useState<any>(moment());
 
   const fetchTokensList = async () => {
     const res = await getTokensList();
@@ -469,8 +469,7 @@ const TradeForm = ({
       });
 
       const { timestamp } = await web3Helpers.getBlock();
-
-      const secondsDifference = lockDate.diff(moment(), 'seconds');
+      const secondsDifference = lockDate?.diff(moment(), 'seconds');
       const startSwapTime = BigInt(secondsDifference) + timestamp + '';
 
       let txResult: any;
