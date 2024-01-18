@@ -29,10 +29,22 @@ const Partner = () => {
         >
           <Mises />
         </div>
-        <div className="flex justify-center cursor-pointer my-6 lg:my-0">
+        <div
+          className="flex justify-center cursor-pointer my-6 lg:my-0"
+          onClick={() =>
+            window.open(
+              'https://twitter.com/LineaBuild/status/1745474494427287890'
+            )
+          }
+        >
           <LineaIcon />
         </div>
-        <div className="flex justify-center cursor-pointer my-6 lg:my-0">
+        <div
+          className="flex justify-center cursor-pointer my-6 lg:my-0"
+          onClick={() =>
+            window.open('https://docs.flashpad.io/references/audits')
+          }
+        >
           <svg
             width="148"
             height="37"
@@ -4352,7 +4364,14 @@ const Partner = () => {
             </defs>
           </svg>
         </div>
-        <div className="flex justify-center cursor-pointer my-6 lg:my-0">
+        <div
+          className="flex justify-center cursor-pointer my-6 lg:my-0"
+          onClick={() =>
+            window.open(
+              'https://cryptoadventure.com/flashpad-io-a-native-combination-of-dex-launchpad-on-linea/'
+            )
+          }
+        >
           <svg
             width="257"
             height="33"
@@ -4383,7 +4402,14 @@ const Partner = () => {
             </defs>
           </svg>
         </div>
-        <div className="flex justify-center cursor-pointer my-6 lg:my-0">
+        <div
+          className="flex justify-center cursor-pointer my-6 lg:my-0"
+          onClick={() =>
+            window.open(
+              'https://twitter.com/swing_xyz/status/1746998588792573973'
+            )
+          }
+        >
           <svg
             width="137"
             height="33"
