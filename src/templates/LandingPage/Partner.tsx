@@ -13,11 +13,21 @@ const Partner = () => {
     <div className="w-full max-w-[1440px] mx-auto text-center pt-[60px] pb-4 lg:pb-[72px] bg-dark mt-10 lg:mt-28 ">
       <div
         className={
-          'text-white text-[32px] lg:text-[40px] font-semibold uppercase text-center mb-4 lg:mb-10 ' +
+          'text-white text-[32px] lg:text-[40px] font-semibold uppercase text-center mb-4 lg:mb-4 ' +
           redRose.className
         }
       >
         Partners
+      </div>
+      <div
+        className="flex justify-center cursor-pointer mb-10 mt-0"
+        onClick={() =>
+          window.open(
+            'https://twitter.com/LineaBuild/status/1745474494427287890'
+          )
+        }
+      >
+        <LineaIcon />
       </div>
       <div className="block lg:flex justify-between px-8 lg:px-36 items-center">
         <div className="flex justify-center cursor-pointer my-6 lg:my-0">
@@ -29,16 +39,7 @@ const Partner = () => {
         >
           <Mises />
         </div>
-        <div
-          className="flex justify-center cursor-pointer my-6 lg:my-0"
-          onClick={() =>
-            window.open(
-              'https://twitter.com/LineaBuild/status/1745474494427287890'
-            )
-          }
-        >
-          <LineaIcon />
-        </div>
+
         <div
           className="flex justify-center cursor-pointer my-6 lg:my-0"
           onClick={() =>
