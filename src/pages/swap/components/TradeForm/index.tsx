@@ -86,7 +86,6 @@ const TradeForm = ({
   const [isFetchingRate, setIsFetchingRate] = useState<boolean>(false);
   const [isFirstLP, setIsFirstLP] = useState<boolean | undefined>(undefined);
   const [tokensList, setTokensList] = useState<IERC20TokenMetadata[]>([]);
-
   const fetchTokensList = async () => {
     const res = await getTokensList();
     setTokensList(res?.data);
@@ -95,7 +94,7 @@ const TradeForm = ({
     fetchTokensList();
   }, []);
   useEffect(() => {
-    setToken2Amount('' + +token1Amount * +swapRate1To2);
+    getLPInfo(true);
   }, [token1Amount]);
 
   useEffect(() => {
@@ -289,7 +288,6 @@ const TradeForm = ({
           ) as unknown as bigint,
         });
       } else {
-        console.log('trigger build');
         txResult = await writeContract({
           account: userAddress,
           address: FLASHPAD_ROUTER_ADDRESS as Address,
@@ -314,6 +312,7 @@ const TradeForm = ({
       const hash = txResult.hash;
       await waitForTransaction({ hash });
       mutate(allPairsKey, allPairsKeyForAll);
+      getLPInfo();
       startSuccessTx(
         handleSuccessTxMessageSwap({
           action: 'swapped',
@@ -339,7 +338,7 @@ const TradeForm = ({
     setToken1Amount('');
     setToken2Amount('');
   };
-  const getLPInfo = async () => {
+  const getLPInfo = async (isUpdateToken2?: boolean) => {
     setIsFetchingRate(true);
     const token1Address = token1?.address;
     const token2Address = token2?.address;
@@ -350,32 +349,41 @@ const TradeForm = ({
       const stableSwap = await pairContract.read(address, 'stableSwap', []);
       setIsStableSwap(!!stableSwap);
 
-      const amount1In = BigNumber(10).pow(
-        BigNumber(balanceToken1?.decimals || 0)
-      );
-      const amount2In = BigNumber(10).pow(
-        BigNumber(balanceToken2?.decimals || 0)
-      );
+      const amount1In = BigNumber(10)
+        .pow(balanceToken1?.decimals!)
+        .times(
+          new BigNumber(
+            token1Amount === '0' || token1Amount === '' ? '1' : token1Amount
+          )
+        );
 
+      const amount2In = BigNumber(10)
+        .pow(balanceToken2?.decimals!)
+        .times(
+          new BigNumber(
+            token2Amount === '0' || token2Amount === '' ? '1' : token2Amount
+          )
+        );
       const amount2Out = await pairContract.read(address, 'getAmountOut', [
-        amount1In,
+        amount1In?.integerValue(),
         token1Address,
       ]);
-      setSwapRate1To2(
-        BigNumber(amount2Out)
-          .div(amount2In)
-          .toFixed(balanceToken2?.decimals!)
-      );
+      const rate1To2 = BigNumber(amount2Out)
+        .div(amount1In?.integerValue())
+        .toFixed(balanceToken2?.decimals!);
 
+      setSwapRate1To2(rate1To2);
+      if (isUpdateToken2) {
+        setToken2Amount('' + +token1Amount * +rate1To2);
+      }
       const amount1Out = await pairContract.read(address, 'getAmountOut', [
-        amount2In,
+        amount2In?.integerValue(),
         token2Address,
       ]);
-      setSwapRate2To1(
-        BigNumber(amount1Out)
-          .div(amount1In)
-          .toFixed(balanceToken1?.decimals!)
-      );
+      const rate2To1 = BigNumber(amount1Out)
+        .div(amount2In?.integerValue())
+        .toFixed(balanceToken1?.decimals!);
+      setSwapRate2To1(rate2To1);
     }
     setIsFetchingRate(false);
   };
