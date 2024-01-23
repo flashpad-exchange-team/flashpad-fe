@@ -312,7 +312,7 @@ const TradeForm = ({
       const hash = txResult.hash;
       await waitForTransaction({ hash });
       mutate(allPairsKey, allPairsKeyForAll);
-      getLPInfo();
+      console.log({ token1Amount, token2Amount });
       startSuccessTx(
         handleSuccessTxMessageSwap({
           action: 'swapped',
@@ -323,6 +323,7 @@ const TradeForm = ({
           txHash: hash,
         })
       );
+      getLPInfo();
 
       resetInput();
       stopLoadingTx();
