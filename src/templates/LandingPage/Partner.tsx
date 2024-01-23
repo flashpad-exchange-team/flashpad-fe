@@ -4526,7 +4526,14 @@ const Partner = () => {
           </svg>
         </div>
 
-        <div className="flex justify-center cursor-pointer my-6 lg:my-0">
+        <div
+          className="flex justify-center cursor-pointer my-6 lg:my-0"
+          onClick={() =>
+            window.open(
+              'https://twitter.com/flashpad_io/status/1747922769151746368'
+            )
+          }
+        >
           <svg
             width="85"
             height="31"
