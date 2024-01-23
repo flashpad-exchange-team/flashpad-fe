@@ -4530,7 +4530,7 @@ const Partner = () => {
           className="flex justify-center cursor-pointer my-6 lg:my-0"
           onClick={() =>
             window.open(
-              'https://twitter.com/flashpad_io/status/1747922769151746368'
+              'https://twitter.com/flashpad_io/status/1747922769151746368y'
             )
           }
         >

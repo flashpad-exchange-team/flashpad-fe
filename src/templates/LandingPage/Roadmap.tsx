@@ -100,6 +100,7 @@ const Roadmap = () => {
           <li>Partners Collaboration Boosting </li>
           <li>Public Sale Starts </li>
           <li>Public Sale Ends </li>
+          <li>Roadmap Updating </li>
         </ul>
       </div>
       <div className="block lg:hidden grid-cols-4 pl-28 pr-20 lg:px-20 gap-x-4 ">
@@ -170,6 +171,7 @@ const Roadmap = () => {
           <li>Partners Collaboration Boosting </li>
           <li>Public Sale Starts </li>
           <li>Public Sale Ends </li>
+          <li>Roadmap Updating </li>
         </ul>
       </div>
     </div>
