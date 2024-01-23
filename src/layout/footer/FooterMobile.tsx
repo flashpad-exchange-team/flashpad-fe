@@ -127,6 +127,12 @@ const FooterMobile = ({ info }: FooterInterface) => {
           <>
             <div
               className=" text-base mb-[4px] mt-4 cursor-pointer"
+              onClick={() => window.open('https://app.symbiosis.finance/swap')}
+            >
+              Symbiosis Finance
+            </div>
+            <div
+              className=" text-base mb-[4px] mt-4 cursor-pointer"
               onClick={() => router.push('/swap?feat=bridge')}
             >
               Swing.xyz

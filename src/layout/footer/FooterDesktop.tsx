@@ -74,6 +74,12 @@ const FooterDesktop = ({ info }: FooterInterface) => {
           <div className="text-primary text-base mb-[5px] ">Bridge Options</div>
           <div
             className=" text-base mb-[4px] cursor-pointer"
+            onClick={() => window.open('https://app.symbiosis.finance/swap')}
+          >
+            Symbiosis Finance
+          </div>
+          <div
+            className=" text-base mb-[4px] cursor-pointer"
             onClick={() => router.push('/swap?feat=bridge')}
           >
             Swing.xyz
